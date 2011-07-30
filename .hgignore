@@ -1,0 +1,3 @@
+glob:build/**
+glob:dist/**
+glob:nbproject/private/**

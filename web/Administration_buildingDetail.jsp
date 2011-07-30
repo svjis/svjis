@@ -1,0 +1,55 @@
+<%-- 
+    Document   : Administration_buildingDetail
+    Created on : 19.6.2011, 23:21:27
+    Author     : berk
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
+<jsp:useBean id="building" scope="request" class="cz.svjis.bean.Building" />
+
+<jsp:include page="_header.jsp" />
+<jsp:include page="_tray.jsp" />
+
+    <!-- Columns -->
+    <div id="cols" class="box">
+
+        <!-- Content -->
+        <div id="content">
+            <div id="content-main">
+                <div id="content-main-in">
+                    <h2><%=language.getText("Building") %></h2>
+                    <form action="Dispatcher" method="post">
+                        <input type="hidden" name="page" value="buildingSave" />
+                        <fieldset>
+                            <p>
+                                <label id="common-label" for="common-input"><%=language.getText("Address") %></label>
+                                <input id="common-input" type="text" name="address" maxlength="50" size="50" value="<%=building.getAddress() %>">
+                            </p>
+                            <p>
+                                <label id="common-label" for="common-input"><%=language.getText("City") %></label>
+                                <input id="common-input" type="text" name="city" maxlength="50" size="50" value="<%=building.getCity() %>">
+                            </p>
+                            <p>
+                                <label id="common-label" for="common-input"><%=language.getText("Post code") %></label>
+                                <input id="common-input" type="text" name="postCode" maxlength="10" size="50" value="<%=building.getPostCode() %>">
+                            </p>
+                            <p>
+                                <label id="common-label" for="common-input"><%=language.getText("Registration Id.") %></label>
+                                <input id="common-input" type="text" name="registrationNo" maxlength="20" size="50" value="<%=building.getRegistrationNo() %>">
+                            </p>
+                            <p id="common-submit">
+                                <input type="submit" value="<%=language.getText("Save") %>" />
+                            </p>
+                        </fieldset>
+                    </form>
+                </div> <!-- /content-main-in -->
+            </div> <!-- /content-main -->
+            <hr class="noscreen" />
+        </div> <!-- /content -->
+
+        <jsp:include page="Administration__menu.jsp" />
+    
+    </div> <!-- /cols -->
+
+<jsp:include page="_footer.jsp" />

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+    <servlet>
+        <servlet-name>Dispatcher</servlet-name>
+        <servlet-class>cz.svjis.servlet.Dispatcher</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Upload</servlet-name>
+        <servlet-class>cz.svjis.servlet.Upload</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Dispatcher</servlet-name>
+        <url-pattern>/Dispatcher</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Upload</servlet-name>
+        <url-pattern>/Upload</url-pattern>
+    </servlet-mapping>
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+    <welcome-file-list>
+        <welcome-file>Dispatcher</welcome-file>
+    </welcome-file-list>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/BadPage.jsp</location>
+    </error-page>
+</web-app>
