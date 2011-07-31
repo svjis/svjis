@@ -23,6 +23,9 @@ public class Company {
     private String vatRegistrationNo;
     private Date databaseCreationDate;
     private String internetDomain;
+    private String pictureContentType;
+    private String pictureFilename;
+    private byte[] pictureData;
     private int unitCnt;
     private int userCnt;
     private int roleCnt;
@@ -235,5 +238,47 @@ public class Company {
      */
     public void setRoleCnt(int roleCnt) {
         this.roleCnt = roleCnt;
+    }
+
+    /**
+     * @return the pictureContentType
+     */
+    public String getPictureContentType() {
+        return pictureContentType;
+    }
+
+    /**
+     * @param pictureContentType the pictureContentType to set
+     */
+    public void setPictureContentType(String pictureContentType) {
+        this.pictureContentType = pictureContentType;
+    }
+
+    /**
+     * @return the pictureFilename
+     */
+    public String getPictureFilename() {
+        return pictureFilename;
+    }
+
+    /**
+     * @param pictureFilename the pictureFilename to set
+     */
+    public void setPictureFilename(String pictureFilename) {
+        this.pictureFilename = pictureFilename;
+    }
+
+    /**
+     * @return the pictureData
+     */
+    public byte[] getPictureData() {
+        return pictureData;
+    }
+
+    /**
+     * @param pictureData the pictureData to set
+     */
+    public void setPictureData(byte[] pictureData) {
+        this.pictureData = pictureData;
     }
 }

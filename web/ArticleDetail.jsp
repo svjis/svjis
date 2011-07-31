@@ -59,7 +59,9 @@
                         }
 
                     %>
-                    <h2><%=highlight(article.getHeader(), request.getParameter("search")) %></h2>
+                    <div class="article-detail">
+                    <div class="article-desc">
+                    <h3 class="article-desc"><%=highlight(article.getHeader(), request.getParameter("search")) %></h3>
                     <p class="info">
                         <%=language.getText("Published:") %> <strong><%=sdf.format(article.getCreationDate()) %></strong> 
                         <%=language.getText("by:") %> <strong><%=article.getAuthor().getFirstName() %> <%=article.getAuthor().getLastName() %></strong> 
@@ -67,6 +69,8 @@
                     </p> 
                     <p class="nomb"><%=highlight(article.getDescription(), request.getParameter("search")).replace("\n", "<br>") %></p>
                     <p class="nomb"><%=highlight(body, request.getParameter("search")).replace("\n", "<br>") %></p>
+                    </div>
+                    </div>
                     
                     <%
                         if ((article.getAttachmentList() != null) && (article.getAttachmentList().size() != 0)) {

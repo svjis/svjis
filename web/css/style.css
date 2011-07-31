@@ -29,6 +29,7 @@ a {color:#739D13;}
 a:hover {color:#516F0D;}
 
 h3.title {border-bottom:1px solid #D7ECF4; color:#3fa5cd;}
+h3.article-desc {color:#739D13;}
 
 /* ----------------------------------------------------------------------------------------------------------
 2) HTML styles
@@ -40,7 +41,7 @@ h3.title {border-bottom:1px solid #D7ECF4; color:#3fa5cd;}
 
 #main {background-color:#FFF;}
 
-#header {background-color:#9fcf00; color:#FFF;}
+#header {background-color:#9fcf00; color:#000;}
 #header a {color:#FFF;}
 
 #tray {background-color:#2f2f2f; color:#FFF;}
@@ -68,7 +69,7 @@ h3.title {border-bottom:1px solid #D7ECF4; color:#3fa5cd;}
 ---------------------------------------------------------------------------------------------------------- */
 
 #topstory-top, #topstory {background-color:#D7ECF4;}
-#topstory-desc .info, #topstory-desc .info a, .article .article-desc .info, .article .article-desc .info a {color:#5F5F5F;}
+#topstory-desc .info, #topstory-desc .info a, .article .article-desc .info, .article .article-desc .info a, .article-detail .article-desc .info {color:#5F5F5F;}
 #topstory-desc .info a:hover, .article .article-desc .info a:hover {color:#2F2F2F;}
 #topstory-desc h2 a {color:#3087ad;}
 #topstory-desc h2 a:hover {color:#256785;}

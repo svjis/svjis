@@ -81,6 +81,9 @@ public class CompanyDAO {
                 + "a.VAT_REGISTRATION_NO, "
                 + "a.DATABASE_CREATION_DATE, "
                 + "a.INTERNET_DOMAIN, "
+                + "a.PICTURE_CONTENT_TYPE, "
+                + "a.PICTURE_FILENAME, "
+                + "a.PICTURE_DATA, "
                 + "(SELECT count(*) FROM BUILDING b left join BUILDING_UNIT u on (u.BUILDING_ID = b.ID) where (b.COMPANY_ID = a.ID)) AS UNIT_CNT, "
                 + "(SELECT count(*) FROM \"USER\" u where (u.COMPANY_ID = a.ID)) AS USER_CNT, "
                 + "(SELECT (count(*)) FROM \"ROLE\" r where (r.COMPANY_ID = a.ID)) AS ROLE_CNT "
@@ -104,6 +107,9 @@ public class CompanyDAO {
             result.setVatRegistrationNo(rs.getString("VAT_REGISTRATION_NO"));
             result.setDatabaseCreationDate(rs.getDate("DATABASE_CREATION_DATE"));
             result.setInternetDomain(rs.getString("INTERNET_DOMAIN"));
+            result.setPictureContentType(rs.getString("PICTURE_CONTENT_TYPE"));
+            result.setPictureFilename(rs.getString("PICTURE_FILENAME"));
+            result.setPictureData(rs.getBytes("PICTURE_DATA"));
             result.setUnitCnt(rs.getInt("UNIT_CNT"));
             result.setUserCnt(rs.getInt("USER_CNT"));
             result.setRoleCnt(rs.getInt("ROLE_CNT"));
@@ -129,6 +135,9 @@ public class CompanyDAO {
                 + "a.VAT_REGISTRATION_NO, "
                 + "a.DATABASE_CREATION_DATE, "
                 + "a.INTERNET_DOMAIN, "
+                + "a.PICTURE_CONTENT_TYPE, "
+                + "a.PICTURE_FILENAME, "
+                + "a.PICTURE_DATA, "
                 + "(SELECT count(*) FROM BUILDING b left join BUILDING_UNIT u on (u.BUILDING_ID = b.ID) where (b.COMPANY_ID = a.ID)) AS UNIT_CNT, "
                 + "(SELECT count(*) FROM \"USER\" u where (u.COMPANY_ID = a.ID)) AS USER_CNT, "
                 + "(SELECT (count(*)) FROM \"ROLE\" r where (r.COMPANY_ID = a.ID)) AS ROLE_CNT "
@@ -152,6 +161,9 @@ public class CompanyDAO {
             result.setVatRegistrationNo(rs.getString("VAT_REGISTRATION_NO"));
             result.setDatabaseCreationDate(rs.getDate("DATABASE_CREATION_DATE"));
             result.setInternetDomain(rs.getString("INTERNET_DOMAIN"));
+            result.setPictureContentType(rs.getString("PICTURE_CONTENT_TYPE"));
+            result.setPictureFilename(rs.getString("PICTURE_FILENAME"));
+            result.setPictureData(rs.getBytes("PICTURE_DATA"));
             result.setUnitCnt(rs.getInt("UNIT_CNT"));
             result.setUserCnt(rs.getInt("USER_CNT"));
             result.setRoleCnt(rs.getInt("ROLE_CNT"));
@@ -188,6 +200,21 @@ public class CompanyDAO {
         ps.setString(10, c.getInternetDomain());
         ps.setInt(11, c.getId());
         ps.executeUpdate();
+        ps.close();
+    }
+    
+    public void savePicture(int companyId, String contentType, String fileName, byte[] data) throws SQLException {
+        String update = "UPDATE COMPANY SET "
+                + "PICTURE_CONTENT_TYPE = ?, "
+                + "PICTURE_FILENAME = ?, "
+                + "PICTURE_DATA = ? "
+                + "WHERE ID = ?";
+        PreparedStatement ps = cnn.prepareStatement(update);
+        ps.setString(1, contentType);
+        ps.setString(2, fileName);
+        ps.setBytes(3, data);
+        ps.setInt(4, companyId);
+        ps.execute();
         ps.close();
     }
 }

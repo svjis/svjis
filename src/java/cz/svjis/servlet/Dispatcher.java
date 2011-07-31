@@ -848,6 +848,27 @@ public class Dispatcher extends HttpServlet {
                     return;
                 }
                 
+                if (page.equals("buildingPictureSave")) {
+                    FileItemFactory factory = new DiskFileItemFactory();
+                    ServletFileUpload upload = new ServletFileUpload(factory);
+                    //upload.setSizeMax(yourMaxRequestSize);
+                    List items = upload.parseRequest(request);
+                    java.util.Iterator iterator = items.iterator();
+                    while (iterator.hasNext()) {
+                        FileItem item = (FileItem) iterator.next();
+                        File f = new File(item.getName());
+                        if (!item.isFormField()) {
+                            compDao.savePicture(company.getId(), item.getContentType(), f.getName(), item.get());
+                        }
+                    }
+                    session.setAttribute("company", compDao.getCompany(company.getId()));
+                    String url = "Dispatcher?page=buildingDetail";
+                    request.setAttribute("url", url);
+                    RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
+                    rd.forward(request, response);
+                    return;
+                }
+                
                 if (page.equals("buildingUnitList")) {
                     Company currCompany = compDao.getCompany(company.getId());
                     request.setAttribute("currCompany", currCompany);

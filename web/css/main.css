@@ -43,14 +43,11 @@ h3 {font-size:140%;}
 
 #main {width:940px; margin:0 auto; overflow:hidden;}
 
-	#header {width:940px; height:95px; overflow:hidden; background:url("../design/Header_1.png") 0 0 no-repeat;}
+	#header {width:940px; height:95px; overflow:hidden; background:url("../design/header.gif") 0 0 no-repeat;}
 
-       #logo {position:relative; width:254px; height:75px; overflow:hidden; margin:0 0 0 20px; padding:0; font-size:300%;}
-       /*
-       #logo span {display:block; position:absolute; top:0; left:0; z-index:1; width:100%; height:100%; margin:0; padding:0; background:url("../tmp/logo.gif") 0 0 no-repeat; cursor:pointer;}
-       */
-       #logo span {display:block; position:absolute; top:0; left:0; z-index:1; width:100%; height:100%; margin:0; padding:0; cursor:pointer;}
-
+        #logo {position:relative; float: left; width:529px; height:94px; overflow:hidden; margin:0px 0px 0px 0px; padding:0; font-size:300%;}
+        #logo span {display:block; position:absolute; top:0; left:0; z-index:1; width:100%; height:100%; margin:0; padding:0; cursor:pointer;}
+        #company_name {position:relative; float: right; width:411px; height:94px; overflow:hidden; margin:15px 0px 0px 0px; padding:0; font-size:160%; text-align: center;}
     #tray {padding:10px 0 15px 10px; background:url("../design/tray.gif") 0 100% no-repeat;}
     
         #tray ul {margin:0; list-style:none;}
@@ -133,10 +130,12 @@ h3 {font-size:140%;}
 .article {margin-bottom:10px; padding-bottom:10px; background:url("../design/dot.gif") 0 100% repeat-x;}
 .article .article-desc {float:left; width:435px;}
 
-    .article .article-desc h3 {margin:0; font-size:140%; font-weight:normal;}
-    .article .article-desc .info {margin:0; font-size:85%;}
-    .article .article-desc p.nomb {margin-top:8px; text-align:justify;}
+    .article .article-desc h3, .article-detail .article-desc h3 {margin:0; font-size:140%; font-weight:normal;}
+    .article .article-desc .info, .article-detail .article-desc .info {margin:0; font-size:85%;}
+    .article .article-desc p.nomb, .article-detail .article-desc p.nomb {margin-top:8px; text-align:justify;}
 
+h3.article-desc {margin:0; font-size:140%; font-weight:normal;}
+    
 .box-01-top {width:260px; height:5px; margin-top:5px; background:url("../design/box-01-top.gif") 0 0 no-repeat; font-size:0; line-height:0;}
 .box-01-top-b {padding:5px 10px 15px 10px; background:url("../design/box-01-top-b.gif") 0 100% no-repeat;}
 .box-01-top-b .f-left {text-transform:uppercase;}

@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
+<jsp:useBean id="company" scope="session" class="cz.svjis.bean.Company" />
 <jsp:useBean id="building" scope="request" class="cz.svjis.bean.Building" />
 
 <jsp:include page="_header.jsp" />
@@ -40,6 +41,21 @@
                             </p>
                             <p id="common-submit">
                                 <input type="submit" value="<%=language.getText("Save") %>" />
+                            </p>
+                        </fieldset>
+                    </form>
+                            
+                    <form action="Dispatcher?page=buildingPictureSave" enctype="multipart/form-data" method="post">
+                        <fieldset>
+                            <legend><%=language.getText("Building picture (size 529 x 94 px)") %></legend>
+                            <% if (company.getPictureFilename() != null) { %>
+                            <p>
+                                <img src="Upload?page=getBuildingPicture" />
+                            </p>
+                            <% } %>
+                            <p>
+                                <input type="file" name="attachment" size="40">
+                                <input type="submit" value="<%=language.getText("Insert picture") %>">
                             </p>
                         </fieldset>
                     </form>

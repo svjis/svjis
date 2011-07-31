@@ -57,7 +57,17 @@ public class Upload extends HttpServlet {
             cnn = createConnection();
             
             if (page.equals("download")) {
-                processDownload(cnn, request, response);
+                ArticleDAO dao = new ArticleDAO(cnn);
+                ArticleAttachment aa = dao.getArticleAttachment(Integer.parseInt(request.getParameter("id")));
+                if (dao.getArticle(user, aa.getArticleId()) == null) {
+                    return;
+                }
+                writeBinaryData(aa.getContentType(), aa.getFileName(), aa.getData(), request, response);
+                return;
+            }
+            
+            if (page.equals("getBuildingPicture")) {
+                writeBinaryData(company.getPictureContentType(), company.getPictureFilename(), company.getPictureData(), request, response);
                 return;
             }
             
@@ -68,33 +78,21 @@ public class Upload extends HttpServlet {
         }
     }
     
-    protected void processDownload(Connection cnn, HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException {
-
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        ArticleDAO dao = new ArticleDAO(cnn);
-        ArticleAttachment aa = null;
-
-        int id = Integer.parseInt(request.getParameter("id"));
-        aa = dao.getArticleAttachment(id);
-        if (dao.getArticle(user, aa.getArticleId()) == null) {
-            return;
-        }
-
+    private void writeBinaryData(String contentType, String fileName, byte[] data, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         String userAgent = request.getHeader("User-Agent");
         String encodedFileName = null;
         if (userAgent.contains("MSIE") || userAgent.contains("Opera")) {
-            encodedFileName = URLEncoder.encode(aa.getFileName().replace(" ", "_"), "UTF-8");
+            encodedFileName = URLEncoder.encode(fileName.replace(" ", "_"), "UTF-8");
         } else {
-            encodedFileName = "=?UTF-8?B?" + Base64.encode(aa.getFileName().replace(" ", "_").getBytes("UTF-8")) + "?=";
+            encodedFileName = "=?UTF-8?B?" + Base64.encode(fileName.replace(" ", "_").getBytes("UTF-8")) + "?=";
         }
 
-        response.setContentType(aa.getContentType());
+        response.setContentType(contentType);
         response.setHeader("Content-Disposition", "attachment; filename=\"" + encodedFileName + "\"");
         response.setDateHeader("Expires", 0);
         java.io.OutputStream outb = response.getOutputStream();
-        outb.write(aa.getData());
+        outb.write(data);
         outb.close();
     }
 
