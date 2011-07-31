@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context antiJARLocking="true" path="/SVJIS">
-  <Resource auth="Container" driverClassName="org.firebirdsql.jdbc.FBDriver" maxActive="100" maxIdle="30" maxWait="10000" name="jdbc/SVJIS" password="asnad" type="javax.sql.DataSource" url="jdbc:firebirdsql:localhost/3050:SVJIS_TEST?lc_ctype=UNICODE_FSS" username="web"/>
+  <Resource 
+    auth="Container" 
+    driverClassName="org.firebirdsql.jdbc.FBDriver" 
+    maxActive="100" 
+    maxIdle="30" 
+    maxWait="10000" 
+    name="jdbc/SVJIS" 
+    password="asnad" 
+    type="javax.sql.DataSource" 
+    url="jdbc:firebirdsql:localhost/3050:SVJIS_TEST?lc_ctype=UNICODE_FSS" 
+    username="web"/>
 </Context>

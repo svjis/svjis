@@ -23,7 +23,7 @@ public class ApplicationSetupDAO {
     
     public Properties getApplicationSetup(int companyId) throws SQLException {
         Properties result = new Properties();
-        String select = "SELECT a.ID, a.\"VALUE\" FROM APPLICATION_SETUP a WHERE a.COMPANY_ID = ? ";
+        String select = "SELECT a.ID, a.\"VALUE\" FROM APPLICATION_SETUP a WHERE a.COMPANY_ID = ? ORDER BY a.ID";
         PreparedStatement ps = cnn.prepareStatement(select);
         ps.setInt(1, companyId);
         ResultSet rs = ps.executeQuery();

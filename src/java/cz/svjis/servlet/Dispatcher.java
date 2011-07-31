@@ -230,6 +230,9 @@ public class Dispatcher extends HttpServlet {
                     if (request.getParameter("section") != null) {
                         section = Integer.valueOf(request.getParameter("section"));
                     }
+                    if ((section == 0) && (setup.get("article.menu.default.item") != null)) {
+                        section = Integer.valueOf(setup.getProperty("article.menu.default.item"));
+                    }
                     menu.setActiveSection(section);
                     request.setAttribute("menu", menu);
 
