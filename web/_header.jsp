@@ -35,7 +35,7 @@
     <!-- Header -->
     <div id="header">
 
-        <div id="logo"><span style="background:url('<%=(company.getPictureFilename() != null) ? "Upload?page=getBuildingPicture" : "" %>') 0 0 no-repeat;"></span></div> 
+        <div id="logo"><span style="background:url('<%=company.getPictureUrl(request.getServletContext().getRealPath("/")) %>') 0 0 no-repeat;"></span></div> 
         <div id="company_name"><%=company.getName() %></div>
         <hr class="noscreen" />          
 

@@ -864,7 +864,9 @@ public class Dispatcher extends HttpServlet {
                             compDao.savePicture(company.getId(), item.getContentType(), f.getName(), item.get());
                         }
                     }
-                    session.setAttribute("company", compDao.getCompany(company.getId()));
+                    company = compDao.getCompany(company.getId());
+                    session.setAttribute("company", company);
+                    company.refreshPicture(request.getServletContext().getRealPath("/"));
                     String url = "Dispatcher?page=buildingDetail";
                     request.setAttribute("url", url);
                     RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");

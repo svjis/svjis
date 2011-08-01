@@ -4,7 +4,11 @@
  */
 package cz.svjis.bean;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -280,5 +284,31 @@ public class Company {
      */
     public void setPictureData(byte[] pictureData) {
         this.pictureData = pictureData;
+    }
+ 
+    public String getPictureUrl(String realRootPath) {
+        String result = "";
+        if (getPictureFilename() != null) {
+            TempFileProcessor tfp = new TempFileProcessor(getInternetDomain(), realRootPath);
+            if (!tfp.isFileExists(getPictureFilename())) {
+                try {
+                    tfp.createFile(getPictureFilename(), getPictureData());
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(Company.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(Company.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            result = tfp.getUrlPath(getPictureFilename());
+        }
+        return result;
+    }
+    
+    public void refreshPicture(String realRootPath) {
+        if (getPictureFilename() != null) {
+            TempFileProcessor tfp = new TempFileProcessor(getInternetDomain(), realRootPath);
+            tfp.deleteFile(getPictureFilename());
+        }
+        getPictureUrl(realRootPath);
     }
 }
