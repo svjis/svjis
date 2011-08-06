@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="company" scope="session" class="cz.svjis.bean.Company" />
+<jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
@@ -35,7 +36,7 @@
     <!-- Header -->
     <div id="header">
 
-        <div id="logo"><span style="background:url('<%=company.getPictureUrl(request.getServletContext().getRealPath("/")) %>') 0 0 no-repeat;"></span></div> 
+        <div id="logo"><a href="Dispatcher" title="[<%=language.getText("Go to homepage") %>]"><span style="background:url('<%=company.getPictureUrl(request.getServletContext().getRealPath("/")) %>') 0 0 no-repeat;"></span></a></div> 
         <div id="company_name"><%=company.getName() %></div>
         <hr class="noscreen" />          
 
