@@ -22,6 +22,7 @@ import cz.svjis.bean.InquiryOption;
 import cz.svjis.bean.Language;
 import cz.svjis.bean.LanguageDAO;
 import cz.svjis.bean.LogDAO;
+import cz.svjis.bean.MailDAO;
 import cz.svjis.bean.Menu;
 import cz.svjis.bean.MenuDAO;
 import cz.svjis.bean.MenuItem;
@@ -143,9 +144,14 @@ public class Dispatcher extends HttpServlet {
             // * Login         *
             // *****************
             
-            
             User user = (User) session.getAttribute("user");
-            if (user == null) {
+            Language language = (Language) session.getAttribute("language");
+            
+            if (page.equals("logout") || (user == null)) {
+                if (page.equals("logout")) {
+                    logDao.log(user.getId(), LogDAO.operationTypeLogout, LogDAO.idNull);
+                    page = "articleList";
+                }
                 user = new User();
                 if (company != null) {
                     user.setCompanyId(company.getId());
@@ -155,6 +161,8 @@ public class Dispatcher extends HttpServlet {
                     user = userDao.getUser(company.getId(), Integer.valueOf(setup.getProperty("anonymous.user.id")));
                 }
                 session.setAttribute("user", user);
+                language = languageDao.getDictionary(user.getLanguageId());
+                session.setAttribute("language", language);
             }
             
             if (page.equals("login") && (company != null)) {
@@ -162,35 +170,17 @@ public class Dispatcher extends HttpServlet {
                 if ((u != null) && (u.login(request.getParameter("password")))) {
                     user = u;
                     session.setAttribute("user", user);
-                    session.setAttribute("language", null);
+                    language = languageDao.getDictionary(user.getLanguageId());
+                    session.setAttribute("language", language);
                     page = "articleList";
                     logDao.log(user.getId(), LogDAO.operationTypeLogin, LogDAO.idNull);
                 } else {
-                    RequestDispatcher rd = request.getRequestDispatcher("/BadLogin.jsp");
+                    request.setAttribute("messageHeader", language.getText("Bad login"));
+                    request.setAttribute("message", "<p>" + language.getText("You can continue") + " <a href=\"Dispatcher\">" + language.getText("here") + "</a>.</p><p><a href=\"Dispatcher?page=lostPassword\">" + language.getText("Forgot password?") + "</a></p>");
+                    RequestDispatcher rd = request.getRequestDispatcher("/_message.jsp");
                     rd.forward(request, response);
                     return;
                 }
-            }
-            
-            if (page.equals("logout")) {
-                logDao.log(user.getId(), LogDAO.operationTypeLogout, LogDAO.idNull);
-                session.setAttribute("user", null);
-                session.setAttribute("language", null);
-                String url = "Dispatcher";
-                request.setAttribute("url", url);
-                RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
-                rd.forward(request, response);
-                return;
-            }
-            
-            // *****************
-            // * Language      *
-            // *****************
-            
-            Language language = (Language) session.getAttribute("language");
-            if (language == null) {
-                language = languageDao.getDictionary(user.getLanguageId());
-                session.setAttribute("language", language);
             }
             
             // *****************
@@ -216,6 +206,54 @@ public class Dispatcher extends HttpServlet {
                 ArrayList<Company> companyList = compDao.getCompanyList();
                 request.setAttribute("companyList", companyList);
                 RequestDispatcher rd = request.getRequestDispatcher("/CompanyList.jsp");
+                rd.forward(request, response);
+                return;
+            }
+            
+            // *****************
+            // * Lost login    *
+            // *****************
+            
+            if (page.equals("lostPassword")) {
+                RequestDispatcher rd = request.getRequestDispatcher("/LostPassword_form.jsp");
+                rd.forward(request, response);
+                return;
+            }
+            
+            if (page.equals("lostPassword_submit")) {
+                String email = request.getParameter("email");
+                if ((email == null) || (email.equals(""))) {
+                    String url = "Dispatcher?page=lostPassword";
+                    request.setAttribute("url", url);
+                    RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
+                    rd.forward(request, response);
+                    return;
+                }
+                RequestDispatcher rd = null;
+                ArrayList<User> result = userDao.findLostPassword(company.getId(), email);
+                if (!result.isEmpty()) {
+                    String logins = "";
+                    for (int i = 0; i < result.size(); i++) {
+                        User u = result.get(i);
+                        logins += "Login: " + u.getLogin() + " " + "Password: " + u.getPassword() + "<br>"; 
+                        logDao.log(u.getId(), LogDAO.operationTypeSendLostPassword, LogDAO.idNull);
+                    }
+                    String body = setup.getProperty("mail.template.lost.password");
+                    body = String.format(body, logins);
+                    MailDAO mailDao = new MailDAO(
+                            setup.getProperty("mail.smtp"),
+                            setup.getProperty("mail.login"),
+                            setup.getProperty("mail.password"),
+                            setup.getProperty("mail.sender"));
+                    mailDao.sendMail(email, company.getName(), body);
+                    request.setAttribute("messageHeader", language.getText("Password assistance"));
+                    request.setAttribute("message", language.getText("Your login and password were sent to your mail."));
+                    rd = request.getRequestDispatcher("/_message.jsp");
+                } else {
+                    request.setAttribute("messageHeader", language.getText("Password assistance"));
+                    request.setAttribute("message", language.getText("There is not user assigned to e-mail."));
+                    rd = request.getRequestDispatcher("/_message.jsp");
+                }
                 rd.forward(request, response);
                 return;
             }

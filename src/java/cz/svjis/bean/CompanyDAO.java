@@ -142,7 +142,7 @@ public class CompanyDAO {
                 + "(SELECT count(*) FROM \"USER\" u where (u.COMPANY_ID = a.ID)) AS USER_CNT, "
                 + "(SELECT (count(*)) FROM \"ROLE\" r where (r.COMPANY_ID = a.ID)) AS ROLE_CNT "
                 + "FROM COMPANY a "
-                + "WHERE a.INTERNET_DOMAIN = ?";
+                + "WHERE a.INTERNET_DOMAIN collate UNICODE_CI_AI = ?";
         
         PreparedStatement ps = cnn.prepareStatement(select);
         ps.setString(1, domain);

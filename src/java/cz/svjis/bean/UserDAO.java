@@ -410,4 +410,25 @@ public class UserDAO {
         }
         return result;
     }
+    
+    public ArrayList<User> findLostPassword(int companyId, String email) throws SQLException {
+        ArrayList<User> result = new ArrayList<User>();
+        String select = "SELECT a.ID, a.E_MAIL, a.LOGIN, a.\"PASSWORD\" FROM \"USER\" a "
+                + "WHERE (a.COMPANY_ID = ?) and (a.E_MAIL collate UNICODE_CI_AI = ?) and (a.ENABLED = 1)";
+        PreparedStatement ps = cnn.prepareStatement(select);
+        ps.setInt(1, companyId);
+        ps.setString(2, email);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            User u = new User();
+            u.setId(rs.getInt("ID"));
+            u.seteMail(rs.getString("E_MAIL"));
+            u.setLogin(rs.getString("LOGIN"));
+            u.setPassword(rs.getString("PASSWORD"));
+            result.add(u);
+        }
+        rs.close();
+        ps.close();
+        return result;
+    }
 }

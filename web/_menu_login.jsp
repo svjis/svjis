@@ -37,6 +37,7 @@
                             <p><label id="login-label" for="login-name"><%=language.getText("Name") %></label> <input id="login-input" type="text" name="login" size="10" /></p>
                             <p><label id="login-label" for="login-password"><%=language.getText("Password") %></label> <input id="login-input" type="password" name="password" size="10" /></p>
                             <p><input id="login-submit" type="submit" value="<%=language.getText("Log-in") %>" /></p>
+                            <p><a href="Dispatcher?page=lostPassword"><%=language.getText("Forgot password?")%></a></p>
                         </div>
                     </form>
                 <%

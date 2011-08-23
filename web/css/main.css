@@ -57,7 +57,10 @@ h3 {font-size:140%;}
         #tray ul li#tray-active a {font-weight:bold; text-decoration:none;}
 
     #cols {position:relative; margin:10px 0; background:url("../design/cols.gif") 0 0 repeat-y;}
-
+    
+        #content-width {float:left; width:940px; overflow:hidden;}
+            #content-width-in {padding:0 10px;}
+        
     	#content {float:right; width:740px; overflow:hidden;}
         
             #content-main {float:left; width:730px;}
@@ -84,7 +87,7 @@ h3 {font-size:140%;}
             #search-submit {position:absolute; top:15px; left:115px; width:60px; height:22px; border:0;}
             #search-input, #search-submit {font-size:100%; font-family:"arial",sans-serif;}
             
-            #login {position:relative; height:110px; margin:0 -15px; padding:15px; text-align:center;}
+            #login {position:relative; height:150px; margin:0 -15px; padding:15px; text-align:center;}
             #logout {position:relative; height:50px; margin:0 -15px; padding:15px; text-align:center;}
             #login-label {width: 4em; float: left; text-align: right; margin-right: 0.5em; display: block}
             #login-input {width:100px; height:22px; border:0;}
