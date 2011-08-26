@@ -38,6 +38,9 @@ import cz.svjis.bean.UserDAO;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -53,6 +56,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -150,19 +154,27 @@ public class Dispatcher extends HttpServlet {
             if (page.equals("logout") || (user == null)) {
                 if (page.equals("logout")) {
                     logDao.log(user.getId(), LogDAO.operationTypeLogout, LogDAO.idNull);
-                    page = "articleList";
+                    clearPermanentLogin(request, response);
                 }
                 user = new User();
                 if (company != null) {
                     user.setCompanyId(company.getId());
                 }
-                if ((setup.getProperty("anonymous.user.id") != null) && (userDao.getUser(company.getId(), 
-                        Integer.valueOf(setup.getProperty("anonymous.user.id"))) != null)) {
-                    user = userDao.getUser(company.getId(), Integer.valueOf(setup.getProperty("anonymous.user.id")));
+                if ((company != null) && (!page.equals("logout")) && (checkPermanentLogin(request, response, userDao, company.getId()) != 0)) {
+                    user = userDao.getUser(company.getId(), checkPermanentLogin(request, response, userDao, company.getId()));
+                    user.login(user.getPassword());
+                    logDao.log(user.getId(), LogDAO.operationTypeLogin, LogDAO.idNull);
+                    savePermanentLogin(request, response, user);
+                } else {
+                    if ((setup.getProperty("anonymous.user.id") != null) && (userDao.getUser(company.getId(), 
+                            Integer.valueOf(setup.getProperty("anonymous.user.id"))) != null)) {
+                        user = userDao.getUser(company.getId(), Integer.valueOf(setup.getProperty("anonymous.user.id")));
+                    }
                 }
                 session.setAttribute("user", user);
                 language = languageDao.getDictionary(user.getLanguageId());
                 session.setAttribute("language", language);
+                page = "articleList";
             }
             
             if (page.equals("login") && (company != null)) {
@@ -174,6 +186,7 @@ public class Dispatcher extends HttpServlet {
                     session.setAttribute("language", language);
                     page = "articleList";
                     logDao.log(user.getId(), LogDAO.operationTypeLogin, LogDAO.idNull);
+                    savePermanentLogin(request, response, user);
                 } else {
                     request.setAttribute("messageHeader", language.getText("Bad login"));
                     request.setAttribute("message", "<p>" + language.getText("You can continue") + " <a href=\"Dispatcher\">" + language.getText("here") + "</a>.</p><p><a href=\"Dispatcher?page=lostPassword\">" + language.getText("Forgot password?") + "</a></p>");
@@ -306,10 +319,10 @@ public class Dispatcher extends HttpServlet {
                     rd.forward(request, response);
                     return;
                 }
-                
+
                 if (page.equals("search")) {
                     String search = request.getParameter("search");
-                    
+
                     Menu menu = menuDao.getMenu(company.getId());
                     int section = 0;
                     if (request.getParameter("section") != null) {
@@ -1258,6 +1271,7 @@ public class Dispatcher extends HttpServlet {
             return;
             
         } catch (Exception ex) {
+            ex.printStackTrace();
             out.println(ex.getMessage());
         } finally {            
             out.close();
@@ -1311,6 +1325,71 @@ public class Dispatcher extends HttpServlet {
         if (u.hasPermission("menu_administration")) result.add(new SystemMenuEntry("Administration", "Dispatcher?page=companyDetail"));
         
         return result;
+    }
+    
+    private void clearPermanentLogin(HttpServletRequest request, HttpServletResponse response) {
+        int age = 365 * 24 * 60 * 60;
+        Cookie cookie = null;
+        cookie = new Cookie("company", "0");
+        cookie.setMaxAge(age);
+        response.addCookie(cookie);
+        cookie = new Cookie("login", "");
+        cookie.setMaxAge(age);
+        response.addCookie(cookie);
+        cookie = new Cookie("password", "");
+        cookie.setMaxAge(age);
+        response.addCookie(cookie);
+    }
+    
+    private void savePermanentLogin(HttpServletRequest request, HttpServletResponse response, User user) throws NoSuchAlgorithmException {
+        int age = 365 * 24 * 60 * 60;
+        Cookie cookie = null;
+        cookie = new Cookie("company", String.valueOf(user.getCompanyId()));
+        cookie.setMaxAge(age);
+        response.addCookie(cookie);
+        cookie = new Cookie("login", user.getLogin());
+        cookie.setMaxAge(age);
+        response.addCookie(cookie);
+        cookie = new Cookie("password", getMd5Digest(user.getPassword()));
+        cookie.setMaxAge(age);
+        response.addCookie(cookie);
+    }
+    
+    private int checkPermanentLogin(HttpServletRequest request, HttpServletResponse response, UserDAO userDao, int companyId) throws SQLException, NoSuchAlgorithmException {
+        int result = 0;
+        Cookie cookies[] = request.getCookies();
+        int company = (getCookie(cookies, "company").equals("")) ? 0 : Integer.valueOf(getCookie(cookies, "company"));
+        String login = getCookie(cookies, "login");
+        String password = getCookie(cookies, "password");
+        User u = userDao.getUserByLogin(company, login);
+        if ((company == companyId) && (u != null) && (password.equals(getMd5Digest(u.getPassword()))) && (u.isEnabled())) {
+            result = u.getId();
+        }
+        //System.out.println(company);
+        //System.out.println(login);
+        //System.out.println(password);
+        //System.out.println(result);
+        return result;
+    }
+    
+    private String getCookie(Cookie cookies[], String key) {
+        String result = "";
+        if (cookies != null) {
+            for (int i = 0; i < cookies.length; i++) {
+                if (cookies [i].getName().equals(key)) {
+                    result = cookies[i].getValue();
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+    
+    private String getMd5Digest(String pInput) throws NoSuchAlgorithmException {    
+        MessageDigest lDigest = MessageDigest.getInstance("MD5");
+        lDigest.update(pInput.getBytes());
+        BigInteger lHashInt = new BigInteger(1, lDigest.digest());
+        return String.format("%1$032X", lHashInt);
     }
     
     private Connection createConnection() throws javax.naming.NamingException, SQLException {
