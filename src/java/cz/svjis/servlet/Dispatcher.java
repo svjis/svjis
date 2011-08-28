@@ -368,11 +368,12 @@ public class Dispatcher extends HttpServlet {
                 if (page.equals("inquiryVote")) {
                     int id = Integer.parseInt(request.getParameter("id"));
                     Inquiry i = inquiryDao.getInquiry(user, id);
-                    if ((i != null) && (i.isUserCanVote())) {
+                    if ((i != null) && (i.isUserCanVote()) && (request.getParameter("i_" + i.getId()) != null)) {
+                        String value = request.getParameter("i_" + i.getId());
                         Iterator<InquiryOption> ioI = i.getOptionList().iterator();
                         while (ioI.hasNext()) {
                             InquiryOption io = ioI.next();
-                            if (request.getParameter("o_" + io.getId()) != null) {
+                            if (value.equals("o_" + io.getId())) {
                                 inquiryDao.insertInquiryVote(io.getId(), user.getId());
                             }
                         }
