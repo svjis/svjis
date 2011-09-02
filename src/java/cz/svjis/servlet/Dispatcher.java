@@ -644,7 +644,11 @@ public class Dispatcher extends HttpServlet {
                         File f = new File(item.getName());
                         if (!item.isFormField()) {
                             ArticleAttachment aa = new ArticleAttachment();
-                            aa.setFileName(f.getName());
+                            String fileName = f.getName().replace(" ", "_");
+                            if (fileName.lastIndexOf("\\") > -1) {
+                                fileName = fileName.substring(fileName.lastIndexOf("\\") + 1);
+                            }
+                            aa.setFileName(fileName);
                             aa.setContentType(item.getContentType());
                             aa.setData(item.get());
                             aa.setUserId(user.getId());
