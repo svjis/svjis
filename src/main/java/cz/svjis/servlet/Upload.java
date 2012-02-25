@@ -4,6 +4,7 @@
  */
 package cz.svjis.servlet;
 
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import cz.svjis.bean.ArticleAttachment;
 import cz.svjis.bean.ArticleDAO;
 import cz.svjis.bean.Company;
@@ -22,7 +23,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
-import org.apache.catalina.util.Base64;
 
 /**
  *

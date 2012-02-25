@@ -1,3 +1,5 @@
-glob:build/**
-glob:dist/**
-glob:nbproject/private/**
+glob:.settings/**
+glob:target/**
+glob:.project
+glob:.classpath
+
