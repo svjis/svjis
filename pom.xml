@@ -18,6 +18,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>javax.resource</groupId>
+            <artifactId>connector-api</artifactId>
+            <version>1.5</version>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>6.0</version>
@@ -50,8 +55,8 @@
             <version>2.1.6</version>
             <exclusions>
                 <exclusion>
-                    <artifactId>jms</artifactId>
-                    <groupId>javax.jms</groupId>
+                    <artifactId>log4j</artifactId>
+                    <groupId>log4j</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
