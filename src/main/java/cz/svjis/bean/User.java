@@ -63,7 +63,11 @@ public final class User {
     }
     
     public boolean login (String password) {
-        if ((enabled) && (password != null) && (password.equals(this.password))) {
+        if ((enabled) && 
+                (login != null) && (!login.equals("")) && 
+                (this.password != null) && (!this.password.equals("")) &&
+                (password != null) && (!password.equals("")) && 
+                (password.equals(this.password))) {
             userLogged = true;
         } else {
             clear();
