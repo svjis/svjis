@@ -51,14 +51,8 @@
         </dependency>
         <dependency>
             <groupId>org.firebirdsql.jdbc</groupId>
-            <artifactId>jaybird</artifactId>
-            <version>2.1.6</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>log4j</artifactId>
-                    <groupId>log4j</groupId>
-                </exclusion>
-            </exclusions>
+            <artifactId>jaybird-jdk16</artifactId>
+            <version>2.2.0</version>
         </dependency>
     </dependencies>
 
