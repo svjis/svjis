@@ -32,6 +32,7 @@
                         <tr>
                             <th class="list">&nbsp;</th>
                             <th class="list">&nbsp;</th>
+                            <th class="list">&nbsp;</th>
                             <th class="list"><%=language.getText("Article") %></th>
                             <th class="list"><%=language.getText("Menu") %></th>
                             <th class="list"><%=language.getText("Author") %></th>
@@ -47,6 +48,7 @@
                         <tr>
                             <td class="list"><a href="Dispatcher?page=articleDetail&id=<%=a.getId() %>"><img src="gfx/find.png" border="0" title="View"></a></td>
                             <td class="list"><a href="Dispatcher?page=redactionArticleEdit&id=<%=a.getId() %>"><img src="gfx/pencil.png" border="0" title="<%=language.getText("Edit") %>"></a></td>
+                            <td class="list"><a href="Dispatcher?page=redactionArticleSendNotifications&id=<%=a.getId() %>"><img src="gfx/email_open_image.png" border="0" title="<%=language.getText("Send notifications") %>"></td>
                             <td class="list"><%=a.getHeader() %></td>
                             <td class="list"><%=a.getMenuNodeDescription() %></td>
                             <td class="list"><%=a.getAuthor().getFirstName() %>&nbsp;<%=a.getAuthor().getLastName() %></td>

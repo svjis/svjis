@@ -21,6 +21,7 @@ public class LogDAO {
     public static final int operationTypeLogout = 2;
     public static final int operationTypeRead = 3;
     public static final int operationTypeSendLostPassword = 4;
+    public static final int operationTypeSendArticleNotification = 5;
     
     public LogDAO (Connection cnn) {
         this.cnn = cnn;

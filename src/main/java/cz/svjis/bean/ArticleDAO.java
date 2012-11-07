@@ -301,9 +301,11 @@ public class ArticleDAO {
         rs.close();
         ps.close();
         
-        result.setAttachmentList(getArticleAttachmentList(result.getId()));
-        result.setCommentList(getArticleCommentList(result.getId()));
-        result.setRoles(getArticleRoles(result.getId()));
+        if (result != null) {
+            result.setAttachmentList(getArticleAttachmentList(result.getId()));
+            result.setCommentList(getArticleCommentList(result.getId()));
+            result.setRoles(getArticleRoles(result.getId()));
+        }
         return result;
     }
     
@@ -581,5 +583,40 @@ public class ArticleDAO {
         ps.setString(4, c.getBody());
         ps.execute();
         ps.close();
+    }
+    
+    public ArrayList<User> getUserListPermittedForRead(int articleId) throws SQLException {
+        ArrayList<User> result = new ArrayList<User>();
+        String select = "SELECT "
+                + "a.ARTICLE_ID, "
+                + "u.ID,u.LAST_NAME, "
+                + "u.FIRST_NAME, "
+                + "u.E_MAIL "
+                + "FROM ARTICLE_IS_VISIBLE_TO_ROLE a "
+                + "LEFT JOIN USER_HAS_ROLE r on (r.ROLE_ID = a.ROLE_ID) "
+                + "LEFT JOIN \"USER\" u on (u.ID = r.USER_ID) "
+                + "WHERE (a.ARTICLE_ID = ?) AND (u.E_MAIL <> '') "
+                + "GROUP BY "
+                + "a.ARTICLE_ID, "
+                + "u.ID, "
+                + "u.FIRST_NAME, "
+                + "u.LAST_NAME, "
+                + "u.E_MAIL "
+                + "ORDER BY "
+                + "u.LAST_NAME collate UNICODE_CI_AI";
+        
+        PreparedStatement ps = cnn.prepareStatement(select);
+        ps.setInt(1, articleId);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            User u = new User();
+            u.setId(rs.getInt("ID"));
+            u.setFirstName(rs.getString("FIRST_NAME"));
+            u.setLastName(rs.getString("LAST_NAME"));
+            u.seteMail(rs.getString("E_MAIL"));
+            result.add(u);
+        }
+        ps.close();
+        return result;
     }
 }

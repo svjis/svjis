@@ -174,7 +174,9 @@ public class Dispatcher extends HttpServlet {
                 session.setAttribute("user", user);
                 language = languageDao.getDictionary(user.getLanguageId());
                 session.setAttribute("language", language);
-                page = "articleList";
+                if (page.equals("logout")) {
+                    page = "articleList";
+                }
             }
             
             if (page.equals("login") && (company != null)) {
@@ -392,6 +394,13 @@ public class Dispatcher extends HttpServlet {
                     Article article = articleDao.getArticle(
                             user, 
                             articleId);
+                    if ((article == null) || (article.getId() == 0)) {
+                        Menu menu = menuDao.getMenu(company.getId());
+                        request.setAttribute("menu", menu);
+                        RequestDispatcher rd = request.getRequestDispatcher("/ArticleNotFound.jsp");
+                        rd.forward(request, response);
+                        return;
+                    }
                     request.setAttribute("article", article);
 
                     Menu menu = menuDao.getMenu(company.getId());
@@ -628,6 +637,67 @@ public class Dispatcher extends HttpServlet {
                     String url = "Dispatcher?page=redactionArticleEdit&id=" + a.getId();
                     request.setAttribute("url", url);
                     RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
+                    rd.forward(request, response);
+                    return;
+                }
+                
+                if (page.equals("redactionArticleSendNotifications")) {
+                    int articleId = 0;
+                    if (request.getParameter("id") != null) {
+                        articleId = Integer.valueOf(request.getParameter("id"));
+                    } 
+                    Article article = null;
+                    if (articleId == 0) {
+                        article = new Article();
+                    } else {
+                        article = articleDao.getArticle(user, articleId);
+                    }
+                    request.setAttribute("article", article);
+                    
+                    ArrayList<User> userList = articleDao.getUserListPermittedForRead(articleId);
+                    request.setAttribute("userList", userList);
+                    
+                    RequestDispatcher rd = request.getRequestDispatcher("/Redaction_ArticleSendNotifications.jsp");
+                    rd.forward(request, response);
+                    return;
+                }
+                
+                if (page.equals("redactionArticleSendNotificationsConfirmation")) {
+                    int articleId = 0;
+                    if (request.getParameter("id") != null) {
+                        articleId = Integer.valueOf(request.getParameter("id"));
+                    } 
+                    Article article = null;
+                    if (articleId == 0) {
+                        article = new Article();
+                    } else {
+                        article = articleDao.getArticle(user, articleId);
+                    }
+                    request.setAttribute("article", article);
+                    
+                    String subject = company.getInternetDomain() + ": " + article.getHeader();
+                    String body = setup.getProperty("mail.template.article.notification");
+                    body = String.format(body, "<a href=\"http://" + company.getInternetDomain() + "/Dispatcher?page=articleDetail&id=" + article.getId() + "\">" + article.getHeader() + "</a>");
+                    MailDAO mailDao = new MailDAO(
+                            setup.getProperty("mail.smtp"),
+                            setup.getProperty("mail.login"),
+                            setup.getProperty("mail.password"),
+                            setup.getProperty("mail.sender"));
+                    
+                    int counter = 0;
+                    ArrayList<User> userList = articleDao.getUserListPermittedForRead(articleId);
+                    Iterator<User> it = userList.iterator();
+                    while (it.hasNext()) {
+                        User u = it.next();
+                        if (request.getParameter("u_" + u.getId()) != null) {
+                            mailDao.sendMail(u.geteMail(), subject, body);
+                            logDao.log(u.getId(), LogDAO.operationTypeSendArticleNotification, article.getId());
+                            counter++;
+                        }
+                    }
+                    article.setNumOfReads(counter);
+                    
+                    RequestDispatcher rd = request.getRequestDispatcher("/Redaction_ArticleSendNotificationsConfirmation.jsp");
                     rd.forward(request, response);
                     return;
                 }
