@@ -86,7 +86,8 @@ public class CompanyDAO {
                 + "a.PICTURE_DATA, "
                 + "(SELECT count(*) FROM BUILDING b left join BUILDING_UNIT u on (u.BUILDING_ID = b.ID) where (b.COMPANY_ID = a.ID)) AS UNIT_CNT, "
                 + "(SELECT count(*) FROM \"USER\" u where (u.COMPANY_ID = a.ID)) AS USER_CNT, "
-                + "(SELECT (count(*)) FROM \"ROLE\" r where (r.COMPANY_ID = a.ID)) AS ROLE_CNT "
+                + "(SELECT count(*) FROM \"ROLE\" r where (r.COMPANY_ID = a.ID)) AS ROLE_CNT, "
+                + "(SELECT count(*) FROM MESSAGE_QUEUE m WHERE (m.COMPANY_ID = a.ID) AND (m.STATUS = 0)) AS MESSAGE_CNT "
                 + "FROM COMPANY a "
                 + "WHERE a.ID = ?";
         
@@ -113,6 +114,7 @@ public class CompanyDAO {
             result.setUnitCnt(rs.getInt("UNIT_CNT"));
             result.setUserCnt(rs.getInt("USER_CNT"));
             result.setRoleCnt(rs.getInt("ROLE_CNT"));
+            result.setMessageCnt(rs.getInt("MESSAGE_CNT"));
         }
         rs.close();
         ps.close();

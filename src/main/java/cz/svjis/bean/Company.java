@@ -33,6 +33,7 @@ public class Company {
     private int unitCnt;
     private int userCnt;
     private int roleCnt;
+    private int messageCnt;
 
     /**
      * @return the id
@@ -310,5 +311,19 @@ public class Company {
             tfp.deleteFile(getPictureFilename());
         }
         getPictureUrl(realRootPath);
+    }
+
+    /**
+     * @return the messageCnt
+     */
+    public int getMessageCnt() {
+        return messageCnt;
+    }
+
+    /**
+     * @param messageCnt the messageCnt to set
+     */
+    public void setMessageCnt(int messageCnt) {
+        this.messageCnt = messageCnt;
     }
 }

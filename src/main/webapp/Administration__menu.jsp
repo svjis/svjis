@@ -32,6 +32,7 @@
                 <li <%=(p.startsWith("userList") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=userList"><%=language.getText("User list") %> (<%=currCompany.getUserCnt() %>)</a></li>
                 <li <%=(p.startsWith("roleList") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=roleList"><%=language.getText("Role list") %> (<%=currCompany.getRoleCnt() %>)</a></li>
                 <li <%=(p.startsWith("propertyList") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=propertyList"><%=language.getText("Properties") %></a></li>
+                <li <%=(p.startsWith("messagesPending") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=messagesPending"><%=language.getText("Messages pending") %> (<%=currCompany.getMessageCnt() %>)</a></li>
             </ul>
             
             <jsp:include page="_menu_login.jsp" />

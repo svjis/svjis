@@ -27,6 +27,7 @@ import cz.svjis.bean.Menu;
 import cz.svjis.bean.MenuDAO;
 import cz.svjis.bean.MenuItem;
 import cz.svjis.bean.MenuNode;
+import cz.svjis.bean.Message;
 import cz.svjis.bean.MiniNews;
 import cz.svjis.bean.MiniNewsDAO;
 import cz.svjis.bean.Permission;
@@ -256,11 +257,12 @@ public class Dispatcher extends HttpServlet {
                     String body = setup.getProperty("mail.template.lost.password");
                     body = String.format(body, logins);
                     MailDAO mailDao = new MailDAO(
+                            cnn,
                             setup.getProperty("mail.smtp"),
                             setup.getProperty("mail.login"),
                             setup.getProperty("mail.password"),
                             setup.getProperty("mail.sender"));
-                    mailDao.sendMail(email, company.getName(), body);
+                    mailDao.sendInstantMail(email, company.getName(), body);
                     request.setAttribute("messageHeader", language.getText("Password assistance"));
                     request.setAttribute("message", language.getText("Your login and password were sent to your mail."));
                     rd = request.getRequestDispatcher("/_message.jsp");
@@ -679,6 +681,7 @@ public class Dispatcher extends HttpServlet {
                     String body = setup.getProperty("mail.template.article.notification");
                     body = String.format(body, "<a href=\"http://" + company.getInternetDomain() + "/Dispatcher?page=articleDetail&id=" + article.getId() + "\">" + article.getHeader() + "</a>");
                     MailDAO mailDao = new MailDAO(
+                            cnn,
                             setup.getProperty("mail.smtp"),
                             setup.getProperty("mail.login"),
                             setup.getProperty("mail.password"),
@@ -690,11 +693,11 @@ public class Dispatcher extends HttpServlet {
                     while (it.hasNext()) {
                         User u = it.next();
                         if (request.getParameter("u_" + u.getId()) != null) {
-                            mailDao.sendMail(u.geteMail(), subject, body);
-                            logDao.log(u.getId(), LogDAO.operationTypeSendArticleNotification, article.getId());
+                            mailDao.queueMail(company.getId(), u.geteMail(), subject, body);
                             counter++;
                         }
                     }
+                    logDao.log(user.getId(), LogDAO.operationTypeSendArticleNotification, article.getId());
                     article.setNumOfReads(counter);
                     
                     RequestDispatcher rd = request.getRequestDispatcher("/Redaction_ArticleSendNotificationsConfirmation.jsp");
@@ -1332,6 +1335,22 @@ public class Dispatcher extends HttpServlet {
                     String url = "Dispatcher?page=propertyList";
                     request.setAttribute("url", url);
                     RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
+                    rd.forward(request, response);
+                    return;
+                }
+                
+                if (page.equals("messagesPending")) {
+                    Company currCompany = compDao.getCompany(company.getId());
+                    request.setAttribute("currCompany", currCompany);
+                    MailDAO mailDao = new MailDAO(
+                            cnn,
+                            setup.getProperty("mail.smtp"),
+                            setup.getProperty("mail.login"),
+                            setup.getProperty("mail.password"),
+                            setup.getProperty("mail.sender"));
+                    ArrayList<Message> messageList = mailDao.getWaitingMessages(company.getId());
+                    request.setAttribute("messageList", messageList);
+                    RequestDispatcher rd = request.getRequestDispatcher("/Administration_messageList.jsp");
                     rd.forward(request, response);
                     return;
                 }
