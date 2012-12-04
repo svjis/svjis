@@ -27,8 +27,8 @@ public class LogDAO {
         this.cnn = cnn;
     }
     
-    public void log(int userId, int operationId, int articleId) throws SQLException {
-        String insert = "INSERT INTO LOG (\"TIME\", USER_ID, OPERATION_ID, ARTICLE_ID) VALUES (?,?,?,?)";
+    public void log(int userId, int operationId, int articleId, String remoteIp) throws SQLException {
+        String insert = "INSERT INTO LOG (\"TIME\", USER_ID, OPERATION_ID, ARTICLE_ID, REMOTE_IP) VALUES (?,?,?,?,?)";
         PreparedStatement ps = cnn.prepareStatement(insert);
         ps.setTimestamp(1, new java.sql.Timestamp(new Date().getTime()));
         ps.setInt(2, userId);
@@ -38,7 +38,15 @@ public class LogDAO {
         } else {
             ps.setNull(4, java.sql.Types.NULL);
         }
+        ps.setString(5, trim(remoteIp, 16));
         ps.execute();
         ps.close();
+    }
+    
+    private String trim(String s, int maxLength) {
+        if (s.length() > maxLength) {
+            s = s.substring(0, maxLength - 1);
+        }
+        return s;
     }
 }
