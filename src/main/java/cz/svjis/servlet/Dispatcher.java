@@ -1367,6 +1367,25 @@ public class Dispatcher extends HttpServlet {
         } catch (Exception ex) {
             ex.printStackTrace();
             out.println(ex.getMessage());
+
+            HttpSession session = request.getSession();
+            Properties setup = (Properties) session.getAttribute("setup");
+            if ((setup != null) && (setup.getProperty("error.report.recipient") != null)) {
+                MailDAO mailDao = new MailDAO(
+                                cnn,
+                                setup.getProperty("mail.smtp"),
+                                setup.getProperty("mail.login"),
+                                setup.getProperty("mail.password"),
+                                setup.getProperty("mail.sender"));
+                try {
+                    mailDao.sendErrorReport(
+                            setup.getProperty("error.report.recipient"), 
+                            request.getRequestURL().toString() + "/" + request.getQueryString(), 
+                            ex);
+                } catch (Exception e) {}
+            }
+            RequestDispatcher rd = request.getRequestDispatcher("/Error.jsp");
+            rd.forward(request, response);
         } finally {            
             out.close();
             closeConnection(cnn);

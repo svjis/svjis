@@ -4,10 +4,14 @@
  */
 package cz.svjis.bean;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import org.apache.commons.mail.EmailException;
@@ -136,5 +140,25 @@ public class MailDAO {
         psUpdate.setInt(3, messageId);
         psUpdate.executeUpdate();
         psUpdate.close();
+    }
+    
+    public void sendErrorReport(String recipient, String url, Throwable throwable) throws EmailException {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+        HtmlEmail email = new HtmlEmail();
+        email.setCharset("UTF-8");
+        email.setHostName(smtp);
+        email.setAuthentication(login, password);
+        email.addTo(recipient, recipient);
+        email.setFrom(sender, sender);
+        email.setSubject("SVJIS: Error report");
+        email.setHtmlMsg("<p>Time: " + sdf.format(new Date()) + "</p><p>URL: " + url + "</p><p>" + getStackTrace(throwable).replace("\n", "<br>") + "</p>");
+        email.send();
+    }
+    
+    private String getStackTrace(Throwable throwable) {
+        Writer writer = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(writer);
+        throwable.printStackTrace(printWriter);
+        return writer.toString();
     }
 }
