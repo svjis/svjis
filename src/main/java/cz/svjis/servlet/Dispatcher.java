@@ -727,7 +727,9 @@ public class Dispatcher extends HttpServlet {
                             aa.setUserId(user.getId());
                             aa.setArticleId(articleId);
                             aa.setUploadTime(new Date());
-                            articleDao.insertArticleAttachment(aa);
+                            if (!aa.getFileName().equals("")) {
+                                articleDao.insertArticleAttachment(aa);
+                            }
                         }
                     }
                     String url = "Dispatcher?page=redactionArticleEdit&id=" + articleId;
@@ -1366,7 +1368,6 @@ public class Dispatcher extends HttpServlet {
             
         } catch (Exception ex) {
             ex.printStackTrace();
-            out.println(ex.getMessage());
 
             HttpSession session = request.getSession();
             Properties setup = (Properties) session.getAttribute("setup");

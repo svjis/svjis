@@ -8,15 +8,18 @@ import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import cz.svjis.bean.ArticleAttachment;
 import cz.svjis.bean.ArticleDAO;
 import cz.svjis.bean.Company;
+import cz.svjis.bean.MailDAO;
 import cz.svjis.bean.User;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -73,6 +76,24 @@ public class Upload extends HttpServlet {
             
         } catch (Exception ex) {
             ex.printStackTrace();
+            
+            Properties setup = (Properties) session.getAttribute("setup");
+            if ((setup != null) && (setup.getProperty("error.report.recipient") != null)) {
+                MailDAO mailDao = new MailDAO(
+                                cnn,
+                                setup.getProperty("mail.smtp"),
+                                setup.getProperty("mail.login"),
+                                setup.getProperty("mail.password"),
+                                setup.getProperty("mail.sender"));
+                try {
+                    mailDao.sendErrorReport(
+                            setup.getProperty("error.report.recipient"), 
+                            request.getRequestURL().toString() + "/" + request.getQueryString(), 
+                            ex);
+                } catch (Exception e) {}
+            }
+            RequestDispatcher rd = request.getRequestDispatcher("/Error.jsp");
+            rd.forward(request, response);
         } finally {            
             closeConnection(cnn);
         }
