@@ -12,6 +12,7 @@
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
 <jsp:useBean id="menu" scope="request" class="cz.svjis.bean.Menu" />
+<jsp:useBean id="slider" scope="request" class="cz.svjis.bean.SliderImpl" />
 <jsp:useBean id="articleList" scope="request" class="java.util.ArrayList" />
 <jsp:useBean id="articleListInfo" scope="request" class="cz.svjis.bean.ArticleListInfo" />
 
@@ -61,27 +62,20 @@
                     </table>
                     
                     <br>
+                    <% if (slider.getTotalNumOfPages() > 1) { %>
                     <strong><%=language.getText("Pages:") %></strong>&nbsp;
                     <%
-                        for (int i = 0; i < articleListInfo.getNumOfPages(); i ++) {
-                            if ((i + 1) != articleListInfo.getActualPage()) {
-                                if (request.getParameter("search") != null) {
-                                    String search = URLEncoder.encode(request.getParameter("search"), "UTF-8");
-                    %>
-                                <a href="Dispatcher?page=redactionSearch&search=<%=search %>&pageNo=<%=(i + 1) %>"><%=(i + 1) %></a>&nbsp;
-                    <%
-                                } else {
-                    %>
-                                <a href="Dispatcher?page=redactionArticleList&section=<%= articleListInfo.getMenuNodeId() %>&pageNo=<%=(i + 1) %>"><%=(i + 1) %></a>&nbsp;
-                    <%
-                                }
+                        Iterator<cz.svjis.bean.SliderItem> slIt = slider.getItemList().iterator();
+                        while (slIt.hasNext()) {
+                            cz.svjis.bean.SliderItem item = slIt.next();
+                            if (item.isCurrent()) {
+                                out.println("<b>" + item.getLabel() + "</b>&nbsp;");
                             } else {
-                    %>
-                                <b><%=(i + 1) %></b>
-                    <%            
+                                out.println("<a href=\"Dispatcher?page=redactionArticleList&section=0&pageNo=" + item.getPage() + "\">" + item.getLabel() + "</a>&nbsp;");
                             }
                         }
                     %>
+                    <% } %>
                 </div> <!-- /content-main-in -->
             </div> <!-- /content-main -->
             <hr class="noscreen" />

@@ -15,6 +15,7 @@
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
+<jsp:useBean id="slider" scope="request" class="cz.svjis.bean.SliderImpl" />
 <jsp:useBean id="articleList" scope="request" class="java.util.ArrayList" />
 <jsp:useBean id="articleTopList" scope="request" class="java.util.ArrayList" />
 <jsp:useBean id="articleListInfo" scope="request" class="cz.svjis.bean.ArticleListInfo" />
@@ -78,27 +79,27 @@
                     %>
 
                     <p class="t-left">
+                        <% if (slider.getTotalNumOfPages() > 1) { %>
                         <strong><%=language.getText("Pages:") %></strong>&nbsp;
                         <%
-                            for (int i = 0; i < articleListInfo.getNumOfPages(); i ++) {
-                                if ((i + 1) != articleListInfo.getActualPage()) {
-                                    if (request.getParameter("search") != null) {
-                                        String search = URLEncoder.encode(request.getParameter("search"), "UTF-8");
-                        %>
-                                    <a href="Dispatcher?page=search&search=<%=search %>&pageNo=<%=(i + 1) %>"><%=(i + 1) %></a>&nbsp;
-                        <%
-                                    } else {
-                        %>
-                                    <a href="Dispatcher?page=articleList&section=<%= articleListInfo.getMenuNodeId() %>&pageNo=<%=(i + 1) %>"><%=(i + 1) %></a>&nbsp;
-                        <%
-                                    }
-                                } else {
-                        %>
-                                    <b><%=(i + 1) %></b>
-                        <%            
-                                }
+                        String search = "";
+                        String pageId = "page=articleList&";
+                        if ((request.getParameter("search") != null) && (!request.getParameter("search").equals(""))) {
+                            search = "search=" + URLEncoder.encode(request.getParameter("search"), "UTF-8") + "&";
+                            pageId = "page=search&";
+                        }
+                        Iterator<cz.svjis.bean.SliderItem> slIt = slider.getItemList().iterator();
+                        while (slIt.hasNext()) {
+                            cz.svjis.bean.SliderItem item = slIt.next();
+                            if (item.isCurrent()) {
+                                out.println("<b>" + item.getLabel() + "</b>&nbsp;");
+                            } else {
+                                out.println("<a href=\"Dispatcher?" + pageId + "section=" + articleListInfo.getMenuNodeId() + "&" + search + "pageNo=" + item.getPage() + "\">" + item.getLabel() + "</a>&nbsp;");
                             }
+                        }
                         %>
+                        <% } %>
+
                     </p>
 
                 </div> <!-- /content-left-in -->

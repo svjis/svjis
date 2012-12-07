@@ -33,6 +33,7 @@ import cz.svjis.bean.MiniNewsDAO;
 import cz.svjis.bean.Permission;
 import cz.svjis.bean.Role;
 import cz.svjis.bean.RoleDAO;
+import cz.svjis.bean.SliderImpl;
 import cz.svjis.bean.SystemMenuEntry;
 import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
@@ -295,6 +296,12 @@ public class Dispatcher extends HttpServlet {
                     if (request.getParameter("pageNo") != null) {
                         pageNo = Integer.valueOf(request.getParameter("pageNo"));
                     }
+                    SliderImpl sl = new SliderImpl();
+                    sl.setSliderWide(10);
+                    sl.setCurrentPage(pageNo);
+                    sl.setNumOfItemsAtPage(Integer.valueOf(setup.getProperty("article.page.size")));
+                    sl.setTotalNumOfItems(articleDao.getNumOfArticles(user, section, true, false));
+                    request.setAttribute("slider", sl);
                     ArrayList<Article> articleList = articleDao.getArticleList(
                             user,
                             section,
@@ -339,6 +346,12 @@ public class Dispatcher extends HttpServlet {
                     if (request.getParameter("pageNo") != null) {
                         pageNo = Integer.valueOf(request.getParameter("pageNo"));
                     }
+                    SliderImpl sl = new SliderImpl();
+                    sl.setSliderWide(10);
+                    sl.setCurrentPage(pageNo);
+                    sl.setNumOfItemsAtPage(Integer.valueOf(setup.getProperty("article.page.size")));
+                    sl.setTotalNumOfItems(articleDao.getNumOfArticlesFromSearch(search, user, section, true, false));
+                    request.setAttribute("slider", sl);
                     ArrayList<Article> articleList = articleDao.getArticleListFromSearch(
                             search,
                             user,
@@ -556,6 +569,12 @@ public class Dispatcher extends HttpServlet {
                     if (request.getParameter("pageNo") != null) {
                         pageNo = Integer.valueOf(request.getParameter("pageNo"));
                     }
+                    SliderImpl sl = new SliderImpl();
+                    sl.setSliderWide(10);
+                    sl.setCurrentPage(pageNo);
+                    sl.setNumOfItemsAtPage(Integer.valueOf(setup.getProperty("article.page.size")));
+                    sl.setTotalNumOfItems(articleDao.getNumOfArticles(user, section, false, !user.hasPermission("redaction_articles_all")));
+                    request.setAttribute("slider", sl);
                     ArrayList<Article> articleList = articleDao.getArticleList(
                             user,
                             section,
