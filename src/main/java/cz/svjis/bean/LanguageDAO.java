@@ -39,6 +39,21 @@ public class LanguageDAO {
     }
     
     public Language getDictionary(int languageId) throws SQLException {
+        Language result = getLanguage(languageId);
+        
+        String select2 = "SELECT a.ID, a.TEXT FROM LANGUAGE_DICTIONARY a WHERE a.LANGUAGE_ID = ?";
+        PreparedStatement ps = cnn.prepareStatement(select2);
+        ps.setInt(1, languageId);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            result.getPhrases().put(rs.getString("ID"), rs.getString("TEXT"));
+        }
+        rs.close();
+        ps.close();
+        return result;
+    }
+    
+    public Language getLanguage(int languageId) throws SQLException {
         Language result = new Language();
         String select = "SELECT a.ID, a.DESCRIPTION FROM LANGUAGE a WHERE a.ID = ?";
         PreparedStatement ps = cnn.prepareStatement(select);
@@ -51,15 +66,6 @@ public class LanguageDAO {
         rs.close();
         ps.close();
         
-        String select2 = "SELECT a.ID, a.TEXT FROM LANGUAGE_DICTIONARY a WHERE a.LANGUAGE_ID = ?";
-        ps = cnn.prepareStatement(select2);
-        ps.setInt(1, languageId);
-        rs = ps.executeQuery();
-        while (rs.next()) {
-            result.getPhrases().put(rs.getString("ID"), rs.getString("TEXT"));
-        }
-        rs.close();
-        ps.close();
         return result;
     }
 }

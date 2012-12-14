@@ -20,7 +20,8 @@
             <div id="content-main">
                 <div id="content-main-in">
                     <h2><%=language.getText("User list") %></h2>
-                    [<a href="Dispatcher?page=userEdit&id=0"><%=language.getText("Add new user") %></a>]<br>
+                    [<a href="Dispatcher?page=userEdit&id=0"><%=language.getText("Add new user") %></a>]&nbsp;
+                    [<a href="Upload?page=exportUserListToXls"><%=language.getText("Export to Excel") %></a>]<br>
                     <table class="list">
                         <tr>
                             <th class="list">&nbsp;</th>
@@ -29,8 +30,6 @@
                             <th class="list">&nbsp;</th>
                             <th class="list"><%=language.getText("Last name") %></th>
                             <th class="list"><%=language.getText("First name") %></th>
-                            <th class="list"><%=language.getText("Salutation") %></th>
-                            <th class="list"><%=language.getText("Login") %></th>
                             <th class="list"><%=language.getText("Enabled") %></th>
                             <th class="list"><%=language.getText("In contact list") %></th>
                             <th class="list"><%=language.getText("Last login") %></th>
@@ -49,8 +48,6 @@
                             <td class="list"><a onclick="if (!confirm('<%=language.getText("Really do you want to remove user") %> <%=u.getLastName() %> <%=u.getFirstName() %> ?')) return false;" href="Dispatcher?page=userDelete&id=<%=u.getId() %>"><img src="gfx/delete.png" border="0" title="<%=language.getText("Delete") %>"></a></td>
                             <td class="list"><%=u.getLastName() %></td>
                             <td class="list"><%=u.getFirstName() %></td>
-                            <td class="list"><%=u.getSalutation() %></td>
-                            <td class="list"><%=u.getLogin() %></td>
                             <td class="list"><%=(u.isEnabled()) ? language.getText("yes") : language.getText("no") %></td>
                             <td class="list"><%=(u.isShowInPhoneList()) ? language.getText("yes") : language.getText("no") %></td>
                             <td class="list"><%=(u.getLastLogin() == null) ? "&nbsp;" : sdf.format(u.getLastLogin()) %></td>

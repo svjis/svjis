@@ -44,7 +44,8 @@
                     </form>
                     <br>
 
-                    [<a href="Dispatcher?page=buildingUnitEdit&id=0"><%=language.getText("Add new building unit") %></a>]<br>
+                    [<a href="Dispatcher?page=buildingUnitEdit&id=0"><%=language.getText("Add new building unit") %></a>]&nbsp;
+                    [<a href="Upload?page=exportBuildingUnitListToXls"><%=language.getText("Export to Excel") %></a>]<br>
                     <table class="list">
                         <tr>
                             <th class="list">&nbsp;</th>
