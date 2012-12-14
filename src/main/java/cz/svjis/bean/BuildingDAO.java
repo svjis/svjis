@@ -229,7 +229,7 @@ public class BuildingDAO {
                 + "FROM USER_HAS_BUILDING_UNIT a "
                 + "LEFT JOIN \"USER\" u ON (u.ID = a.USER_ID) "
                 + "WHERE (a.BUILDING_UNIT_ID = ?) "
-                + "ORDER BY u.LAST_NAME";
+                + "ORDER BY u.LAST_NAME collate UNICODE_CI_AI";
         
         PreparedStatement ps = cnn.prepareStatement(select);
         ps.setInt(1, buildingUnitId);

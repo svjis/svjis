@@ -1218,7 +1218,7 @@ public class Dispatcher extends HttpServlet {
                     request.setAttribute("cUser", cUser);
                     ArrayList<BuildingUnit> userHasUnitList = buildingDao.getUserHasBuildingUnitList(cUser.getId());
                     request.setAttribute("userHasUnitList", userHasUnitList);
-                    ArrayList<BuildingUnit> unitList = buildingDao.getUnconnectedBuildingUnitList(company.getId());
+                    ArrayList<BuildingUnit> unitList = buildingDao.getBuildingUnitList(company.getId(), 0);
                     request.setAttribute("unitList", unitList);
                     RequestDispatcher rd = request.getRequestDispatcher("/Administration_userUnits.jsp");
                     rd.forward(request, response);
