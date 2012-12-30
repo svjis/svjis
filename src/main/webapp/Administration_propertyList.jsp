@@ -4,6 +4,7 @@
     Author     : berk
 --%>
 
+<%@page import="java.util.Collections"%>
 <%@page import="java.util.Iterator"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
@@ -31,9 +32,11 @@
                         </tr>
                         <%
                         int i = 0;
-                        Iterator keyI = setup.keySet().iterator();
-                        while (keyI.hasNext()) {
-                            String key = (String) keyI.next();
+                        java.util.ArrayList<String> keys = new java.util.ArrayList<String>(setup.stringPropertyNames());
+                        Collections.sort(keys);
+                        Iterator<String> iKeys = keys.iterator();
+                        while (iKeys.hasNext()) {
+                            String key = iKeys.next();
                         %>
                         <tr>
                             <td class="list" style="text-align: right"><%=++i %></td>
