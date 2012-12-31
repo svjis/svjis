@@ -288,8 +288,8 @@ public class Company {
     }
  
     public String getPictureUrl(String realRootPath) {
-        String result = "";
-        if (getPictureFilename() != null) {
+        String result = null;
+        if ((getPictureFilename() != null) && (!getPictureFilename().equals(""))) {
             TempFileProcessor tfp = new TempFileProcessor(getInternetDomain(), realRootPath);
             if (!tfp.isFileExists(getPictureFilename())) {
                 try {

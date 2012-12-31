@@ -56,8 +56,14 @@
 
     <!-- Header -->
     <div id="header">
-
-        <div id="logo"><a href="Dispatcher" title="[<%=language.getText("Go to homepage") %>]"><span style="background:url('<%=company.getPictureUrl(request.getServletContext().getRealPath("/")) %>') 0 0 no-repeat;"></span></a></div> 
+<% 
+    String picture = company.getPictureUrl(request.getServletContext().getRealPath("/")); 
+    if (picture != null) {
+%>
+        <div id="logo"><a href="Dispatcher" title="[<%=language.getText("Go to homepage") %>]"><span style="background:url('<%=picture %>') 0 0 no-repeat;"></span></a></div>
+<%
+   }
+%>
         <div id="company_name"><%=company.getName() %></div>
         <hr class="noscreen" />          
 

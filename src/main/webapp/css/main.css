@@ -45,9 +45,9 @@ h3 {font-size:140%;}
 
 	#header {width:940px; height:95px; overflow:hidden; background:url("../design/header.gif") 0 0 no-repeat;}
 
-        #logo {position:relative; float: left; width:529px; height:94px; overflow:hidden; margin:0px 0px 0px 0px; padding:0; font-size:300%;}
+        #logo {position:relative; float: left; width:940px; height:94px; overflow:hidden; margin:0px 0px 0px 0px; padding:0; font-size:300%;}
         #logo span {display:block; position:absolute; top:0; left:0; z-index:1; width:100%; height:100%; margin:0; padding:0; cursor:pointer;}
-        #company_name {position:relative; float: right; width:411px; height:94px; overflow:hidden; margin:15px 0px 0px 0px; padding:0; font-size:160%; text-align: center;}
+        #company_name {position:relative; float: right; width:940px; height:94px; overflow:hidden; margin:25px 0px 0px 0px; padding:0; font-size:160%; text-align: center;}
     #tray {padding:10px 0 15px 10px; background:url("../design/tray.gif") 0 100% no-repeat;}
     
         #tray ul {margin:0; list-style:none;}
