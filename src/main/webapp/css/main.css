@@ -135,7 +135,8 @@ h3 {font-size:140%;}
 
     .article .article-desc h3, .article-detail .article-desc h3 {margin:0; font-size:140%; font-weight:normal;}
     .article .article-desc .info, .article-detail .article-desc .info {margin:0; font-size:85%;}
-    .article .article-desc p.nomb, .article-detail .article-desc p.nomb {margin-top:8px; text-align:justify;}
+    .article .article-desc p, .article-detail .article-desc p {margin-top:8px; text-align:justify; margin-bottom:0 !important;}
+    .article-desc ul,.article-desc ol,.article-desc li {padding-left:10px; margin-left:10px;}
 
 h3.article-desc {margin:0; font-size:140%; font-weight:normal;}
     

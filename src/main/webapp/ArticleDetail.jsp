@@ -67,8 +67,8 @@
                         <%=language.getText("by:") %> <strong><%=article.getAuthor().getFirstName() %> <%=article.getAuthor().getLastName() %></strong> 
                         <%=(article.getCommentList().size() != 0) ? language.getText("Comments:") + " <strong>" + article.getCommentList().size() + "</strong>" : "" %>
                     </p> 
-                    <p class="nomb"><%=highlight(article.getDescription(), request.getParameter("search")).replace("\n", "<br>") %></p>
-                    <p class="nomb"><%=highlight(body, request.getParameter("search")).replace("\n", "<br>") %></p>
+                    <%=highlight(article.getDescription(), request.getParameter("search")) %>
+                    <%=highlight(body, request.getParameter("search")) %>
                     </div>
                     </div>
                     

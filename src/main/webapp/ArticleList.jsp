@@ -71,7 +71,7 @@
                         <div class="article-desc">
                             <h3><a href="Dispatcher?page=articleDetail&id=<%=a.getId() %><%=(request.getParameter("search") != null) ? "&search=" + URLEncoder.encode(request.getParameter("search"), "UTF-8") : "" %>"><%=highlight(a.getHeader(), request.getParameter("search")) %></a></h3>
                             <p class="info"><%=language.getText("Published:") %> <strong><%=sdf.format(a.getCreationDate()) %></strong> <%=language.getText("by:") %> <strong><%=a.getAuthor().getFirstName() %> <%=a.getAuthor().getLastName() %></strong> <%=(a.getNumOfComments() != 0) ? language.getText("Comments:") + " <strong>" + a.getNumOfComments() + "</strong>" : "" %></p> 
-                            <p class="nomb"><%=highlight(a.getDescription(), request.getParameter("search")).replace("\n", "<br>") %></p>
+                            <%=highlight(a.getDescription(), request.getParameter("search")) %>
                         </div>
                     </div> <!-- /article -->
                     <%

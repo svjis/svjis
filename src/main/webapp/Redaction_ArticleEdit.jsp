@@ -22,6 +22,29 @@
 <jsp:include page="_header.jsp" />
 <jsp:include page="_tray.jsp" />
 
+
+<!-- TinyMCE -->
+<script type="text/javascript" src="js/tiny_mce/tiny_mce.js"></script>
+<script type="text/javascript">
+	tinyMCE.init({
+                language : "<%=language.getText("tiny_mce.language") %>",
+                entity_encoding : "raw",
+		mode : "textareas",
+		theme : "advanced",
+                
+                // Theme options
+		theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,formatselect,fontselect,fontsizeselect",
+		theme_advanced_buttons2 : "bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,cleanup,help,code,|,forecolor,backcolor",
+		theme_advanced_toolbar_location : "top",
+		theme_advanced_toolbar_align : "left",
+		theme_advanced_statusbar_location : "bottom",
+                
+                // Example content CSS (should be your site CSS)
+		content_css : "css/main.css"
+	});
+</script>
+<!-- /TinyMCE -->
+
 <%
     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 %>
@@ -49,7 +72,7 @@
                         <%=language.getText("Description") %><br>
                         <textarea
                             name="description"
-                            id="common-textarea"
+                            id="common-textarea-desc"
                             rows=10 cols=80
                             wrap
                             ><%=article.getDescription() %></textarea>
@@ -58,7 +81,7 @@
                         <%=language.getText("Body") %><br>
                         <textarea
                             name="body"
-                            id="common-textarea"
+                            id="common-textarea-text"
                             rows=20 cols=80
                             wrap
                             ><%=article.getBody() %></textarea>
