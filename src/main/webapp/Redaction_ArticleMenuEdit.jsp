@@ -21,7 +21,7 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h2><%=language.getText("Article menu") %></h2>
+                    <h1 class="page-title"><%=language.getText("Article menu") %></h1>
                     <form action="Dispatcher" method="post">
                         <input type="hidden" name="page" value="redactionArticleMenuSave">
                         <input type="hidden" name="id" value="<%=menuNode.getId() %>">

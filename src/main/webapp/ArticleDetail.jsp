@@ -61,7 +61,7 @@
                     %>
                     <div class="article-detail">
                     <div class="article-desc">
-                    <h3 class="article-desc"><%=highlight(article.getHeader(), request.getParameter("search")) %></h3>
+                    <h1 class="article-title"><%=highlight(article.getHeader(), request.getParameter("search")) %></h1>
                     <p class="info">
                         <%=language.getText("Published:") %> <strong><%=sdf.format(article.getCreationDate()) %></strong> 
                         <%=language.getText("by:") %> <strong><%=article.getAuthor().getFirstName() %> <%=article.getAuthor().getLastName() %></strong> 
@@ -108,7 +108,7 @@
                     <%
                         if ((article.getCommentList() != null) && (article.getCommentList().size() != 0)) {
                     %>
-                        <h3><%=language.getText("Comments:") %></h3>
+                        <h2 class="article-title"><%=language.getText("Comments:") %></h2>
 
                         <%
                             SimpleDateFormat sdft = new SimpleDateFormat("dd.MM.yyyy HH:mm");

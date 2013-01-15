@@ -23,7 +23,7 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h2><%=language.getText("Send notifications") %> - <%=article.getHeader() %></h2>
+                    <h1 class="page-title"><%=language.getText("Send notifications") %> - <%=article.getHeader() %></h1>
                     
                     <form action="Dispatcher" method="post">
                         <input type="hidden" name="page" value="redactionArticleSendNotificationsConfirmation">

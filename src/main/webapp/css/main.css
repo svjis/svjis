@@ -30,7 +30,10 @@ a:hover {color:#F00;}
 
 h1, h2, h3, h4, h5, h6, p, address, blockquote, table, dl, fieldset {margin:15px 0;}
 
-h3 {font-size:140%;}
+h1 {font-size: large;}
+h2 {font-size: medium;}
+h3 {font-size: small;}
+
 
 /* ----------------------------------------------------------------------------------------------------------
 2) HTML styles
@@ -133,12 +136,14 @@ h3 {font-size:140%;}
 .article {margin-bottom:10px; padding-bottom:10px; background:url("../design/dot.gif") 0 100% repeat-x;}
 .article .article-desc {float:left; width:435px;}
 
-    .article .article-desc h3, .article-detail .article-desc h3 {margin:0; font-size:140%; font-weight:normal;}
-    .article .article-desc .info, .article-detail .article-desc .info {margin:0; font-size:85%;}
-    .article .article-desc p, .article-detail .article-desc p {margin-top:8px; text-align:justify; margin-bottom:0 !important;}
-    .article-desc ul,.article-desc ol,.article-desc li {padding-left:10px; margin-left:10px;}
+/* .article .article-desc h3, .article-detail .article-desc h3 {margin:0; font-size:140%; font-weight:normal;} */
+/* h3.article-desc {margin:0; font-size:140%; font-weight:normal;} */
+h1.article-title {margin:0; font-weight:normal;}
+h2.article-title {margin:0; font-weight:normal;}
+.article .article-desc .info, .article-detail .article-desc .info {margin:0; font-size:85%;}
+.article .article-desc p, .article-detail .article-desc p {margin-top:8px; text-align:justify; margin-bottom:0 !important;}
+.article-desc ul,.article-desc ol,.article-desc li {padding-left:10px; margin-left:10px;}
 
-h3.article-desc {margin:0; font-size:140%; font-weight:normal;}
     
 .box-01-top {width:260px; height:5px; margin-top:5px; background:url("../design/box-01-top.gif") 0 0 no-repeat; font-size:0; line-height:0;}
 .box-01-top-b {padding:5px 10px 15px 10px; background:url("../design/box-01-top-b.gif") 0 100% no-repeat;}

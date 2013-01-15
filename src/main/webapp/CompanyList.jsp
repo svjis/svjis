@@ -16,7 +16,7 @@
     </head>
 
     <body>
-        <h2>SVJ list</h2>
+        <h1>SVJ list</h1>
         <%
         String letter = "";
         java.util.Iterator<cz.svjis.bean.Company> compI = companyList.iterator();
@@ -26,7 +26,7 @@
             if (!letter.equals(c.getName().substring(0, 1))) {
                 letter = c.getName().substring(0,1);
         %>
-                <h3><%=letter %></h3>
+                <h2><%=letter %></h2>
         <%
             }
         %>

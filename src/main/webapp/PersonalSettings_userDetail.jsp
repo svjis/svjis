@@ -21,7 +21,7 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h2><%=user.getSalutation() %> <%=user.getFirstName() %> <%=user.getLastName() %></h2>
+                    <h1 class="page-title"><%=user.getSalutation() %> <%=user.getFirstName() %> <%=user.getLastName() %></h1>
                     <form action="Dispatcher" method="post">
                         <input type="hidden" name="page" value="psUserDetailSave" />
                         <fieldset>

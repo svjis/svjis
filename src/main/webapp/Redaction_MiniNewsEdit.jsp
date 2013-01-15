@@ -28,7 +28,7 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h2><%=language.getText("Mini news") %></h2>
+                    <h1 class="page-title"><%=language.getText("Mini news") %></h1>
                     <form action="Dispatcher" method="post">
                         <input type="hidden" name="page" value="redactionNewsEditSave">
                         <input type="hidden" name="id" value="<%=miniNews.getId() %>">

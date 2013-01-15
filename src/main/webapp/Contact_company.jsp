@@ -18,7 +18,7 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h2><%=company.getName() %></h2>
+                    <h1 class="page-title"><%=company.getName() %></h1>
                     
                     <table border="0">
                         <tr>

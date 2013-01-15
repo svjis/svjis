@@ -21,7 +21,7 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h2><%=language.getText("Inquiry list") %></h2>
+                    <h1 class="page-title"><%=language.getText("Inquiry list") %></h1>
                     [<a href="Dispatcher?page=redactionInquiryEdit&id=0"><%=language.getText("Add new inquiry") %></a>]<br>
 
                     <table class="list" width="100%">

@@ -19,7 +19,7 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h2><%=language.getText("Building") %></h2>
+                    <h1 class="page-title"><%=language.getText("Building") %></h1>
                     <form action="Dispatcher" method="post">
                         <input type="hidden" name="page" value="buildingSave" />
                         <fieldset>

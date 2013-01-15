@@ -20,7 +20,7 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h2><%=language.getText("Property list") %></h2>
+                    <h1 class="page-title"><%=language.getText("Property list") %></h1>
                     [<a href="Dispatcher?page=propertyEdit&key="><%=language.getText("Add new property") %></a>]<br>
                     <table class="list">
                         <tr>

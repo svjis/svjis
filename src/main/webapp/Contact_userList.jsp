@@ -18,7 +18,7 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h2><%=language.getText("Contact list") %></h2>
+                    <h1 class="page-title"><%=language.getText("Contact list") %></h1>
                     
                     <table class="list">
                         <tr>

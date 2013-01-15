@@ -28,8 +28,10 @@ body {background-color:#d7ecf4; color:#000}
 a {color:#739D13;}
 a:hover {color:#516F0D;}
 
-h3.title {border-bottom:1px solid #D7ECF4; color:#3fa5cd;}
-h3.article-desc {color:#739D13;}
+h1.page-title {color:#000000;}
+h1.article-page-title {border-bottom:1px solid #D7ECF4; color:#3fa5cd;}
+h1.article-title {color:#739D13;}
+h2.article-title {color:#739D13;}
 
 /* ----------------------------------------------------------------------------------------------------------
 2) HTML styles

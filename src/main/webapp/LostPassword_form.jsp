@@ -14,7 +14,7 @@
         <div id="content-width">
             <div id="content-width-in">
             
-                    <h2><%=language.getText("Password assistance")%></h2>
+                    <h1 class="page-title"><%=language.getText("Password assistance")%></h1>
                     
                         <form action="Dispatcher" method="post">
                         <input type="hidden" name="page" value="lostPassword_submit" />

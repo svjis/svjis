@@ -19,7 +19,7 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h2><%=buildingUnit.getBuildingUnitType() %> <%=buildingUnit.getDescription() %> - <%=language.getText("Owner list") %></h2>
+                    <h1 class="page-title"><%=buildingUnit.getBuildingUnitType() %> <%=buildingUnit.getDescription() %> - <%=language.getText("Owner list") %></h1>
                     <table class="list">
                         <tr>
                             <th class="list">&nbsp;</th>

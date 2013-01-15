@@ -47,7 +47,7 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h2><%=language.getText("Article menu") %></h2>
+                    <h1 class="page-title"><%=language.getText("Article menu") %></h1>
                     [<a href="Dispatcher?page=redactionArticleMenuEdit&id=0"><%=language.getText("Add new menu node") %></a>]
                     <p>
                         <table class="list">

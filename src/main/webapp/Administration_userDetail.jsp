@@ -24,7 +24,7 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h2><%=language.getText("User") %></h2>
+                    <h1 class="page-title"><%=language.getText("User") %></h1>
                     <strong><%=message %></strong>
                     <form action="Dispatcher" method="post">
                         <input type="hidden" name="page" value="userSave" />

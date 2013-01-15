@@ -18,7 +18,7 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h2><%=language.getText("Role list") %></h2>
+                    <h1 class="page-title"><%=language.getText("Role list") %></h1>
                     [<a href="Dispatcher?page=roleEdit&id=0"><%=language.getText("Add new role") %></a>]<br>
                     <table class="list">
                         <tr>

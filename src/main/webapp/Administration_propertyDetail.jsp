@@ -19,7 +19,7 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h2><%=language.getText("Property") %></h2>
+                    <h1 class="page-title"><%=language.getText("Property") %></h1>
                     <form action="Dispatcher" method="post">
                         <input type="hidden" name="page" value="propertySave" />
                         <input type="hidden" name="origKey" value="<%=key %>" />

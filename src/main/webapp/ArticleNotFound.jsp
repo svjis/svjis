@@ -20,7 +20,7 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h2><%=language.getText("Article was not found") %></h2>
+                    <h1 class="page-title"><%=language.getText("Article was not found") %></h1>
                     <p><%=language.getText("Probably you have insufficient permissions.") %></p>
                     <% if (!user.isUserLogged()) { %>
                         <p><%=language.getText("Try to login with your login name and password.") %></p>

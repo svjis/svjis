@@ -21,7 +21,7 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h2><%=language.getText("News list") %></h2>
+                    <h1 class="page-title"><%=language.getText("News list") %></h1>
                     [<a href="Dispatcher?page=redactionNewsEdit&id=0"><%=language.getText("Add new mini news") %></a>]<br>
 
                     <table class="list" width="100%">
