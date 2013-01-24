@@ -14,7 +14,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,29 +34,37 @@ public class MailSenderJob implements Runnable {
             cnn = createConnection();
             CompanyDAO companyDao = new CompanyDAO(cnn);
             ArrayList<Company> companyList = companyDao.getCompanyList();
-            Iterator<Company> cIter = companyList.iterator();
-            while (cIter.hasNext()) {
-                Company c = cIter.next();
-                ApplicationSetupDAO setup = new ApplicationSetupDAO(cnn);
-                Properties props = setup.getApplicationSetup(c.getId());
-                MailDAO mailDao = new MailDAO(
-                        cnn,
-                        props.getProperty("mail.smtp"),
-                        props.getProperty("mail.login"),
-                        props.getProperty("mail.password"),
-                        props.getProperty("mail.sender"));
-                ArrayList<Message> messageList = mailDao.getWaitingMessages(c.getId());
-                Iterator<Message> mIter = messageList.iterator();
-                while (mIter.hasNext()) {
-                    Message m = mIter.next();
-                    mailDao.sendInstantMail(m.getRecipient(), m.getSubject(), m.getBody());
-                    mailDao.updateMessageStatus(m.getId(), 1, new Date());
-                }
+            for(Company c: companyList) {
+                processAllMessagesForCompany(cnn, c);
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             closeConnection(cnn);
+        }
+    }
+    
+    private void processAllMessagesForCompany(Connection cnn, Company c) {
+        try {
+            ApplicationSetupDAO setup = new ApplicationSetupDAO(cnn);
+            Properties props = setup.getApplicationSetup(c.getId());
+            
+            MailDAO mailDao = new MailDAO(
+                    cnn,
+                    props.getProperty("mail.smtp"),
+                    props.getProperty("mail.login"),
+                    props.getProperty("mail.password"),
+                    props.getProperty("mail.sender"));
+            
+            ArrayList<Message> messageList = mailDao.getWaitingMessages(c.getId());
+            
+            for (Message m: messageList) {
+                mailDao.sendInstantMail(m.getRecipient(), m.getSubject(), m.getBody());
+                mailDao.updateMessageStatus(m.getId(), 1, new Date());
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
      
