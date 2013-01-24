@@ -21,27 +21,36 @@
                     <h1 class="page-title"><%=company.getName() %></h1>
                     
                     <table border="0">
+                        <% if (!company.getAddress().equals("")) { %>
                         <tr>
                             <td><strong><%=language.getText("Address") %>:&nbsp;</strong></td>
                             <td><%=company.getAddress() %></td>
                         </tr>
+                        <% } %>
+                        <% if (!company.getCity().equals("")) { %>
                         <tr>
                             <td><strong><%=language.getText("City") %>:&nbsp;</strong></td>
                             <td><%=company.getCity() %></td>
                         </tr>
+                        <% } %>
+                        <% if (!company.getPostCode().equals("")) { %>
                         <tr>
                             <td><strong><%=language.getText("Post code") %>:&nbsp;</strong></td>
                             <td><%=company.getPostCode() %></td>
                         </tr>
+                        <% } %>
+                        <% if (!company.geteMail().equals("")) { %>
                         <tr>
                             <td><strong><%=language.getText("E-Mail") %>:&nbsp;</strong></td>
                             <td><a href="mailto:<%=company.geteMail() %>"><%=company.geteMail() %></a></td>
                         </tr>
+                        <% } %>
+                        <% if (!company.getRegistrationNo().equals("")) { %>
                         <tr>
                             <td><strong><%=language.getText("Registration No.") %>:&nbsp;</strong></td>
                             <td><%=company.getRegistrationNo() %></td>
                         </tr>
-                        
+                        <% } %>
                     </table>
                 </div> <!-- /content-main-in -->
             </div> <!-- /content-main -->
