@@ -4,7 +4,6 @@
  */
 package cz.svjis.servlet;
 
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import cz.svjis.bean.ArticleAttachment;
 import cz.svjis.bean.ArticleDAO;
 import cz.svjis.bean.BuildingDAO;
@@ -46,6 +45,7 @@ import jxl.write.WritableFont;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
+import org.apache.commons.codec.binary.Base64;
 
 /**
  *
@@ -135,7 +135,7 @@ public class Upload extends HttpServlet {
         if (userAgent.contains("MSIE") || userAgent.contains("Opera")) {
             encodedFileName = URLEncoder.encode(fileName.replace(" ", "_"), "UTF-8");
         } else {
-            encodedFileName = "=?UTF-8?B?" + Base64.encode(fileName.replace(" ", "_").getBytes("UTF-8")) + "?=";
+            encodedFileName = "=?UTF-8?B?" + Base64.encodeBase64String(fileName.replace(" ", "_").getBytes("UTF-8")) + "?=";
         }
 
         response.setContentType(contentType);
