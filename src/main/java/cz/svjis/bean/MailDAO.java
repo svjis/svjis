@@ -142,17 +142,15 @@ public class MailDAO {
         psUpdate.close();
     }
     
-    public void sendErrorReport(String recipient, String url, Throwable throwable) throws EmailException {
+    public void sendErrorReport(int companyId, String recipient, String url, String user, Throwable throwable) throws SQLException, EmailException {
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-        HtmlEmail email = new HtmlEmail();
-        email.setCharset("UTF-8");
-        email.setHostName(smtp);
-        email.setAuthentication(login, password);
-        email.addTo(recipient, recipient);
-        email.setFrom(sender, sender);
-        email.setSubject("SVJIS: Error report");
-        email.setHtmlMsg("<p>Time: " + sdf.format(new Date()) + "</p><p>URL: " + url + "</p><p>" + getStackTrace(throwable).replace("\n", "<br>") + "</p>");
-        email.send();
+        String subject = "SVJIS: Error report";
+        String body = "<p>Time: " + sdf.format(new Date()) + "</p>"
+                + "<p>User: " + user + "</p>"
+                + "<p>URL: " + url + "</p>"
+                + "<p>" + getStackTrace(throwable).replace("\n", "<br>") + "</p>";
+        //queueMail(companyId, recipient, subject, body);
+        sendInstantMail(recipient, subject, body);
     }
     
     private String getStackTrace(Throwable throwable) {

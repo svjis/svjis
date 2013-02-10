@@ -11,7 +11,6 @@ import cz.svjis.bean.BuildingUnit;
 import cz.svjis.bean.Company;
 import cz.svjis.bean.Language;
 import cz.svjis.bean.LanguageDAO;
-import cz.svjis.bean.MailDAO;
 import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
 import java.io.IOException;
@@ -23,12 +22,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -105,24 +102,14 @@ public class Upload extends HttpServlet {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            
-            Properties setup = (Properties) session.getAttribute("setup");
-            if ((setup != null) && (setup.getProperty("error.report.recipient") != null)) {
-                MailDAO mailDao = new MailDAO(
-                                cnn,
-                                setup.getProperty("mail.smtp"),
-                                setup.getProperty("mail.login"),
-                                setup.getProperty("mail.password"),
-                                setup.getProperty("mail.sender"));
-                try {
-                    mailDao.sendErrorReport(
-                            setup.getProperty("error.report.recipient"), 
-                            request.getRequestURL().toString() + "/" + request.getQueryString(), 
-                            ex);
-                } catch (Exception e) {}
+            HandleErrorCmd errCmd = new HandleErrorCmd();
+            errCmd.setThrowable(ex);
+            errCmd.setCnn(cnn);
+            try {
+                errCmd.run(request, response);
+            } catch (Exception exx) {
+                exx.printStackTrace();
             }
-            RequestDispatcher rd = request.getRequestDispatcher("/Error.jsp");
-            rd.forward(request, response);
         } finally {            
             closeConnection(cnn);
         }
