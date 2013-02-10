@@ -27,11 +27,10 @@
                             <th class="list">&nbsp;</th>
                             <th class="list">&nbsp;</th>
                             <th class="list">&nbsp;</th>
-                            <th class="list">&nbsp;</th>
                             <th class="list"><%=language.getText("Last name") %></th>
                             <th class="list"><%=language.getText("First name") %></th>
                             <th class="list"><%=language.getText("Enabled") %></th>
-                            <th class="list"><%=language.getText("In contact list") %></th>
+                            <th class="list"><%=language.getText("E-Mail") %></th>
                             <th class="list"><%=language.getText("Last login") %></th>
                         </tr>
                     <%
@@ -45,11 +44,10 @@
                             <td class="list" style="text-align: right"><%=++i %></td>
                             <td class="list"><a href="Dispatcher?page=userEdit&id=<%=u.getId() %>"><img src="gfx/pencil.png" border="0" title="<%=language.getText("Edit") %>"></a></td>
                             <td class="list"><a href="Dispatcher?page=userBuildingUnits&id=<%=u.getId() %>"><img src="gfx/house.png" border="0" title="<%=language.getText("Building unit list") %>"></a></td>
-                            <td class="list"><a onclick="if (!confirm('<%=language.getText("Really do you want to remove user") %> <%=u.getLastName() %> <%=u.getFirstName() %> ?')) return false;" href="Dispatcher?page=userDelete&id=<%=u.getId() %>"><img src="gfx/delete.png" border="0" title="<%=language.getText("Delete") %>"></a></td>
                             <td class="list"><%=u.getLastName() %></td>
                             <td class="list"><%=u.getFirstName() %></td>
                             <td class="list"><%=(u.isEnabled()) ? language.getText("yes") : language.getText("no") %></td>
-                            <td class="list"><%=(u.isShowInPhoneList()) ? language.getText("yes") : language.getText("no") %></td>
+                            <td class="list"><a href="mailto:<%=u.geteMail() %>"><%=u.geteMail() %></a></td>
                             <td class="list"><%=(u.getLastLogin() == null) ? "&nbsp;" : sdf.format(u.getLastLogin()) %></td>
                         </tr>
                     <%
