@@ -39,6 +39,18 @@
                             <td><%=company.getPostCode() %></td>
                         </tr>
                         <% } %>
+                        <% if (!company.getPhone().equals("")) { %>
+                        <tr>
+                            <td><strong><%=language.getText("Phone") %>:&nbsp;</strong></td>
+                            <td><%=company.getPhone() %></td>
+                        </tr>
+                        <% } %>
+                        <% if (!company.getFax().equals("")) { %>
+                        <tr>
+                            <td><strong><%=language.getText("Fax") %>:&nbsp;</strong></td>
+                            <td><%=company.getFax() %></td>
+                        </tr>
+                        <% } %>
                         <% if (!company.geteMail().equals("")) { %>
                         <tr>
                             <td><strong><%=language.getText("E-Mail") %>:&nbsp;</strong></td>
