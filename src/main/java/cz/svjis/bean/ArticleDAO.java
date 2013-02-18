@@ -595,7 +595,7 @@ public class ArticleDAO {
                 + "FROM ARTICLE_IS_VISIBLE_TO_ROLE a "
                 + "LEFT JOIN USER_HAS_ROLE r on (r.ROLE_ID = a.ROLE_ID) "
                 + "LEFT JOIN \"USER\" u on (u.ID = r.USER_ID) "
-                + "WHERE (a.ARTICLE_ID = ?) AND (u.E_MAIL <> '') "
+                + "WHERE (a.ARTICLE_ID = ?) AND (u.E_MAIL <> '') AND (u.ENABLED = 1) "
                 + "GROUP BY "
                 + "a.ARTICLE_ID, "
                 + "u.ID, "
