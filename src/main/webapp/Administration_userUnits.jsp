@@ -54,6 +54,7 @@
                         <input type="hidden" name="page" value="userBuildingUnitAdd" />
                         <input type="hidden" name="userId" value="<%=cUser.getId() %>" />
                         <select id="common-input" name="unitId">
+                            <option value="0"><%=language.getText("(choose)") %></option>
                         <%
                             Iterator<BuildingUnit> unitI = unitList.iterator();
                             while (unitI.hasNext()) {

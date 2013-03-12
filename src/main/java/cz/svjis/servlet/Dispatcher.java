@@ -1226,9 +1226,11 @@ public class Dispatcher extends HttpServlet {
                 }
                 
                 if (page.equals("userBuildingUnitAdd")) {
-                    buildingDao.addUserHasBuildingUnitConnection(
-                            Integer.valueOf(request.getParameter("userId")), 
-                            Integer.valueOf(request.getParameter("unitId")));
+                    if (Integer.valueOf(request.getParameter("unitId")) != 0) {
+                        buildingDao.addUserHasBuildingUnitConnection(
+                                Integer.valueOf(request.getParameter("userId")), 
+                                Integer.valueOf(request.getParameter("unitId")));
+                    }
                     String url = "Dispatcher?page=userBuildingUnits&id=" + request.getParameter("userId");
                     request.setAttribute("url", url);
                     RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
