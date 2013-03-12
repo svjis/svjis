@@ -585,11 +585,12 @@ public class ArticleDAO {
         ps.close();
     }
     
-    public ArrayList<User> getUserListPermittedForRead(int articleId) throws SQLException {
+    public ArrayList<User> getUserListForNotificationAboutNewArticle(int articleId) throws SQLException {
         ArrayList<User> result = new ArrayList<User>();
         String select = "SELECT "
                 + "a.ARTICLE_ID, "
-                + "u.ID,u.LAST_NAME, "
+                + "u.ID, "
+                + "u.LAST_NAME, "
                 + "u.FIRST_NAME, "
                 + "u.E_MAIL "
                 + "FROM ARTICLE_IS_VISIBLE_TO_ROLE a "
@@ -607,6 +608,42 @@ public class ArticleDAO {
         
         PreparedStatement ps = cnn.prepareStatement(select);
         ps.setInt(1, articleId);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            User u = new User();
+            u.setId(rs.getInt("ID"));
+            u.setFirstName(rs.getString("FIRST_NAME"));
+            u.setLastName(rs.getString("LAST_NAME"));
+            u.seteMail(rs.getString("E_MAIL"));
+            result.add(u);
+        }
+        ps.close();
+        return result;
+    }
+    
+    public ArrayList<User> getUserListForNotificationAboutNewComment(int articleId) throws SQLException {
+        ArrayList<User> result = new ArrayList<User>();
+        String select = "SELECT "
+                + "a.ID, "
+                + "a.LAST_NAME, "
+                + "a.FIRST_NAME, "
+                + "a.E_MAIL "
+                + "FROM \"USER\" a "
+                + "WHERE (a.ENABLED = 1) AND (a.E_MAIL <> '') AND  "
+                + "a.ID in ( "
+                + "SELECT a.USER_ID "
+                + "FROM ARTICLE_COMMENT a "
+                + "WHERE a.ARTICLE_ID = ? "
+                + "UNION "
+                + "SELECT a.CREATED_BY_USER_ID AS USER_ID "
+                + "FROM ARTICLE a "
+                + "WHERE a.ID = ? "
+                + "GROUP BY USER_ID "
+                + ")";
+        
+        PreparedStatement ps = cnn.prepareStatement(select);
+        ps.setInt(1, articleId);
+        ps.setInt(2, articleId);
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
             User u = new User();

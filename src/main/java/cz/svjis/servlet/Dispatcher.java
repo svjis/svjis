@@ -435,12 +435,32 @@ public class Dispatcher extends HttpServlet {
                     request.setAttribute("article", article);
                     
                     if ((article != null) && (article.isCommentsAllowed()) && (user.hasPermission("can_insert_article_comment"))) {
+                        // insert comment
                         ArticleComment ac = new ArticleComment();
                         ac.setArticleId(article.getId());
                         ac.setUserId(user.getId());
                         ac.setInsertionTime(new Date());
                         ac.setBody(request.getParameter("body"));
                         articleDao.insertArticleComment(ac);
+                        
+                        // send notification
+                        String subject = company.getInternetDomain() + ": " + article.getHeader() + " (New comment)";
+                        MailDAO mailDao = new MailDAO(
+                                cnn,
+                                setup.getProperty("mail.smtp"),
+                                setup.getProperty("mail.login"),
+                                setup.getProperty("mail.password"),
+                                setup.getProperty("mail.sender"));
+
+                        ArrayList<User> userList = articleDao.getUserListForNotificationAboutNewComment(article.getId());
+                        for (User u: userList) {
+                            String body = setup.getProperty("mail.template.comment.notification");
+                            body = String.format(body, 
+                                    user.getFirstName() + " " + user.getLastName(),
+                                    "<a href=\"http://" + company.getInternetDomain() + "/Dispatcher?page=articleDetail&id=" + article.getId() + "\">" + article.getHeader() + "</a>", 
+                                    ac.getBody().replace("\n", "<br>"));
+                            mailDao.queueMail(company.getId(), u.geteMail(), subject, body);
+                        }
                     }
                     
                     String url = "Dispatcher?page=articleDetail&id=" + article.getId();
@@ -675,7 +695,7 @@ public class Dispatcher extends HttpServlet {
                     }
                     request.setAttribute("article", article);
                     
-                    ArrayList<User> userList = articleDao.getUserListPermittedForRead(articleId);
+                    ArrayList<User> userList = articleDao.getUserListForNotificationAboutNewArticle(articleId);
                     request.setAttribute("userList", userList);
                     
                     RequestDispatcher rd = request.getRequestDispatcher("/Redaction_ArticleSendNotifications.jsp");
@@ -707,7 +727,7 @@ public class Dispatcher extends HttpServlet {
                             setup.getProperty("mail.sender"));
                     
                     int counter = 0;
-                    ArrayList<User> userList = articleDao.getUserListPermittedForRead(articleId);
+                    ArrayList<User> userList = articleDao.getUserListForNotificationAboutNewArticle(articleId);
                     Iterator<User> it = userList.iterator();
                     while (it.hasNext()) {
                         User u = it.next();
