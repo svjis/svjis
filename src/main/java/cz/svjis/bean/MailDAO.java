@@ -142,11 +142,12 @@ public class MailDAO {
         psUpdate.close();
     }
     
-    public void sendErrorReport(int companyId, String recipient, String url, String user, Throwable throwable) throws SQLException, EmailException {
+    public void sendErrorReport(int companyId, String recipient, String url, String user, String userAgent, Throwable throwable) throws SQLException, EmailException {
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         String subject = "SVJIS: Error report";
         String body = "<p>Time: " + sdf.format(new Date()) + "</p>"
                 + "<p>User: " + user + "</p>"
+                + "<p>User Agent: " + userAgent + "</p>"
                 + "<p>URL: " + url + "</p>"
                 + "<p>" + getStackTrace(throwable).replace("\n", "<br>") + "</p>";
         //queueMail(companyId, recipient, subject, body);

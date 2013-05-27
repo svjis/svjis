@@ -30,6 +30,7 @@ public class HandleErrorCmd implements ICommand {
         User user = (User) session.getAttribute("user");
         if (user == null) user = new User();
         String userId = user.getFirstName() + " " + user.getLastName() + " (" + user.getId() + ")";
+        String userAgent = request.getHeader("User-Agent");
 
         Properties setup = (Properties) session.getAttribute("setup");
         if ((setup != null) && (setup.getProperty("error.report.recipient") != null)) {
@@ -45,6 +46,7 @@ public class HandleErrorCmd implements ICommand {
                     setup.getProperty("error.report.recipient"), 
                     request.getRequestURL().toString() + "/" + request.getQueryString(), 
                     userId,
+                    userAgent,
                     throwable);
         }
         RequestDispatcher rd = request.getRequestDispatcher("/Error.jsp");

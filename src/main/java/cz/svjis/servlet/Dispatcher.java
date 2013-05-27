@@ -155,7 +155,7 @@ public class Dispatcher extends HttpServlet {
             
             if (page.equals("logout") || (user == null)) {
                 if (page.equals("logout")) {
-                    logDao.log(user.getId(), LogDAO.operationTypeLogout, LogDAO.idNull, request.getRemoteAddr());
+                    logDao.log(user.getId(), LogDAO.operationTypeLogout, LogDAO.idNull, request.getRemoteAddr(), request.getHeader("User-Agent"));
                     clearPermanentLogin(request, response);
                 }
                 user = new User();
@@ -165,7 +165,7 @@ public class Dispatcher extends HttpServlet {
                 if ((company != null) && (!page.equals("logout")) && (checkPermanentLogin(request, response, userDao, company.getId()) != 0)) {
                     user = userDao.getUser(company.getId(), checkPermanentLogin(request, response, userDao, company.getId()));
                     user.login(user.getPassword());
-                    logDao.log(user.getId(), LogDAO.operationTypeLogin, LogDAO.idNull, request.getRemoteAddr());
+                    logDao.log(user.getId(), LogDAO.operationTypeLogin, LogDAO.idNull, request.getRemoteAddr(), request.getHeader("User-Agent"));
                     savePermanentLogin(request, response, user);
                 } else {
                     if ((setup.getProperty("anonymous.user.id") != null) && (userDao.getUser(company.getId(), 
@@ -189,7 +189,7 @@ public class Dispatcher extends HttpServlet {
                     language = languageDao.getDictionary(user.getLanguageId());
                     session.setAttribute("language", language);
                     page = "articleList";
-                    logDao.log(user.getId(), LogDAO.operationTypeLogin, LogDAO.idNull, request.getRemoteAddr());
+                    logDao.log(user.getId(), LogDAO.operationTypeLogin, LogDAO.idNull, request.getRemoteAddr(), request.getHeader("User-Agent"));
                     savePermanentLogin(request, response, user);
                 } else {
                     request.setAttribute("messageHeader", language.getText("Bad login"));
@@ -253,7 +253,7 @@ public class Dispatcher extends HttpServlet {
                     for (int i = 0; i < result.size(); i++) {
                         User u = result.get(i);
                         logins += "Login: " + u.getLogin() + " " + "Password: " + u.getPassword() + "<br>"; 
-                        logDao.log(u.getId(), LogDAO.operationTypeSendLostPassword, LogDAO.idNull, request.getRemoteAddr());
+                        logDao.log(u.getId(), LogDAO.operationTypeSendLostPassword, LogDAO.idNull, request.getRemoteAddr(), request.getHeader("User-Agent"));
                     }
                     String body = setup.getProperty("mail.template.lost.password");
                     body = String.format(body, logins);
@@ -423,7 +423,7 @@ public class Dispatcher extends HttpServlet {
                     request.setAttribute("menu", menu);
                     RequestDispatcher rd = request.getRequestDispatcher("/ArticleDetail.jsp");
                     rd.forward(request, response);
-                    logDao.log(user.getId(), LogDAO.operationTypeRead, article.getId(), request.getRemoteAddr());
+                    logDao.log(user.getId(), LogDAO.operationTypeRead, article.getId(), request.getRemoteAddr(), request.getHeader("User-Agent"));
                     return;
                 }
                 
@@ -736,7 +736,7 @@ public class Dispatcher extends HttpServlet {
                             counter++;
                         }
                     }
-                    logDao.log(user.getId(), LogDAO.operationTypeSendArticleNotification, article.getId(), request.getRemoteAddr());
+                    logDao.log(user.getId(), LogDAO.operationTypeSendArticleNotification, article.getId(), request.getRemoteAddr(), request.getHeader("User-Agent"));
                     article.setNumOfReads(counter);
                     
                     RequestDispatcher rd = request.getRequestDispatcher("/Redaction_ArticleSendNotificationsConfirmation.jsp");
