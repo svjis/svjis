@@ -434,7 +434,12 @@ public class Dispatcher extends HttpServlet {
                             articleId);
                     request.setAttribute("article", article);
                     
-                    if ((article != null) && (article.isCommentsAllowed()) && (user.hasPermission("can_insert_article_comment"))) {
+                    if ((article != null) && 
+                            article.isCommentsAllowed() && 
+                            user.hasPermission("can_insert_article_comment") &&
+                            (request.getParameter("body") != null) &&
+                            (!request.getParameter("body").equals(""))) {
+                        
                         // insert comment
                         ArticleComment ac = new ArticleComment();
                         ac.setArticleId(article.getId());
