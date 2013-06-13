@@ -27,26 +27,35 @@ public class ArticleDAO {
     public ArrayList<Article> getArticleTopList(User u, int top) throws SQLException {
         ArrayList<Article> result = new ArrayList<Article>();
         
-        String select = "SELECT FIRST " + top + " "
-                + "a.ID, "
-                + "a.HEADER, "
-                + "count(*) as \"COUNT\" "
-                + "FROM LOG l "
-                + "LEFT JOIN ARTICLE a ON (a.ID = l.ARTICLE_ID) "
-                + "WHERE "
-                + "(l.OPERATION_ID = 3) AND "
-                + createFilter(u ,true, false)
-                + "GROUP BY "
-                + "a.ID, "
-                + "a.HEADER "
-                + "ORDER BY count(*) desc";
+        String select = "SELECT FIRST " + top + " " +
+                        "    a.ID, " +
+                        "    a.HEADER, " +
+                        "    l.CNT " +
+                        "FROM ARTICLE a " +
+                        "LEFT JOIN (SELECT l.ARTICLE_ID, count(*) as CNT FROM LOG l WHERE l.OPERATION_ID = 3 GROUP BY l.ARTICLE_ID) l " +
+                        "    ON (l.ARTICLE_ID = a.ID) " +
+                        "LEFT JOIN ARTICLE_IS_VISIBLE_TO_ROLE b " +
+                        "    ON (b.ARTICLE_ID = a.ID) " +
+                        "LEFT JOIN USER_HAS_ROLE c " +
+                        "    ON (c.USER_ID = " + u.getId() + ") AND (c.ROLE_ID = b.ROLE_ID) " +
+                        "WHERE " +
+                        "    (a.COMPANY_ID = " + u.getCompanyId() + ") AND " +
+                        "    (l.CNT is not null) AND " +
+                        "    (a.PUBLISHED = 1)  AND " +
+                        "    (c.ROLE_ID is not null) " +
+                        "GROUP BY " +
+                        "    a.ID, " +
+                        "    a.HEADER, " +
+                        "    l.CNT " +
+                        "ORDER BY " +
+                        "    l.CNT DESC ";
         Statement st = cnn.createStatement();
         ResultSet rs = st.executeQuery(select);
         while (rs.next()) {
             Article a = new Article();
             a.setId(rs.getInt("ID"));
             a.setHeader(rs.getString("HEADER"));
-            a.setNumOfReads(rs.getInt("COUNT"));
+            a.setNumOfReads(rs.getInt("CNT"));
             result.add(a);
         }
         rs.close();
