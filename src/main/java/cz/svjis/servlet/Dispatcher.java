@@ -1200,9 +1200,9 @@ public class Dispatcher extends HttpServlet {
                     if (!userDao.testLoginDuplicity(u.getLogin(), u.getId())) {
                         message += language.getText("Login already exists.") + " (" + u.getLogin() + ")<br>";
                     }
-                    if (!userDao.testPasswordValidity(u.getPassword())) {
-                        message += language.getText("Password is too short. Minimum is 6 characters.") + "<br>";
-                    }
+                    //if (!userDao.testPasswordValidity(u.getPassword())) {
+                    //    message += language.getText("Password is too short. Minimum is 6 characters.") + "<br>";
+                    //}
                     if (message.equals("")) {
                         if (u.getId() == 0) {
                             u.setId(userDao.insertUser(u));
