@@ -816,15 +816,20 @@ public class Dispatcher extends HttpServlet {
                 if (page.equals("redactionNewsEditSave")) {
                     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
                     int id = Integer.parseInt(request.getParameter("id"));
-                    MiniNews n = new MiniNews();
-                    n.setId(id);
-                    n.setCreatedById(user.getId());
-                    n.setCompanyId(user.getCompanyId());
+                    MiniNews n = null;
+                    if (id == 0) {
+                        n = new MiniNews();
+                        n.setId(id);
+                        n.setCreatedById(user.getId());
+                        n.setCompanyId(user.getCompanyId());
+                    } else {
+                        n = newsDao.getMiniNews(user, id);
+                    }
                     n.setTime(sdf.parse(request.getParameter("time")));
                     n.setLanguageId(Integer.parseInt(request.getParameter("language")));
                     n.setPublished(request.getParameter("publish") != null);
                     n.setBody(request.getParameter("body"));
-                    if (n.getId() == 0) {
+                    if (id == 0) {
                         n.setId(newsDao.insertMiniNews(n));
                     } else {
                         newsDao.modifyMiniNews(n);
