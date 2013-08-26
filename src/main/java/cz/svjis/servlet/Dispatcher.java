@@ -701,9 +701,15 @@ public class Dispatcher extends HttpServlet {
                     request.setAttribute("article", article);
                     
                     ArrayList<User> userList = articleDao.getUserListForNotificationAboutNewArticle(articleId);
-                    request.setAttribute("userList", userList);
-                    
-                    RequestDispatcher rd = request.getRequestDispatcher("/Redaction_ArticleSendNotifications.jsp");
+                    RequestDispatcher rd;
+                    if (userList.isEmpty()) {
+                        request.setAttribute("messageHeader", language.getText("This article is not visible to any user"));
+                        request.setAttribute("message", "<p>" + language.getText("You can continue") + " <a href=\"javascript:history.go(-1)\">" + language.getText("here") + "</a>.</p>");
+                        rd = request.getRequestDispatcher("/_message.jsp");
+                    } else {
+                        request.setAttribute("userList", userList);
+                        rd = request.getRequestDispatcher("/Redaction_ArticleSendNotifications.jsp");
+                    }
                     rd.forward(request, response);
                     return;
                 }
