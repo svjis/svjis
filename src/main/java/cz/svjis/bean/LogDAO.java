@@ -22,6 +22,10 @@ public class LogDAO {
     public static final int operationTypeRead = 3;
     public static final int operationTypeSendLostPassword = 4;
     public static final int operationTypeSendArticleNotification = 5;
+    public static final int operationTypeCreateArticle = 6;
+    public static final int operationTypeModifyArticle = 7;
+    public static final int operationTypeInsertAttachment = 8;
+    public static final int operationTypeDeleteAttachment = 9;
     
     public LogDAO (Connection cnn) {
         this.cnn = cnn;

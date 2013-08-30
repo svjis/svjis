@@ -677,8 +677,10 @@ public class Dispatcher extends HttpServlet {
                     a.setRoles(uRoles);
                     if (a.getId() == 0) {
                         a.setId(articleDao.insertArticle(a));
+                        logDao.log(user.getId(), LogDAO.operationTypeCreateArticle, a.getId(), request.getRemoteAddr(), request.getHeader("User-Agent"));
                     } else {
                         articleDao.modifyArticle(a);
+                        logDao.log(user.getId(), LogDAO.operationTypeModifyArticle, a.getId(), request.getRemoteAddr(), request.getHeader("User-Agent"));
                     }
                     String url = "Dispatcher?page=redactionArticleEdit&id=" + a.getId();
                     request.setAttribute("url", url);
@@ -786,6 +788,7 @@ public class Dispatcher extends HttpServlet {
                     request.setAttribute("url", url);
                     RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
                     rd.forward(request, response);
+                    logDao.log(user.getId(), LogDAO.operationTypeInsertAttachment, articleId, request.getRemoteAddr(), request.getHeader("User-Agent"));
                     return;
                 }
                 if (page.equals("redactionArticleAttachmentDelete")) {
@@ -796,6 +799,7 @@ public class Dispatcher extends HttpServlet {
                     request.setAttribute("url", url);
                     RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
                     rd.forward(request, response);
+                    logDao.log(user.getId(), LogDAO.operationTypeDeleteAttachment, articleId, request.getRemoteAddr(), request.getHeader("User-Agent"));
                     return;
                 }
                 
