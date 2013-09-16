@@ -69,7 +69,7 @@
                     <!-- Article -->
                     <div class="article box">
                         <div class="article-desc">
-                            <h1 class="article-title"><a href="Dispatcher?page=articleDetail&id=<%=a.getId() %><%=(request.getParameter("search") != null) ? "&search=" + URLEncoder.encode(request.getParameter("search"), "UTF-8") : "" %>"><%=highlight(a.getHeader(), request.getParameter("search")) %></a></h1>
+                            <h1 class="article-title-list"><a href="Dispatcher?page=articleDetail&id=<%=a.getId() %><%=(request.getParameter("search") != null) ? "&search=" + URLEncoder.encode(request.getParameter("search"), "UTF-8") : "" %>"><%=highlight(a.getHeader(), request.getParameter("search")) %></a></h1>
                             <p class="info"><%=language.getText("Published:") %> <strong><%=sdf.format(a.getCreationDate()) %></strong> <%=language.getText("by:") %> <strong><%=a.getAuthor().getFirstName() %> <%=a.getAuthor().getLastName() %></strong> <%=(a.getNumOfComments() != 0) ? language.getText("Comments:") + " <strong>" + a.getNumOfComments() + "</strong>" : "" %></p> 
                             <%=highlight(a.getDescription(), request.getParameter("search")) %>
                         </div>

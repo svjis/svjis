@@ -138,9 +138,11 @@ h3 {font-size: small;}
 
 /* .article .article-desc h3, .article-detail .article-desc h3 {margin:0; font-size:140%; font-weight:normal;} */
 /* h3.article-desc {margin:0; font-size:140%; font-weight:normal;} */
-h1.article-title {margin:0; font-weight:normal;}
-h2.article-title {margin:0; font-weight:normal;}
-.article .article-desc .info, .article-detail .article-desc .info {margin:0; font-size:85%;}
+h1.article-title-list {margin:0; font-weight:normal;}
+h1.article-title {margin:0; padding:10px 10px 0px 0px; font-weight:normal;}
+h2.article-title {margin:0; padding:10px 10px 10px 0px; font-weight:normal;}
+.article .article-desc .info {margin:0; font-size:85%;}
+.article-detail .article-desc .info {margin:0; padding:0px 10px 10px 0px; font-size:85%;}
 .article .article-desc p, .article-detail .article-desc p {margin-top:8px; text-align:justify; margin-bottom:0 !important;}
 .article-desc ul,.article-desc ol,.article-desc li {padding-left:10px; margin-left:10px;}
 
