@@ -24,11 +24,22 @@ public class UserDAO {
         this.cnn = cnn;
     }
     
-    public ArrayList<User> getUserList(int companyId, boolean inPhoneListOnly) throws SQLException {
+    /**
+     * Returns list of users for company
+     * @param companyId ID of company
+     * @param inPhoneListOnly Gives user list from phonel ist only
+     * @param roleId Gives users owning specified role (0 = give all users)
+     * @return List of users
+     * @throws SQLException 
+     */
+    public ArrayList<User> getUserList(int companyId, boolean inPhoneListOnly, int roleId) throws SQLException {
         ArrayList<User> result = new ArrayList<User>();
         String filter = "";
         if (inPhoneListOnly) {
-            filter = "AND (a.SHOW_IN_PHONELIST = 1) ";
+            filter += "AND (a.SHOW_IN_PHONELIST = 1) ";
+        }
+        if (roleId != 0) {
+            filter += "AND (b.ROLE_ID IS NOT NULL) ";
         }
         String select = "SELECT "
                 + "a.ID, "
@@ -48,14 +59,17 @@ public class UserDAO {
                 + "a.ENABLED, "
                 + "a.SHOW_IN_PHONELIST,"
                 + "a.LANGUAGE_ID, "
-                + "(SELECT FIRST 1 l.\"TIME\" FROM LOG l WHERE (l.USER_ID = a.ID) AND (l.OPERATION_ID = 1) ORDER BY l.ID DESC) AS LAST_LOGIN "
+                + "(SELECT FIRST 1 l.\"TIME\" FROM LOG l WHERE (l.USER_ID = a.ID) AND (l.OPERATION_ID = 1) ORDER BY l.ID DESC) AS LAST_LOGIN, "
+                + "b.ROLE_ID "
                 + "FROM \"USER\" a "
+                + "LEFT JOIN USER_HAS_ROLE b on b.USER_ID = a.ID and b.ROLE_ID = ? "
                 + "WHERE (a.COMPANY_ID = ?) "
                 + filter
                 + "ORDER BY a.LAST_NAME collate UNICODE_CI_AI";
         
         PreparedStatement ps = cnn.prepareStatement(select);
-        ps.setInt(1, companyId);
+        ps.setInt(1, roleId);
+        ps.setInt(2, companyId);
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
             User u = new User();

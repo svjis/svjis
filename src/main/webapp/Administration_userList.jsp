@@ -7,6 +7,7 @@
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
+<jsp:useBean id="roleList" scope="request" class="java.util.ArrayList" />
 <jsp:useBean id="userList" scope="request" class="java.util.ArrayList" />
 
 <jsp:include page="_header.jsp" />
@@ -20,8 +21,41 @@
             <div id="content-main">
                 <div id="content-main-in">
                     <h1 class="page-title"><%=language.getText("User list") %></h1>
-                    [<a href="Dispatcher?page=userEdit&id=0"><%=language.getText("Add new user") %></a>]&nbsp;
-                    [<a href="Upload?page=exportUserListToXls"><%=language.getText("Export to Excel") %></a>]<br>
+                    <table width="100%">
+                        <tr>
+                            <td align="left">
+                                [<a href="Dispatcher?page=userEdit&id=0"><%=language.getText("Add new user") %></a>]&nbsp;
+                                [<a href="Upload?page=exportUserListToXls"><%=language.getText("Export to Excel") %></a>]&nbsp;
+                            </td>
+                            <td align="right">
+                            <td align="right">
+                                <%=language.getText("Role filter") %>:&nbsp;
+                            </td>
+                            <td align="left">
+                                <form action="Dispatcher" method="post">
+                                    <input type="hidden" name="page" value="userList" />
+                                    <select name='roleId' onchange='this.form.submit()'>
+                                        <option value="0"><%=language.getText("all") %></option>
+                                        <%
+                                            int roleId = Integer.valueOf((request.getParameter("roleId") == null) ? "0" : request.getParameter("roleId"));
+                                            java.util.Iterator<cz.svjis.bean.Role> roleI = roleList.iterator();
+                                            while (roleI.hasNext()) {
+                                                cz.svjis.bean.Role r = roleI.next();
+                                                String sel;
+                                                if (roleId == r.getId()) {
+                                                    sel = "selected";
+                                                } else {
+                                                    sel = "";
+                                                }
+                                        %>
+                                        <option value="<%=r.getId() %>" <%=sel %>><%=r.getDescription() %></option>
+                                        <% } %>
+                                        </select>
+                                </form>
+                            </td>
+                        </tr>
+                    </table>
+                    
                     <table class="list">
                         <tr>
                             <th class="list">&nbsp;</th>

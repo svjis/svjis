@@ -25,6 +25,7 @@
                             <th class="list">&nbsp;</th>
                             <th class="list">&nbsp;</th>
                             <th class="list">&nbsp;</th>
+                            <th class="list">&nbsp;</th>
                             <th class="list"><%=language.getText("Description") %></th>
                             <th class="list"><%=language.getText("Num. of users") %></th>
                         </tr>
@@ -37,6 +38,7 @@
                         <tr>
                             <td class="list" style="text-align: right"><%=++i %></td>
                             <td class="list"><a href="Dispatcher?page=roleEdit&id=<%=r.getId() %>"><img src="gfx/pencil.png" border="0" title="<%=language.getText("Edit") %>"></a></td>
+                            <td class="list"><a href="Dispatcher?page=userList&roleId=<%=r.getId() %>"><img src="gfx/user.png" border="0" title="<%=language.getText("User list") %>"></a></td>
                             <td class="list"><a onclick="if (!confirm('<%=language.getText("Really do you want to remove role") %> <%=r.getDescription() %> ?')) return false;" href="Dispatcher?page=roleDelete&id=<%=r.getId() %>"><img src="gfx/delete.png" border="0" title="<%=language.getText("Delete") %>"></a></td>
                             <td class="list"><%=r.getDescription() %></td>
                             <td class="list" style="text-align: right"><%=r.getNumOfUsers() %></td>

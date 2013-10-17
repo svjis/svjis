@@ -233,7 +233,7 @@ public class Upload extends HttpServlet {
             LanguageDAO languageDao = new LanguageDAO(cnn);
             Language lang = languageDao.getDictionary(user.getLanguageId());
             UserDAO userDao = new UserDAO(cnn);
-            ArrayList<User> userList = userDao.getUserList(user.getCompanyId(), false);
+            ArrayList<User> userList = userDao.getUserList(user.getCompanyId(), false, 0);
             
             WritableCellFormat bold = new WritableCellFormat(new WritableFont(WritableFont.ARIAL, 10, WritableFont.BOLD));
             WritableCellFormat boldGr = new WritableCellFormat(new WritableFont(WritableFont.ARIAL, 10, WritableFont.BOLD));

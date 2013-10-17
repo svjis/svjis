@@ -488,7 +488,7 @@ public class Dispatcher extends HttpServlet {
                 }
             
                 if (page.equals("phonelist")) {
-                    ArrayList<User> userList = userDao.getUserList(company.getId(), true);
+                    ArrayList<User> userList = userDao.getUserList(company.getId(), true, 0);
                     request.setAttribute("userList", userList);
                     RequestDispatcher rd = request.getRequestDispatcher("/Contact_userList.jsp");
                     rd.forward(request, response);
@@ -1150,7 +1150,10 @@ public class Dispatcher extends HttpServlet {
                 if (page.equals("userList")) {
                     Company currCompany = compDao.getCompany(company.getId());
                     request.setAttribute("currCompany", currCompany);
-                    ArrayList<User> userList = userDao.getUserList(company.getId(), false);
+                    ArrayList<Role> roleList = roleDao.getRoleList(company.getId());
+                    request.setAttribute("roleList", roleList);
+                    int roleId = Integer.valueOf((request.getParameter("roleId") == null) ? "0" : request.getParameter("roleId"));
+                    ArrayList<User> userList = userDao.getUserList(company.getId(), false, roleId);
                     request.setAttribute("userList", userList);
                     RequestDispatcher rd = request.getRequestDispatcher("/Administration_userList.jsp");
                     rd.forward(request, response);
