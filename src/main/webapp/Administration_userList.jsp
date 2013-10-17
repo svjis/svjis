@@ -31,7 +31,7 @@
                             <td align="right">
                                 <%=language.getText("Role filter") %>:&nbsp;
                             </td>
-                            <td align="left">
+                            <td align="right">
                                 <form action="Dispatcher" method="post">
                                     <input type="hidden" name="page" value="userList" />
                                     <select name='roleId' onchange='this.form.submit()'>
@@ -56,7 +56,7 @@
                         </tr>
                     </table>
                     
-                    <table class="list">
+                    <table class="list" width="100%">
                         <tr>
                             <th class="list">&nbsp;</th>
                             <th class="list">&nbsp;</th>
