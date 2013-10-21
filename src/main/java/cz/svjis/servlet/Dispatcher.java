@@ -300,14 +300,14 @@ public class Dispatcher extends HttpServlet {
                     sl.setSliderWide(10);
                     sl.setCurrentPage(pageNo);
                     sl.setNumOfItemsAtPage(Integer.valueOf(setup.getProperty("article.page.size")));
-                    sl.setTotalNumOfItems(articleDao.getNumOfArticles(user, section, true, false));
+                    sl.setTotalNumOfItems(articleDao.getNumOfArticles(user, section, true, false, 0));
                     request.setAttribute("slider", sl);
                     ArrayList<Article> articleList = articleDao.getArticleList(
                             user,
                             section,
                             pageNo, 
                             Integer.valueOf(setup.getProperty("article.page.size")),
-                            true, false);
+                            true, false, 0);
                     request.setAttribute("articleList", articleList);
                     ArrayList<Article> articleTopList = articleDao.getArticleTopList(
                             user, 
@@ -317,7 +317,7 @@ public class Dispatcher extends HttpServlet {
                     articleListInfo.setNumOfArticles(articleDao.getNumOfArticles(
                             user,
                             section,
-                            true, false));
+                            true, false, 0));
                     articleListInfo.setPageSize(Integer.valueOf(setup.getProperty("article.page.size")));
                     articleListInfo.setActualPage(pageNo);
                     articleListInfo.setMenuNodeId(section);
@@ -594,11 +594,12 @@ public class Dispatcher extends HttpServlet {
                     if (request.getParameter("pageNo") != null) {
                         pageNo = Integer.valueOf(request.getParameter("pageNo"));
                     }
+                    int roleId = Integer.valueOf((request.getParameter("roleId") == null) ? "0" : request.getParameter("roleId"));
                     SliderImpl sl = new SliderImpl();
                     sl.setSliderWide(10);
                     sl.setCurrentPage(pageNo);
                     sl.setNumOfItemsAtPage(Integer.valueOf(setup.getProperty("article.page.size")));
-                    sl.setTotalNumOfItems(articleDao.getNumOfArticles(user, section, false, !user.hasPermission("redaction_articles_all")));
+                    sl.setTotalNumOfItems(articleDao.getNumOfArticles(user, section, false, !user.hasPermission("redaction_articles_all"), roleId));
                     request.setAttribute("slider", sl);
                     ArrayList<Article> articleList = articleDao.getArticleList(
                             user,
@@ -606,7 +607,8 @@ public class Dispatcher extends HttpServlet {
                             pageNo, 
                             Integer.valueOf(setup.getProperty("article.page.size")),
                             false,
-                            !user.hasPermission("redaction_articles_all"));
+                            !user.hasPermission("redaction_articles_all"),
+                            roleId);
                     request.setAttribute("articleList", articleList);
 
                     ArticleListInfo articleListInfo = new ArticleListInfo();
@@ -614,11 +616,14 @@ public class Dispatcher extends HttpServlet {
                             user,
                             section,
                             false,
-                            !user.hasPermission("redaction_articles_all")));
+                            !user.hasPermission("redaction_articles_all"),
+                            roleId));
                     articleListInfo.setPageSize(Integer.valueOf(setup.getProperty("article.page.size")));
                     articleListInfo.setActualPage(pageNo);
                     articleListInfo.setMenuNodeId(section);
                     request.setAttribute("articleListInfo", articleListInfo);
+                    ArrayList<Role> roleList = roleDao.getRoleList(company.getId());
+                    request.setAttribute("roleList", roleList);
 
                     RequestDispatcher rd = request.getRequestDispatcher("/Redaction_ArticleList.jsp");
                     rd.forward(request, response);

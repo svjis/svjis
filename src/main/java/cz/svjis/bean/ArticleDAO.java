@@ -64,7 +64,20 @@ public class ArticleDAO {
         return result;        
     }
     
-    public int getNumOfArticles(User u, int menuNodeId, boolean publishedOnly, boolean ownedOnly) throws SQLException {
+    /**
+     * 
+     * Returns number of all articles.
+     * 
+     * @param u Current user.
+     * @param menuNodeId Menu node Id. Fill 0 for all articles.
+     * @param publishedOnly If value is true all published articles will be taken.
+     * @param ownedOnly If value is true only owned articles will be taken.
+     * @param role Will take only articles which hase this role. Fill 0 for all articles.
+     * @return Returns number of all articles.
+     * @throws SQLException 
+     */
+    
+    public int getNumOfArticles(User u, int menuNodeId, boolean publishedOnly, boolean ownedOnly, int role) throws SQLException {
         int result = 0;
         
         String menuNodeFilter = "";
@@ -72,9 +85,17 @@ public class ArticleDAO {
             menuNodeFilter = "AND (a.MENU_NODE_ID = " + menuNodeId + ") ";
         }
         
-        String select = "SELECT COUNT(*) AS CNT FROM ARTICLE a WHERE "
+        String roleFilter = "";
+        if (role != 0) {
+            roleFilter = "AND (b.ROLE_ID is not null) ";
+        }
+        
+        String select = "SELECT COUNT(*) AS CNT FROM ARTICLE a "
+                + "LEFT JOIN ARTICLE_IS_VISIBLE_TO_ROLE b ON b.ARTICLE_ID = a.ID and b.ROLE_ID = " + role + " "
+                + "WHERE "
                 + createFilter(u ,publishedOnly, ownedOnly)
-                + menuNodeFilter;
+                + menuNodeFilter
+                + roleFilter;
         //System.err.println(select);
         Statement st = cnn.createStatement();
         ResultSet rs = st.executeQuery(select);
@@ -86,12 +107,32 @@ public class ArticleDAO {
         return result;
     }
     
-    public ArrayList<Article> getArticleList(User u, int menuNodeId, int pageNo, int pageSize, boolean publishedOnly, boolean ownedOnly) throws SQLException {
+    /**
+     * 
+     * Returns all articles.
+     * 
+     * @param u Current user.
+     * @param menuNodeId Menu node Id. Fill 0 for all articles.
+     * @param pageNo Number of page.
+     * @param pageSize Size of page.
+     * @param publishedOnly If value is true all published articles will be taken.
+     * @param ownedOnly If value is true only owned articles will be taken.
+     * @param role Will take only articles which hase this role. Fill 0 for all articles.
+     * @return
+     * @throws SQLException 
+     */
+    
+    public ArrayList<Article> getArticleList(User u, int menuNodeId, int pageNo, int pageSize, boolean publishedOnly, boolean ownedOnly, int role) throws SQLException {
         ArrayList<Article> result = new ArrayList<Article>();
         
         String menuNodeFilter = "";
         if (menuNodeId != 0) {
             menuNodeFilter = "AND (a.MENU_NODE_ID = " + menuNodeId + ") ";
+        }
+        
+        String roleFilter = "";
+        if (role != 0) {
+            roleFilter = "AND (b.ROLE_ID is not null) ";
         }
         
         String select = "SELECT FIRST " + (pageNo * pageSize) + " "
@@ -113,9 +154,11 @@ public class ArticleDAO {
                 + "FROM ARTICLE a "
                 + "LEFT JOIN \"USER\" u ON (u.ID = a.CREATED_BY_USER_ID) "
                 + "LEFT JOIN MENU_TREE m ON (m.ID = a.MENU_NODE_ID) "
+                + "LEFT JOIN ARTICLE_IS_VISIBLE_TO_ROLE b ON b.ARTICLE_ID = a.ID and b.ROLE_ID = " + role + " "
                 + "WHERE "
                 + createFilter(u ,publishedOnly, ownedOnly)
                 + menuNodeFilter
+                + roleFilter
                 + "ORDER BY a.CREATION_DATE desc, a.ID desc ";
         
         Statement st = cnn.createStatement();

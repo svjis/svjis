@@ -15,6 +15,7 @@
 <jsp:useBean id="slider" scope="request" class="cz.svjis.bean.SliderImpl" />
 <jsp:useBean id="articleList" scope="request" class="java.util.ArrayList" />
 <jsp:useBean id="articleListInfo" scope="request" class="cz.svjis.bean.ArticleListInfo" />
+<jsp:useBean id="roleList" scope="request" class="java.util.ArrayList" />
 
 <jsp:include page="_header.jsp" />
 <jsp:include page="_tray.jsp" />
@@ -27,7 +28,40 @@
             <div id="content-main">
                 <div id="content-main-in">
                     <h1 class="page-title"><%=language.getText("Article list") %></h1>
-                    [<a href="Dispatcher?page=redactionArticleEdit&id=0"><%=language.getText("Add new article") %></a>]<br>
+                    <table width="100%">
+                        <tr>
+                            <td align="left">
+                                [<a href="Dispatcher?page=redactionArticleEdit&id=0"><%=language.getText("Add new article") %></a>]<br>
+                                </td>
+                            <td align="right">
+                            <td width="40%">&nbsp;</td>
+                            <td align="right">
+                                <%=language.getText("Role filter") %>:&nbsp;
+                            </td>
+                            <td align="right">
+                                <form action="Dispatcher" method="post">
+                                    <input type="hidden" name="page" value="redactionArticleList" />
+                                    <select name='roleId' onchange='this.form.submit()'>
+                                        <option value="0"><%=language.getText("all") %></option>
+                                        <%
+                                            int roleId = Integer.valueOf((request.getParameter("roleId") == null) ? "0" : request.getParameter("roleId"));
+                                            java.util.Iterator<cz.svjis.bean.Role> roleI = roleList.iterator();
+                                            while (roleI.hasNext()) {
+                                                cz.svjis.bean.Role r = roleI.next();
+                                                String sel;
+                                                if (roleId == r.getId()) {
+                                                    sel = "selected";
+                                                } else {
+                                                    sel = "";
+                                                }
+                                        %>
+                                        <option value="<%=r.getId() %>" <%=sel %>><%=r.getDescription() %></option>
+                                        <% } %>
+                                        </select>
+                                </form>
+                            </td>
+                        </tr>
+                    </table>
 
                     <table class="list" width="100%">
                         <tr>
@@ -65,13 +99,17 @@
                     <% if (slider.getTotalNumOfPages() > 1) { %>
                     <strong><%=language.getText("Pages:") %></strong>&nbsp;
                     <%
+                        String roleFilter = "";
+                        if (request.getParameter("roleId") != null) {
+                            roleFilter = "&roleId=" + request.getParameter("roleId");
+                        }
                         Iterator<cz.svjis.bean.SliderItem> slIt = slider.getItemList().iterator();
                         while (slIt.hasNext()) {
                             cz.svjis.bean.SliderItem item = slIt.next();
                             if (item.isCurrent()) {
                                 out.println("<b>" + item.getLabel() + "</b>&nbsp;");
                             } else {
-                                out.println("<a href=\"Dispatcher?page=redactionArticleList&section=0&pageNo=" + item.getPage() + "\">" + item.getLabel() + "</a>&nbsp;");
+                                out.println("<a href=\"Dispatcher?page=redactionArticleList&section=0&pageNo=" + item.getPage() + roleFilter +"\">" + item.getLabel() + "</a>&nbsp;");
                             }
                         }
                     %>
