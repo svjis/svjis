@@ -132,17 +132,21 @@ public class Dispatcher extends HttpServlet {
                 session.setAttribute("language", null);
             }
             
+            if (company == null) {
+                ArrayList<Company> companyList = compDao.getCompanyList();
+                request.setAttribute("companyList", companyList);
+                RequestDispatcher rd = request.getRequestDispatcher("/CompanyList.jsp");
+                rd.forward(request, response);
+                return;
+            }
+            
             // *****************
             // * Setup         *
             // *****************
             
             Properties setup = (Properties) session.getAttribute("setup");
             if (setup == null) {
-                if (company != null) {
-                    setup = setupDao.getApplicationSetup(company.getId());
-                } else {
-                    setup = new Properties();
-                }
+                setup = setupDao.getApplicationSetup(company.getId());
                 session.setAttribute("setup", setup);
             }
             
@@ -159,10 +163,8 @@ public class Dispatcher extends HttpServlet {
                     clearPermanentLogin(request, response);
                 }
                 user = new User();
-                if (company != null) {
-                    user.setCompanyId(company.getId());
-                }
-                if ((company != null) && (!page.equals("logout")) && (checkPermanentLogin(request, response, userDao, company.getId()) != 0)) {
+                user.setCompanyId(company.getId());
+                if ((!page.equals("logout")) && (checkPermanentLogin(request, response, userDao, company.getId()) != 0)) {
                     user = userDao.getUser(company.getId(), checkPermanentLogin(request, response, userDao, company.getId()));
                     user.login(user.getPassword());
                     logDao.log(user.getId(), LogDAO.operationTypeLogin, LogDAO.idNull, request.getRemoteAddr(), request.getHeader("User-Agent"));
@@ -203,34 +205,12 @@ public class Dispatcher extends HttpServlet {
             // *****************
             // * System menu   *
             // *****************
-            
             ArrayList<SystemMenuEntry> systemMenu = createSystemMenu(user);
             request.setAttribute("systemMenu", systemMenu);
             
             // *****************
-            // * Default page  *
-            // *****************
-            
-            if (company == null) {
-                page = "companyList";
-            }
-            
-            // *****************
-            // * Company       *
-            // *****************
-            
-            if (page.equals("companyList")) {
-                ArrayList<Company> companyList = compDao.getCompanyList();
-                request.setAttribute("companyList", companyList);
-                RequestDispatcher rd = request.getRequestDispatcher("/CompanyList.jsp");
-                rd.forward(request, response);
-                return;
-            }
-            
-            // *****************
             // * Lost login    *
             // *****************
-            
             if (page.equals("lostPassword")) {
                 RequestDispatcher rd = request.getRequestDispatcher("/LostPassword_form.jsp");
                 rd.forward(request, response);
