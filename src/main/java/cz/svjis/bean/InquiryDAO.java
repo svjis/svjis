@@ -136,6 +136,33 @@ public class InquiryDAO {
         return result;
     }
     
+    public ArrayList<InquiryLog> getInquiryLog(User user, int id) throws SQLException {
+        ArrayList<InquiryLog> result = new ArrayList<InquiryLog>();
+        String select = "SELECT " +
+                        "  a.VOTING_TIME " +
+                        "  ,u.FIRST_NAME " +
+                        "  ,u.LAST_NAME " +
+                        "  ,b.DESCRIPTION " +
+                        "FROM INQUIRY_VOTING_LOG a " +
+                        "left join INQUIRY_OPTION b on b.ID = a.INQUIRY_OPTION_ID " +
+                        "left join INQUIRY c on c.ID = b.INQUIRY_ID " +
+                        "left join \"USER\" u on u.ID = a.USER_ID " +
+                        "where c.COMPANY_ID = " + user.getCompanyId() + " and c.ID = " + id + " " +
+                        "order by a.ID;";
+        Statement st = cnn.createStatement();
+        ResultSet rs = st.executeQuery(select);
+        while (rs.next()) {
+            InquiryLog l = new InquiryLog();
+            l.setTime(rs.getTimestamp("VOTING_TIME"));
+            l.setUser(rs.getString("FIRST_NAME") + " " + rs.getString("LAST_NAME"));
+            l.setOptionDescription(rs.getString("DESCRIPTION"));
+            result.add(l);
+        }
+        rs.close();
+        st.close();
+        return result;
+    }
+    
     public ArrayList<InquiryOption> getInquiryOptionList(int inquiryId) throws SQLException {
         ArrayList<InquiryOption> result = new ArrayList<InquiryOption>();
         String select = "SELECT "

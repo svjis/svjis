@@ -27,6 +27,7 @@
                     <table class="list" width="100%">
                         <tr>
                             <th class="list">&nbsp;</th>
+                            <th class="list">&nbsp;</th>
                             <th class="list"><%=language.getText("Description") %></th>
                             <th class="list"><%=language.getText("Starting date") %></th>
                             <th class="list"><%=language.getText("Ending date") %></th>
@@ -40,6 +41,7 @@
                     %>
                         <tr>
                             <td class="list"><a href="Dispatcher?page=redactionInquiryEdit&id=<%=i.getId() %>"><img src="gfx/pencil.png" border="0" title="<%=language.getText("Edit") %>"></a></td>
+                            <td class="list"><a href="Dispatcher?page=redactionInquiryLog&id=<%=i.getId() %>"><img src="gfx/chart_bar.png" border="0" title="<%=language.getText("Log") %>"></a></td>
                             <td class="list"><%=i.getDescription() %></td>
                             <td class="list"><%=sdf.format(i.getStartingDate()) %></td>
                             <td class="list"><%=sdf.format(i.getEndingDate()) %></td>

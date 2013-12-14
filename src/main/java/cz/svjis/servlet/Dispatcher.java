@@ -18,6 +18,7 @@ import cz.svjis.bean.Company;
 import cz.svjis.bean.CompanyDAO;
 import cz.svjis.bean.Inquiry;
 import cz.svjis.bean.InquiryDAO;
+import cz.svjis.bean.InquiryLog;
 import cz.svjis.bean.InquiryOption;
 import cz.svjis.bean.Language;
 import cz.svjis.bean.LanguageDAO;
@@ -852,6 +853,20 @@ public class Dispatcher extends HttpServlet {
                     ArrayList<Inquiry> inquiryList = inquiryDao.getInquiryList(user, false);
                     request.setAttribute("inquiryList", inquiryList);
                     RequestDispatcher rd = request.getRequestDispatcher("/Redaction_InquiryList.jsp");
+                    rd.forward(request, response);
+                    return;
+                }
+                if (page.equals("redactionInquiryLog")) {
+                    int id = Integer.parseInt(request.getParameter("id"));
+                    Inquiry inquiry = new Inquiry();
+                    ArrayList<InquiryLog> log = new ArrayList<InquiryLog>();
+                    if (id != 0) {
+                        inquiry = inquiryDao.getInquiry(user, id);
+                        log = inquiryDao.getInquiryLog(user, id);
+                    }
+                    request.setAttribute("inquiry", inquiry);
+                    request.setAttribute("log", log);
+                    RequestDispatcher rd = request.getRequestDispatcher("/Redaction_InquiryLog.jsp");
                     rd.forward(request, response);
                     return;
                 }
