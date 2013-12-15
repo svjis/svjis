@@ -66,6 +66,10 @@ public class Upload extends HttpServlet {
         Company company = (Company) session.getAttribute("company");
         User user = (User) session.getAttribute("user");
         
+        if ((company == null) || (user == null)) {
+            return;
+        }
+        
         String page = request.getParameter("page");
         if (page == null) {
             page = "";
