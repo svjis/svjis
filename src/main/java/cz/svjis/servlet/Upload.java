@@ -131,10 +131,18 @@ public class Upload extends HttpServlet {
 
         response.setContentType(contentType);
         response.setHeader("Content-Disposition", "attachment; filename=\"" + encodedFileName + "\"");
+        //response.setContentLength(data.length);
         response.setDateHeader("Expires", 0);
-        java.io.OutputStream outb = response.getOutputStream();
-        outb.write(data);
-        outb.close();
+        
+        java.io.OutputStream outb = null;
+        try {
+            outb = response.getOutputStream();
+            outb.write(data, 0, data.length);
+        } catch (java.io.IOException ex) {
+            //ClientAbortException:  java.io.IOException: Roura přerušena (SIGPIPE) 
+        } finally {
+            if (outb != null) outb.close();
+        }
     }
     
     protected void exportBuildingUnitListToXls(User user, Connection cnn, HttpServletRequest request, HttpServletResponse response)
