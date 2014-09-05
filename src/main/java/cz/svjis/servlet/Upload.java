@@ -123,7 +123,7 @@ public class Upload extends HttpServlet {
             throws ServletException, IOException {
         String userAgent = request.getHeader("User-Agent");
         String encodedFileName = null;
-        if (userAgent.contains("MSIE") || userAgent.contains("Opera")) {
+        if (userAgent.contains("MSIE") || userAgent.contains("Opera") || userAgent.contains("Trident")) {
             encodedFileName = URLEncoder.encode(fileName.replace(" ", "_"), "UTF-8");
         } else {
             encodedFileName = "=?UTF-8?B?" + Base64.encodeBase64String(fileName.replace(" ", "_").getBytes("UTF-8")) + "?=";
