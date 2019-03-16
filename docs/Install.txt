@@ -57,6 +57,8 @@ Tomcat
 	JAVA_OPTS="-Djava.awt.headless=true -Xmx512m -XX:+UseConcMarkSweepGC"
 	LOGFILE_DAYS=14
 	AUTHBIND=yes
+   sudo vi /etc/tomcat7/catalina.properties
+        db.password=***
 6) install /etc/tomcat7/server.xml
 7) install ROOT.war, .keystore
    sudo chown tomcat7 /home/webapps/.keystore
