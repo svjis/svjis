@@ -7,7 +7,7 @@
     maxIdle="30" 
     maxWait="10000" 
     name="jdbc/SVJIS" 
-    password="asnad" 
+    password="${db.password}"
     type="javax.sql.DataSource" 
     url="jdbc:firebirdsql:localhost/3050:SVJIS_TEST?sql_role_name=R_WEB&amp;lc_ctype=UNICODE_FSS" 
     username="web"/>
