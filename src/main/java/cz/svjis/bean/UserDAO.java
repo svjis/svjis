@@ -4,6 +4,7 @@
  */
 package cz.svjis.bean;
 
+import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,6 +13,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.UUID;
+import javax.xml.bind.DatatypeConverter;
 
 /**
  *
@@ -251,6 +254,101 @@ public class UserDAO {
         return result;
     }
     
+    public void storeNewPassword(int company, String login, String password) throws SQLException {
+        String salt = UUID.randomUUID().toString();
+        String hash = generateHash(password, salt);
+        String sql = "UPDATE \"USER\" SET \"PASSWORD\" = NULL, \"PASSWORD_HASH\" = ?, \"PASSWORD_SALT\" = ? WHERE \"COMPANY_ID\" = ? AND \"LOGIN\" = ?;";
+        
+        PreparedStatement ps = cnn.prepareStatement(sql);
+        ps.setString(1, hash);
+        ps.setString(2, salt);
+        ps.setInt(3, company);
+        ps.setString(4, login);
+        ps.execute();
+        ps.close();
+    }
+    
+    public static String generateHash(String password, String salt){
+        String result = "";
+        try {
+            byte[] saltBytes = salt.getBytes("UTF-16LE");
+            byte[] passwordBytes = password.getBytes("UTF-16LE");
+            
+            byte[] bytesToHash = new byte[saltBytes.length + passwordBytes.length];
+            
+            System.arraycopy(saltBytes, 0, bytesToHash, 0, saltBytes.length);
+            System.arraycopy(passwordBytes, 0, bytesToHash, saltBytes.length, passwordBytes.length);
+            
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(bytesToHash);
+            //result = Base64.encodeBase64String(hash);
+            result = DatatypeConverter.printHexBinary(hash).toLowerCase();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return result;
+    }
+    
+    public boolean verifyPassword(User u, String password) throws SQLException {
+        boolean result = false;
+        String hash = null;
+        String salt = null;
+        String select = "SELECT  a.PASSWORD_HASH, a.PASSWORD_SALT FROM \"USER\" a WHERE a.COMPANY_ID = ? AND a.LOGIN = ?";
+        
+        /* find plain passwords and encrypt them */
+        convertPasswords();
+        
+        if ((u.isEnabled()) && (u.getLogin() != null) && (!u.getLogin().equals(""))) {
+            
+            PreparedStatement ps = cnn.prepareStatement(select);
+            ps.setInt(1, u.getCompanyId());
+            ps.setString(2, u.getLogin());
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                hash = rs.getString("PASSWORD_HASH");
+                salt = rs.getString("PASSWORD_SALT");
+            }
+            rs.close();
+            ps.close();
+            
+            if ((hash != null) && (salt != null) && (password != null) && !password.equals("")) {
+                String pwdHash = generateHash(password, salt);
+                if (pwdHash.equals(hash)) {
+                    u.setUserLogged(true);
+                    result = true;
+                }
+            }
+        }
+        
+        if (!result) {
+            u.clear();
+        }
+        
+        return result;
+    }
+    
+    private void convertPasswords() throws SQLException {
+        String select = "SELECT a.COMPANY_ID, a.\"LOGIN\", a.\"PASSWORD\" FROM \"USER\" a WHERE a.\"PASSWORD\" IS NOT NULL";
+        ArrayList<User> list = new ArrayList<User>();
+        
+        PreparedStatement ps = cnn.prepareStatement(select);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            User u = new User();
+            u.setCompanyId(rs.getInt("COMPANY_ID"));
+            u.setLogin(rs.getString("LOGIN"));
+            u.setPassword(rs.getString("PASSWORD"));
+            list.add(u);
+        }
+        rs.close();
+        ps.close();
+        
+        for (User u: list) {
+            storeNewPassword(u.getCompanyId(), u.getLogin(), u.getPassword());
+        }
+    }
+    
     public void modifyUser(User user) throws SQLException {
         int updated = 0;
         cnn.setAutoCommit(false);
@@ -266,7 +364,6 @@ public class UserDAO {
                 + "CELL_PHONE = ?, "
                 + "E_MAIL = ?, "
                 + "LOGIN = ?, "
-                + "\"PASSWORD\" = ?, "
                 + "ENABLED = ?, "
                 + "SHOW_IN_PHONELIST = ?, "
                 + "LANGUAGE_ID = ? "
@@ -283,12 +380,11 @@ public class UserDAO {
         ps.setString(9, user.getCellPhone());
         ps.setString(10, user.geteMail());
         ps.setString(11, user.getLogin());
-        ps.setString(12, user.getPassword());
-        ps.setBoolean(13, user.isEnabled());
-        ps.setBoolean(14, user.isShowInPhoneList());
-        ps.setInt(15, user.getLanguageId());
-        ps.setInt(16, user.getId());
-        ps.setInt(17, user.getCompanyId());
+        ps.setBoolean(12, user.isEnabled());
+        ps.setBoolean(13, user.isShowInPhoneList());
+        ps.setInt(14, user.getLanguageId());
+        ps.setInt(15, user.getId());
+        ps.setInt(16, user.getCompanyId());
         updated = ps.executeUpdate();
         ps.close();
         if (updated == 1) {
@@ -315,7 +411,6 @@ public class UserDAO {
                 + "CELL_PHONE, "
                 + "E_MAIL, "
                 + "LOGIN, "
-                + "\"PASSWORD\", "
                 + "ENABLED, "
                 + "SHOW_IN_PHONELIST, "
                 + "LANGUAGE_ID"
@@ -334,10 +429,9 @@ public class UserDAO {
         ps.setString(10, user.getCellPhone());
         ps.setString(11, user.geteMail());
         ps.setString(12, user.getLogin());
-        ps.setString(13, user.getPassword());
-        ps.setBoolean(14, user.isEnabled());
-        ps.setBoolean(15, user.isShowInPhoneList());
-        ps.setInt(16, user.getLanguageId());
+        ps.setBoolean(13, user.isEnabled());
+        ps.setBoolean(14, user.isShowInPhoneList());
+        ps.setInt(15, user.getLanguageId());
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
             result = rs.getInt("ID");

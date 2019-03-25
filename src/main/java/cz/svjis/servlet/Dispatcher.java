@@ -165,17 +165,21 @@ public class Dispatcher extends HttpServlet {
                 }
                 user = new User();
                 user.setCompanyId(company.getId());
+                /*
                 if ((!page.equals("logout")) && (checkPermanentLogin(request, response, userDao, company.getId()) != 0)) {
                     user = userDao.getUser(company.getId(), checkPermanentLogin(request, response, userDao, company.getId()));
                     user.login(user.getPassword());
                     logDao.log(user.getId(), LogDAO.operationTypeLogin, LogDAO.idNull, request.getRemoteAddr(), request.getHeader("User-Agent"));
                     savePermanentLogin(request, response, user);
                 } else {
+                */
                     if ((setup.getProperty("anonymous.user.id") != null) && (userDao.getUser(company.getId(), 
                             Integer.valueOf(setup.getProperty("anonymous.user.id"))) != null)) {
                         user = userDao.getUser(company.getId(), Integer.valueOf(setup.getProperty("anonymous.user.id")));
                     }
+                /*
                 }
+                */
                 session.setAttribute("user", user);
                 language = languageDao.getDictionary(user.getLanguageId());
                 session.setAttribute("language", language);
@@ -186,14 +190,14 @@ public class Dispatcher extends HttpServlet {
             
             if (page.equals("login") && (company != null)) {
                 User u = userDao.getUserByLogin(company.getId(), request.getParameter("login"));
-                if ((u != null) && (u.login(request.getParameter("password")))) {
+                if ((u != null) && userDao.verifyPassword(u, request.getParameter("password"))) {
                     user = u;
                     session.setAttribute("user", user);
                     language = languageDao.getDictionary(user.getLanguageId());
                     session.setAttribute("language", language);
                     page = "articleList";
                     logDao.log(user.getId(), LogDAO.operationTypeLogin, LogDAO.idNull, request.getRemoteAddr(), request.getHeader("User-Agent"));
-                    savePermanentLogin(request, response, user);
+                    //savePermanentLogin(request, response, user);
                 } else {
                     request.setAttribute("messageHeader", language.getText("Bad login"));
                     request.setAttribute("message", "<p>" + language.getText("You can continue") + " <a href=\"Dispatcher\">" + language.getText("here") + "</a>.</p><p><a href=\"Dispatcher?page=lostPassword\">" + language.getText("Forgot password?") + "</a></p>");
