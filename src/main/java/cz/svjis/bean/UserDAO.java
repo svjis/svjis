@@ -58,7 +58,6 @@ public class UserDAO {
                 + "a.CELL_PHONE, "
                 + "a.E_MAIL, "
                 + "a.LOGIN, "
-                + "a.PASSWORD, "
                 + "a.ENABLED, "
                 + "a.SHOW_IN_PHONELIST,"
                 + "a.LANGUAGE_ID, "
@@ -89,7 +88,6 @@ public class UserDAO {
             u.setCellPhone(rs.getString("CELL_PHONE"));
             u.seteMail(rs.getString("E_MAIL"));
             u.setLogin(rs.getString("LOGIN"));
-            u.setPassword(rs.getString("PASSWORD"));
             u.setEnabled(rs.getBoolean("ENABLED"));
             u.setShowInPhoneList(rs.getBoolean("SHOW_IN_PHONELIST"));
             u.setLanguageId(rs.getInt("LANGUAGE_ID"));
@@ -118,7 +116,6 @@ public class UserDAO {
                 + "a.CELL_PHONE, "
                 + "a.E_MAIL, "
                 + "a.LOGIN, "
-                + "a.PASSWORD, "
                 + "a.ENABLED, "
                 + "a.SHOW_IN_PHONELIST, "
                 + "a.LANGUAGE_ID "
@@ -144,7 +141,6 @@ public class UserDAO {
             result.setCellPhone(rs.getString("CELL_PHONE"));
             result.seteMail(rs.getString("E_MAIL"));
             result.setLogin(rs.getString("LOGIN"));
-            result.setPassword(rs.getString("PASSWORD"));
             result.setEnabled(rs.getBoolean("ENABLED"));
             result.setShowInPhoneList(rs.getBoolean("SHOW_IN_PHONELIST"));
             result.setLanguageId(rs.getInt("LANGUAGE_ID"));
@@ -173,7 +169,6 @@ public class UserDAO {
                 + "a.CELL_PHONE, "
                 + "a.E_MAIL, "
                 + "a.LOGIN, "
-                + "a.PASSWORD, "
                 + "a.ENABLED, "
                 + "a.SHOW_IN_PHONELIST,"
                 + "a.LANGUAGE_ID "
@@ -199,7 +194,6 @@ public class UserDAO {
             result.setCellPhone(rs.getString("CELL_PHONE"));
             result.seteMail(rs.getString("E_MAIL"));
             result.setLogin(rs.getString("LOGIN"));
-            result.setPassword(rs.getString("PASSWORD"));
             result.setEnabled(rs.getBoolean("ENABLED"));
             result.setShowInPhoneList(rs.getBoolean("SHOW_IN_PHONELIST"));
             result.setLanguageId(rs.getInt("LANGUAGE_ID"));
@@ -387,6 +381,11 @@ public class UserDAO {
         ps.setInt(16, user.getCompanyId());
         updated = ps.executeUpdate();
         ps.close();
+        
+        if ((user.getPassword() != null) && (!user.getPassword().equals(""))) {
+            storeNewPassword(user.getCompanyId(), user.getLogin(), user.getPassword());
+        }
+        
         if (updated == 1) {
             modifyUserRoles(user);
         }
@@ -414,7 +413,7 @@ public class UserDAO {
                 + "ENABLED, "
                 + "SHOW_IN_PHONELIST, "
                 + "LANGUAGE_ID"
-                + ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) returning ID";
+                + ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) returning ID";
         
         PreparedStatement ps = cnn.prepareStatement(update);
         ps.setInt(1, user.getCompanyId());
@@ -437,6 +436,10 @@ public class UserDAO {
             result = rs.getInt("ID");
         }
         ps.close();
+        
+        if ((user.getPassword() != null) && (!user.getPassword().equals(""))) {
+            storeNewPassword(user.getCompanyId(), user.getLogin(), user.getPassword());
+        }
         
         user.setId(result);
         modifyUserRoles(user);
@@ -521,7 +524,7 @@ public class UserDAO {
     
     public ArrayList<User> findLostPassword(int companyId, String email) throws SQLException {
         ArrayList<User> result = new ArrayList<User>();
-        String select = "SELECT a.ID, a.COMPANY_ID, a.E_MAIL, a.LOGIN, a.\"PASSWORD\" FROM \"USER\" a "
+        String select = "SELECT a.ID, a.COMPANY_ID, a.E_MAIL, a.LOGIN FROM \"USER\" a "
                 + "WHERE (a.COMPANY_ID = ?) and (a.E_MAIL collate UNICODE_CI_AI = ?) and (a.ENABLED = 1)";
         PreparedStatement ps = cnn.prepareStatement(select);
         ps.setInt(1, companyId);
@@ -533,7 +536,6 @@ public class UserDAO {
             u.setCompanyId(rs.getInt("COMPANY_ID"));
             u.seteMail(rs.getString("E_MAIL"));
             u.setLogin(rs.getString("LOGIN"));
-            u.setPassword(rs.getString("PASSWORD"));
             result.add(u);
         }
         rs.close();

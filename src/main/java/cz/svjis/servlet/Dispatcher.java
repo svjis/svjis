@@ -543,7 +543,7 @@ public class Dispatcher extends HttpServlet {
                     String oldPass = request.getParameter("oldPassword");
                     String newPass1 = request.getParameter("newPassword");
                     String newPass2 = request.getParameter("newPassword2");
-                    if (!oldPass.equals(user.getPassword())) {
+                    if (!userDao.verifyPassword(user, oldPass)) {
                         message += language.getText("You typed wrong current password.") + "<br>";
                     }
                     if (!newPass1.equals(newPass2)) {
@@ -553,8 +553,7 @@ public class Dispatcher extends HttpServlet {
                         message += language.getText("Password is too short. Minimum is 6 characters.") + "<br>";
                     }
                     if (message.equals("")) {
-                        user.setPassword(newPass1);
-                        userDao.modifyUser(user);
+                        userDao.storeNewPassword(user.getCompanyId(), user.getLogin(), newPass1);
                         message += language.getText("New password has been set.") + "<br>";
                     }
                     request.setAttribute("message", message);
