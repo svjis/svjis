@@ -38,6 +38,7 @@ import cz.svjis.bean.SliderImpl;
 import cz.svjis.bean.SystemMenuEntry;
 import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
+import cz.svjis.common.RandomString;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -235,9 +236,10 @@ public class Dispatcher extends HttpServlet {
                 ArrayList<User> result = userDao.findLostPassword(company.getId(), email);
                 if (!result.isEmpty()) {
                     String logins = "";
-                    for (int i = 0; i < result.size(); i++) {
-                        User u = result.get(i);
-                        logins += "Login: " + u.getLogin() + " " + "Password: " + u.getPassword() + "<br>"; 
+                    for (User u: result) {
+                        String newPassword = RandomString.randomString(8);
+                        userDao.storeNewPassword(u.getCompanyId(), u.getLogin(), newPassword);
+                        logins += "Login: " + u.getLogin() + " " + "Password: " + newPassword + "<br>"; 
                         logDao.log(u.getId(), LogDAO.operationTypeSendLostPassword, LogDAO.idNull, request.getRemoteAddr(), request.getHeader("User-Agent"));
                     }
                     String body = setup.getProperty("mail.template.lost.password");
