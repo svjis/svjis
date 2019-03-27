@@ -4,7 +4,9 @@
  */
 package cz.svjis.bean;
 
+import java.math.BigInteger;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -320,6 +322,45 @@ public class UserDAO {
         }
         
         return result;
+    }
+    
+    public String getAuthToken(int companyId, String login) throws SQLException, NoSuchAlgorithmException {
+        String result = "";
+        String select = "SELECT "
+                + "a.PASSWORD_SALT "
+                + "FROM \"USER\" a "
+                + "WHERE (a.COMPANY_ID = ?) AND (a.LOGIN  collate UNICODE_CI_AI = ?) ";
+        
+        PreparedStatement ps = cnn.prepareStatement(select);
+        ps.setInt(1, companyId);
+        ps.setString(2, login);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            result = rs.getString("PASSWORD_SALT");
+            result = getMd5Digest(result);
+        }
+        rs.close();
+        ps.close();
+        
+        return result;
+    }
+    
+    public boolean verifyAuthToken(int companyId, String login, String token) throws SQLException, NoSuchAlgorithmException {
+        boolean result = false;
+        
+        String t = getAuthToken(companyId, login);
+        if ((t != null) && (token != null) && !token.equals("") && token.equals(t)) {
+            result = true;
+        }
+        
+        return result;
+    }
+    
+    private String getMd5Digest(String pInput) throws NoSuchAlgorithmException {    
+        MessageDigest lDigest = MessageDigest.getInstance("MD5");
+        lDigest.update(pInput.getBytes());
+        BigInteger lHashInt = new BigInteger(1, lDigest.digest());
+        return String.format("%1$032X", lHashInt);
     }
     
     private void convertPasswords() throws SQLException {
