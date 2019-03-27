@@ -2,17 +2,30 @@
 
 Information system for Owners Associations.  
 
-## Documentation
+## Three main branches
+* `master` - development branch containing testing version
+* `staging` - staging branch containing acceptance test version
+* `production` - production branch containing production version
 
-See docs directory:
+## Development workflow
 
-* `docs/Install.txt` for installation instructions
-* `dosc/database.sql` for database schema
-* `docs/server.xml` for Tomcat configuration
-* `dosc/mkcert.sh` for installing Let's Encrypt certificate
-* `dbbak_production.sh` for backup script
+Developer takes ticket and creates new feature branch **from staging branch**:
 
-## Contact:
+1. `git checkout staging`
+1. `git pull`
+1. `git checkout -b Issue_#3`
+1. `git push -u origin Issue_#3`
 
-Jaroslav Beran  
-jaroslav.beran@gmail.com  
+Developing is done in feature branch:
+
+1. `git status`
+1. `git add .`
+1. `git commit -m "what have been changed"`
+1. `git push`
+
+At the end developer will merge feature branch to master and deploy to test:
+
+1. `git checkout master`
+1. `git pull` 
+1. `git merge --no-ff origin/Issue_#3`
+1. `git push`
