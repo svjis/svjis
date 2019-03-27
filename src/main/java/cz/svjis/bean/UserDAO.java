@@ -348,6 +348,9 @@ public class UserDAO {
     public boolean verifyAuthToken(int companyId, String login, String token) throws SQLException, NoSuchAlgorithmException {
         boolean result = false;
         
+        /* find plain passwords and encrypt them */
+        convertPasswords();
+        
         String t = getAuthToken(companyId, login);
         if ((t != null) && (token != null) && !token.equals("") && token.equals(t)) {
             result = true;
