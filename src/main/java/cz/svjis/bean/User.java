@@ -62,20 +62,6 @@ public final class User {
         permissions = new HashMap();
     }
     
-    public boolean login (String password) {
-        if ((enabled) && 
-                (login != null) && (!login.equals("")) && 
-                (this.password != null) && (!this.password.equals("")) &&
-                (password != null) && (!password.equals("")) && 
-                (password.equals(this.password))) {
-            userLogged = true;
-        } else {
-            clear();
-        }
-        
-        return userLogged;
-    }
-    
     /**
      * @return the id
      */

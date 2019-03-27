@@ -4,6 +4,9 @@
  */
 package cz.svjis.bean;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,6 +15,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.UUID;
+import javax.xml.bind.DatatypeConverter;
 
 /**
  *
@@ -55,7 +60,6 @@ public class UserDAO {
                 + "a.CELL_PHONE, "
                 + "a.E_MAIL, "
                 + "a.LOGIN, "
-                + "a.PASSWORD, "
                 + "a.ENABLED, "
                 + "a.SHOW_IN_PHONELIST,"
                 + "a.LANGUAGE_ID, "
@@ -86,7 +90,6 @@ public class UserDAO {
             u.setCellPhone(rs.getString("CELL_PHONE"));
             u.seteMail(rs.getString("E_MAIL"));
             u.setLogin(rs.getString("LOGIN"));
-            u.setPassword(rs.getString("PASSWORD"));
             u.setEnabled(rs.getBoolean("ENABLED"));
             u.setShowInPhoneList(rs.getBoolean("SHOW_IN_PHONELIST"));
             u.setLanguageId(rs.getInt("LANGUAGE_ID"));
@@ -115,7 +118,6 @@ public class UserDAO {
                 + "a.CELL_PHONE, "
                 + "a.E_MAIL, "
                 + "a.LOGIN, "
-                + "a.PASSWORD, "
                 + "a.ENABLED, "
                 + "a.SHOW_IN_PHONELIST, "
                 + "a.LANGUAGE_ID "
@@ -141,7 +143,6 @@ public class UserDAO {
             result.setCellPhone(rs.getString("CELL_PHONE"));
             result.seteMail(rs.getString("E_MAIL"));
             result.setLogin(rs.getString("LOGIN"));
-            result.setPassword(rs.getString("PASSWORD"));
             result.setEnabled(rs.getBoolean("ENABLED"));
             result.setShowInPhoneList(rs.getBoolean("SHOW_IN_PHONELIST"));
             result.setLanguageId(rs.getInt("LANGUAGE_ID"));
@@ -170,7 +171,6 @@ public class UserDAO {
                 + "a.CELL_PHONE, "
                 + "a.E_MAIL, "
                 + "a.LOGIN, "
-                + "a.PASSWORD, "
                 + "a.ENABLED, "
                 + "a.SHOW_IN_PHONELIST,"
                 + "a.LANGUAGE_ID "
@@ -196,7 +196,6 @@ public class UserDAO {
             result.setCellPhone(rs.getString("CELL_PHONE"));
             result.seteMail(rs.getString("E_MAIL"));
             result.setLogin(rs.getString("LOGIN"));
-            result.setPassword(rs.getString("PASSWORD"));
             result.setEnabled(rs.getBoolean("ENABLED"));
             result.setShowInPhoneList(rs.getBoolean("SHOW_IN_PHONELIST"));
             result.setLanguageId(rs.getInt("LANGUAGE_ID"));
@@ -251,6 +250,143 @@ public class UserDAO {
         return result;
     }
     
+    public void storeNewPassword(int company, String login, String password) throws SQLException {
+        String salt = UUID.randomUUID().toString();
+        String hash = generateHash(password, salt);
+        String sql = "UPDATE \"USER\" SET \"PASSWORD\" = NULL, \"PASSWORD_HASH\" = ?, \"PASSWORD_SALT\" = ? WHERE \"COMPANY_ID\" = ? AND \"LOGIN\" = ?;";
+        
+        PreparedStatement ps = cnn.prepareStatement(sql);
+        ps.setString(1, hash);
+        ps.setString(2, salt);
+        ps.setInt(3, company);
+        ps.setString(4, login);
+        ps.execute();
+        ps.close();
+    }
+    
+    public static String generateHash(String password, String salt){
+        String result = "";
+        try {
+            byte[] saltBytes = salt.getBytes("UTF-16LE");
+            byte[] passwordBytes = password.getBytes("UTF-16LE");
+            
+            byte[] bytesToHash = new byte[saltBytes.length + passwordBytes.length];
+            
+            System.arraycopy(saltBytes, 0, bytesToHash, 0, saltBytes.length);
+            System.arraycopy(passwordBytes, 0, bytesToHash, saltBytes.length, passwordBytes.length);
+            
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(bytesToHash);
+            //result = Base64.encodeBase64String(hash);
+            result = DatatypeConverter.printHexBinary(hash).toLowerCase();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return result;
+    }
+    
+    public boolean verifyPassword(User u, String password) throws SQLException {
+        boolean result = false;
+        String hash = null;
+        String salt = null;
+        String select = "SELECT  a.PASSWORD_HASH, a.PASSWORD_SALT FROM \"USER\" a WHERE a.COMPANY_ID = ? AND a.LOGIN = ?";
+        
+        /* find plain passwords and encrypt them */
+        convertPasswords();
+        
+        if ((u.isEnabled()) && (u.getLogin() != null) && (!u.getLogin().equals(""))) {
+            
+            PreparedStatement ps = cnn.prepareStatement(select);
+            ps.setInt(1, u.getCompanyId());
+            ps.setString(2, u.getLogin());
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                hash = rs.getString("PASSWORD_HASH");
+                salt = rs.getString("PASSWORD_SALT");
+            }
+            rs.close();
+            ps.close();
+            
+            if ((hash != null) && (salt != null) && (password != null) && !password.equals("")) {
+                String pwdHash = generateHash(password, salt);
+                if (pwdHash.equals(hash)) {
+                    u.setUserLogged(true);
+                    result = true;
+                }
+            }
+        }
+        
+        if (!result) {
+            u.clear();
+        }
+        
+        return result;
+    }
+    
+    public String getAuthToken(int companyId, String login) throws SQLException, NoSuchAlgorithmException {
+        String result = "";
+        String select = "SELECT "
+                + "a.PASSWORD_SALT "
+                + "FROM \"USER\" a "
+                + "WHERE (a.COMPANY_ID = ?) AND (a.LOGIN  collate UNICODE_CI_AI = ?) ";
+        
+        PreparedStatement ps = cnn.prepareStatement(select);
+        ps.setInt(1, companyId);
+        ps.setString(2, login);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            result = rs.getString("PASSWORD_SALT");
+            result = getMd5Digest(result);
+        }
+        rs.close();
+        ps.close();
+        
+        return result;
+    }
+    
+    public boolean verifyAuthToken(int companyId, String login, String token) throws SQLException, NoSuchAlgorithmException {
+        boolean result = false;
+        
+        /* find plain passwords and encrypt them */
+        convertPasswords();
+        
+        String t = getAuthToken(companyId, login);
+        if ((t != null) && (token != null) && !token.equals("") && token.equals(t)) {
+            result = true;
+        }
+        
+        return result;
+    }
+    
+    private String getMd5Digest(String pInput) throws NoSuchAlgorithmException {    
+        MessageDigest lDigest = MessageDigest.getInstance("MD5");
+        lDigest.update(pInput.getBytes());
+        BigInteger lHashInt = new BigInteger(1, lDigest.digest());
+        return String.format("%1$032X", lHashInt);
+    }
+    
+    private void convertPasswords() throws SQLException {
+        String select = "SELECT a.COMPANY_ID, a.\"LOGIN\", a.\"PASSWORD\" FROM \"USER\" a WHERE a.\"PASSWORD\" IS NOT NULL";
+        ArrayList<User> list = new ArrayList<User>();
+        
+        PreparedStatement ps = cnn.prepareStatement(select);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            User u = new User();
+            u.setCompanyId(rs.getInt("COMPANY_ID"));
+            u.setLogin(rs.getString("LOGIN"));
+            u.setPassword(rs.getString("PASSWORD"));
+            list.add(u);
+        }
+        rs.close();
+        ps.close();
+        
+        for (User u: list) {
+            storeNewPassword(u.getCompanyId(), u.getLogin(), u.getPassword());
+        }
+    }
+    
     public void modifyUser(User user) throws SQLException {
         int updated = 0;
         cnn.setAutoCommit(false);
@@ -266,7 +402,6 @@ public class UserDAO {
                 + "CELL_PHONE = ?, "
                 + "E_MAIL = ?, "
                 + "LOGIN = ?, "
-                + "\"PASSWORD\" = ?, "
                 + "ENABLED = ?, "
                 + "SHOW_IN_PHONELIST = ?, "
                 + "LANGUAGE_ID = ? "
@@ -283,14 +418,18 @@ public class UserDAO {
         ps.setString(9, user.getCellPhone());
         ps.setString(10, user.geteMail());
         ps.setString(11, user.getLogin());
-        ps.setString(12, user.getPassword());
-        ps.setBoolean(13, user.isEnabled());
-        ps.setBoolean(14, user.isShowInPhoneList());
-        ps.setInt(15, user.getLanguageId());
-        ps.setInt(16, user.getId());
-        ps.setInt(17, user.getCompanyId());
+        ps.setBoolean(12, user.isEnabled());
+        ps.setBoolean(13, user.isShowInPhoneList());
+        ps.setInt(14, user.getLanguageId());
+        ps.setInt(15, user.getId());
+        ps.setInt(16, user.getCompanyId());
         updated = ps.executeUpdate();
         ps.close();
+        
+        if ((user.getPassword() != null) && (!user.getPassword().equals(""))) {
+            storeNewPassword(user.getCompanyId(), user.getLogin(), user.getPassword());
+        }
+        
         if (updated == 1) {
             modifyUserRoles(user);
         }
@@ -315,11 +454,10 @@ public class UserDAO {
                 + "CELL_PHONE, "
                 + "E_MAIL, "
                 + "LOGIN, "
-                + "\"PASSWORD\", "
                 + "ENABLED, "
                 + "SHOW_IN_PHONELIST, "
                 + "LANGUAGE_ID"
-                + ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) returning ID";
+                + ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) returning ID";
         
         PreparedStatement ps = cnn.prepareStatement(update);
         ps.setInt(1, user.getCompanyId());
@@ -334,15 +472,18 @@ public class UserDAO {
         ps.setString(10, user.getCellPhone());
         ps.setString(11, user.geteMail());
         ps.setString(12, user.getLogin());
-        ps.setString(13, user.getPassword());
-        ps.setBoolean(14, user.isEnabled());
-        ps.setBoolean(15, user.isShowInPhoneList());
-        ps.setInt(16, user.getLanguageId());
+        ps.setBoolean(13, user.isEnabled());
+        ps.setBoolean(14, user.isShowInPhoneList());
+        ps.setInt(15, user.getLanguageId());
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
             result = rs.getInt("ID");
         }
         ps.close();
+        
+        if ((user.getPassword() != null) && (!user.getPassword().equals(""))) {
+            storeNewPassword(user.getCompanyId(), user.getLogin(), user.getPassword());
+        }
         
         user.setId(result);
         modifyUserRoles(user);
@@ -427,8 +568,10 @@ public class UserDAO {
     
     public ArrayList<User> findLostPassword(int companyId, String email) throws SQLException {
         ArrayList<User> result = new ArrayList<User>();
-        String select = "SELECT a.ID, a.E_MAIL, a.LOGIN, a.\"PASSWORD\" FROM \"USER\" a "
+
+        String select = "SELECT a.ID, a.COMPANY_ID, a.E_MAIL, a.LOGIN FROM \"USER\" a "
                 + "WHERE (a.COMPANY_ID = ?) and (trim(a.E_MAIL) collate UNICODE_CI_AI = ?) and (a.ENABLED = 1)";
+
         PreparedStatement ps = cnn.prepareStatement(select);
         ps.setInt(1, companyId);
         ps.setString(2, email);
@@ -436,9 +579,9 @@ public class UserDAO {
         while (rs.next()) {
             User u = new User();
             u.setId(rs.getInt("ID"));
+            u.setCompanyId(rs.getInt("COMPANY_ID"));
             u.seteMail(rs.getString("E_MAIL"));
             u.setLogin(rs.getString("LOGIN"));
-            u.setPassword(rs.getString("PASSWORD"));
             result.add(u);
         }
         rs.close();
