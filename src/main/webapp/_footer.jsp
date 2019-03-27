@@ -13,7 +13,7 @@
         <p class="f-right"><a href="http://www.nuviotemplates.com/">Free web templates</a> presented by <a href="http://www.qartin.cz/">QARTIN</a> &ndash; Our tip: <a href="http://last-minute.invia.sk" title="Last Minute">Last Minute</a> <a href="http://wycieczki.invia.pl" title="Wczasy">Wczasy</a></p>
         <!-- Do you want remove this backlinks? Look at www.nuviotemplates.com/payment.php -->
 
-        <p>System <strong>SVJIS 1.2.0-SNAPSHOT</strong>, build from 27.3.2019, <strong><a href="mailto:jaroslav.beran@gmail.com">Jaroslav Beran</a></strong>, All Rights Reserved &reg;</p>
+        <p>System <strong>SVJIS 1.3.0-SNAPSHOT</strong>, build from 27.3.2019, <strong><a href="mailto:jaroslav.beran@gmail.com">Jaroslav Beran</a></strong>, All Rights Reserved &reg;</p>
 
     </div> <!-- /footer -->
 
