@@ -428,7 +428,7 @@ public class UserDAO {
     public ArrayList<User> findLostPassword(int companyId, String email) throws SQLException {
         ArrayList<User> result = new ArrayList<User>();
         String select = "SELECT a.ID, a.E_MAIL, a.LOGIN, a.\"PASSWORD\" FROM \"USER\" a "
-                + "WHERE (a.COMPANY_ID = ?) and (a.E_MAIL collate UNICODE_CI_AI = ?) and (a.ENABLED = 1)";
+                + "WHERE (a.COMPANY_ID = ?) and (trim(a.E_MAIL) collate UNICODE_CI_AI = ?) and (a.ENABLED = 1)";
         PreparedStatement ps = cnn.prepareStatement(select);
         ps.setInt(1, companyId);
         ps.setString(2, email);
