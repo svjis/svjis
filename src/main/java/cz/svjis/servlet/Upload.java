@@ -4,6 +4,7 @@
  */
 package cz.svjis.servlet;
 
+import cz.svjis.servlet.cmd.HandleErrorCmd;
 import cz.svjis.bean.ArticleAttachment;
 import cz.svjis.bean.ArticleDAO;
 import cz.svjis.bean.BuildingDAO;
@@ -108,9 +109,8 @@ public class Upload extends HttpServlet {
             ex.printStackTrace();
             HandleErrorCmd errCmd = new HandleErrorCmd();
             errCmd.setThrowable(ex);
-            errCmd.setCnn(cnn);
             try {
-                errCmd.run(request, response);
+                errCmd.run(request, response, cnn);
             } catch (Exception exx) {
                 exx.printStackTrace();
             }

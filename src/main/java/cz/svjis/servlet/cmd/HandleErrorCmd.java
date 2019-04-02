@@ -2,10 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package cz.svjis.servlet;
+package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.MailDAO;
 import cz.svjis.bean.User;
+import cz.svjis.servlet.ICommand;
 import java.sql.Connection;
 import java.util.Properties;
 import javax.servlet.RequestDispatcher;
@@ -23,8 +24,9 @@ public class HandleErrorCmd implements ICommand {
     private Connection cnn;
     
     @Override
-    public void run(HttpServletRequest request, HttpServletResponse response) throws Exception {
-                
+    public void run(HttpServletRequest request, HttpServletResponse response, Connection cnn) throws Exception {
+     
+        this.cnn = cnn;
         HttpSession session = request.getSession();
 
         User user = (User) session.getAttribute("user");
@@ -66,19 +68,4 @@ public class HandleErrorCmd implements ICommand {
     public void setThrowable(Throwable throwable) {
         this.throwable = throwable;
     }
-
-    /**
-     * @return the cnn
-     */
-    public Connection getCnn() {
-        return cnn;
-    }
-
-    /**
-     * @param cnn the cnn to set
-     */
-    public void setCnn(Connection cnn) {
-        this.cnn = cnn;
-    }
-    
 }

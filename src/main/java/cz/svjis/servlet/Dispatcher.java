@@ -4,6 +4,7 @@
  */
 package cz.svjis.servlet;
 
+import cz.svjis.servlet.cmd.HandleErrorCmd;
 import cz.svjis.bean.ApplicationSetupDAO;
 import cz.svjis.bean.Article;
 import cz.svjis.bean.ArticleAttachment;
@@ -38,7 +39,8 @@ import cz.svjis.bean.SliderImpl;
 import cz.svjis.bean.SystemMenuEntry;
 import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
-import cz.svjis.common.RandomString;
+import cz.svjis.servlet.cmd.LostPasswordCmd;
+import cz.svjis.servlet.cmd.LostPasswordSubmitCmd;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -212,48 +214,16 @@ public class Dispatcher extends HttpServlet {
             // * Lost login    *
             // *****************
             if (page.equals("lostPassword")) {
-                RequestDispatcher rd = request.getRequestDispatcher("/LostPassword_form.jsp");
-                rd.forward(request, response);
+                new LostPasswordCmd().run(request, response, cnn);
                 return;
             }
             
             if (page.equals("lostPassword_submit")) {
-                String email = request.getParameter("email");
-                if ((email == null) || (email.equals(""))) {
-                    String url = "Dispatcher?page=lostPassword";
-                    request.setAttribute("url", url);
-                    RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
-                    rd.forward(request, response);
-                    return;
-                }
-                RequestDispatcher rd = null;
-                ArrayList<User> result = userDao.findLostPassword(company.getId(), email);
-                if (!result.isEmpty()) {
-                    String logins = "";
-                    for (User u: result) {
-                        String newPassword = RandomString.randomString(8);
-                        userDao.storeNewPassword(u.getCompanyId(), u.getLogin(), newPassword);
-                        logins += "Login: " + u.getLogin() + " " + "Password: " + newPassword + "<br>"; 
-                        logDao.log(u.getId(), LogDAO.operationTypeSendLostPassword, LogDAO.idNull, request.getRemoteAddr(), request.getHeader("User-Agent"));
-                    }
-                    String body = setup.getProperty("mail.template.lost.password");
-                    body = String.format(body, logins);
-                    MailDAO mailDao = new MailDAO(
-                            cnn,
-                            setup.getProperty("mail.smtp"),
-                            setup.getProperty("mail.login"),
-                            setup.getProperty("mail.password"),
-                            setup.getProperty("mail.sender"));
-                    mailDao.sendInstantMail(email, company.getName(), body);
-                    request.setAttribute("messageHeader", language.getText("Password assistance"));
-                    request.setAttribute("message", language.getText("Your login and password were sent to your mail."));
-                    rd = request.getRequestDispatcher("/_message.jsp");
-                } else {
-                    request.setAttribute("messageHeader", language.getText("Password assistance"));
-                    request.setAttribute("message", language.getText("There is not user assigned to e-mail."));
-                    rd = request.getRequestDispatcher("/_message.jsp");
-                }
-                rd.forward(request, response);
+                LostPasswordSubmitCmd cmd = new LostPasswordSubmitCmd();
+                cmd.setCompany(company);
+                cmd.setSetup(setup);
+                cmd.setLanguage(language);
+                cmd.run(request, response, cnn);
                 return;
             }
             
@@ -1433,9 +1403,8 @@ public class Dispatcher extends HttpServlet {
             ex.printStackTrace();
             HandleErrorCmd errCmd = new HandleErrorCmd();
             errCmd.setThrowable(ex);
-            errCmd.setCnn(cnn);
             try {
-                errCmd.run(request, response);
+                errCmd.run(request, response, cnn);
             } catch (Exception exx) {
                 exx.printStackTrace();
             }
