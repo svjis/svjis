@@ -209,6 +209,19 @@ public class Dispatcher extends HttpServlet {
             }
             
             // *****************
+            // * Context       *
+            // *****************
+
+            CmdContext ctx = new CmdContext();
+            ctx.setCompany(company);
+            ctx.setSetup(setup);
+            ctx.setLanguage(language);
+            ctx.setUser(user);
+            ctx.setRequest(request);
+            ctx.setResponse(response);
+            ctx.setCnn(cnn);
+            
+            // *****************
             // * System menu   *
             // *****************
             ArrayList<SystemMenuEntry> systemMenu = createSystemMenu(user);
@@ -218,16 +231,12 @@ public class Dispatcher extends HttpServlet {
             // * Lost login    *
             // *****************
             if (page.equals("lostPassword")) {
-                new LostPasswordCmd().run(request, response, cnn);
+                new LostPasswordCmd(ctx).execute();
                 return;
             }
             
             if (page.equals("lostPassword_submit")) {
-                LostPasswordSubmitCmd cmd = new LostPasswordSubmitCmd();
-                cmd.setCompany(company);
-                cmd.setSetup(setup);
-                cmd.setLanguage(language);
-                cmd.run(request, response, cnn);
+                new LostPasswordSubmitCmd(ctx).execute();
                 return;
             }
             

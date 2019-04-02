@@ -5,22 +5,23 @@
  */
 package cz.svjis.servlet.cmd;
 
-import cz.svjis.servlet.ICommand;
-import java.sql.Connection;
+import cz.svjis.servlet.CmdContext;
+import cz.svjis.servlet.Command;
 import javax.servlet.RequestDispatcher;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  *
  * @author jaroslav_b
  */
-public class LostPasswordCmd implements ICommand {
+public class LostPasswordCmd extends Command {
 
+    public LostPasswordCmd(CmdContext ctx) {
+        super(ctx);
+    }
+    
     @Override
-    public void run(HttpServletRequest request, HttpServletResponse response, Connection cnn) throws Exception {
-        RequestDispatcher rd = request.getRequestDispatcher("/LostPassword_form.jsp");
-        rd.forward(request, response);
-        return;
+    public void execute() throws Exception {
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/LostPassword_form.jsp");
+        rd.forward(getRequest(), getResponse());
     }
 }
