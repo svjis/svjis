@@ -8,7 +8,6 @@ import cz.svjis.servlet.cmd.HandleErrorCmd;
 import cz.svjis.bean.ApplicationSetupDAO;
 import cz.svjis.bean.Article;
 import cz.svjis.bean.ArticleAttachment;
-import cz.svjis.bean.ArticleComment;
 import cz.svjis.bean.ArticleDAO;
 import cz.svjis.bean.ArticleListInfo;
 import cz.svjis.bean.Building;
@@ -39,6 +38,11 @@ import cz.svjis.bean.SliderImpl;
 import cz.svjis.bean.SystemMenuEntry;
 import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
+import cz.svjis.servlet.cmd.ArticleDetailCmd;
+import cz.svjis.servlet.cmd.ArticleInquiryVoteCmd;
+import cz.svjis.servlet.cmd.ArticleInsertCommentCmd;
+import cz.svjis.servlet.cmd.ArticleListCmd;
+import cz.svjis.servlet.cmd.ArticleSearchCmd;
 import cz.svjis.servlet.cmd.LostPasswordCmd;
 import cz.svjis.servlet.cmd.LostPasswordSubmitCmd;
 import java.io.File;
@@ -231,198 +235,47 @@ public class Dispatcher extends HttpServlet {
             // * Article       *
             // *****************
             if (user.hasPermission("menu_articles")) {
+                
                 if (page.equals("articleList")) {
-                    Menu menu = menuDao.getMenu(company.getId());
-                    int section = 0;
-                    if (request.getParameter("section") != null) {
-                        section = Integer.valueOf(request.getParameter("section"));
-                    }
-                    if ((section == 0) && (setup.get("article.menu.default.item") != null)) {
-                        section = Integer.valueOf(setup.getProperty("article.menu.default.item"));
-                    }
-                    menu.setActiveSection(section);
-                    request.setAttribute("menu", menu);
-
-                    int pageNo = 1;
-                    if (request.getParameter("pageNo") != null) {
-                        pageNo = Integer.valueOf(request.getParameter("pageNo"));
-                    }
-                    SliderImpl sl = new SliderImpl();
-                    sl.setSliderWide(10);
-                    sl.setCurrentPage(pageNo);
-                    sl.setNumOfItemsAtPage(Integer.valueOf(setup.getProperty("article.page.size")));
-                    sl.setTotalNumOfItems(articleDao.getNumOfArticles(user, section, true, false, 0));
-                    request.setAttribute("slider", sl);
-                    ArrayList<Article> articleList = articleDao.getArticleList(
-                            user,
-                            section,
-                            pageNo, 
-                            Integer.valueOf(setup.getProperty("article.page.size")),
-                            true, false, 0);
-                    request.setAttribute("articleList", articleList);
-                    ArrayList<Article> articleTopList = articleDao.getArticleTopList(
-                            user, 
-                            Integer.valueOf(setup.getProperty("article.top.size")));
-                    request.setAttribute("articleTopList", articleTopList);
-                    ArticleListInfo articleListInfo = new ArticleListInfo();
-                    articleListInfo.setNumOfArticles(articleDao.getNumOfArticles(
-                            user,
-                            section,
-                            true, false, 0));
-                    articleListInfo.setPageSize(Integer.valueOf(setup.getProperty("article.page.size")));
-                    articleListInfo.setActualPage(pageNo);
-                    articleListInfo.setMenuNodeId(section);
-                    request.setAttribute("articleListInfo", articleListInfo);
-                    ArrayList<MiniNews> miniNewsList = newsDao.getMiniNews(user, true);
-                    request.setAttribute("miniNewsList", miniNewsList);
-                    ArrayList<Inquiry> inquiryList = inquiryDao.getInquiryList(user, true);
-                    request.setAttribute("inquiryList", inquiryList);
-                    RequestDispatcher rd = request.getRequestDispatcher("/ArticleList.jsp");
-                    rd.forward(request, response);
+                    ArticleListCmd cmd = new ArticleListCmd();
+                    cmd.setCompany(company);
+                    cmd.setSetup(setup);
+                    cmd.setLanguage(language);
+                    cmd.setUser(user);
+                    cmd.run(request, response, cnn);
                     return;
                 }
 
                 if (page.equals("search")) {
-                    String search = request.getParameter("search");
-
-                    Menu menu = menuDao.getMenu(company.getId());
-                    int section = 0;
-                    if (request.getParameter("section") != null) {
-                        section = Integer.valueOf(request.getParameter("section"));
-                    }
-                    menu.setActiveSection(section);
-                    request.setAttribute("menu", menu);
-
-                    int pageNo = 1;
-                    if (request.getParameter("pageNo") != null) {
-                        pageNo = Integer.valueOf(request.getParameter("pageNo"));
-                    }
-                    SliderImpl sl = new SliderImpl();
-                    sl.setSliderWide(10);
-                    sl.setCurrentPage(pageNo);
-                    sl.setNumOfItemsAtPage(Integer.valueOf(setup.getProperty("article.page.size")));
-                    sl.setTotalNumOfItems(articleDao.getNumOfArticlesFromSearch(search, user, section, true, false));
-                    request.setAttribute("slider", sl);
-                    ArrayList<Article> articleList = articleDao.getArticleListFromSearch(
-                            search,
-                            user,
-                            section,
-                            pageNo, 
-                            Integer.valueOf(setup.getProperty("article.page.size")),
-                            true, false);
-                    request.setAttribute("articleList", articleList);
-                    ArrayList<Article> articleTopList = articleDao.getArticleTopList(
-                            user, 
-                            Integer.valueOf(setup.getProperty("article.top.size")));
-                    request.setAttribute("articleTopList", articleTopList);
-                    ArticleListInfo articleListInfo = new ArticleListInfo();
-                    articleListInfo.setNumOfArticles(articleDao.getNumOfArticlesFromSearch(
-                            search,
-                            user,
-                            section,
-                            true, false));
-                    articleListInfo.setPageSize(Integer.valueOf(setup.getProperty("article.page.size")));
-                    articleListInfo.setActualPage(pageNo);
-                    articleListInfo.setMenuNodeId(section);
-                    request.setAttribute("articleListInfo", articleListInfo);
-                    ArrayList<MiniNews> miniNewsList = newsDao.getMiniNews(user, true);
-                    request.setAttribute("miniNewsList", miniNewsList);
-                    ArrayList<Inquiry> inquiryList = inquiryDao.getInquiryList(user, true);
-                    request.setAttribute("inquiryList", inquiryList);
-                    RequestDispatcher rd = request.getRequestDispatcher("/ArticleList.jsp");
-                    rd.forward(request, response);
+                    ArticleSearchCmd cmd = new ArticleSearchCmd();
+                    cmd.setCompany(company);
+                    cmd.setSetup(setup);
+                    cmd.setUser(user);
+                    cmd.run(request, response, cnn);
                     return;
                 }
+                
                 if (page.equals("inquiryVote")) {
-                    int id = Integer.parseInt(request.getParameter("id"));
-                    Inquiry i = inquiryDao.getInquiry(user, id);
-                    if ((i != null) && (i.isUserCanVote()) && (request.getParameter("i_" + i.getId()) != null)) {
-                        String value = request.getParameter("i_" + i.getId());
-                        Iterator<InquiryOption> ioI = i.getOptionList().iterator();
-                        while (ioI.hasNext()) {
-                            InquiryOption io = ioI.next();
-                            if (value.equals("o_" + io.getId())) {
-                                inquiryDao.insertInquiryVote(io.getId(), user.getId());
-                            }
-                        }
-                    }
-                    String url = "Dispatcher?page=articleList";
-                    request.setAttribute("url", url);
-                    RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
-                    rd.forward(request, response);
+                    ArticleInquiryVoteCmd cmd = new ArticleInquiryVoteCmd();
+                    cmd.setUser(user);
+                    cmd.run(request, response, cnn);
                     return;
                 }
+                
                 if (page.equals("articleDetail")) {
-                    int articleId = 0;
-                    if (request.getParameter("id") != null) {
-                        articleId = Integer.valueOf(request.getParameter("id"));
-                    } 
-                    Article article = articleDao.getArticle(
-                            user, 
-                            articleId);
-                    if ((article == null) || (article.getId() == 0)) {
-                        Menu menu = menuDao.getMenu(company.getId());
-                        request.setAttribute("menu", menu);
-                        RequestDispatcher rd = request.getRequestDispatcher("/ArticleNotFound.jsp");
-                        rd.forward(request, response);
-                        return;
-                    }
-                    request.setAttribute("article", article);
-
-                    Menu menu = menuDao.getMenu(company.getId());
-                    menu.setActiveSection(article.getMenuNodeId());
-                    request.setAttribute("menu", menu);
-                    RequestDispatcher rd = request.getRequestDispatcher("/ArticleDetail.jsp");
-                    rd.forward(request, response);
-                    logDao.log(user.getId(), LogDAO.operationTypeRead, article.getId(), request.getRemoteAddr(), request.getHeader("User-Agent"));
+                    ArticleDetailCmd cmd = new ArticleDetailCmd();
+                    cmd.setCompany(company);
+                    cmd.setUser(user);
+                    cmd.run(request, response, cnn);
                     return;
                 }
                 
                 if (page.equals("insertArticleComment")) {
-                    int articleId = Integer.valueOf(request.getParameter("id"));
-                    Article article = articleDao.getArticle(
-                            user, 
-                            articleId);
-                    request.setAttribute("article", article);
-                    
-                    if ((article != null) && 
-                            article.isCommentsAllowed() && 
-                            user.hasPermission("can_insert_article_comment") &&
-                            (request.getParameter("body") != null) &&
-                            (!request.getParameter("body").equals(""))) {
-                        
-                        // insert comment
-                        ArticleComment ac = new ArticleComment();
-                        ac.setArticleId(article.getId());
-                        ac.setUserId(user.getId());
-                        ac.setInsertionTime(new Date());
-                        ac.setBody(request.getParameter("body"));
-                        articleDao.insertArticleComment(ac);
-                        
-                        // send notification
-                        String subject = company.getInternetDomain() + ": " + article.getHeader() + " (New comment)";
-                        MailDAO mailDao = new MailDAO(
-                                cnn,
-                                setup.getProperty("mail.smtp"),
-                                setup.getProperty("mail.login"),
-                                setup.getProperty("mail.password"),
-                                setup.getProperty("mail.sender"));
-
-                        ArrayList<User> userList = articleDao.getUserListForNotificationAboutNewComment(article.getId());
-                        for (User u: userList) {
-                            String body = setup.getProperty("mail.template.comment.notification");
-                            body = String.format(body, 
-                                    user.getFirstName() + " " + user.getLastName(),
-                                    "<a href=\"http://" + company.getInternetDomain() + "/Dispatcher?page=articleDetail&id=" + article.getId() + "\">" + article.getHeader() + "</a>", 
-                                    ac.getBody().replace("\n", "<br>"));
-                            mailDao.queueMail(company.getId(), u.geteMail(), subject, body);
-                        }
-                    }
-                    
-                    String url = "Dispatcher?page=articleDetail&id=" + article.getId();
-                    request.setAttribute("url", url);
-                    RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
-                    rd.forward(request, response);
+                    ArticleInsertCommentCmd cmd = new ArticleInsertCommentCmd();
+                    cmd.setCompany(company);
+                    cmd.setSetup(setup);
+                    cmd.setUser(user);
+                    cmd.run(request, response, cnn);
                     return;
                 }
             }
