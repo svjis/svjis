@@ -43,8 +43,15 @@ import cz.svjis.servlet.cmd.ArticleInquiryVoteCmd;
 import cz.svjis.servlet.cmd.ArticleInsertCommentCmd;
 import cz.svjis.servlet.cmd.ArticleListCmd;
 import cz.svjis.servlet.cmd.ArticleSearchCmd;
+import cz.svjis.servlet.cmd.ContactCompanyCmd;
+import cz.svjis.servlet.cmd.ContactPhoneListCmd;
 import cz.svjis.servlet.cmd.LostPasswordCmd;
 import cz.svjis.servlet.cmd.LostPasswordSubmitCmd;
+import cz.svjis.servlet.cmd.MyBuildingUnitsCmd;
+import cz.svjis.servlet.cmd.PersonalPasswordChangeCmd;
+import cz.svjis.servlet.cmd.PersonalPasswordChangeSaveCmd;
+import cz.svjis.servlet.cmd.PersonalUserDetailCmd;
+import cz.svjis.servlet.cmd.PersonalUserDetailSaveCmd;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -197,7 +204,7 @@ public class Dispatcher extends HttpServlet {
             
             if (page.equals("login") && (company != null)) {
                 User u = userDao.getUserByLogin(company.getId(), request.getParameter("login"));
-                if ((u != null) && userDao.verifyPassword(u, request.getParameter("password"))) {
+                if ((u != null) && userDao.verifyPassword(u, request.getParameter("password"), true)) {
                     user = u;
                     session.setAttribute("user", user);
                     language = languageDao.getDictionary(user.getLanguageId());
@@ -279,16 +286,12 @@ public class Dispatcher extends HttpServlet {
             if (user.hasPermission("menu_contact")) {
                 
                 if (page.equals("contact")) {
-                    RequestDispatcher rd = request.getRequestDispatcher("/Contact_company.jsp");
-                    rd.forward(request, response);
+                    new ContactCompanyCmd(ctx).execute();
                     return;
                 }
             
                 if (page.equals("phonelist")) {
-                    ArrayList<User> userList = userDao.getUserList(company.getId(), true, 0);
-                    request.setAttribute("userList", userList);
-                    RequestDispatcher rd = request.getRequestDispatcher("/Contact_userList.jsp");
-                    rd.forward(request, response);
+                    new ContactPhoneListCmd(ctx).execute();
                     return;
                 }
             }
@@ -298,10 +301,7 @@ public class Dispatcher extends HttpServlet {
             // ***********************
             if (user.hasPermission("menu_building_units")) {
                 if (page.equals("myBuildingUnitList")) {
-                    ArrayList<BuildingUnit> userHasUnitList = buildingDao.getUserHasBuildingUnitList(user.getId());
-                    request.setAttribute("userHasUnitList", userHasUnitList);
-                    RequestDispatcher rd = request.getRequestDispatcher("/Units_userUnitList.jsp");
-                    rd.forward(request, response);
+                    new MyBuildingUnitsCmd(ctx).execute();
                     return;
                 }
             }
@@ -311,64 +311,21 @@ public class Dispatcher extends HttpServlet {
             // **********************
             if (user.hasPermission("menu_personal_settings")) {
                 if (page.equals("psUserDetail")) {
-                    ArrayList<Language> languageList = languageDao.getLanguageList();
-                    request.setAttribute("languageList", languageList);
-                    RequestDispatcher rd = request.getRequestDispatcher("/PersonalSettings_userDetail.jsp");
-                    rd.forward(request, response);
+                    new PersonalUserDetailCmd(ctx).execute();
                     return;
                 }
                 
                 if (page.equals("psUserDetailSave")) {
-                    user.setSalutation(request.getParameter("salutation"));
-                    user.setFirstName(request.getParameter("firstName"));
-                    user.setLastName(request.getParameter("lastName"));
-                    user.setLanguageId(Integer.valueOf(request.getParameter("language")));
-                    user.setAddress(request.getParameter("address"));
-                    user.setCity(request.getParameter("city"));
-                    user.setPostCode(request.getParameter("postCode"));
-                    user.setCountry(request.getParameter("country"));
-                    user.setFixedPhone(request.getParameter("fixedPhone"));
-                    user.setCellPhone(request.getParameter("cellPhone"));
-                    user.seteMail(request.getParameter("eMail"));
-                    user.setShowInPhoneList(request.getParameter("phoneList") != null);
-                    userDao.modifyUser(user);
-                    language = languageDao.getDictionary(user.getLanguageId());
-                    session.setAttribute("language", language);
-                    String url = "Dispatcher?page=psUserDetail";
-                    request.setAttribute("url", url);
-                    RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
-                    rd.forward(request, response);
+                    new PersonalUserDetailSaveCmd(ctx).execute();
                     return;
                 }
                 
                 if (page.equals("psPasswordChange")) {
-                    String message = "";
-                    request.setAttribute("message", message);
-                    RequestDispatcher rd = request.getRequestDispatcher("/PersonalSettings_passwordChange.jsp");
-                    rd.forward(request, response);
+                    new PersonalPasswordChangeCmd(ctx).execute();
                     return;
                 }
                 if (page.equals("psPasswordChangeSave")) {
-                    String message = "";
-                    String oldPass = request.getParameter("oldPassword");
-                    String newPass1 = request.getParameter("newPassword");
-                    String newPass2 = request.getParameter("newPassword2");
-                    if (!userDao.verifyPassword(user, oldPass)) {
-                        message += language.getText("You typed wrong current password.") + "<br>";
-                    }
-                    if (!newPass1.equals(newPass2)) {
-                        message += language.getText("New passwords doesnt match.") + "<br>";
-                    }
-                    if (!userDao.testPasswordValidity(newPass2)) {
-                        message += language.getText("Password is too short. Minimum is 6 characters.") + "<br>";
-                    }
-                    if (message.equals("")) {
-                        userDao.storeNewPassword(user.getCompanyId(), user.getLogin(), newPass1);
-                        message += language.getText("New password has been set.") + "<br>";
-                    }
-                    request.setAttribute("message", message);
-                    RequestDispatcher rd = request.getRequestDispatcher("/PersonalSettings_passwordChange.jsp");
-                    rd.forward(request, response);
+                    new PersonalPasswordChangeSaveCmd(ctx).execute();
                     return;
                 }
             }
