@@ -101,8 +101,14 @@ public class Dispatcher extends HttpServlet {
         
         Connection cnn = null;
         
+        CmdContext ctx = new CmdContext();
+        ctx.setRequest(request);
+        ctx.setResponse(response);
+        
         try {
             cnn = createConnection();
+            ctx.setCnn(cnn);
+            
             CompanyDAO compDao = new CompanyDAO(cnn);
             LanguageDAO languageDao = new LanguageDAO(cnn);
             UserDAO userDao = new UserDAO(cnn);
@@ -212,14 +218,10 @@ public class Dispatcher extends HttpServlet {
             // * Context       *
             // *****************
 
-            CmdContext ctx = new CmdContext();
             ctx.setCompany(company);
             ctx.setSetup(setup);
             ctx.setLanguage(language);
             ctx.setUser(user);
-            ctx.setRequest(request);
-            ctx.setResponse(response);
-            ctx.setCnn(cnn);
             
             // *****************
             // * System menu   *
@@ -246,45 +248,27 @@ public class Dispatcher extends HttpServlet {
             if (user.hasPermission("menu_articles")) {
                 
                 if (page.equals("articleList")) {
-                    ArticleListCmd cmd = new ArticleListCmd();
-                    cmd.setCompany(company);
-                    cmd.setSetup(setup);
-                    cmd.setLanguage(language);
-                    cmd.setUser(user);
-                    cmd.run(request, response, cnn);
+                    new ArticleListCmd(ctx).execute();
                     return;
                 }
 
                 if (page.equals("search")) {
-                    ArticleSearchCmd cmd = new ArticleSearchCmd();
-                    cmd.setCompany(company);
-                    cmd.setSetup(setup);
-                    cmd.setUser(user);
-                    cmd.run(request, response, cnn);
+                    new ArticleSearchCmd(ctx).execute();
                     return;
                 }
                 
                 if (page.equals("inquiryVote")) {
-                    ArticleInquiryVoteCmd cmd = new ArticleInquiryVoteCmd();
-                    cmd.setUser(user);
-                    cmd.run(request, response, cnn);
+                    new ArticleInquiryVoteCmd(ctx).execute();
                     return;
                 }
                 
                 if (page.equals("articleDetail")) {
-                    ArticleDetailCmd cmd = new ArticleDetailCmd();
-                    cmd.setCompany(company);
-                    cmd.setUser(user);
-                    cmd.run(request, response, cnn);
+                    new ArticleDetailCmd(ctx).execute();
                     return;
                 }
                 
                 if (page.equals("insertArticleComment")) {
-                    ArticleInsertCommentCmd cmd = new ArticleInsertCommentCmd();
-                    cmd.setCompany(company);
-                    cmd.setSetup(setup);
-                    cmd.setUser(user);
-                    cmd.run(request, response, cnn);
+                    new ArticleInsertCommentCmd(ctx).execute();
                     return;
                 }
             }
@@ -1263,10 +1247,9 @@ public class Dispatcher extends HttpServlet {
             
         } catch (Exception ex) {
             ex.printStackTrace();
-            HandleErrorCmd errCmd = new HandleErrorCmd();
-            errCmd.setThrowable(ex);
+            HandleErrorCmd errCmd = new HandleErrorCmd(ctx, ex);
             try {
-                errCmd.run(request, response, cnn);
+                errCmd.execute();
             } catch (Exception exx) {
                 exx.printStackTrace();
             }

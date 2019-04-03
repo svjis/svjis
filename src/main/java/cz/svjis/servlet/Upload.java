@@ -78,8 +78,13 @@ public class Upload extends HttpServlet {
         
         Connection cnn = null;
         
+        CmdContext ctx = new CmdContext();
+        ctx.setRequest(request);
+        ctx.setResponse(response);
+        
         try {
             cnn = createConnection();
+            ctx.setCnn(cnn);
             
             if (page.equals("download")) {
                 ArticleDAO dao = new ArticleDAO(cnn);
@@ -107,10 +112,9 @@ public class Upload extends HttpServlet {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            HandleErrorCmd errCmd = new HandleErrorCmd();
-            errCmd.setThrowable(ex);
+            HandleErrorCmd errCmd = new HandleErrorCmd(ctx, ex);
             try {
-                errCmd.run(request, response, cnn);
+                errCmd.execute();
             } catch (Exception exx) {
                 exx.printStackTrace();
             }

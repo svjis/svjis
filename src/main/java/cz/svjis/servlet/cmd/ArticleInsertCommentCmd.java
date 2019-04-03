@@ -8,56 +8,52 @@ package cz.svjis.servlet.cmd;
 import cz.svjis.bean.Article;
 import cz.svjis.bean.ArticleComment;
 import cz.svjis.bean.ArticleDAO;
-import cz.svjis.bean.Company;
 import cz.svjis.bean.MailDAO;
 import cz.svjis.bean.User;
-import cz.svjis.servlet.ICommand;
-import java.sql.Connection;
+import cz.svjis.servlet.CmdContext;
+import cz.svjis.servlet.Command;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Properties;
 import javax.servlet.RequestDispatcher;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  *
  * @author jaroslav_b
  */
-public class ArticleInsertCommentCmd implements ICommand {
+public class ArticleInsertCommentCmd extends Command {
 
-    private Company company;
-    private Properties setup;
-    private User user;
+    public ArticleInsertCommentCmd(CmdContext ctx) {
+        super(ctx);
+    }
 
     @Override
-    public void run(HttpServletRequest request, HttpServletResponse response, Connection cnn) throws Exception {
+    public void execute() throws Exception {
 
-        ArticleDAO articleDao = new ArticleDAO(cnn);
+        ArticleDAO articleDao = new ArticleDAO(getCnn());
 
-        int articleId = Integer.valueOf(request.getParameter("id"));
+        int articleId = Integer.valueOf(getRequest().getParameter("id"));
         Article article = articleDao.getArticle(getUser(),
                 articleId);
-        request.setAttribute("article", article);
+        getRequest().setAttribute("article", article);
 
         if ((article != null)
                 && article.isCommentsAllowed()
                 && getUser().hasPermission("can_insert_article_comment")
-                && (request.getParameter("body") != null)
-                && (!request.getParameter("body").equals(""))) {
+                && (getRequest().getParameter("body") != null)
+                && (!getRequest().getParameter("body").equals(""))) {
 
             // insert comment
             ArticleComment ac = new ArticleComment();
             ac.setArticleId(article.getId());
             ac.setUserId(getUser().getId());
             ac.setInsertionTime(new Date());
-            ac.setBody(request.getParameter("body"));
+            ac.setBody(getRequest().getParameter("body"));
             articleDao.insertArticleComment(ac);
 
             // send notification
             String subject = getCompany().getInternetDomain() + ": " + article.getHeader() + " (New comment)";
             MailDAO mailDao = new MailDAO(
-                    cnn,
+                    getCnn(),
                     getSetup().getProperty("mail.smtp"),
                     getSetup().getProperty("mail.login"),
                     getSetup().getProperty("mail.password"),
@@ -75,52 +71,8 @@ public class ArticleInsertCommentCmd implements ICommand {
         }
 
         String url = "Dispatcher?page=articleDetail&id=" + article.getId();
-        request.setAttribute("url", url);
-        RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
-        rd.forward(request, response);
-        return;
+        getRequest().setAttribute("url", url);
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
+        rd.forward(getRequest(), getResponse());
     }
-
-    /**
-     * @return the user
-     */
-    public User getUser() {
-        return user;
-    }
-
-    /**
-     * @param user the user to set
-     */
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    /**
-     * @return the company
-     */
-    public Company getCompany() {
-        return company;
-    }
-
-    /**
-     * @param company the company to set
-     */
-    public void setCompany(Company company) {
-        this.company = company;
-    }
-
-    /**
-     * @return the setup
-     */
-    public Properties getSetup() {
-        return setup;
-    }
-
-    /**
-     * @param setup the setup to set
-     */
-    public void setSetup(Properties setup) {
-        this.setup = setup;
-    }
-
 }

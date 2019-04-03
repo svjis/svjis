@@ -67,6 +67,5 @@ public class LostPasswordSubmitCmd extends Command {
             rd = getRequest().getRequestDispatcher("/_message.jsp");
         }
         rd.forward(getRequest(), getResponse());
-        return;
     }
 }

@@ -8,31 +8,30 @@ package cz.svjis.servlet.cmd;
 import cz.svjis.bean.Inquiry;
 import cz.svjis.bean.InquiryDAO;
 import cz.svjis.bean.InquiryOption;
-import cz.svjis.bean.User;
-import cz.svjis.servlet.ICommand;
-import java.sql.Connection;
+import cz.svjis.servlet.CmdContext;
+import cz.svjis.servlet.Command;
 import java.util.Iterator;
 import javax.servlet.RequestDispatcher;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  *
  * @author jaroslav_b
  */
-public class ArticleInquiryVoteCmd implements ICommand {
+public class ArticleInquiryVoteCmd extends Command {
 
-    private User user;
+    public ArticleInquiryVoteCmd(CmdContext ctx) {
+        super(ctx);
+    }
 
     @Override
-    public void run(HttpServletRequest request, HttpServletResponse response, Connection cnn) throws Exception {
+    public void execute() throws Exception {
 
-        InquiryDAO inquiryDao = new InquiryDAO(cnn);
+        InquiryDAO inquiryDao = new InquiryDAO(getCnn());
 
-        int id = Integer.parseInt(request.getParameter("id"));
+        int id = Integer.parseInt(getRequest().getParameter("id"));
         Inquiry i = inquiryDao.getInquiry(getUser(), id);
-        if ((i != null) && (i.isUserCanVote()) && (request.getParameter("i_" + i.getId()) != null)) {
-            String value = request.getParameter("i_" + i.getId());
+        if ((i != null) && (i.isUserCanVote()) && (getRequest().getParameter("i_" + i.getId()) != null)) {
+            String value = getRequest().getParameter("i_" + i.getId());
             Iterator<InquiryOption> ioI = i.getOptionList().iterator();
             while (ioI.hasNext()) {
                 InquiryOption io = ioI.next();
@@ -42,24 +41,8 @@ public class ArticleInquiryVoteCmd implements ICommand {
             }
         }
         String url = "Dispatcher?page=articleList";
-        request.setAttribute("url", url);
-        RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
-        rd.forward(request, response);
-        return;
+        getRequest().setAttribute("url", url);
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
+        rd.forward(getRequest(), getResponse());
     }
-
-    /**
-     * @return the user
-     */
-    public User getUser() {
-        return user;
-    }
-
-    /**
-     * @param user the user to set
-     */
-    public void setUser(User user) {
-        this.user = user;
-    }
-
 }
