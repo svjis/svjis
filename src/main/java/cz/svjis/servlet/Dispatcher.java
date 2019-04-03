@@ -6,10 +6,8 @@ package cz.svjis.servlet;
 
 import cz.svjis.servlet.cmd.HandleErrorCmd;
 import cz.svjis.bean.ApplicationSetupDAO;
-import cz.svjis.bean.Article;
 import cz.svjis.bean.ArticleAttachment;
 import cz.svjis.bean.ArticleDAO;
-import cz.svjis.bean.ArticleListInfo;
 import cz.svjis.bean.Building;
 import cz.svjis.bean.BuildingDAO;
 import cz.svjis.bean.BuildingUnit;
@@ -26,7 +24,6 @@ import cz.svjis.bean.LogDAO;
 import cz.svjis.bean.MailDAO;
 import cz.svjis.bean.Menu;
 import cz.svjis.bean.MenuDAO;
-import cz.svjis.bean.MenuItem;
 import cz.svjis.bean.MenuNode;
 import cz.svjis.bean.Message;
 import cz.svjis.bean.MiniNews;
@@ -34,7 +31,6 @@ import cz.svjis.bean.MiniNewsDAO;
 import cz.svjis.bean.Permission;
 import cz.svjis.bean.Role;
 import cz.svjis.bean.RoleDAO;
-import cz.svjis.bean.SliderImpl;
 import cz.svjis.bean.SystemMenuEntry;
 import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
@@ -52,6 +48,11 @@ import cz.svjis.servlet.cmd.PersonalPasswordChangeCmd;
 import cz.svjis.servlet.cmd.PersonalPasswordChangeSaveCmd;
 import cz.svjis.servlet.cmd.PersonalUserDetailCmd;
 import cz.svjis.servlet.cmd.PersonalUserDetailSaveCmd;
+import cz.svjis.servlet.cmd.RedactionArticleEditCmd;
+import cz.svjis.servlet.cmd.RedactionArticleListCmd;
+import cz.svjis.servlet.cmd.RedactionArticleSaveCmd;
+import cz.svjis.servlet.cmd.RedactionArticleSendNotificationsCmd;
+import cz.svjis.servlet.cmd.RedactionArticleSendNotificationsConfirmationCmd;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -224,7 +225,6 @@ public class Dispatcher extends HttpServlet {
             // *****************
             // * Context       *
             // *****************
-
             ctx.setCompany(company);
             ctx.setSetup(setup);
             ctx.setLanguage(language);
@@ -335,183 +335,27 @@ public class Dispatcher extends HttpServlet {
             // *****************
             if (user.hasPermission("menu_redaction")) {
                 if (page.equals("redactionArticleList")) {
-                    Menu menu = menuDao.getMenu(company.getId());
-                    int section = 0;
-                    if (request.getParameter("section") != null) {
-                        section = Integer.valueOf(request.getParameter("section"));
-                    }
-                    menu.setActiveSection(section);
-                    request.setAttribute("menu", menu);
-
-                    int pageNo = 1;
-                    if (request.getParameter("pageNo") != null) {
-                        pageNo = Integer.valueOf(request.getParameter("pageNo"));
-                    }
-                    int roleId = Integer.valueOf((request.getParameter("roleId") == null) ? "0" : request.getParameter("roleId"));
-                    SliderImpl sl = new SliderImpl();
-                    sl.setSliderWide(10);
-                    sl.setCurrentPage(pageNo);
-                    sl.setNumOfItemsAtPage(Integer.valueOf(setup.getProperty("article.page.size")));
-                    sl.setTotalNumOfItems(articleDao.getNumOfArticles(user, section, false, !user.hasPermission("redaction_articles_all"), roleId));
-                    request.setAttribute("slider", sl);
-                    ArrayList<Article> articleList = articleDao.getArticleList(
-                            user,
-                            section,
-                            pageNo, 
-                            Integer.valueOf(setup.getProperty("article.page.size")),
-                            false,
-                            !user.hasPermission("redaction_articles_all"),
-                            roleId);
-                    request.setAttribute("articleList", articleList);
-
-                    ArticleListInfo articleListInfo = new ArticleListInfo();
-                    articleListInfo.setNumOfArticles(articleDao.getNumOfArticles(
-                            user,
-                            section,
-                            false,
-                            !user.hasPermission("redaction_articles_all"),
-                            roleId));
-                    articleListInfo.setPageSize(Integer.valueOf(setup.getProperty("article.page.size")));
-                    articleListInfo.setActualPage(pageNo);
-                    articleListInfo.setMenuNodeId(section);
-                    request.setAttribute("articleListInfo", articleListInfo);
-                    ArrayList<Role> roleList = roleDao.getRoleList(company.getId());
-                    request.setAttribute("roleList", roleList);
-
-                    RequestDispatcher rd = request.getRequestDispatcher("/Redaction_ArticleList.jsp");
-                    rd.forward(request, response);
+                    new RedactionArticleListCmd(ctx).execute();
                     return;
                 }
                 
                 if (page.equals("redactionArticleEdit")) {
-                    int articleId = 0;
-                    if (request.getParameter("id") != null) {
-                        articleId = Integer.valueOf(request.getParameter("id"));
-                    } 
-                    Article article = null;
-                    if (articleId == 0) {
-                        article = new Article();
-                    } else {
-                        article = articleDao.getArticle(user, articleId);
-                    }
-                    request.setAttribute("article", article);
-                    
-                    ArrayList<MenuItem> menuNodeList = menuDao.getMenu(company.getId()).getMenu();
-                    request.setAttribute("menuNodeList", menuNodeList);
-                    ArrayList<Language> languageList = languageDao.getLanguageList();
-                    request.setAttribute("languageList", languageList);
-                    ArrayList<Role> roleList = roleDao.getRoleList(company.getId());
-                    request.setAttribute("roleList", roleList);
-
-                    RequestDispatcher rd = request.getRequestDispatcher("/Redaction_ArticleEdit.jsp");
-                    rd.forward(request, response);
+                    new RedactionArticleEditCmd(ctx).execute();
                     return;
                 }
                 
                 if (page.equals("redactionArticleSave")) {
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-                    Article a = new Article();
-                    a.setId(Integer.valueOf(request.getParameter("id")));
-                    a.setCompanyId(company.getId());
-                    a.setHeader(request.getParameter("header"));
-                    a.setDescription(request.getParameter("description"));
-                    a.setBody(request.getParameter("body"));
-                    a.setLanguageId(Integer.valueOf(request.getParameter("language")));
-                    a.setCommentsAllowed(request.getParameter("commentsAllowed") != null);
-                    a.setPublished(request.getParameter("publish") != null);
-                    a.setAuthorId((Integer.valueOf(request.getParameter("authorId")) == 0) ? user.getId() : Integer.valueOf(request.getParameter("authorId")));
-                    a.setCreationDate(sdf.parse(request.getParameter("creationDate")));
-                    a.setMenuNodeId(Integer.valueOf(request.getParameter("menuId")));
-                    
-                    HashMap uRoles = new HashMap();
-                    ArrayList<Role> roles = roleDao.getRoleList(company.getId());
-                    Iterator<Role> roleI = roles.iterator();
-                    while (roleI.hasNext()) {
-                        Role r = roleI.next();
-                        if (request.getParameter("r_" + r.getId()) != null) {
-                            uRoles.put(new Integer(r.getId()), r.getDescription());
-                        }
-                    }
-                    a.setRoles(uRoles);
-                    if (a.getId() == 0) {
-                        a.setId(articleDao.insertArticle(a));
-                        logDao.log(user.getId(), LogDAO.operationTypeCreateArticle, a.getId(), request.getRemoteAddr(), request.getHeader("User-Agent"));
-                    } else {
-                        articleDao.modifyArticle(a);
-                        logDao.log(user.getId(), LogDAO.operationTypeModifyArticle, a.getId(), request.getRemoteAddr(), request.getHeader("User-Agent"));
-                    }
-                    String url = "Dispatcher?page=redactionArticleEdit&id=" + a.getId();
-                    request.setAttribute("url", url);
-                    RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
-                    rd.forward(request, response);
+                    new RedactionArticleSaveCmd(ctx).execute();
                     return;
                 }
                 
                 if (page.equals("redactionArticleSendNotifications")) {
-                    int articleId = 0;
-                    if (request.getParameter("id") != null) {
-                        articleId = Integer.valueOf(request.getParameter("id"));
-                    } 
-                    Article article = null;
-                    if (articleId == 0) {
-                        article = new Article();
-                    } else {
-                        article = articleDao.getArticle(user, articleId);
-                    }
-                    request.setAttribute("article", article);
-                    
-                    ArrayList<User> userList = articleDao.getUserListForNotificationAboutNewArticle(articleId);
-                    RequestDispatcher rd;
-                    if (userList.isEmpty()) {
-                        request.setAttribute("messageHeader", language.getText("This article is not visible to any user"));
-                        request.setAttribute("message", "<p>" + language.getText("You can continue") + " <a href=\"javascript:history.go(-1)\">" + language.getText("here") + "</a>.</p>");
-                        rd = request.getRequestDispatcher("/_message.jsp");
-                    } else {
-                        request.setAttribute("userList", userList);
-                        rd = request.getRequestDispatcher("/Redaction_ArticleSendNotifications.jsp");
-                    }
-                    rd.forward(request, response);
+                    new RedactionArticleSendNotificationsCmd(ctx).execute();
                     return;
                 }
                 
                 if (page.equals("redactionArticleSendNotificationsConfirmation")) {
-                    int articleId = 0;
-                    if (request.getParameter("id") != null) {
-                        articleId = Integer.valueOf(request.getParameter("id"));
-                    } 
-                    Article article = null;
-                    if (articleId == 0) {
-                        article = new Article();
-                    } else {
-                        article = articleDao.getArticle(user, articleId);
-                    }
-                    request.setAttribute("article", article);
-                    
-                    String subject = company.getInternetDomain() + ": " + article.getHeader();
-                    String body = setup.getProperty("mail.template.article.notification");
-                    body = String.format(body, "<a href=\"http://" + company.getInternetDomain() + "/Dispatcher?page=articleDetail&id=" + article.getId() + "\">" + article.getHeader() + "</a>");
-                    MailDAO mailDao = new MailDAO(
-                            cnn,
-                            setup.getProperty("mail.smtp"),
-                            setup.getProperty("mail.login"),
-                            setup.getProperty("mail.password"),
-                            setup.getProperty("mail.sender"));
-                    
-                    int counter = 0;
-                    ArrayList<User> userList = articleDao.getUserListForNotificationAboutNewArticle(articleId);
-                    Iterator<User> it = userList.iterator();
-                    while (it.hasNext()) {
-                        User u = it.next();
-                        if (request.getParameter("u_" + u.getId()) != null) {
-                            mailDao.queueMail(company.getId(), u.geteMail(), subject, body);
-                            counter++;
-                        }
-                    }
-                    logDao.log(user.getId(), LogDAO.operationTypeSendArticleNotification, article.getId(), request.getRemoteAddr(), request.getHeader("User-Agent"));
-                    article.setNumOfReads(counter);
-                    
-                    RequestDispatcher rd = request.getRequestDispatcher("/Redaction_ArticleSendNotificationsConfirmation.jsp");
-                    rd.forward(request, response);
+                    new RedactionArticleSendNotificationsConfirmationCmd(ctx).execute();
                     return;
                 }
                 
