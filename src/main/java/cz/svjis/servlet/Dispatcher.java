@@ -7,10 +7,8 @@ package cz.svjis.servlet;
 import cz.svjis.servlet.cmd.HandleErrorCmd;
 import cz.svjis.bean.ApplicationSetupDAO;
 import cz.svjis.bean.ArticleDAO;
-import cz.svjis.bean.Building;
 import cz.svjis.bean.BuildingDAO;
 import cz.svjis.bean.BuildingUnit;
-import cz.svjis.bean.BuildingUnitType;
 import cz.svjis.bean.Company;
 import cz.svjis.bean.CompanyDAO;
 import cz.svjis.bean.InquiryDAO;
@@ -32,6 +30,16 @@ import cz.svjis.servlet.cmd.ArticleInquiryVoteCmd;
 import cz.svjis.servlet.cmd.ArticleInsertCommentCmd;
 import cz.svjis.servlet.cmd.ArticleListCmd;
 import cz.svjis.servlet.cmd.ArticleSearchCmd;
+import cz.svjis.servlet.cmd.BuildingDetailCmd;
+import cz.svjis.servlet.cmd.BuildingPictureSaveCmd;
+import cz.svjis.servlet.cmd.BuildingSaveCmd;
+import cz.svjis.servlet.cmd.BuildingUnitDeleteCmd;
+import cz.svjis.servlet.cmd.BuildingUnitEditCmd;
+import cz.svjis.servlet.cmd.BuildingUnitListCmd;
+import cz.svjis.servlet.cmd.BuildingUnitOwnerCmd;
+import cz.svjis.servlet.cmd.BuildingUnitSaveCmd;
+import cz.svjis.servlet.cmd.CompanyDetailCmd;
+import cz.svjis.servlet.cmd.CompanySaveCmd;
 import cz.svjis.servlet.cmd.ContactCompanyCmd;
 import cz.svjis.servlet.cmd.ContactPhoneListCmd;
 import cz.svjis.servlet.cmd.LostPasswordCmd;
@@ -61,7 +69,6 @@ import cz.svjis.servlet.cmd.RedactionNewsDeleteCmd;
 import cz.svjis.servlet.cmd.RedactionNewsEditCmd;
 import cz.svjis.servlet.cmd.RedactionNewsEditSaveCmd;
 import cz.svjis.servlet.cmd.RedactionNewsListCmd;
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.NoSuchAlgorithmException;
@@ -70,7 +77,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -84,10 +90,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 /**
  *
@@ -436,162 +438,52 @@ public class Dispatcher extends HttpServlet {
             // ******************
             if (user.hasPermission("menu_administration")) {
                 if (page.equals("companyDetail")) {
-                    Company currCompany = compDao.getCompany(company.getId());
-                    request.setAttribute("currCompany", currCompany);
-                    RequestDispatcher rd = request.getRequestDispatcher("/Administration_companyDetail.jsp");
-                    rd.forward(request, response);
+                    new CompanyDetailCmd(ctx).execute();
                     return;
                 }
 
                 if (page.equals("companySave")) {
-                    Company c = new Company();
-                    c.setId(company.getId());
-                    c.setName(request.getParameter("name"));
-                    c.setAddress(request.getParameter("address"));
-                    c.setCity(request.getParameter("city"));
-                    c.setPostCode(request.getParameter("postCode"));
-                    c.setPhone(request.getParameter("phone"));
-                    c.setFax(request.getParameter("fax"));
-                    c.seteMail(request.getParameter("eMail"));
-                    c.setRegistrationNo(request.getParameter("registrationNo"));
-                    c.setVatRegistrationNo(request.getParameter("vatRegistrationNo"));
-                    c.setInternetDomain(request.getParameter("internetDomain"));
-                    compDao.modifyCompany(c);
-                    session.setAttribute("company", compDao.getCompany(company.getId()));
-                    String url = "Dispatcher?page=companyDetail";
-                    request.setAttribute("url", url);
-                    RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
-                    rd.forward(request, response);
+                    new CompanySaveCmd(ctx).execute();
                     return;
                 }
                 
                 if (page.equals("buildingDetail")) {
-                    Company currCompany = compDao.getCompany(company.getId());
-                    request.setAttribute("currCompany", currCompany);
-                    Building building = buildingDao.getBuilding(company.getId());
-                    request.setAttribute("building", building);
-                    RequestDispatcher rd = request.getRequestDispatcher("/Administration_buildingDetail.jsp");
-                    rd.forward(request, response);
+                    new BuildingDetailCmd(ctx).execute();
                     return;
                 }
                 
                 if (page.equals("buildingSave")) {
-                    Building b = buildingDao.getBuilding(company.getId());
-                    b.setAddress(request.getParameter("address"));
-                    b.setCity(request.getParameter("city"));
-                    b.setPostCode(request.getParameter("postCode"));
-                    b.setRegistrationNo(request.getParameter("registrationNo"));
-                    buildingDao.modifyBuilding(b);
-                    String url = "Dispatcher?page=buildingDetail";
-                    request.setAttribute("url", url);
-                    RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
-                    rd.forward(request, response);
+                    new BuildingSaveCmd(ctx).execute();
                     return;
                 }
                 
                 if (page.equals("buildingPictureSave")) {
-                    FileItemFactory factory = new DiskFileItemFactory();
-                    ServletFileUpload upload = new ServletFileUpload(factory);
-                    //upload.setSizeMax(yourMaxRequestSize);
-                    List items = upload.parseRequest(request);
-                    java.util.Iterator iterator = items.iterator();
-                    while (iterator.hasNext()) {
-                        FileItem item = (FileItem) iterator.next();
-                        File f = new File(item.getName());
-                        if (!item.isFormField()) {
-                            compDao.savePicture(company.getId(), item.getContentType(), f.getName(), item.get());
-                        }
-                    }
-                    company = compDao.getCompany(company.getId());
-                    session.setAttribute("company", company);
-                    company.refreshPicture(request.getServletContext().getRealPath("/"));
-                    String url = "Dispatcher?page=buildingDetail";
-                    request.setAttribute("url", url);
-                    RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
-                    rd.forward(request, response);
+                    new BuildingPictureSaveCmd(ctx).execute();
                     return;
                 }
                 
                 if (page.equals("buildingUnitList")) {
-                    Company currCompany = compDao.getCompany(company.getId());
-                    request.setAttribute("currCompany", currCompany);
-                    ArrayList<BuildingUnitType> buildingUnitType = buildingDao.getBuildingUnitTypeList();
-                    request.setAttribute("buildingUnitType", buildingUnitType);
-                    int typeId = 0;
-                    if (request.getParameter("typeId") != null) {
-                        typeId = Integer.valueOf(request.getParameter("typeId"));
-                    }
-                    ArrayList<BuildingUnit> buildingUnitList = buildingDao.getBuildingUnitList(
-                            buildingDao.getBuilding(company.getId()).getId(),
-                            typeId);
-                    request.setAttribute("buildingUnitList", buildingUnitList);
-                    RequestDispatcher rd = request.getRequestDispatcher("/Administration_buildingUnitList.jsp");
-                    rd.forward(request, response);
+                    new BuildingUnitListCmd(ctx).execute();
                     return;
                 }
                 
                 if (page.equals("buildingUnitEdit")) {
-                    Company currCompany = compDao.getCompany(company.getId());
-                    request.setAttribute("currCompany", currCompany);
-                    ArrayList<BuildingUnitType> buildingUnitType = buildingDao.getBuildingUnitTypeList();
-                    request.setAttribute("buildingUnitType", buildingUnitType);
-                    BuildingUnit buildingUnit = null;
-                    int id = Integer.valueOf(request.getParameter("id"));
-                    if (id == 0) {
-                        buildingUnit = new BuildingUnit();
-                        buildingUnit.setBuildingId(buildingDao.getBuilding(company.getId()).getId());
-                    } else {
-                        buildingUnit = buildingDao.getBuildingUnit(id);
-                    }
-                    request.setAttribute("buildingUnit", buildingUnit);
-                    RequestDispatcher rd = request.getRequestDispatcher("/Administration_buildingUnitDetail.jsp");
-                    rd.forward(request, response);
+                    new BuildingUnitEditCmd(ctx).execute();
                     return;
                 }
                 
                 if (page.equals("buildingUnitSave")) {
-                    BuildingUnit u = new BuildingUnit();
-                    u.setId(Integer.valueOf(request.getParameter("id")));
-                    u.setBuildingId(buildingDao.getBuilding(company.getId()).getId());
-                    u.setBuildingUnitTypeId(Integer.valueOf(request.getParameter("typeId")));
-                    u.setRegistrationId(request.getParameter("registrationNo"));
-                    u.setDescription(request.getParameter("description"));
-                    u.setNumerator(Integer.valueOf(request.getParameter("numerator")));
-                    u.setDenominator(Integer.valueOf(request.getParameter("denominator")));
-                    if (u.getId() == 0) {
-                        u.setId(buildingDao.insertBuildingUnit(u));
-                    } else {
-                        buildingDao.modifyBuildingUnit(u);
-                    }
-                    String url = "Dispatcher?page=buildingUnitEdit&id=" + u.getId();
-                    request.setAttribute("url", url);
-                    RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
-                    rd.forward(request, response);
+                    new BuildingUnitSaveCmd(ctx).execute();
                     return;
                 }
                 
                 if (page.equals("buildingUnitDelete")) {
-                    BuildingUnit u = new BuildingUnit();
-                    u.setId(Integer.valueOf(request.getParameter("id")));
-                    u.setBuildingId(buildingDao.getBuilding(company.getId()).getId());
-                    buildingDao.deleteBuildingUnit(u);
-                    String url = "Dispatcher?page=buildingUnitList";
-                    request.setAttribute("url", url);
-                    RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
-                    rd.forward(request, response);
+                    new BuildingUnitDeleteCmd(ctx).execute();
                     return;
                 }
                 
                 if (page.equals("buildingUnitOwner")) {
-                    Company currCompany = compDao.getCompany(company.getId());
-                    request.setAttribute("currCompany", currCompany);
-                    int id = Integer.valueOf(request.getParameter("id"));
-                    BuildingUnit buildingUnit = buildingDao.getBuildingUnit(id);
-                    request.setAttribute("buildingUnit", buildingUnit);
-                    ArrayList<User> userList = buildingDao.getBuildingUnitHasUserList(id);
-                    request.setAttribute("userList", userList);
-                    RequestDispatcher rd = request.getRequestDispatcher("/Administration_buildingUnitOwner.jsp");
-                    rd.forward(request, response);
+                    new BuildingUnitOwnerCmd(ctx).execute();
                     return;
                 }
 
