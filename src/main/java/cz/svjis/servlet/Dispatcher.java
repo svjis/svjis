@@ -6,7 +6,6 @@ package cz.svjis.servlet;
 
 import cz.svjis.servlet.cmd.HandleErrorCmd;
 import cz.svjis.bean.ApplicationSetupDAO;
-import cz.svjis.bean.ArticleAttachment;
 import cz.svjis.bean.ArticleDAO;
 import cz.svjis.bean.Building;
 import cz.svjis.bean.BuildingDAO;
@@ -14,19 +13,13 @@ import cz.svjis.bean.BuildingUnit;
 import cz.svjis.bean.BuildingUnitType;
 import cz.svjis.bean.Company;
 import cz.svjis.bean.CompanyDAO;
-import cz.svjis.bean.Inquiry;
 import cz.svjis.bean.InquiryDAO;
-import cz.svjis.bean.InquiryLog;
-import cz.svjis.bean.InquiryOption;
 import cz.svjis.bean.Language;
 import cz.svjis.bean.LanguageDAO;
 import cz.svjis.bean.LogDAO;
 import cz.svjis.bean.MailDAO;
-import cz.svjis.bean.Menu;
 import cz.svjis.bean.MenuDAO;
-import cz.svjis.bean.MenuNode;
 import cz.svjis.bean.Message;
-import cz.svjis.bean.MiniNews;
 import cz.svjis.bean.MiniNewsDAO;
 import cz.svjis.bean.Permission;
 import cz.svjis.bean.Role;
@@ -48,20 +41,33 @@ import cz.svjis.servlet.cmd.PersonalPasswordChangeCmd;
 import cz.svjis.servlet.cmd.PersonalPasswordChangeSaveCmd;
 import cz.svjis.servlet.cmd.PersonalUserDetailCmd;
 import cz.svjis.servlet.cmd.PersonalUserDetailSaveCmd;
+import cz.svjis.servlet.cmd.RedactionArticleAttachmentDeleteCmd;
+import cz.svjis.servlet.cmd.RedactionArticleAttachmentSaveCmd;
 import cz.svjis.servlet.cmd.RedactionArticleEditCmd;
 import cz.svjis.servlet.cmd.RedactionArticleListCmd;
+import cz.svjis.servlet.cmd.RedactionArticleMenuCmd;
+import cz.svjis.servlet.cmd.RedactionArticleMenuDeleteCmd;
+import cz.svjis.servlet.cmd.RedactionArticleMenuEditCmd;
+import cz.svjis.servlet.cmd.RedactionArticleMenuSaveCmd;
 import cz.svjis.servlet.cmd.RedactionArticleSaveCmd;
 import cz.svjis.servlet.cmd.RedactionArticleSendNotificationsCmd;
 import cz.svjis.servlet.cmd.RedactionArticleSendNotificationsConfirmationCmd;
+import cz.svjis.servlet.cmd.RedactionInquiryEditCmd;
+import cz.svjis.servlet.cmd.RedactionInquiryListCmd;
+import cz.svjis.servlet.cmd.RedactionInquiryLogCmd;
+import cz.svjis.servlet.cmd.RedactionInquiryOptionDeleteCmd;
+import cz.svjis.servlet.cmd.RedactionInquirySaveCmd;
+import cz.svjis.servlet.cmd.RedactionNewsDeleteCmd;
+import cz.svjis.servlet.cmd.RedactionNewsEditCmd;
+import cz.svjis.servlet.cmd.RedactionNewsEditSaveCmd;
+import cz.svjis.servlet.cmd.RedactionNewsListCmd;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -360,240 +366,66 @@ public class Dispatcher extends HttpServlet {
                 }
                 
                 if (page.equals("redactionArticleAttachmentSave")) {
-                    int articleId = Integer.parseInt(request.getParameter("articleId"));
-                    FileItemFactory factory = new DiskFileItemFactory();
-                    ServletFileUpload upload = new ServletFileUpload(factory);
-                    //upload.setSizeMax(yourMaxRequestSize);
-                    List items = upload.parseRequest(request);
-                    java.util.Iterator iterator = items.iterator();
-                    while (iterator.hasNext()) {
-                        FileItem item = (FileItem) iterator.next();
-                        File f = new File(item.getName());
-                        if (!item.isFormField()) {
-                            ArticleAttachment aa = new ArticleAttachment();
-                            String fileName = f.getName().replace(" ", "_");
-                            if (fileName.lastIndexOf("\\") > -1) {
-                                fileName = fileName.substring(fileName.lastIndexOf("\\") + 1);
-                            }
-                            aa.setFileName(fileName);
-                            aa.setContentType(item.getContentType());
-                            aa.setData(item.get());
-                            aa.setUserId(user.getId());
-                            aa.setArticleId(articleId);
-                            aa.setUploadTime(new Date());
-                            if (!aa.getFileName().equals("")) {
-                                articleDao.insertArticleAttachment(aa);
-                            }
-                        }
-                    }
-                    String url = "Dispatcher?page=redactionArticleEdit&id=" + articleId;
-                    request.setAttribute("url", url);
-                    RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
-                    rd.forward(request, response);
-                    logDao.log(user.getId(), LogDAO.operationTypeInsertAttachment, articleId, request.getRemoteAddr(), request.getHeader("User-Agent"));
+                    new RedactionArticleAttachmentSaveCmd(ctx).execute();
                     return;
                 }
                 if (page.equals("redactionArticleAttachmentDelete")) {
-                    int id = Integer.parseInt(request.getParameter("id"));
-                    int articleId = Integer.parseInt(request.getParameter("articleId"));
-                    articleDao.deleteArticleAttachment(id);
-                    String url = "Dispatcher?page=redactionArticleEdit&id=" + articleId;
-                    request.setAttribute("url", url);
-                    RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
-                    rd.forward(request, response);
-                    logDao.log(user.getId(), LogDAO.operationTypeDeleteAttachment, articleId, request.getRemoteAddr(), request.getHeader("User-Agent"));
+                    new RedactionArticleAttachmentDeleteCmd(ctx).execute();
                     return;
                 }
                 
                 if (page.equals("redactionNewsList")) {
-                    ArrayList<MiniNews> miniNewsList = newsDao.getMiniNews(user, false);
-                    request.setAttribute("miniNewsList", miniNewsList);
-                    RequestDispatcher rd = request.getRequestDispatcher("/Redaction_MiniNewsList.jsp");
-                    rd.forward(request, response);
+                    new RedactionNewsListCmd(ctx).execute();
                     return;
                 }
                 if (page.equals("redactionNewsEdit")) {
-                    int id = Integer.parseInt(request.getParameter("id"));
-                    MiniNews miniNews = new MiniNews();
-                    if (id != 0) {
-                        miniNews = newsDao.getMiniNews(user, id);
-                    }
-                    request.setAttribute("miniNews", miniNews);
-                    RequestDispatcher rd = request.getRequestDispatcher("/Redaction_MiniNewsEdit.jsp");
-                    ArrayList<Language> languageList = languageDao.getLanguageList();
-                    request.setAttribute("languageList", languageList);
-                    rd.forward(request, response);
+                    new RedactionNewsEditCmd(ctx).execute();
                     return;
                 }
                 if (page.equals("redactionNewsEditSave")) {
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-                    int id = Integer.parseInt(request.getParameter("id"));
-                    MiniNews n = null;
-                    if (id == 0) {
-                        n = new MiniNews();
-                        n.setId(id);
-                        n.setCreatedById(user.getId());
-                        n.setCompanyId(user.getCompanyId());
-                    } else {
-                        n = newsDao.getMiniNews(user, id);
-                    }
-                    n.setTime(sdf.parse(request.getParameter("time")));
-                    n.setLanguageId(Integer.parseInt(request.getParameter("language")));
-                    n.setPublished(request.getParameter("publish") != null);
-                    n.setBody(request.getParameter("body"));
-                    if (id == 0) {
-                        n.setId(newsDao.insertMiniNews(n));
-                    } else {
-                        newsDao.modifyMiniNews(n);
-                    }
-                    String url = "Dispatcher?page=redactionNewsEdit&id=" + n.getId();
-                    request.setAttribute("url", url);
-                    RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
-                    rd.forward(request, response);
+                    new RedactionNewsEditSaveCmd(ctx).execute();
                     return;
                 }
                 if (page.equals("redactionNewsDelete")) {
-                    int id = Integer.parseInt(request.getParameter("id"));
-                    MiniNews n = new MiniNews();
-                    n.setId(id);
-                    n.setCompanyId(user.getCompanyId());
-                    newsDao.deleteMiniNews(n);
-                    String url = "Dispatcher?page=redactionNewsList";
-                    request.setAttribute("url", url);
-                    RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
-                    rd.forward(request, response);
+                    new RedactionNewsDeleteCmd(ctx).execute();
                     return;
                 }
                 
                 if (page.equals("redactionInquiryList")) {
-                    ArrayList<Inquiry> inquiryList = inquiryDao.getInquiryList(user, false);
-                    request.setAttribute("inquiryList", inquiryList);
-                    RequestDispatcher rd = request.getRequestDispatcher("/Redaction_InquiryList.jsp");
-                    rd.forward(request, response);
+                    new RedactionInquiryListCmd(ctx).execute();
                     return;
                 }
                 if (page.equals("redactionInquiryLog")) {
-                    int id = Integer.parseInt(request.getParameter("id"));
-                    Inquiry inquiry = new Inquiry();
-                    ArrayList<InquiryLog> log = new ArrayList<InquiryLog>();
-                    if (id != 0) {
-                        inquiry = inquiryDao.getInquiry(user, id);
-                        log = inquiryDao.getInquiryLog(user, id);
-                    }
-                    request.setAttribute("inquiry", inquiry);
-                    request.setAttribute("log", log);
-                    RequestDispatcher rd = request.getRequestDispatcher("/Redaction_InquiryLog.jsp");
-                    rd.forward(request, response);
+                    new RedactionInquiryLogCmd(ctx).execute();
                     return;
                 }
                 if (page.equals("redactionInquiryEdit")) {
-                    int id = Integer.parseInt(request.getParameter("id"));
-                    Inquiry inquiry = new Inquiry();
-                    if (id != 0) {
-                        inquiry = inquiryDao.getInquiry(user, id);
-                    }
-                    request.setAttribute("inquiry", inquiry);
-                    RequestDispatcher rd = request.getRequestDispatcher("/Redaction_InquiryEdit.jsp");
-                    rd.forward(request, response);
+                    new RedactionInquiryEditCmd(ctx).execute();
                     return;
                 }
                 if (page.equals("redactionInquirySave")) {
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-                    int id = Integer.parseInt(request.getParameter("id"));
-                    Inquiry i = new Inquiry();
-                    i.setId(id);
-                    i.setCompanyId(user.getCompanyId());
-                    i.setUserId(user.getId());
-                    i.setDescription(request.getParameter("description"));
-                    i.setStartingDate(sdf.parse(request.getParameter("startingDate")));
-                    i.setEndingDate(sdf.parse(request.getParameter("endingDate")));
-                    i.setEnabled(request.getParameter("publish") != null);
-                    ArrayList<InquiryOption> ioList = new ArrayList<InquiryOption>();
-                    int n = 1;
-                    while (request.getParameter("oid_" + n) != null) {
-                        InquiryOption io = new InquiryOption();
-                        io.setId(Integer.valueOf(request.getParameter("oid_" + n)));
-                        io.setInquiryId(i.getId());
-                        io.setDescription(request.getParameter("o_" + n));
-                        if (!io.getDescription().equals("")) {
-                            ioList.add(io);
-                        }
-                        n++;
-                    }
-                    i.setOptionList(ioList);
-                    
-                    if (i.getId() == 0) {
-                        i.setId(inquiryDao.insertInquiry(i));
-                    } else {
-                        inquiryDao.modifyInquiry(i);
-                    }
-                    String url = "Dispatcher?page=redactionInquiryEdit&id=" + i.getId();
-                    request.setAttribute("url", url);
-                    RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
-                    rd.forward(request, response);
+                    new RedactionInquirySaveCmd(ctx).execute();
                     return;
                 }
                 if (page.equals("redactionInquiryOptionDelete")) {
-                    int id = Integer.parseInt(request.getParameter("id"));
-                    InquiryOption io = inquiryDao.getInquiryOption(user.getCompanyId(), id);
-                    inquiryDao.deleteInquiryOption(io);
-                    String url = "Dispatcher?page=redactionInquiryEdit&id=" + io.getInquiryId();
-                    request.setAttribute("url", url);
-                    RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
-                    rd.forward(request, response);
+                    new RedactionInquiryOptionDeleteCmd(ctx).execute();
                     return;
                 }
                 
                 if (page.equals("redactionArticleMenu")) {
-                    Menu menu = menuDao.getMenu(company.getId());
-                    menu.setActiveSection(-1);
-                    request.setAttribute("menu", menu);
-                    RequestDispatcher rd = request.getRequestDispatcher("/Redaction_ArticleMenu.jsp");
-                    rd.forward(request, response);
+                    new RedactionArticleMenuCmd(ctx).execute();
                     return;
                 }
                 if (page.equals("redactionArticleMenuEdit")) {
-                    int id = Integer.parseInt(request.getParameter("id"));
-                    MenuNode menuNode = new MenuNode();
-                    if (id != 0) {
-                        menuNode = menuDao.getMenuNode(id, user.getCompanyId());
-                    }
-                    request.setAttribute("menuNode", menuNode);
-                    ArrayList<MenuNode> menuNodeList = menuDao.getMenuNodeList(user.getCompanyId());
-                    request.setAttribute("menuNodeList", menuNodeList);
-                    RequestDispatcher rd = request.getRequestDispatcher("/Redaction_ArticleMenuEdit.jsp");
-                    rd.forward(request, response);
+                    new RedactionArticleMenuEditCmd(ctx).execute();
                     return;
                 }
                 if (page.equals("redactionArticleMenuSave")) {
-                    MenuNode n = new MenuNode();
-                    n.setId(Integer.parseInt(request.getParameter("id")));
-                    n.setDescription(request.getParameter("description"));
-                    n.setParentId(Integer.parseInt(request.getParameter("parent")));
-                    //-- disable recursive join
-                    if ((n.getId() != 0) && (n.getId() == n.getParentId())) {
-                        n.setParentId(0);
-                    }
-                    //--
-                    if (n.getId() == 0) {
-                        n.setId(menuDao.insertMenuNode(n, user.getCompanyId()));
-                    } else {
-                        menuDao.updateMenuNode(n, user.getCompanyId());
-                    }
-                    String url = "Dispatcher?page=redactionArticleMenuEdit&id=" + n.getId();
-                    request.setAttribute("url", url);
-                    RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
-                    rd.forward(request, response);
+                    new RedactionArticleMenuSaveCmd(ctx).execute();
                     return;
                 }
                 if (page.equals("redactionArticleMenuDelete")) {
-                    MenuNode n = new MenuNode();
-                    n.setId(Integer.parseInt(request.getParameter("id")));
-                    menuDao.deleteMenuNode(n, user.getCompanyId());
-                    String url = "Dispatcher?page=redactionArticleMenu";
-                    request.setAttribute("url", url);
-                    RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
-                    rd.forward(request, response);
+                    new RedactionArticleMenuDeleteCmd(ctx).execute();
                     return;
                 }
             }
