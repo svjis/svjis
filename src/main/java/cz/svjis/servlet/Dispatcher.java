@@ -7,20 +7,16 @@ package cz.svjis.servlet;
 import cz.svjis.servlet.cmd.HandleErrorCmd;
 import cz.svjis.bean.ApplicationSetupDAO;
 import cz.svjis.bean.ArticleDAO;
+import cz.svjis.bean.BadPageCmd;
 import cz.svjis.bean.BuildingDAO;
-import cz.svjis.bean.BuildingUnit;
 import cz.svjis.bean.Company;
 import cz.svjis.bean.CompanyDAO;
 import cz.svjis.bean.InquiryDAO;
 import cz.svjis.bean.Language;
 import cz.svjis.bean.LanguageDAO;
 import cz.svjis.bean.LogDAO;
-import cz.svjis.bean.MailDAO;
 import cz.svjis.bean.MenuDAO;
-import cz.svjis.bean.Message;
 import cz.svjis.bean.MiniNewsDAO;
-import cz.svjis.bean.Permission;
-import cz.svjis.bean.Role;
 import cz.svjis.bean.RoleDAO;
 import cz.svjis.bean.SystemMenuEntry;
 import cz.svjis.bean.User;
@@ -44,11 +40,16 @@ import cz.svjis.servlet.cmd.ContactCompanyCmd;
 import cz.svjis.servlet.cmd.ContactPhoneListCmd;
 import cz.svjis.servlet.cmd.LostPasswordCmd;
 import cz.svjis.servlet.cmd.LostPasswordSubmitCmd;
+import cz.svjis.servlet.cmd.MessagesPendingCmd;
 import cz.svjis.servlet.cmd.MyBuildingUnitsCmd;
 import cz.svjis.servlet.cmd.PersonalPasswordChangeCmd;
 import cz.svjis.servlet.cmd.PersonalPasswordChangeSaveCmd;
 import cz.svjis.servlet.cmd.PersonalUserDetailCmd;
 import cz.svjis.servlet.cmd.PersonalUserDetailSaveCmd;
+import cz.svjis.servlet.cmd.PropertyDeleteCmd;
+import cz.svjis.servlet.cmd.PropertyEditCmd;
+import cz.svjis.servlet.cmd.PropertyListCmd;
+import cz.svjis.servlet.cmd.PropertySaveCmd;
 import cz.svjis.servlet.cmd.RedactionArticleAttachmentDeleteCmd;
 import cz.svjis.servlet.cmd.RedactionArticleAttachmentSaveCmd;
 import cz.svjis.servlet.cmd.RedactionArticleEditCmd;
@@ -69,14 +70,23 @@ import cz.svjis.servlet.cmd.RedactionNewsDeleteCmd;
 import cz.svjis.servlet.cmd.RedactionNewsEditCmd;
 import cz.svjis.servlet.cmd.RedactionNewsEditSaveCmd;
 import cz.svjis.servlet.cmd.RedactionNewsListCmd;
+import cz.svjis.servlet.cmd.RoleDeleteCmd;
+import cz.svjis.servlet.cmd.RoleEditCmd;
+import cz.svjis.servlet.cmd.RoleListCmd;
+import cz.svjis.servlet.cmd.RoleSaveCmd;
+import cz.svjis.servlet.cmd.UserBuildingUnitAddCmd;
+import cz.svjis.servlet.cmd.UserBuildingUnitRemoveCmd;
+import cz.svjis.servlet.cmd.UserBuildingUnitsCmd;
+import cz.svjis.servlet.cmd.UserDeleteCmd;
+import cz.svjis.servlet.cmd.UserEditCmd;
+import cz.svjis.servlet.cmd.UserListCmd;
+import cz.svjis.servlet.cmd.UserSaveCmd;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -488,276 +498,82 @@ public class Dispatcher extends HttpServlet {
                 }
 
                 if (page.equals("userList")) {
-                    Company currCompany = compDao.getCompany(company.getId());
-                    request.setAttribute("currCompany", currCompany);
-                    ArrayList<Role> roleList = roleDao.getRoleList(company.getId());
-                    request.setAttribute("roleList", roleList);
-                    int roleId = Integer.valueOf((request.getParameter("roleId") == null) ? "0" : request.getParameter("roleId"));
-                    ArrayList<User> userList = userDao.getUserList(company.getId(), false, roleId);
-                    request.setAttribute("userList", userList);
-                    RequestDispatcher rd = request.getRequestDispatcher("/Administration_userList.jsp");
-                    rd.forward(request, response);
+                    new UserListCmd(ctx).execute();
                     return;
                 }
 
                 if (page.equals("userEdit")) {
-                    Company currCompany = compDao.getCompany(company.getId());
-                    request.setAttribute("currCompany", currCompany);
-                    User cUser = null;
-                    int id = Integer.valueOf(request.getParameter("id"));
-                    if (id == 0) {
-                        cUser = new User();
-                        cUser.setCompanyId(company.getId());
-                    } else {
-                        cUser = userDao.getUser(company.getId(), id);
-                    }
-                    request.setAttribute("cUser", cUser);
-                    ArrayList<Language> languageList = languageDao.getLanguageList();
-                    request.setAttribute("languageList", languageList);
-                    ArrayList<Role> roleList = roleDao.getRoleList(company.getId());
-                    request.setAttribute("roleList", roleList);
-                    request.setAttribute("message", "");
-                    RequestDispatcher rd = request.getRequestDispatcher("/Administration_userDetail.jsp");
-                    rd.forward(request, response);
+                    new UserEditCmd(ctx).execute();
                     return;
                 }
 
                 if (page.equals("userSave")) {
-                    User u = new User();
-                    u.setId(Integer.valueOf(request.getParameter("id")));
-                    u.setCompanyId(company.getId());
-                    u.setSalutation(request.getParameter("salutation"));
-                    u.setFirstName(request.getParameter("firstName"));
-                    u.setLastName(request.getParameter("lastName"));
-                    u.setLanguageId(Integer.valueOf(request.getParameter("language")));
-                    u.setAddress(request.getParameter("address"));
-                    u.setCity(request.getParameter("city"));
-                    u.setPostCode(request.getParameter("postCode"));
-                    u.setCountry(request.getParameter("country"));
-                    u.setFixedPhone(request.getParameter("fixedPhone"));
-                    u.setCellPhone(request.getParameter("cellPhone"));
-                    u.seteMail(request.getParameter("eMail"));
-                    u.setShowInPhoneList(request.getParameter("phoneList") != null);
-                    u.setLogin(request.getParameter("login"));
-                    u.setPassword(request.getParameter("password"));
-                    u.setEnabled(request.getParameter("enabled") != null);
-                    HashMap uRoles = new HashMap();
-                    ArrayList<Role> roles = roleDao.getRoleList(company.getId());
-                    Iterator<Role> roleI = roles.iterator();
-                    while (roleI.hasNext()) {
-                        Role r = roleI.next();
-                        if (request.getParameter("r_" + r.getId()) != null) {
-                            uRoles.put(new Integer(r.getId()), r.getDescription());
-                        }
-                    }
-                    u.setRoles(uRoles);
-                    String message = "";
-                    if (!userDao.testLoginValidity(u.getLogin())) {
-                        message += language.getText("Login is not valid.") + " (" + u.getLogin() + ")<br>";
-                    }
-                    if (!userDao.testLoginDuplicity(u.getLogin(), u.getId())) {
-                        message += language.getText("Login already exists.") + " (" + u.getLogin() + ")<br>";
-                    }
-                    //if (!userDao.testPasswordValidity(u.getPassword())) {
-                    //    message += language.getText("Password is too short. Minimum is 6 characters.") + "<br>";
-                    //}
-                    if (message.equals("")) {
-                        if (u.getId() == 0) {
-                            u.setId(userDao.insertUser(u));
-                        } else {
-                            userDao.modifyUser(u);
-                        }
-                        message = language.getText("User has been saved.");
-                    }
-                    Company currCompany = compDao.getCompany(company.getId());
-                    request.setAttribute("currCompany", currCompany);
-                    request.setAttribute("cUser", u);
-                    ArrayList<Language> languageList = languageDao.getLanguageList();
-                    request.setAttribute("languageList", languageList);
-                    ArrayList<Role> roleList = roleDao.getRoleList(company.getId());
-                    request.setAttribute("roleList", roleList);
-                    request.setAttribute("message", message);
-                    RequestDispatcher rd = request.getRequestDispatcher("/Administration_userDetail.jsp");
-                    rd.forward(request, response);
+                    new UserSaveCmd(ctx).execute();
                     return;
                 }
                 
                 if (page.equals("userDelete")) {
-                    User u = new User();
-                    u.setId(Integer.valueOf(request.getParameter("id")));
-                    u.setCompanyId(company.getId());
-                    userDao.deleteUser(u);
-                    String url = "Dispatcher?page=userList";
-                    request.setAttribute("url", url);
-                    RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
-                    rd.forward(request, response);
+                    new UserDeleteCmd(ctx).execute();
                     return;
                 }
                 
                 if (page.equals("userBuildingUnits")) {
-                    Company currCompany = compDao.getCompany(company.getId());
-                    request.setAttribute("currCompany", currCompany);
-                    User cUser = userDao.getUser(company.getId(), Integer.valueOf(request.getParameter("id")));
-                    request.setAttribute("cUser", cUser);
-                    ArrayList<BuildingUnit> userHasUnitList = buildingDao.getUserHasBuildingUnitList(cUser.getId());
-                    request.setAttribute("userHasUnitList", userHasUnitList);
-                    ArrayList<BuildingUnit> unitList = buildingDao.getBuildingUnitList(company.getId(), 0);
-                    request.setAttribute("unitList", unitList);
-                    RequestDispatcher rd = request.getRequestDispatcher("/Administration_userUnits.jsp");
-                    rd.forward(request, response);
+                    new UserBuildingUnitsCmd(ctx).execute();
                     return;
                 }
                 
                 if (page.equals("userBuildingUnitAdd")) {
-                    if (Integer.valueOf(request.getParameter("unitId")) != 0) {
-                        buildingDao.addUserHasBuildingUnitConnection(
-                                Integer.valueOf(request.getParameter("userId")), 
-                                Integer.valueOf(request.getParameter("unitId")));
-                    }
-                    String url = "Dispatcher?page=userBuildingUnits&id=" + request.getParameter("userId");
-                    request.setAttribute("url", url);
-                    RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
-                    rd.forward(request, response);
+                    new UserBuildingUnitAddCmd(ctx).execute();
                     return;
                 }
                 
                 if (page.equals("userBuildingUnitRemove")) {
-                    buildingDao.deleteUserHasBuildingUnitConnection(
-                            Integer.valueOf(request.getParameter("userId")), 
-                            Integer.valueOf(request.getParameter("unitId")));
-                    String url = "Dispatcher?page=userBuildingUnits&id=" + request.getParameter("userId");
-                    request.setAttribute("url", url);
-                    RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
-                    rd.forward(request, response);
+                    new UserBuildingUnitRemoveCmd(ctx).execute();
                     return;
                 }
 
                 if (page.equals("roleList")) {
-                    Company currCompany = compDao.getCompany(company.getId());
-                    request.setAttribute("currCompany", currCompany);
-                    ArrayList<Role> roleList = roleDao.getRoleList(company.getId());
-                    request.setAttribute("roleList", roleList);
-                    RequestDispatcher rd = request.getRequestDispatcher("/Administration_roleList.jsp");
-                    rd.forward(request, response);
+                    new RoleListCmd(ctx).execute();
                     return;
                 }
 
                 if (page.equals("roleEdit")) {
-                    Company currCompany = compDao.getCompany(company.getId());
-                    request.setAttribute("currCompany", currCompany);
-                    Role role = null;
-                    int id = Integer.valueOf(request.getParameter("id"));
-                    if (id == 0) {
-                        role = new Role();
-                        role.setCompanyId(company.getId());
-                    } else {
-                        role = roleDao.getRole(company.getId(), Integer.valueOf(request.getParameter("id")));
-                    }
-                    request.setAttribute("role", role);
-                    ArrayList<Permission> permissionList = roleDao.getPermissionList();
-                    request.setAttribute("permissionList", permissionList);
-                    RequestDispatcher rd = request.getRequestDispatcher("/Administration_roleDetail.jsp");
-                    rd.forward(request, response);
+                    new RoleEditCmd(ctx).execute();
                     return;
                 }
 
                 if (page.equals("roleSave")) {
-                    Role role = new Role();
-                    role.setId(Integer.valueOf(request.getParameter("id")));
-                    role.setCompanyId(company.getId());
-                    role.setDescription(request.getParameter("description"));
-                    HashMap props = new HashMap();
-                    ArrayList<Permission> perms = roleDao.getPermissionList();
-                    Iterator<Permission> permsI = perms.iterator();
-                    while (permsI.hasNext()) {
-                        Permission p = permsI.next();
-                        if (request.getParameter("p_" + p.getId()) != null) {
-                            props.put(new Integer(p.getId()), p.getDescription());
-                        }
-                    }
-                    role.setPermissions(props);
-                    if (role.getId() == 0) {
-                        role.setId(roleDao.insertRole(role));
-                    } else {
-                        roleDao.modifyRole(role);
-                    }
-                    String url = "Dispatcher?page=roleEdit&id=" + role.getId();
-                    request.setAttribute("url", url);
-                    RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
-                    rd.forward(request, response);
+                    new RoleSaveCmd(ctx).execute();
                     return;
                 }
 
                 if (page.equals("roleDelete")) {
-                    Role role = new Role();
-                    role.setId(Integer.valueOf(request.getParameter("id")));
-                    role.setCompanyId(company.getId());
-                    roleDao.deleteRole(role);
-                    String url = "Dispatcher?page=roleList";
-                    request.setAttribute("url", url);
-                    RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
-                    rd.forward(request, response);
+                    new RoleDeleteCmd(ctx).execute();
                     return;
                 }
                 
                 if (page.equals("propertyList")) {
-                    Company currCompany = compDao.getCompany(company.getId());
-                    request.setAttribute("currCompany", currCompany);
-                    RequestDispatcher rd = request.getRequestDispatcher("/Administration_propertyList.jsp");
-                    rd.forward(request, response);
+                    new PropertyListCmd(ctx).execute();
                     return;
                 }
                 
                 if (page.equals("propertyEdit")) {
-                    Company currCompany = compDao.getCompany(company.getId());
-                    request.setAttribute("currCompany", currCompany);
-                    String key = request.getParameter("key");
-                    request.setAttribute("key", key);
-                    RequestDispatcher rd = request.getRequestDispatcher("/Administration_propertyDetail.jsp");
-                    rd.forward(request, response);
+                    new PropertyEditCmd(ctx).execute();
                     return;
                 }
                 
                 if (page.equals("propertySave")) {
-                    String origKey = request.getParameter("origKey");
-                    String key = request.getParameter("key");
-                    String value = request.getParameter("value");
-                    if (setup.getProperty(origKey) != null) {
-                        setupDao.deleteProperty(company.getId(), origKey);
-                    }
-                    setupDao.insertProperty(company.getId(), key, value);
-                    session.setAttribute("setup", null);
-                    String url = "Dispatcher?page=propertyEdit&key=" + key;
-                    request.setAttribute("url", url);
-                    RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
-                    rd.forward(request, response);
+                    new PropertySaveCmd(ctx).execute();
                     return;
                 }
                 
                 if (page.equals("propertyDelete")) {
-                    String key = request.getParameter("key");
-                    setupDao.deleteProperty(company.getId(), key);
-                    session.setAttribute("setup", null);
-                    String url = "Dispatcher?page=propertyList";
-                    request.setAttribute("url", url);
-                    RequestDispatcher rd = request.getRequestDispatcher("/_refresh.jsp");
-                    rd.forward(request, response);
+                    new PropertyDeleteCmd(ctx).execute();
                     return;
                 }
                 
                 if (page.equals("messagesPending")) {
-                    Company currCompany = compDao.getCompany(company.getId());
-                    request.setAttribute("currCompany", currCompany);
-                    MailDAO mailDao = new MailDAO(
-                            cnn,
-                            setup.getProperty("mail.smtp"),
-                            setup.getProperty("mail.login"),
-                            setup.getProperty("mail.password"),
-                            setup.getProperty("mail.sender"));
-                    ArrayList<Message> messageList = mailDao.getWaitingMessages(company.getId());
-                    request.setAttribute("messageList", messageList);
-                    RequestDispatcher rd = request.getRequestDispatcher("/Administration_messageList.jsp");
-                    rd.forward(request, response);
+                    new MessagesPendingCmd(ctx).execute();
                     return;
                 }
             }
@@ -766,8 +582,7 @@ public class Dispatcher extends HttpServlet {
             // * Page does not exists *
             // ************************
             
-            RequestDispatcher rd = request.getRequestDispatcher("/BadPage.jsp");
-            rd.forward(request, response);
+            new BadPageCmd(ctx).execute();
             return;
             
         } catch (Exception ex) {
