@@ -14,9 +14,10 @@ import cz.svjis.bean.LogDAO;
 import cz.svjis.bean.SystemMenuEntry;
 import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
+import cz.svjis.common.PermanentLoginUtils;
+import cz.svjis.servlet.cmd.SelectCompanyCmd;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -25,9 +26,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,17 +51,12 @@ public class Dispatcher extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
-
-        String page = request.getParameter("page");
-        if (page == null) {
-            page = "articleList";
-        }
-        
-        Connection cnn = null;
         
         CmdContext ctx = new CmdContext();
         ctx.setRequest(request);
         ctx.setResponse(response);
+        
+        Connection cnn = null;
         
         try {
             cnn = createConnection();
@@ -98,12 +92,10 @@ public class Dispatcher extends HttpServlet {
             }
             
             if (company == null) {
-                ArrayList<Company> companyList = compDao.getCompanyList();
-                request.setAttribute("companyList", companyList);
-                RequestDispatcher rd = request.getRequestDispatcher("/CompanyList.jsp");
-                rd.forward(request, response);
+                new SelectCompanyCmd(ctx).execute();
                 return;
             }
+            ctx.setCompany(company);
             
             // *****************
             // * Setup         *
@@ -114,66 +106,35 @@ public class Dispatcher extends HttpServlet {
                 setup = setupDao.getApplicationSetup(company.getId());
                 session.setAttribute("setup", setup);
             }
+            ctx.setSetup(setup);
             
             // *****************
-            // * Login         *
+            // * User          *
             // *****************
             
             User user = (User) session.getAttribute("user");
             Language language = (Language) session.getAttribute("language");
-            
-            if (page.equals("logout") || (user == null)) {
-                if (page.equals("logout")) {
-                    logDao.log(user.getId(), LogDAO.operationTypeLogout, LogDAO.idNull, request.getRemoteAddr(), request.getHeader("User-Agent"));
-                    clearPermanentLogin(request, response);
-                }
-                user = new User();
-                user.setCompanyId(company.getId());
-                if ((!page.equals("logout")) && (checkPermanentLogin(request, response, userDao, company.getId()) != 0)) {
-                    user = userDao.getUser(company.getId(), checkPermanentLogin(request, response, userDao, company.getId()));
+                        
+            if (user == null) {
+                if (PermanentLoginUtils.checkPermanentLogin(request, response, userDao, company.getId()) != 0) {
+                    user = userDao.getUser(company.getId(), PermanentLoginUtils.checkPermanentLogin(request, response, userDao, company.getId()));
                     user.setUserLogged(true);
                     logDao.log(user.getId(), LogDAO.operationTypeLogin, LogDAO.idNull, request.getRemoteAddr(), request.getHeader("User-Agent"));
-                    savePermanentLogin(request, response, user, userDao);
+                    PermanentLoginUtils.savePermanentLogin(request, response, user, userDao);
                 } else {
-                    if ((setup.getProperty("anonymous.user.id") != null) && (userDao.getUser(company.getId(), 
-                            Integer.valueOf(setup.getProperty("anonymous.user.id"))) != null)) {
+                    user = new User();
+                    user.setCompanyId(company.getId());
+                    if ((setup.getProperty("anonymous.user.id") != null) && (userDao.getUser(company.getId(), Integer.valueOf(setup.getProperty("anonymous.user.id"))) != null)) {
                         user = userDao.getUser(company.getId(), Integer.valueOf(setup.getProperty("anonymous.user.id")));
                     }
                 }
                 session.setAttribute("user", user);
                 language = languageDao.getDictionary(user.getLanguageId());
                 session.setAttribute("language", language);
-                if (page.equals("logout")) {
-                    page = "articleList";
-                }
             }
             
-            if (page.equals("login") && (company != null)) {
-                User u = userDao.getUserByLogin(company.getId(), request.getParameter("login"));
-                if ((u != null) && userDao.verifyPassword(u, request.getParameter("password"), true)) {
-                    user = u;
-                    session.setAttribute("user", user);
-                    language = languageDao.getDictionary(user.getLanguageId());
-                    session.setAttribute("language", language);
-                    page = "articleList";
-                    logDao.log(user.getId(), LogDAO.operationTypeLogin, LogDAO.idNull, request.getRemoteAddr(), request.getHeader("User-Agent"));
-                    savePermanentLogin(request, response, user, userDao);
-                } else {
-                    request.setAttribute("messageHeader", language.getText("Bad login"));
-                    request.setAttribute("message", "<p>" + language.getText("You can continue") + " <a href=\"Dispatcher\">" + language.getText("here") + "</a>.</p><p><a href=\"Dispatcher?page=lostPassword\">" + language.getText("Forgot password?") + "</a></p>");
-                    RequestDispatcher rd = request.getRequestDispatcher("/_message.jsp");
-                    rd.forward(request, response);
-                    return;
-                }
-            }
-            
-            // *****************
-            // * Context       *
-            // *****************
-            ctx.setCompany(company);
-            ctx.setSetup(setup);
-            ctx.setLanguage(language);
             ctx.setUser(user);
+            ctx.setLanguage(language);
             
             // *****************
             // * System menu   *
@@ -184,6 +145,12 @@ public class Dispatcher extends HttpServlet {
             // *****************
             // * Run command   *
             // *****************
+            String page = request.getParameter("page");
+            
+            if (page == null) {
+                page = "articleList";
+            }
+            
             Command cmd = CmdFactory.create(page, ctx);
             cmd.execute();
             
@@ -246,60 +213,6 @@ public class Dispatcher extends HttpServlet {
         if (u.hasPermission("menu_redaction")) result.add(new SystemMenuEntry("Redaction", "Dispatcher?page=redactionArticleList"));
         if (u.hasPermission("menu_administration")) result.add(new SystemMenuEntry("Administration", "Dispatcher?page=companyDetail"));
         
-        return result;
-    }
-    
-    private void clearPermanentLogin(HttpServletRequest request, HttpServletResponse response) {
-        int age = 365 * 24 * 60 * 60;
-        Cookie cookie = null;
-        cookie = new Cookie("company", "0");
-        cookie.setMaxAge(age);
-        response.addCookie(cookie);
-        cookie = new Cookie("login", "");
-        cookie.setMaxAge(age);
-        response.addCookie(cookie);
-        cookie = new Cookie("password", "");
-        cookie.setMaxAge(age);
-        response.addCookie(cookie);
-    }
-    
-    private void savePermanentLogin(HttpServletRequest request, HttpServletResponse response, User user, UserDAO userDao) throws NoSuchAlgorithmException, SQLException {
-        int age = 365 * 24 * 60 * 60;
-        Cookie cookie = null;
-        cookie = new Cookie("company", String.valueOf(user.getCompanyId()));
-        cookie.setMaxAge(age);
-        response.addCookie(cookie);
-        cookie = new Cookie("login", user.getLogin());
-        cookie.setMaxAge(age);
-        response.addCookie(cookie);
-        cookie = new Cookie("password", userDao.getAuthToken(user.getCompanyId(), user.getLogin()));
-        cookie.setMaxAge(age);
-        response.addCookie(cookie);
-    }
-    
-    private int checkPermanentLogin(HttpServletRequest request, HttpServletResponse response, UserDAO userDao, int companyId) throws SQLException, NoSuchAlgorithmException {
-        int result = 0;
-        Cookie cookies[] = request.getCookies();
-        int company = (getCookie(cookies, "company").equals("")) ? 0 : Integer.valueOf(getCookie(cookies, "company"));
-        String login = getCookie(cookies, "login");
-        String token = getCookie(cookies, "password");
-        User u = userDao.getUserByLogin(company, login);
-        if ((company == companyId) && (u != null) && userDao.verifyAuthToken(company, login, token) && (u.isEnabled())) {
-            result = u.getId();
-        }
-        return result;
-    }
-    
-    private String getCookie(Cookie cookies[], String key) {
-        String result = "";
-        if (cookies != null) {
-            for (int i = 0; i < cookies.length; i++) {
-                if (cookies [i].getName().equals(key)) {
-                    result = cookies[i].getValue();
-                    break;
-                }
-            }
-        }
         return result;
     }
     

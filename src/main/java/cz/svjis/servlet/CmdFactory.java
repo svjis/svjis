@@ -23,6 +23,8 @@ import cz.svjis.servlet.cmd.CompanyDetailCmd;
 import cz.svjis.servlet.cmd.CompanySaveCmd;
 import cz.svjis.servlet.cmd.ContactCompanyCmd;
 import cz.svjis.servlet.cmd.ContactPhoneListCmd;
+import cz.svjis.servlet.cmd.LoginCmd;
+import cz.svjis.servlet.cmd.LogoutCmd;
 import cz.svjis.servlet.cmd.LostPasswordCmd;
 import cz.svjis.servlet.cmd.LostPasswordSubmitCmd;
 import cz.svjis.servlet.cmd.MessagesPendingCmd;
@@ -74,7 +76,18 @@ import cz.svjis.servlet.cmd.UserSaveCmd;
 public class CmdFactory {
 
     public static Command create(String page, CmdContext ctx) {
+
+        // *****************
+        // * Login         *
+        // *****************
+        if (page.equals("login")) {
+            return new LoginCmd(ctx);
+        }
         
+        if (page.equals("logout")) {
+            return new LogoutCmd(ctx);
+        }
+
         // *****************
         // * Lost login    *
         // *****************
