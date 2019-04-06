@@ -286,7 +286,7 @@ public class UserDAO {
         return result;
     }
     
-    public boolean verifyPassword(User u, String password) throws SQLException {
+    public boolean verifyPassword(User u, String password, boolean loginUser) throws SQLException {
         boolean result = false;
         String hash = null;
         String salt = null;
@@ -311,13 +311,13 @@ public class UserDAO {
             if ((hash != null) && (salt != null) && (password != null) && !password.equals("")) {
                 String pwdHash = generateHash(password, salt);
                 if (pwdHash.equals(hash)) {
-                    u.setUserLogged(true);
+                    if (loginUser) u.setUserLogged(true);
                     result = true;
                 }
             }
         }
         
-        if (!result) {
+        if (loginUser && (result == false)) {
             u.clear();
         }
         
