@@ -4,6 +4,7 @@
  */
 package cz.svjis.servlet;
 
+import cz.svjis.servlet.cmd.HandleErrorCmd;
 import cz.svjis.bean.ArticleAttachment;
 import cz.svjis.bean.ArticleDAO;
 import cz.svjis.bean.BuildingDAO;
@@ -77,8 +78,13 @@ public class Upload extends HttpServlet {
         
         Connection cnn = null;
         
+        CmdContext ctx = new CmdContext();
+        ctx.setRequest(request);
+        ctx.setResponse(response);
+        
         try {
             cnn = createConnection();
+            ctx.setCnn(cnn);
             
             if (page.equals("download")) {
                 ArticleDAO dao = new ArticleDAO(cnn);
@@ -106,11 +112,9 @@ public class Upload extends HttpServlet {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            HandleErrorCmd errCmd = new HandleErrorCmd();
-            errCmd.setThrowable(ex);
-            errCmd.setCnn(cnn);
+            HandleErrorCmd errCmd = new HandleErrorCmd(ctx, ex);
             try {
-                errCmd.run(request, response);
+                errCmd.execute();
             } catch (Exception exx) {
                 exx.printStackTrace();
             }
