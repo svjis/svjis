@@ -1,6 +1,5 @@
 /********************* ROLES **********************/
 
-CREATE ROLE RDB$ADMIN;
 CREATE ROLE R_WEB;
 /********************* UDFS ***********************/
 
@@ -705,7 +704,7 @@ BEGIN
 END^
 SET TERM ; ^
 SET TERM ^ ;
-CREATE TRIGGER TR_USER FOR USER ACTIVE
+CREATE TRIGGER TR_USER FOR "USER" ACTIVE
 BEFORE INSERT POSITION 0
 AS 
 BEGIN 
