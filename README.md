@@ -1,6 +1,6 @@
 # SVJIS information system
 
-Information system for Owners Associations.  
+Information system for Owners Associations. See [wiki](https://gitlab.com/svjis/svjis/wikis/home) for more information.  
 
 ## Three main branches
 * `master` - development branch containing testing version
