@@ -1,4 +1,4 @@
-/********************* ROLES **********************/
+﻿/********************* ROLES **********************/
 
 CREATE ROLE R_WEB;
 /********************* UDFS ***********************/
@@ -810,15 +810,16 @@ BEGIN
   INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('article.menu.default.item', :COMPANY_ID, '0');
   INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('article.page.size', :COMPANY_ID, '10');
   INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('article.top.size', :COMPANY_ID, '5');
-  INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('error.report.recipient', :COMPANY_ID, 'jaroslav.beran@gmail.com');
+  INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('error.report.recipient', :COMPANY_ID, 'admin@mycompany.com');
   --INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('google.analytics.id', :COMPANY_ID, '');
   INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('http.meta.description', :COMPANY_ID, 'stránky Společenství vlastníků');
   INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('http.meta.keywords', :COMPANY_ID, 'svj, společenství');
-  INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('mail.login', :COMPANY_ID, '');
-  INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('mail.password', :COMPANY_ID, '');
-  INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('mail.sender', :COMPANY_ID, '');
-  INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('mail.smtp', :COMPANY_ID, '');
+  INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('mail.login', :COMPANY_ID, 'smtplogin');
+  INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('mail.password', :COMPANY_ID, 'smtppass');
+  INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('mail.sender', :COMPANY_ID, 'noreply@mycompany.com');
+  INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('mail.smtp', :COMPANY_ID, 'smtp.mycompany.com');
   INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('mail.template.article.notification', :COMPANY_ID, 'Dobrý den,<br><br>rádi bychom Vás upozornili na následující článek na stránkách SVJ. <br><br>%s<br><br>S pozdravem,<br>Výbor SVJ');
+  INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('mail.template.comment.notification', :COMPANY_ID, 'Uživatel %s přidal nový komentář k článku %s: <br><br><br>%s');
   INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('mail.template.lost.password', :COMPANY_ID, '<html><body>Dobrý den,<br>Vaše přihlašovací údaje jsou:<br><br>%s<br><br>Web SVJ</body></html>');
  
 END^
