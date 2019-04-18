@@ -37,7 +37,7 @@ public class UserListCmd extends Command {
         ArrayList<Role> roleList = roleDao.getRoleList(getCompany().getId());
         getRequest().setAttribute("roleList", roleList);
         int roleId = Integer.valueOf((getRequest().getParameter("roleId") == null) ? "0" : getRequest().getParameter("roleId"));
-        ArrayList<User> userList = userDao.getUserList(getCompany().getId(), false, roleId);
+        ArrayList<User> userList = userDao.getUserList(getCompany().getId(), false, roleId, false);
         getRequest().setAttribute("userList", userList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_userList.jsp");
         rd.forward(getRequest(), getResponse());
