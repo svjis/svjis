@@ -26,4 +26,20 @@ public class Validator {
         
         return true;
     }
+    
+    public static boolean validateString(String s, int minLen, int maxLen) {
+        if (s == null) {
+            return false;
+        }
+        
+        if (s.length() < minLen) {
+            return false;
+        }
+        
+        if (s.length() > maxLen) {
+            return false;
+        }
+        
+        return true;
+    }
 }
