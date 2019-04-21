@@ -12,6 +12,7 @@ import cz.svjis.bean.MailDAO;
 import cz.svjis.bean.User;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
+import cz.svjis.validator.Validator;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.servlet.RequestDispatcher;
@@ -28,10 +29,19 @@ public class ArticleInsertCommentCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        String parId = getRequest().getParameter("id");
+        String parBody = getRequest().getParameter("body");
+        
+        if (!validateInput(parId, parBody)) {
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/BadPage.jsp");
+            rd.forward(getRequest(), getResponse());
+            return;
+        }
 
         ArticleDAO articleDao = new ArticleDAO(getCnn());
 
-        int articleId = Integer.valueOf(getRequest().getParameter("id"));
+        int articleId = Integer.valueOf(parId);
         Article article = articleDao.getArticle(getUser(),
                 articleId);
         getRequest().setAttribute("article", article);
@@ -39,15 +49,15 @@ public class ArticleInsertCommentCmd extends Command {
         if ((article != null)
                 && article.isCommentsAllowed()
                 && getUser().hasPermission("can_insert_article_comment")
-                && (getRequest().getParameter("body") != null)
-                && (!getRequest().getParameter("body").equals(""))) {
+                && (parBody != null)
+                && (!parBody.equals(""))) {
 
             // insert comment
             ArticleComment ac = new ArticleComment();
             ac.setArticleId(article.getId());
             ac.setUserId(getUser().getId());
             ac.setInsertionTime(new Date());
-            ac.setBody(getRequest().getParameter("body"));
+            ac.setBody(parBody);
             articleDao.insertArticleComment(ac);
 
             // send notification
@@ -74,5 +84,20 @@ public class ArticleInsertCommentCmd extends Command {
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
+    }
+    
+    
+    private boolean validateInput(String id, String body) {
+        boolean result = true;
+        
+        if (!Validator.validateInteger(id, 0, Validator.maxIntAllowed)) {
+            result = false;
+        }
+        
+        if ((body != null) && !Validator.validateString(body, 0, 10000)) {
+            result = false;
+        }
+        
+        return result;
     }
 }

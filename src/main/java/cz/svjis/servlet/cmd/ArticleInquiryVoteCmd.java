@@ -10,6 +10,7 @@ import cz.svjis.bean.InquiryDAO;
 import cz.svjis.bean.InquiryOption;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
+import cz.svjis.validator.Validator;
 import java.util.Iterator;
 import javax.servlet.RequestDispatcher;
 
@@ -25,10 +26,18 @@ public class ArticleInquiryVoteCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        String parId = getRequest().getParameter("id");
+        
+        if (!validateInput(parId)) {
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/BadPage.jsp");
+            rd.forward(getRequest(), getResponse());
+            return;
+        }
 
         InquiryDAO inquiryDao = new InquiryDAO(getCnn());
 
-        int id = Integer.parseInt(getRequest().getParameter("id"));
+        int id = Integer.parseInt(parId);
         Inquiry i = inquiryDao.getInquiry(getUser(), id);
         if ((i != null) && (i.isUserCanVote()) && (getRequest().getParameter("i_" + i.getId()) != null)) {
             String value = getRequest().getParameter("i_" + i.getId());
@@ -44,5 +53,15 @@ public class ArticleInquiryVoteCmd extends Command {
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
+    }
+    
+    private boolean validateInput(String id) {
+        boolean result = true;
+        
+        if (!Validator.validateInteger(id, 0, Validator.maxIntAllowed)) {
+            result = false;
+        }
+        
+        return result;
     }
 }

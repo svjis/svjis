@@ -17,6 +17,7 @@ import cz.svjis.bean.MiniNewsDAO;
 import cz.svjis.bean.SliderImpl;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
+import cz.svjis.validator.Validator;
 import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 
@@ -32,7 +33,16 @@ public class ArticleListCmd extends Command {
 
     @Override
     public void execute() throws Exception {
-
+        
+        String parSection = getRequest().getParameter("section");
+        String parPageNo = getRequest().getParameter("pageNo");
+        
+        if (!validateInput(parSection, parPageNo)) {
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/BadPage.jsp");
+            rd.forward(getRequest(), getResponse());
+            return;
+        }
+        
         MenuDAO menuDao = new MenuDAO(getCnn());
         ArticleDAO articleDao = new ArticleDAO(getCnn());
         MiniNewsDAO newsDao = new MiniNewsDAO(getCnn());
@@ -40,8 +50,8 @@ public class ArticleListCmd extends Command {
 
         Menu menu = menuDao.getMenu(getCompany().getId());
         int section = 0;
-        if (getRequest().getParameter("section") != null) {
-            section = Integer.valueOf(getRequest().getParameter("section"));
+        if (parSection != null) {
+            section = Integer.valueOf(parSection);
         }
         if ((section == 0) && (getSetup().get("article.menu.default.item") != null)) {
             section = Integer.valueOf(getSetup().getProperty("article.menu.default.item"));
@@ -50,8 +60,8 @@ public class ArticleListCmd extends Command {
         getRequest().setAttribute("menu", menu);
 
         int pageNo = 1;
-        if (getRequest().getParameter("pageNo") != null) {
-            pageNo = Integer.valueOf(getRequest().getParameter("pageNo"));
+        if (parPageNo != null) {
+            pageNo = Integer.valueOf(parPageNo);
         }
         SliderImpl sl = new SliderImpl();
         sl.setSliderWide(10);
@@ -82,5 +92,21 @@ public class ArticleListCmd extends Command {
         getRequest().setAttribute("inquiryList", inquiryList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/ArticleList.jsp");
         rd.forward(getRequest(), getResponse());
+    }
+    
+    private boolean validateInput(String section, String pageNo) {
+        boolean result = true;
+        
+        //-- section can be null
+        if ((section != null) && !Validator.validateInteger(section, 0, Validator.maxIntAllowed)) {
+            result = false;
+        }
+        
+        //-- pageNo can be null
+        if ((pageNo != null) && !Validator.validateInteger(pageNo, 0, Validator.maxIntAllowed)) {
+            result = false;
+        }
+        
+        return result;
     }
 }

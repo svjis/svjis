@@ -16,6 +16,7 @@ import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
 import cz.svjis.common.PermanentLoginUtils;
 import cz.svjis.servlet.cmd.SelectCompanyCmd;
+import cz.svjis.validator.Validator;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -26,6 +27,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -62,6 +64,15 @@ public class Dispatcher extends HttpServlet {
             cnn = createConnection();
             ctx.setCnn(cnn);
             
+            String parSetCompany = request.getParameter("setcompany");
+            String parPage = request.getParameter("page");
+            
+            if (!validateInput(parSetCompany, parPage)) {
+                RequestDispatcher rd = request.getRequestDispatcher("/BadPage.jsp");
+                rd.forward(request, response);
+                return;
+            }
+            
             CompanyDAO compDao = new CompanyDAO(cnn);
             LanguageDAO languageDao = new LanguageDAO(cnn);
             UserDAO userDao = new UserDAO(cnn);
@@ -83,8 +94,8 @@ public class Dispatcher extends HttpServlet {
                 session.setAttribute("language", null);
             }
             
-            if (request.getParameter("setcompany") != null) {
-                company = compDao.getCompany(Integer.valueOf(request.getParameter("setcompany")));
+            if (parSetCompany != null) {
+                company = compDao.getCompany(Integer.valueOf(parSetCompany));
                 session.setAttribute("company", company);
                 session.setAttribute("user", null);
                 session.setAttribute("setup", null);
@@ -145,7 +156,7 @@ public class Dispatcher extends HttpServlet {
             // *****************
             // * Run command   *
             // *****************
-            String page = request.getParameter("page");
+            String page = parPage;
             
             if (page == null) {
                 page = "articleList";
@@ -231,5 +242,19 @@ public class Dispatcher extends HttpServlet {
                 Logger.getLogger(Dispatcher.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+    
+    private boolean validateInput(String setCompany, String page) {
+        boolean result = true;
+        
+        if ((setCompany != null) && !Validator.validateInteger(setCompany, 0, Validator.maxIntAllowed)) {
+            result = false;
+        }
+        
+        if ((page != null) && !Validator.validateString(page, 0, 100)) {
+            result = false;
+        }
+        
+        return result;
     }
 }

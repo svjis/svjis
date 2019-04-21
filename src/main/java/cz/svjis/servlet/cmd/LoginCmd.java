@@ -13,6 +13,7 @@ import cz.svjis.bean.UserDAO;
 import cz.svjis.common.PermanentLoginUtils;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
+import cz.svjis.validator.Validator;
 import javax.servlet.RequestDispatcher;
 
 /**
@@ -27,12 +28,22 @@ public class LoginCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        String parLogin = getRequest().getParameter("login");
+        String parPassword = getRequest().getParameter("password");
+        
+        if (!validateInput(parLogin, parPassword)) {
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/BadPage.jsp");
+            rd.forward(getRequest(), getResponse());
+            return;
+        }
+        
         UserDAO userDao = new UserDAO(getCnn());
         LanguageDAO languageDao = new LanguageDAO(getCnn());
         LogDAO logDao = new LogDAO(getCnn());
 
-        User u = userDao.getUserByLogin(getCompany().getId(), getRequest().getParameter("login"));
-        if ((u != null) && userDao.verifyPassword(u, getRequest().getParameter("password"), true)) {
+        User u = userDao.getUserByLogin(getCompany().getId(), parLogin);
+        if ((u != null) && userDao.verifyPassword(u, parPassword, true)) {
             User user = u;
             getRequest().getSession().setAttribute("user", user);
             Language language = languageDao.getDictionary(user.getLanguageId());
@@ -50,6 +61,20 @@ public class LoginCmd extends Command {
             RequestDispatcher rd = getRequest().getRequestDispatcher("/_message.jsp");
             rd.forward(getRequest(), getResponse());
         }
+    }
+    
+    private boolean validateInput(String login, String password) {
+        boolean result = true;
+        
+        if (!Validator.validateString(login, 0, 50)) {
+            result = false;
+        }
+        
+        if (!Validator.validateString(password, 0, 50)) {
+            result = false;
+        }
+        
+        return result;
     }
 
 }

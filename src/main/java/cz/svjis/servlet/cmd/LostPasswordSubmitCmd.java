@@ -12,6 +12,7 @@ import cz.svjis.bean.UserDAO;
 import cz.svjis.common.RandomString;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
+import cz.svjis.validator.Validator;
 import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 
@@ -27,11 +28,18 @@ public class LostPasswordSubmitCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        String email = getRequest().getParameter("email");
+        
+        if (!validateInput(email)) {
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/BadPage.jsp");
+            rd.forward(getRequest(), getResponse());
+            return;
+        }
 
         UserDAO userDao = new UserDAO(getCnn());
         LogDAO logDao = new LogDAO(getCnn());
 
-        String email = getRequest().getParameter("email");
         if ((email == null) || (email.equals(""))) {
             String url = "Dispatcher?page=lostPassword";
             getRequest().setAttribute("url", url);
@@ -67,5 +75,15 @@ public class LostPasswordSubmitCmd extends Command {
             rd = getRequest().getRequestDispatcher("/_message.jsp");
         }
         rd.forward(getRequest(), getResponse());
+    }
+    
+    private boolean validateInput(String email) {
+        boolean result = true;
+        
+        if (!Validator.validateString(email, 0, 100)) {
+            result = false;
+        }
+        
+        return result;
     }
 }
