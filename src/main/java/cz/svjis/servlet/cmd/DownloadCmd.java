@@ -10,6 +10,8 @@ import cz.svjis.bean.ArticleDAO;
 import cz.svjis.common.HttpUtils;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
+import cz.svjis.validator.Validator;
+import javax.servlet.RequestDispatcher;
 
 /**
  *
@@ -23,11 +25,30 @@ public class DownloadCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        String parId = getRequest().getParameter("id");
+        
+        if (!validateInput(parId)) {
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/BadPage.jsp");
+            rd.forward(getRequest(), getResponse());
+            return;
+        }
+        
         ArticleDAO dao = new ArticleDAO(getCnn());
-        ArticleAttachment aa = dao.getArticleAttachment(Integer.parseInt(getRequest().getParameter("id")));
+        ArticleAttachment aa = dao.getArticleAttachment(Integer.parseInt(parId));
         if (dao.getArticle(getUser(), aa.getArticleId()) == null) {
             return;
         }
         HttpUtils.writeBinaryData(aa.getContentType(), aa.getFileName(), aa.getData(), getRequest(), getResponse());
+    }
+    
+    private boolean validateInput(String id) {
+        boolean result = true;
+        
+        if (!Validator.validateInteger(id, 0, Validator.maxIntAllowed)) {
+            result = false;
+        }
+        
+        return result;
     }
 }
