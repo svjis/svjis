@@ -7,6 +7,7 @@ package cz.svjis.servlet;
 import cz.svjis.servlet.cmd.HandleErrorCmd;
 import cz.svjis.bean.Company;
 import cz.svjis.bean.User;
+import cz.svjis.validator.Validator;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -14,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -60,12 +62,20 @@ public class Upload extends HttpServlet {
         try {
             cnn = createConnection();
             ctx.setCnn(cnn);
+            
+            String parPage = request.getParameter("page");
+            
+            if (!validateInput(parPage)) {
+                RequestDispatcher rd = request.getRequestDispatcher("/BadPage.jsp");
+                rd.forward(request, response);
+                return;
+            }
 
             // *****************
             // * Run command   *
             // *****************
             
-            String page = request.getParameter("page");
+            String page = parPage;
             if (page == null) {
                 page = "";
             }
@@ -142,4 +152,14 @@ public class Upload extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+    
+    private boolean validateInput(String page) {
+        boolean result = true;
+        
+        if ((page != null) && !Validator.validateString(page, 0, 100)) {
+            result = false;
+        }
+        
+        return result;
+    }
 }
