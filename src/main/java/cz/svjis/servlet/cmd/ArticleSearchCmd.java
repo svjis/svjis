@@ -95,12 +95,12 @@ public class ArticleSearchCmd extends Command {
         boolean result = true;
         
         //-- section can be null
-        if ((section != null) && !Validator.validatePositiveInteger(section)) {
+        if ((section != null) && !Validator.validateInteger(section, 0, Validator.maxIntAllowed)) {
             result = false;
         }
         
         //-- pageNo can be null
-        if ((pageNo != null) && !Validator.validatePositiveInteger(pageNo)) {
+        if ((pageNo != null) && !Validator.validateInteger(pageNo, 0, Validator.maxIntAllowed)) {
             result = false;
         }
         

@@ -11,7 +11,9 @@ package cz.svjis.validator;
  */
 public class Validator {
     
-    public static boolean validatePositiveInteger(String s) {
+    public static final int maxIntAllowed = 10000000;
+    
+    public static boolean validateInteger(String s, int minInt, int maxInt) {
         int i;
         
         try {
@@ -20,7 +22,11 @@ public class Validator {
             return false;
         }
         
-        if (i < 0) {
+        if (i < minInt) {
+            return false;
+        }
+        
+        if (i > maxInt) {
             return false;
         }
         

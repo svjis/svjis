@@ -15,12 +15,13 @@ public class ValidatorTest {
     
     @Test
     public void testValidatePositiveInteger() {
-        org.junit.Assert.assertFalse("PositiveInteger < null", Validator.validatePositiveInteger(null));
-        org.junit.Assert.assertFalse("PositiveInteger < \"\"", Validator.validatePositiveInteger(""));
-        org.junit.Assert.assertFalse("PositiveInteger < 0hello", Validator.validatePositiveInteger("0hello"));
-        org.junit.Assert.assertFalse("PositiveInteger < -1", Validator.validatePositiveInteger("-1"));
-        org.junit.Assert.assertTrue("PositiveInteger < 0", Validator.validatePositiveInteger("0"));
-        org.junit.Assert.assertTrue("PositiveInteger < 1", Validator.validatePositiveInteger("1"));
+        org.junit.Assert.assertFalse("PositiveInteger < null", Validator.validateInteger(null ,0, 1));
+        org.junit.Assert.assertFalse("PositiveInteger < \"\"", Validator.validateInteger("" ,0, 1));
+        org.junit.Assert.assertFalse("PositiveInteger < 0hello", Validator.validateInteger("0hello" ,0, 1));
+        org.junit.Assert.assertFalse("PositiveInteger < -1", Validator.validateInteger("-1" ,0, 1));
+        org.junit.Assert.assertTrue("PositiveInteger < 0", Validator.validateInteger("0" ,0, 1));
+        org.junit.Assert.assertTrue("PositiveInteger < 1", Validator.validateInteger("1" ,0, 1));
+        org.junit.Assert.assertFalse("PositiveInteger < over max", Validator.validateInteger("2" ,0, 1));
     }
     
     @Test
