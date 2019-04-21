@@ -32,5 +32,6 @@ public class ValidatorTest {
         org.junit.Assert.assertTrue("String < \"\"", Validator.validateString("" ,0, 5));
         org.junit.Assert.assertTrue("String < 1", Validator.validateString("1" ,1, 5));
         org.junit.Assert.assertTrue("String < 5", Validator.validateString("12345" ,1, 5));
+        org.junit.Assert.assertFalse("SQL injection", Validator.validateString("select * from user;" ,1, 100));
     }
 }

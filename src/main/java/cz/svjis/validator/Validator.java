@@ -46,6 +46,23 @@ public class Validator {
             return false;
         }
         
+        if (!isInjectionFree(s)) {
+            return false;
+        }
+        
+        return true;
+    }
+    
+    private static boolean isInjectionFree(String s) {
+        String sup = s.toUpperCase();
+        
+        if (sup.contains(";") && 
+                (sup.contains("SELECT") || sup.contains("INSERT") || sup.contains("UPDATE") || 
+                sup.contains("DELETE") || sup.contains("DROP") || sup.contains("CREATE") || sup.contains("ALTER") || 
+                sup.contains("EXECUTE") || sup.contains("COMMIT") || sup.contains("ROLLBACK"))) {
+            return false;
+        }
+        
         return true;
     }
 }
