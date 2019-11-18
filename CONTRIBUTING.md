@@ -12,7 +12,7 @@ Thank you for considering contributing to SVJIS project. Here are some of the wa
 
 New code contributions should be primarily made using GitHub pull requests. This involves you creating a personal fork of the project, adding your new code to a branch in your fork, and then triggering a pull request using the GitHub web UI (it's easier than it sounds). A pull request is both a technical process (to get the code from your branch into the main repository) and a framework for performing code reviews.  
 
-This project uses [Gitflow Workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) The branch naming conventions in your fork should follow projects name conventions.  
+This project uses [Gitflow Workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow). The branch naming conventions in your fork should follow projects name conventions.  
 
 *For new features:*
 
@@ -33,7 +33,7 @@ There's a good guide to performing pull requests at [https://help.github.com/art
 
 ### Before Contributing Code
 
-The best pull request are small and focused. Don't try to change the world in one pull request. And while the focus of this project is reusability, that doesn't mean that every option under the sun needs to be available.
+The best pull request are small and focused. Don't try to change the world in one pull request.
 
 * Add JUnit test for Java code. Our coverage ratio isn't great, but we don't want it to get worse.
 
