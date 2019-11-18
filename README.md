@@ -1,31 +1,17 @@
-# SVJIS information system
+# SVJIS
 
-Information system for Owners Associations. See [wiki](https://github.com/berk76/svjis/wiki) for more information.  
+Informační systém pro SVJ
 
-## Three main branches
-* `develop` - development branch containing testing version
-* `staging` - staging branch containing acceptance test version
-* `production` - production branch containing production version
+## Popis projektu
 
-## Development workflow
+SVJIS je CMS (content management system) pro Společenství Vlastníku Jednotek. Systém poskytuje redakční systém, diskuze pod článkem, aknkety, databázi vlastníků včetně evidence jednotek a podílů. Úplný popis vlastností je dostupný [zde](https://github.com/berk76/svjis/wiki/Vlastnosti).
 
-Developer takes ticket and creates new feature branch **from staging branch**:
+## Jak začít.
 
-1. `git checkout staging`
-1. `git pull`
-1. `git checkout -b Issue_#3`
-1. `git push -u origin Issue_#3`
+* [Popis instalace systému](https://github.com/berk76/svjis/wiki/Instalace)
+* [Parametrizace](https://github.com/berk76/svjis/wiki/Parametrizace)
+* [Často kladené dotazy](https://github.com/berk76/svjis/wiki/FAQ)
 
-When developing is done in feature branch:
+## Contribution
 
-1. `git status`
-1. `git add .`
-1. `git commit -m "what have been changed"`
-1. `git push`
-
-At the end developer will merge feature branch to the develop branch or create pull request:
-
-1. `git checkout develop`
-1. `git pull` 
-1. `git merge --no-ff origin/Issue_#3`
-1. `git push`
+Pokud se chcete podílet na vývoji systému, tak jste vítáni. Prostudujte si [CONTRIBUTING.md](CONTRIBUTING.md), kde jsou popsány pravidla.
