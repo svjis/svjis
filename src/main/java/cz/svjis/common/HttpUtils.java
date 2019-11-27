@@ -23,7 +23,7 @@ public class HttpUtils {
         
         String userAgent = request.getHeader("User-Agent");
         String encodedFileName = null;
-        if (userAgent.contains("MSIE") || userAgent.contains("Opera") || userAgent.contains("Trident")) {
+        if (userAgent.contains("MSIE") || userAgent.contains("Edge") || userAgent.contains("Opera") || userAgent.contains("Trident")) {
             encodedFileName = URLEncoder.encode(fileName.replace(" ", "_"), "UTF-8");
         } else {
             encodedFileName = "=?UTF-8?B?" + Base64.encodeBase64String(fileName.replace(" ", "_").getBytes("UTF-8")) + "?=";
