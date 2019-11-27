@@ -56,8 +56,8 @@
         </dependency>
         <dependency>
             <groupId>org.firebirdsql.jdbc</groupId>
-            <artifactId>jaybird-jdk16</artifactId>
-            <version>2.2.4</version>
+            <artifactId>jaybird-jdk17</artifactId>
+            <version>3.0.7</version>
         </dependency>
         <dependency>
             <groupId>net.sourceforge.jexcelapi</groupId>
