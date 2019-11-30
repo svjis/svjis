@@ -9,6 +9,6 @@
     name="jdbc/SVJIS" 
     password="${db.password}"
     type="javax.sql.DataSource" 
-    url="jdbc:firebirdsql:localhost/3050:SVJIS_PRODUCTION?sql_role_name=R_WEB&amp;lc_ctype=UNICODE_FSS" 
-    username="web"/>
+    url="jdbc:firebirdsql:${db.server}/3050:SVJIS_PRODUCTION?sql_role_name=R_WEB&amp;lc_ctype=UNICODE_FSS" 
+    username="${db.user}"/>
 </Context>
