@@ -5,7 +5,10 @@
  */
 package cz.svjis.validator;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -14,24 +17,26 @@ import org.junit.Test;
 public class ValidatorTest {
     
     @Test
+    @DisplayName("Positive int validation")
     public void testValidatePositiveInteger() {
-        org.junit.Assert.assertFalse("PositiveInteger < null", Validator.validateInteger(null ,0, 1));
-        org.junit.Assert.assertFalse("PositiveInteger < \"\"", Validator.validateInteger("" ,0, 1));
-        org.junit.Assert.assertFalse("PositiveInteger < 0hello", Validator.validateInteger("0hello" ,0, 1));
-        org.junit.Assert.assertFalse("PositiveInteger < -1", Validator.validateInteger("-1" ,0, 1));
-        org.junit.Assert.assertTrue("PositiveInteger < 0", Validator.validateInteger("0" ,0, 1));
-        org.junit.Assert.assertTrue("PositiveInteger < 1", Validator.validateInteger("1" ,0, 1));
-        org.junit.Assert.assertFalse("PositiveInteger < over max", Validator.validateInteger("2" ,0, 1));
+        assertFalse(Validator.validateInteger(null ,0, 1), "PositiveInteger < null");
+        assertFalse(Validator.validateInteger("" ,0, 1), "PositiveInteger < \"\"");
+        assertFalse(Validator.validateInteger("0hello" ,0, 1), "PositiveInteger < 0hello");
+        assertFalse(Validator.validateInteger("-1" ,0, 1), "PositiveInteger < -1");
+        assertTrue(Validator.validateInteger("0" ,0, 1), "PositiveInteger < 0");
+        assertTrue(Validator.validateInteger("1" ,0, 1), "PositiveInteger < 1");
+        assertFalse(Validator.validateInteger("2" ,0, 1), "PositiveInteger < over max");
     }
     
     @Test
+    @DisplayName("String validation")
     public void testValidateString() {
-        org.junit.Assert.assertFalse("String < null", Validator.validateString(null ,1, 100));
-        org.junit.Assert.assertFalse("String < \"\"", Validator.validateString("" ,1, 100));
-        org.junit.Assert.assertFalse("String < over max", Validator.validateString("123456" ,1, 5));
-        org.junit.Assert.assertTrue("String < \"\"", Validator.validateString("" ,0, 5));
-        org.junit.Assert.assertTrue("String < 1", Validator.validateString("1" ,1, 5));
-        org.junit.Assert.assertTrue("String < 5", Validator.validateString("12345" ,1, 5));
-        org.junit.Assert.assertFalse("SQL injection", Validator.validateString("select * from user;" ,1, 100));
+        assertFalse(Validator.validateString(null ,1, 100), "String < null");
+        assertFalse(Validator.validateString("" ,1, 100), "String < \"\"");
+        assertFalse(Validator.validateString("123456" ,1, 5), "String < over max");
+        assertTrue(Validator.validateString("" ,0, 5), "String < \"\"");
+        assertTrue(Validator.validateString("1" ,1, 5), "String < 1");
+        assertTrue(Validator.validateString("12345" ,1, 5), "String < 5");
+        assertFalse(Validator.validateString("select * from user;" ,1, 100), "SQL injection");
     }
 }
