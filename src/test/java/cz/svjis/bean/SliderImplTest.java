@@ -4,7 +4,9 @@
  */
 package cz.svjis.bean;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -13,16 +15,17 @@ import org.junit.Test;
 public class SliderImplTest {
     
     @Test
+    @DisplayName("Slider")
     public void testSlider() {
         SliderImpl sl = new SliderImpl();
         sl.setSliderWide(10);
         sl.setCurrentPage(1);
         sl.setNumOfItemsAtPage(10);
         sl.setTotalNumOfItems(20);
-        org.junit.Assert.assertEquals("Slider page 20/1", sl.getItemList().size(), 6);
+        assertEquals(6, sl.getItemList().size(), "Slider page 20/1");
         sl.setCurrentPage(2);
-        org.junit.Assert.assertEquals("Slider page 20/2", sl.getItemList().size(), 6);
+        assertEquals(6, sl.getItemList().size(), "Slider page 20/2");
         sl.setTotalNumOfItems(21);
-        org.junit.Assert.assertEquals("Slider page 21/2", sl.getItemList().size(), 7);
+        assertEquals(7, sl.getItemList().size(), "Slider page 21/2");
     }
 }
