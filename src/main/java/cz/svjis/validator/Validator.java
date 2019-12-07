@@ -65,4 +65,19 @@ public class Validator {
         
         return true;
     }
+    
+    public static String fixTextInput(String input, boolean enableHtml) {
+        String result = input;
+        
+        if (result == null) {
+            return null;
+        }
+        
+        if (!enableHtml) {
+            result = result.replaceAll("<", "&lt;");
+            result = result.replaceAll(">", "&gt;");
+        }
+        
+        return result;
+    }
 }

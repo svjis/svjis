@@ -29,11 +29,11 @@ public class LoginCmd extends Command {
     @Override
     public void execute() throws Exception {
         
-        String parLogin = getRequest().getParameter("login");
+        String parLogin = Validator.fixTextInput(getRequest().getParameter("login"), false);
         String parPassword = getRequest().getParameter("password");
         
         if (!validateInput(parLogin, parPassword)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/BadPage.jsp");
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
             rd.forward(getRequest(), getResponse());
             return;
         }
