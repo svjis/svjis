@@ -10,6 +10,7 @@ import cz.svjis.bean.ArticleComment;
 import cz.svjis.bean.ArticleDAO;
 import cz.svjis.bean.MailDAO;
 import cz.svjis.bean.User;
+import cz.svjis.common.Input;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -31,7 +32,7 @@ public class ArticleInsertCommentCmd extends Command {
     public void execute() throws Exception {
         
         String parId = getRequest().getParameter("id");
-        String parBody = getRequest().getParameter("body");
+        String parBody = Input.fixTextInput(getRequest().getParameter("body"), false);
         
         if (!validateInput(parId, parBody)) {
             RequestDispatcher rd = getRequest().getRequestDispatcher("/BadPage.jsp");
