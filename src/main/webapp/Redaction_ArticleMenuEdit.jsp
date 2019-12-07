@@ -30,7 +30,7 @@
                             <legend><%=language.getText("Article menu node") %></legend>
                             <p>
                                 <label id="common-label" for="common-input"><%=language.getText("Description") %></label>
-                                <input id="common-input" type="text" name="description" value="<%=menuNode.getDescription() %>">
+                                <input id="common-input" type="text" name="description" maxlength="50" value="<%=menuNode.getDescription() %>">
                             </p>
                             <p>
                                 <label id="common-label" for="common-input"><%=language.getText("Parent node") %></label>

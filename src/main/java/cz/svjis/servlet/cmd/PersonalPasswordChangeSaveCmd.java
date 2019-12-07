@@ -23,7 +23,6 @@ public class PersonalPasswordChangeSaveCmd extends Command {
 
     @Override
     public void execute() throws Exception {
-        UserDAO userDao = new UserDAO(getCnn());
 
         String message = "";
         String oldPass = getRequest().getParameter("oldPassword");
@@ -35,6 +34,8 @@ public class PersonalPasswordChangeSaveCmd extends Command {
             rd.forward(getRequest(), getResponse());
             return;
         }
+        
+        UserDAO userDao = new UserDAO(getCnn());
         
         if (!userDao.verifyPassword(getUser(), oldPass, false)) {
             message += getLanguage().getText("You typed wrong current password.") + "<br>";

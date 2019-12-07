@@ -24,8 +24,7 @@ public class CompanySaveCmd extends Command {
 
     @Override
     public void execute() throws Exception {
-        CompanyDAO compDao = new CompanyDAO(getCnn());
-        
+
         String parName = Validator.fixTextInput(getRequest().getParameter("name"), false);
         String parAddress = Validator.fixTextInput(getRequest().getParameter("address"), false);
         String parCity = Validator.fixTextInput(getRequest().getParameter("city"), false);
@@ -42,6 +41,8 @@ public class CompanySaveCmd extends Command {
             rd.forward(getRequest(), getResponse());
             return;
         }
+
+        CompanyDAO compDao = new CompanyDAO(getCnn());
         
         Company c = new Company();
         c.setId(getCompany().getId());

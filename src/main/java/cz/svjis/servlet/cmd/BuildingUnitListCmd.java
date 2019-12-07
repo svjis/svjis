@@ -28,9 +28,7 @@ public class BuildingUnitListCmd extends Command {
 
     @Override
     public void execute() throws Exception {
-        CompanyDAO compDao = new CompanyDAO(getCnn());
-        BuildingDAO buildingDao = new BuildingDAO(getCnn());
-        
+
         String parTypeId = getRequest().getParameter("typeId");
 
         if (!validateInput(parTypeId)) {
@@ -38,6 +36,9 @@ public class BuildingUnitListCmd extends Command {
             rd.forward(getRequest(), getResponse());
             return;
         }
+
+        CompanyDAO compDao = new CompanyDAO(getCnn());
+        BuildingDAO buildingDao = new BuildingDAO(getCnn());
         
         Company currCompany = compDao.getCompany(getCompany().getId());
         getRequest().setAttribute("currCompany", currCompany);

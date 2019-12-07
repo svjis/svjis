@@ -8,6 +8,7 @@ package cz.svjis.servlet.cmd;
 import cz.svjis.bean.ApplicationSetupDAO;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
+import cz.svjis.validator.Validator;
 import javax.servlet.RequestDispatcher;
 
 /**
@@ -22,19 +23,45 @@ public class PropertySaveCmd extends Command {
 
     @Override
     public void execute() throws Exception {
-        ApplicationSetupDAO setupDao = new ApplicationSetupDAO(getCnn());
 
-        String origKey = getRequest().getParameter("origKey");
-        String key = getRequest().getParameter("key");
-        String value = getRequest().getParameter("value");
-        if (getSetup().getProperty(origKey) != null) {
-            setupDao.deleteProperty(getCompany().getId(), origKey);
+        String parOrigKey = Validator.fixTextInput(getRequest().getParameter("origKey"), false);
+        String parKey = Validator.fixTextInput(getRequest().getParameter("key"), false);
+        String parValue = Validator.fixTextInput(getRequest().getParameter("value"), true);
+        
+        if (!validateInput(parOrigKey, parKey, parValue)) {
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
+            rd.forward(getRequest(), getResponse());
+            return;
         }
-        setupDao.insertProperty(getCompany().getId(), key, value);
+        
+        ApplicationSetupDAO setupDao = new ApplicationSetupDAO(getCnn());
+        
+        if (getSetup().getProperty(parOrigKey) != null) {
+            setupDao.deleteProperty(getCompany().getId(), parOrigKey);
+        }
+        setupDao.insertProperty(getCompany().getId(), parKey, parValue);
         getRequest().getSession().setAttribute("setup", null);
-        String url = "Dispatcher?page=propertyEdit&key=" + key;
+        String url = "Dispatcher?page=propertyEdit&key=" + parKey;
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
+    }
+    
+    private boolean validateInput(String parOrigKey, String parKey, String parValue) {
+        boolean result = true;
+        
+        if (!Validator.validateString(parOrigKey, 0, 50)) {
+            result = false;
+        }
+        
+        if (!Validator.validateString(parKey, 0, 50)) {
+            result = false;
+        }
+        
+        if (!Validator.validateString(parValue, 0, 1000)) {
+            result = false;
+        }
+        
+        return result;
     }
 }

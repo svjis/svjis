@@ -12,6 +12,7 @@ import cz.svjis.bean.MailDAO;
 import cz.svjis.bean.User;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
+import cz.svjis.validator.Validator;
 import java.util.ArrayList;
 import java.util.Iterator;
 import javax.servlet.RequestDispatcher;
@@ -29,12 +30,20 @@ public class RedactionArticleSendNotificationsConfirmationCmd extends Command {
     @Override
     public void execute() throws Exception {
 
+        String parId = getRequest().getParameter("id");
+        
+        if (!validateInput(parId)) {
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
+            rd.forward(getRequest(), getResponse());
+            return;
+        }
+        
         ArticleDAO articleDao = new ArticleDAO(getCnn());
         LogDAO logDao = new LogDAO(getCnn());
-
+        
         int articleId = 0;
-        if (getRequest().getParameter("id") != null) {
-            articleId = Integer.valueOf(getRequest().getParameter("id"));
+        if (parId != null) {
+            articleId = Integer.valueOf(parId);
         }
         
         Article article = null;
@@ -73,4 +82,13 @@ public class RedactionArticleSendNotificationsConfirmationCmd extends Command {
         rd.forward(getRequest(), getResponse());
     }
 
+    private boolean validateInput(String parId) {
+        boolean result = true;
+        
+        if (!Validator.validateInteger(parId, 0, Validator.maxIntAllowed)) {
+            result = false;
+        }
+
+        return result;
+    }
 }

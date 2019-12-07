@@ -26,9 +26,6 @@ public class PersonalUserDetailSaveCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        LanguageDAO languageDao = new LanguageDAO(getCnn());
-        UserDAO userDao = new UserDAO(getCnn());
-
         String parSalutation = Validator.fixTextInput(getRequest().getParameter("salutation"), false);
         String parFirstName = Validator.fixTextInput(getRequest().getParameter("firstName"), false);
         String parLastName = Validator.fixTextInput(getRequest().getParameter("lastName"), false);
@@ -46,6 +43,9 @@ public class PersonalUserDetailSaveCmd extends Command {
             rd.forward(getRequest(), getResponse());
             return;
         }
+        
+        LanguageDAO languageDao = new LanguageDAO(getCnn());
+        UserDAO userDao = new UserDAO(getCnn());
         
         getUser().setSalutation(parSalutation);
         getUser().setFirstName(parFirstName);

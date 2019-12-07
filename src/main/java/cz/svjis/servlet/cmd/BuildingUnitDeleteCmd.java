@@ -24,7 +24,6 @@ public class BuildingUnitDeleteCmd extends Command {
 
     @Override
     public void execute() throws Exception {
-        BuildingDAO buildingDao = new BuildingDAO(getCnn());
         
         String parId = getRequest().getParameter("id");
         
@@ -33,6 +32,8 @@ public class BuildingUnitDeleteCmd extends Command {
             rd.forward(getRequest(), getResponse());
             return;
         }
+        
+        BuildingDAO buildingDao = new BuildingDAO(getCnn());
 
         BuildingUnit u = new BuildingUnit();
         u.setId(Integer.valueOf(parId));

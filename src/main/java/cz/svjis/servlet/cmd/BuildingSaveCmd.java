@@ -24,7 +24,6 @@ public class BuildingSaveCmd extends Command {
 
     @Override
     public void execute() throws Exception {
-        BuildingDAO buildingDao = new BuildingDAO(getCnn());
 
         String parAddress = Validator.fixTextInput(getRequest().getParameter("address"), false);
         String parCity = Validator.fixTextInput(getRequest().getParameter("city"), false);
@@ -36,6 +35,8 @@ public class BuildingSaveCmd extends Command {
             rd.forward(getRequest(), getResponse());
             return;
         }
+        
+        BuildingDAO buildingDao = new BuildingDAO(getCnn());
                 
         Building b = buildingDao.getBuilding(getCompany().getId());
         b.setAddress(parAddress);

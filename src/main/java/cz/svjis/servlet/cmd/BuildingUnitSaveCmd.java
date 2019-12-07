@@ -24,7 +24,6 @@ public class BuildingUnitSaveCmd extends Command {
 
     @Override
     public void execute() throws Exception {
-        BuildingDAO buildingDao = new BuildingDAO(getCnn());
 
         String parId = getRequest().getParameter("id");
         String parBuildingUnitTypeId = getRequest().getParameter("typeId");
@@ -38,6 +37,8 @@ public class BuildingUnitSaveCmd extends Command {
             rd.forward(getRequest(), getResponse());
             return;
         }
+        
+        BuildingDAO buildingDao = new BuildingDAO(getCnn());
         
         BuildingUnit u = new BuildingUnit();
         u.setId(Integer.valueOf(parId));
