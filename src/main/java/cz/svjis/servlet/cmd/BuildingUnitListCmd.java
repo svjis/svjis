@@ -12,6 +12,7 @@ import cz.svjis.bean.Company;
 import cz.svjis.bean.CompanyDAO;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
+import cz.svjis.validator.Validator;
 import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 
@@ -29,13 +30,21 @@ public class BuildingUnitListCmd extends Command {
     public void execute() throws Exception {
         CompanyDAO compDao = new CompanyDAO(getCnn());
         BuildingDAO buildingDao = new BuildingDAO(getCnn());
+        
+        String parTypeId = getRequest().getParameter("typeId");
 
+        if (!validateInput(parTypeId)) {
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
+            rd.forward(getRequest(), getResponse());
+            return;
+        }
+        
         Company currCompany = compDao.getCompany(getCompany().getId());
         getRequest().setAttribute("currCompany", currCompany);
         ArrayList<BuildingUnitType> buildingUnitType = buildingDao.getBuildingUnitTypeList();
         getRequest().setAttribute("buildingUnitType", buildingUnitType);
         int typeId = 0;
-        if (getRequest().getParameter("typeId") != null) {
+        if (parTypeId != null) {
             typeId = Integer.valueOf(getRequest().getParameter("typeId"));
         }
         ArrayList<BuildingUnit> buildingUnitList = buildingDao.getBuildingUnitList(
@@ -44,5 +53,16 @@ public class BuildingUnitListCmd extends Command {
         getRequest().setAttribute("buildingUnitList", buildingUnitList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_buildingUnitList.jsp");
         rd.forward(getRequest(), getResponse());
+    }
+    
+    private boolean validateInput(String parTypeId) {
+        boolean result = true;
+        
+        //-- parTypeId can be null
+        if ((parTypeId != null) && !Validator.validateInteger(parTypeId, 0, Validator.maxIntAllowed)) {
+            result = false;
+        }
+        
+        return result;
     }
 }
