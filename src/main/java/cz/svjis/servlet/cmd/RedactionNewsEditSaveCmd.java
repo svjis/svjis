@@ -9,6 +9,7 @@ import cz.svjis.bean.MiniNews;
 import cz.svjis.bean.MiniNewsDAO;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
+import cz.svjis.validator.Validator;
 import java.text.SimpleDateFormat;
 import javax.servlet.RequestDispatcher;
 
@@ -24,10 +25,22 @@ public class RedactionNewsEditSaveCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        String parId = getRequest().getParameter("id");
+        String parTime = Validator.fixTextInput(getRequest().getParameter("time"), false);
+        String parLangId = getRequest().getParameter("language");
+        String parBody = Validator.fixTextInput(getRequest().getParameter("body"), true);
+        
+        if (!validateInput(parId, parTime, parLangId, parBody)) {
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
+            rd.forward(getRequest(), getResponse());
+            return;
+        }
+        
         MiniNewsDAO newsDao = new MiniNewsDAO(getCnn());
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 
-        int id = Integer.parseInt(getRequest().getParameter("id"));
+        int id = Integer.parseInt(parId);
         MiniNews n = null;
         if (id == 0) {
             n = new MiniNews();
@@ -37,10 +50,10 @@ public class RedactionNewsEditSaveCmd extends Command {
         } else {
             n = newsDao.getMiniNews(getUser(), id);
         }
-        n.setTime(sdf.parse(getRequest().getParameter("time")));
-        n.setLanguageId(Integer.parseInt(getRequest().getParameter("language")));
+        n.setTime(sdf.parse(parTime));
+        n.setLanguageId(Integer.parseInt(parLangId));
         n.setPublished(getRequest().getParameter("publish") != null);
-        n.setBody(getRequest().getParameter("body"));
+        n.setBody(parBody);
         if (id == 0) {
             n.setId(newsDao.insertMiniNews(n));
         } else {
@@ -50,5 +63,27 @@ public class RedactionNewsEditSaveCmd extends Command {
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
+    }
+    
+    private boolean validateInput(String parId, String parTime, String parLangId, String parBody) {
+        boolean result = true;
+        
+        if (!Validator.validateInteger(parId, 0, Validator.maxIntAllowed)) {
+            result = false;
+        }
+        
+        if (!Validator.validateString(parTime, 0, 30)) {
+            result = false;
+        }
+        
+        if (!Validator.validateInteger(parLangId, 0, Validator.maxIntAllowed)) {
+            result = false;
+        }
+        
+        if (!Validator.validateString(parBody, 0, Validator.maxStringLenAllowed)) {
+            result = false;
+        }
+
+        return result;
     }
 }

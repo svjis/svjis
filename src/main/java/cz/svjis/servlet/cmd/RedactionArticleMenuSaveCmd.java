@@ -9,6 +9,7 @@ import cz.svjis.bean.MenuDAO;
 import cz.svjis.bean.MenuNode;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
+import cz.svjis.validator.Validator;
 import javax.servlet.RequestDispatcher;
 
 /**
@@ -23,12 +24,23 @@ public class RedactionArticleMenuSaveCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+
+        String parId = getRequest().getParameter("id");
+        String parDescription = Validator.fixTextInput(getRequest().getParameter("description"), false);
+        String parParentId = getRequest().getParameter("parent");
+
+        if (!validateInput(parId, parDescription, parParentId)) {
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
+            rd.forward(getRequest(), getResponse());
+            return;
+        }
+        
         MenuDAO menuDao = new MenuDAO(getCnn());
         MenuNode n = new MenuNode();
-
-        n.setId(Integer.parseInt(getRequest().getParameter("id")));
-        n.setDescription(getRequest().getParameter("description"));
-        n.setParentId(Integer.parseInt(getRequest().getParameter("parent")));
+        
+        n.setId(Integer.parseInt(parId));
+        n.setDescription(parDescription);
+        n.setParentId(Integer.parseInt(parParentId));
         //-- disable recursive join
         if ((n.getId() != 0) && (n.getId() == n.getParentId())) {
             n.setParentId(0);
@@ -43,5 +55,23 @@ public class RedactionArticleMenuSaveCmd extends Command {
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
+    }
+    
+    private boolean validateInput(String parId, String parDescription, String parParentId) {
+        boolean result = true;
+        
+        if (!Validator.validateInteger(parId, 0, Validator.maxIntAllowed)) {
+            result = false;
+        }
+        
+        if (!Validator.validateString(parDescription, 0, 50)) {
+            result = false;
+        }
+        
+        if (!Validator.validateInteger(parParentId, 0, Validator.maxIntAllowed)) {
+            result = false;
+        }
+        
+        return result;
     }
 }

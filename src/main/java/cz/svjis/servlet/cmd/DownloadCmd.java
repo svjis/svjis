@@ -29,7 +29,7 @@ public class DownloadCmd extends Command {
         String parId = getRequest().getParameter("id");
         
         if (!validateInput(parId)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/BadPage.jsp");
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
             rd.forward(getRequest(), getResponse());
             return;
         }

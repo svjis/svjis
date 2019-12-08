@@ -12,6 +12,7 @@ import cz.svjis.bean.Role;
 import cz.svjis.bean.RoleDAO;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
+import cz.svjis.validator.Validator;
 import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 
@@ -27,23 +28,42 @@ public class RoleEditCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        String parId = getRequest().getParameter("id");
+        
+        if (!validateInput(parId)) {
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
+            rd.forward(getRequest(), getResponse());
+            return;
+        }
+        
         CompanyDAO compDao = new CompanyDAO(getCnn());
         RoleDAO roleDao = new RoleDAO(getCnn());
 
         Company currCompany = compDao.getCompany(getCompany().getId());
         getRequest().setAttribute("currCompany", currCompany);
         Role role = null;
-        int id = Integer.valueOf(getRequest().getParameter("id"));
+        int id = Integer.valueOf(parId);
         if (id == 0) {
             role = new Role();
             role.setCompanyId(getCompany().getId());
         } else {
-            role = roleDao.getRole(getCompany().getId(), Integer.valueOf(getRequest().getParameter("id")));
+            role = roleDao.getRole(getCompany().getId(), Integer.valueOf(parId));
         }
         getRequest().setAttribute("role", role);
         ArrayList<Permission> permissionList = roleDao.getPermissionList();
         getRequest().setAttribute("permissionList", permissionList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_roleDetail.jsp");
         rd.forward(getRequest(), getResponse());
+    }
+    
+    private boolean validateInput(String parId) {
+        boolean result = true;
+        
+        if (!Validator.validateInteger(parId, 0, Validator.maxIntAllowed)) {
+            result = false;
+        }
+
+        return result;
     }
 }

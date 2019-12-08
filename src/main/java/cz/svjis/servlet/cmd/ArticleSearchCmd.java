@@ -36,10 +36,10 @@ public class ArticleSearchCmd extends Command {
         
         String parSection = getRequest().getParameter("section");
         String parPageNo = getRequest().getParameter("pageNo");
-        String parSearch = getRequest().getParameter("search");
+        String parSearch = Validator.fixTextInput(getRequest().getParameter("search"), false);
         
         if (!validateInput(parSection, parPageNo, parSearch)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/BadPage.jsp");
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
             rd.forward(getRequest(), getResponse());
             return;
         }

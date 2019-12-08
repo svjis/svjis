@@ -29,10 +29,10 @@ public class LostPasswordSubmitCmd extends Command {
     @Override
     public void execute() throws Exception {
         
-        String email = getRequest().getParameter("email");
+        String email = Validator.fixTextInput(getRequest().getParameter("email"), false);
         
         if (!validateInput(email)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/BadPage.jsp");
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
             rd.forward(getRequest(), getResponse());
             return;
         }

@@ -31,10 +31,10 @@ public class ArticleInsertCommentCmd extends Command {
     public void execute() throws Exception {
         
         String parId = getRequest().getParameter("id");
-        String parBody = getRequest().getParameter("body");
+        String parBody = Validator.fixTextInput(getRequest().getParameter("body"), false);
         
         if (!validateInput(parId, parBody)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/BadPage.jsp");
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
             rd.forward(getRequest(), getResponse());
             return;
         }

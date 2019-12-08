@@ -38,7 +38,7 @@ public class ArticleListCmd extends Command {
         String parPageNo = getRequest().getParameter("pageNo");
         
         if (!validateInput(parSection, parPageNo)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/BadPage.jsp");
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
             rd.forward(getRequest(), getResponse());
             return;
         }

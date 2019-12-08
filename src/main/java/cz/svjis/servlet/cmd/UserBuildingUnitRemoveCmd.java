@@ -8,6 +8,7 @@ package cz.svjis.servlet.cmd;
 import cz.svjis.bean.BuildingDAO;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
+import cz.svjis.validator.Validator;
 import javax.servlet.RequestDispatcher;
 
 /**
@@ -22,14 +23,38 @@ public class UserBuildingUnitRemoveCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        String parUnitId = getRequest().getParameter("unitId");
+        String parUserId = getRequest().getParameter("userId");
+        
+        if (!validateInput(parUnitId, parUserId)) {
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
+            rd.forward(getRequest(), getResponse());
+            return;
+        }
+        
         BuildingDAO buildingDao = new BuildingDAO(getCnn());
 
         buildingDao.deleteUserHasBuildingUnitConnection(
-                Integer.valueOf(getRequest().getParameter("userId")),
-                Integer.valueOf(getRequest().getParameter("unitId")));
-        String url = "Dispatcher?page=userBuildingUnits&id=" + getRequest().getParameter("userId");
+                Integer.valueOf(parUserId),
+                Integer.valueOf(parUnitId));
+        String url = "Dispatcher?page=userBuildingUnits&id=" + parUserId;
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
+    }
+    
+    private boolean validateInput(String parUnitId, String parUserId) {
+        boolean result = true;
+        
+        if (!Validator.validateInteger(parUnitId, 0, Validator.maxIntAllowed)) {
+            result = false;
+        }
+        
+        if (!Validator.validateInteger(parUserId, 0, Validator.maxIntAllowed)) {
+            result = false;
+        }
+
+        return result;
     }
 }

@@ -32,7 +32,7 @@ public class ArticleDetailCmd extends Command {
         String parSearch = getRequest().getParameter("search");
         
         if (!validateInput(parId, parSearch)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/BadPage.jsp");
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
             rd.forward(getRequest(), getResponse());
             return;
         }

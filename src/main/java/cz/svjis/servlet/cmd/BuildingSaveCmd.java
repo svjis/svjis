@@ -9,6 +9,7 @@ import cz.svjis.bean.Building;
 import cz.svjis.bean.BuildingDAO;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
+import cz.svjis.validator.Validator;
 import javax.servlet.RequestDispatcher;
 
 /**
@@ -23,17 +24,51 @@ public class BuildingSaveCmd extends Command {
 
     @Override
     public void execute() throws Exception {
-        BuildingDAO buildingDao = new BuildingDAO(getCnn());
 
+        String parAddress = Validator.fixTextInput(getRequest().getParameter("address"), false);
+        String parCity = Validator.fixTextInput(getRequest().getParameter("city"), false);
+        String parPostCode = Validator.fixTextInput(getRequest().getParameter("postCode"), false);
+        String parRegNo = Validator.fixTextInput(getRequest().getParameter("registrationNo"), false);
+        
+        if (!validateInput(parAddress, parCity, parPostCode, parRegNo)) {
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
+            rd.forward(getRequest(), getResponse());
+            return;
+        }
+        
+        BuildingDAO buildingDao = new BuildingDAO(getCnn());
+                
         Building b = buildingDao.getBuilding(getCompany().getId());
-        b.setAddress(getRequest().getParameter("address"));
-        b.setCity(getRequest().getParameter("city"));
-        b.setPostCode(getRequest().getParameter("postCode"));
-        b.setRegistrationNo(getRequest().getParameter("registrationNo"));
+        b.setAddress(parAddress);
+        b.setCity(parCity);
+        b.setPostCode(parPostCode);
+        b.setRegistrationNo(parRegNo);
         buildingDao.modifyBuilding(b);
         String url = "Dispatcher?page=buildingDetail";
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
+    }
+    
+    private boolean validateInput(String parAddress, String parCity, String parPostCode, String parRegNo) {
+        boolean result = true;
+        
+        if (!Validator.validateString(parAddress, 0, 50)) {
+            result = false;
+        }
+        
+        if (!Validator.validateString(parCity, 0, 50)) {
+            result = false;
+        }
+        
+        if (!Validator.validateString(parPostCode, 0, 10)) {
+            result = false;
+        }
+        
+        if (!Validator.validateString(parRegNo, 0, 20)) {
+            result = false;
+        }
+        
+        return result;
     }
 }

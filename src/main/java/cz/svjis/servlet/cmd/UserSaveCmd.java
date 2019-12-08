@@ -15,6 +15,7 @@ import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
+import cz.svjis.validator.Validator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -32,28 +33,50 @@ public class UserSaveCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        String parId = getRequest().getParameter("id");
+        String parSalutation = Validator.fixTextInput(getRequest().getParameter("salutation"), false);
+        String parFirstName = Validator.fixTextInput(getRequest().getParameter("firstName"), false);
+        String parLastName = Validator.fixTextInput(getRequest().getParameter("lastName"), false);
+        String parLangId = getRequest().getParameter("language");
+        String parAddress = Validator.fixTextInput(getRequest().getParameter("address"), false);
+        String parCity = Validator.fixTextInput(getRequest().getParameter("city"), false);
+        String parPostCode = Validator.fixTextInput(getRequest().getParameter("postCode"), false);
+        String parCountry = Validator.fixTextInput(getRequest().getParameter("country"), false);
+        String parFixedPhone = Validator.fixTextInput(getRequest().getParameter("fixedPhone"), false);
+        String parCellPhone = Validator.fixTextInput(getRequest().getParameter("cellPhone"), false);
+        String parEMail = Validator.fixTextInput(getRequest().getParameter("eMail"), false);
+        String parLogin = Validator.fixTextInput(getRequest().getParameter("login"), false);
+        String parPassword = Validator.fixTextInput(getRequest().getParameter("password"), true);
+        
+        if (!validateInput(parId, parSalutation, parFirstName, parLastName, parLangId, parAddress, parCity, parPostCode, parCountry, parFixedPhone, parCellPhone, parEMail, parLogin, parPassword)) {
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
+            rd.forward(getRequest(), getResponse());
+            return;
+        }
+        
         CompanyDAO compDao = new CompanyDAO(getCnn());
         RoleDAO roleDao = new RoleDAO(getCnn());
         UserDAO userDao = new UserDAO(getCnn());
         LanguageDAO languageDao = new LanguageDAO(getCnn());
 
         User u = new User();
-        u.setId(Integer.valueOf(getRequest().getParameter("id")));
+        u.setId(Integer.valueOf(parId));
         u.setCompanyId(getCompany().getId());
-        u.setSalutation(getRequest().getParameter("salutation"));
-        u.setFirstName(getRequest().getParameter("firstName"));
-        u.setLastName(getRequest().getParameter("lastName"));
-        u.setLanguageId(Integer.valueOf(getRequest().getParameter("language")));
-        u.setAddress(getRequest().getParameter("address"));
-        u.setCity(getRequest().getParameter("city"));
-        u.setPostCode(getRequest().getParameter("postCode"));
-        u.setCountry(getRequest().getParameter("country"));
-        u.setFixedPhone(getRequest().getParameter("fixedPhone"));
-        u.setCellPhone(getRequest().getParameter("cellPhone"));
-        u.seteMail(getRequest().getParameter("eMail"));
+        u.setSalutation(parSalutation);
+        u.setFirstName(parFirstName);
+        u.setLastName(parLastName);
+        u.setLanguageId(Integer.valueOf(parLangId));
+        u.setAddress(parAddress);
+        u.setCity(parCity);
+        u.setPostCode(parPostCode);
+        u.setCountry(parCountry);
+        u.setFixedPhone(parFixedPhone);
+        u.setCellPhone(parCellPhone);
+        u.seteMail(parEMail);
         u.setShowInPhoneList(getRequest().getParameter("phoneList") != null);
-        u.setLogin(getRequest().getParameter("login"));
-        u.setPassword(getRequest().getParameter("password"));
+        u.setLogin(parLogin);
+        u.setPassword(parPassword);
         u.setEnabled(getRequest().getParameter("enabled") != null);
         HashMap uRoles = new HashMap();
         ArrayList<Role> roles = roleDao.getRoleList(getCompany().getId());
@@ -93,5 +116,67 @@ public class UserSaveCmd extends Command {
         getRequest().setAttribute("message", message);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_userDetail.jsp");
         rd.forward(getRequest(), getResponse());
+    }
+    
+    private boolean validateInput(String parId, String parSalutation, String parFirstName, String parLastName, String parLangId, String parAddress, String parCity, String parPostCode, String parCountry, String parFixedPhone, String parCellPhone, String parEMail, String parLogin, String parPassword) {
+        boolean result = true;
+        
+        if (!Validator.validateInteger(parId, 0, Validator.maxIntAllowed)) {
+            result = false;
+        }
+        
+        if (!Validator.validateString(parSalutation, 0, 30)) {
+            result = false;
+        }
+        
+        if (!Validator.validateString(parFirstName, 0, 30)) {
+            result = false;
+        }
+        
+        if (!Validator.validateString(parLastName, 0, 30)) {
+            result = false;
+        }
+        
+        if (!Validator.validateInteger(parLangId, 0, Validator.maxIntAllowed)) {
+            result = false;
+        }
+        
+        if (!Validator.validateString(parAddress, 0, 50)) {
+            result = false;
+        }
+        
+        if (!Validator.validateString(parCity, 0, 50)) {
+            result = false;
+        }
+        
+        if (!Validator.validateString(parPostCode, 0, 10)) {
+            result = false;
+        }
+        
+        if (!Validator.validateString(parCountry, 0, 50)) {
+            result = false;
+        }
+        
+        if (!Validator.validateString(parFixedPhone, 0, 30)) {
+            result = false;
+        }
+        
+        if (!Validator.validateString(parCellPhone, 0, 30)) {
+            result = false;
+        }
+        
+        if (!Validator.validateString(parEMail, 0, 50)) {
+            result = false;
+        }
+        
+        if (!Validator.validateString(parLogin, 0, 50)) {
+            result = false;
+        }
+        
+        if (!Validator.validateString(parPassword, 0, 20)) {
+            result = false;
+        }
+
+        return result;
     }
 }
