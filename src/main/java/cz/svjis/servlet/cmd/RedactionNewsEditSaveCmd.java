@@ -80,7 +80,7 @@ public class RedactionNewsEditSaveCmd extends Command {
             result = false;
         }
         
-        if (!Validator.validateString(parBody, 0, 100000)) {
+        if (!Validator.validateString(parBody, 0, Validator.maxStringLenAllowed)) {
             result = false;
         }
 

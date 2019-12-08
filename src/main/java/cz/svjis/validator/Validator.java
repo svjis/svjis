@@ -12,6 +12,7 @@ package cz.svjis.validator;
 public class Validator {
     
     public static final int maxIntAllowed = 10000000;
+    public static final int maxStringLenAllowed = 1000000;
     
     public static boolean validateInteger(String s, int minInt, int maxInt) {
         int i;

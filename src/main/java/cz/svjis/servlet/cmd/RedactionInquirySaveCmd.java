@@ -91,7 +91,7 @@ public class RedactionInquirySaveCmd extends Command {
             result = false;
         }
         
-        if (!Validator.validateString(parDescription, 0, 100000)) {
+        if (!Validator.validateString(parDescription, 0, Validator.maxStringLenAllowed)) {
             result = false;
         }
         

@@ -15,6 +15,7 @@ import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
+import cz.svjis.validator.Validator;
 import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 
@@ -30,6 +31,15 @@ public class UserEditCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        String parId = getRequest().getParameter("id");
+        
+        if (!validateInput(parId)) {
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
+            rd.forward(getRequest(), getResponse());
+            return;
+        }
+        
         CompanyDAO compDao = new CompanyDAO(getCnn());
         RoleDAO roleDao = new RoleDAO(getCnn());
         UserDAO userDao = new UserDAO(getCnn());
@@ -38,7 +48,7 @@ public class UserEditCmd extends Command {
         Company currCompany = compDao.getCompany(getCompany().getId());
         getRequest().setAttribute("currCompany", currCompany);
         User cUser = null;
-        int id = Integer.valueOf(getRequest().getParameter("id"));
+        int id = Integer.valueOf(parId);
         if (id == 0) {
             cUser = new User();
             cUser.setCompanyId(getCompany().getId());
@@ -53,5 +63,15 @@ public class UserEditCmd extends Command {
         getRequest().setAttribute("message", "");
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_userDetail.jsp");
         rd.forward(getRequest(), getResponse());
+    }
+    
+    private boolean validateInput(String parId) {
+        boolean result = true;
+        
+        if (!Validator.validateInteger(parId, 0, Validator.maxIntAllowed)) {
+            result = false;
+        }
+
+        return result;
     }
 }

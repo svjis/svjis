@@ -10,6 +10,7 @@ import cz.svjis.bean.Role;
 import cz.svjis.bean.RoleDAO;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
+import cz.svjis.validator.Validator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -27,12 +28,22 @@ public class RoleSaveCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        String parId = getRequest().getParameter("id");
+        String parDescription = Validator.fixTextInput(getRequest().getParameter("description"), false);
+        
+        if (!validateInput(parId, parDescription)) {
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
+            rd.forward(getRequest(), getResponse());
+            return;
+        }
+        
         RoleDAO roleDao = new RoleDAO(getCnn());
 
         Role role = new Role();
-        role.setId(Integer.valueOf(getRequest().getParameter("id")));
+        role.setId(Integer.valueOf(parId));
         role.setCompanyId(getCompany().getId());
-        role.setDescription(getRequest().getParameter("description"));
+        role.setDescription(parDescription);
         HashMap props = new HashMap();
         ArrayList<Permission> perms = roleDao.getPermissionList();
         Iterator<Permission> permsI = perms.iterator();
@@ -52,5 +63,19 @@ public class RoleSaveCmd extends Command {
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
+    }
+    
+    private boolean validateInput(String parId, String parDescription) {
+        boolean result = true;
+        
+        if (!Validator.validateInteger(parId, 0, Validator.maxIntAllowed)) {
+            result = false;
+        }
+        
+        if (!Validator.validateString(parDescription, 0, 50)) {
+            result = false;
+        }
+
+        return result;
     }
 }
