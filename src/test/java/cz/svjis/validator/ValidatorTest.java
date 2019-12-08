@@ -5,6 +5,7 @@
  */
 package cz.svjis.validator;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.DisplayName;
@@ -38,5 +39,14 @@ public class ValidatorTest {
         assertTrue(Validator.validateString("1" ,1, 5), "String < 1");
         assertTrue(Validator.validateString("12345" ,1, 5), "String < 5");
         assertFalse(Validator.validateString("select * from user;" ,1, 100), "SQL injection");
+    }
+    
+    @Test
+    @DisplayName("fixTextInput")
+    public void testFixTextInput() {
+        
+        assertEquals("<b>Ahoj</b>", Validator.fixTextInput("<b>Ahoj</b>", true), "HTML enabled");
+        assertEquals("&lt;b&gt;Ahoj&lt;/b&gt;", Validator.fixTextInput("<b>Ahoj</b>", false), "HTML disabled");
+        assertEquals(null, Validator.fixTextInput(null, false), "null pointer");
     }
 }

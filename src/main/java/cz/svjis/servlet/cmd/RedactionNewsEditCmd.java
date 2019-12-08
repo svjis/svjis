@@ -11,6 +11,7 @@ import cz.svjis.bean.MiniNews;
 import cz.svjis.bean.MiniNewsDAO;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
+import cz.svjis.validator.Validator;
 import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 
@@ -26,10 +27,19 @@ public class RedactionNewsEditCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+
+        String parId = getRequest().getParameter("id");
+        
+        if (!validateInput(parId)) {
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
+            rd.forward(getRequest(), getResponse());
+            return;
+        }
+        
         MiniNewsDAO newsDao = new MiniNewsDAO(getCnn());
         LanguageDAO languageDao = new LanguageDAO(getCnn());
 
-        int id = Integer.parseInt(getRequest().getParameter("id"));
+        int id = Integer.parseInt(parId);
         MiniNews miniNews = new MiniNews();
         if (id != 0) {
             miniNews = newsDao.getMiniNews(getUser(), id);
@@ -39,5 +49,15 @@ public class RedactionNewsEditCmd extends Command {
         ArrayList<Language> languageList = languageDao.getLanguageList();
         getRequest().setAttribute("languageList", languageList);
         rd.forward(getRequest(), getResponse());
+    }
+    
+    private boolean validateInput(String parId) {
+        boolean result = true;
+        
+        if (!Validator.validateInteger(parId, 0, Validator.maxIntAllowed)) {
+            result = false;
+        }
+
+        return result;
     }
 }

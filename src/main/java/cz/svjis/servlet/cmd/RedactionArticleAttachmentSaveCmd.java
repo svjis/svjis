@@ -10,6 +10,7 @@ import cz.svjis.bean.ArticleDAO;
 import cz.svjis.bean.LogDAO;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
+import cz.svjis.validator.Validator;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
@@ -32,10 +33,18 @@ public class RedactionArticleAttachmentSaveCmd extends Command {
     @Override
     public void execute() throws Exception {
 
+        String parArticleId = getRequest().getParameter("articleId");
+        
+        if (!validateInput(parArticleId)) {
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
+            rd.forward(getRequest(), getResponse());
+            return;
+        }
+        
         ArticleDAO articleDao = new ArticleDAO(getCnn());
         LogDAO logDao = new LogDAO(getCnn());
-
-        int articleId = Integer.parseInt(getRequest().getParameter("articleId"));
+        
+        int articleId = Integer.parseInt(parArticleId);
         FileItemFactory factory = new DiskFileItemFactory();
         ServletFileUpload upload = new ServletFileUpload(factory);
         //upload.setSizeMax(yourMaxRequestSize);
@@ -66,5 +75,15 @@ public class RedactionArticleAttachmentSaveCmd extends Command {
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
         logDao.log(getUser().getId(), LogDAO.operationTypeInsertAttachment, articleId, getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
+    }
+    
+    private boolean validateInput(String parArticleId) {
+        boolean result = true;
+        
+        if (!Validator.validateInteger(parArticleId, 0, Validator.maxIntAllowed)) {
+            result = false;
+        }
+        
+        return result;
     }
 }

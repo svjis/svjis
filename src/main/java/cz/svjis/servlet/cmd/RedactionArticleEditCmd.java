@@ -15,6 +15,7 @@ import cz.svjis.bean.Role;
 import cz.svjis.bean.RoleDAO;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
+import cz.svjis.validator.Validator;
 import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 
@@ -31,15 +32,23 @@ public class RedactionArticleEditCmd extends Command {
     @Override
     public void execute() throws Exception {
 
+        String parArticleId = getRequest().getParameter("id");
+        
+        if (!validateInput(parArticleId)) {
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
+            rd.forward(getRequest(), getResponse());
+            return;
+        }
+        
         MenuDAO menuDao = new MenuDAO(getCnn());
         ArticleDAO articleDao = new ArticleDAO(getCnn());
         RoleDAO roleDao = new RoleDAO(getCnn());
         LanguageDAO languageDao = new LanguageDAO(getCnn());
-
+        
         int articleId = 0;
         
-        if (getRequest().getParameter("id") != null) {
-            articleId = Integer.valueOf(getRequest().getParameter("id"));
+        if (parArticleId != null) {
+            articleId = Integer.valueOf(parArticleId);
         }
         
         Article article = null;
@@ -61,5 +70,16 @@ public class RedactionArticleEditCmd extends Command {
 
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Redaction_ArticleEdit.jsp");
         rd.forward(getRequest(), getResponse());
+    }
+    
+    private boolean validateInput(String parArticleId) {
+        boolean result = true;
+        
+        //-- parArticleId can be null
+        if ((parArticleId != null) && !Validator.validateInteger(parArticleId, 0, Validator.maxIntAllowed)) {
+            result = false;
+        }
+        
+        return result;
     }
 }

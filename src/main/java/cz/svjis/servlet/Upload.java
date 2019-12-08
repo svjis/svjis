@@ -66,7 +66,7 @@ public class Upload extends HttpServlet {
             String parPage = request.getParameter("page");
             
             if (!validateInput(parPage)) {
-                RequestDispatcher rd = request.getRequestDispatcher("/BadPage.jsp");
+                RequestDispatcher rd = request.getRequestDispatcher("/InputValidationError.jsp");
                 rd.forward(request, response);
                 return;
             }

@@ -15,6 +15,7 @@ import cz.svjis.bean.RoleDAO;
 import cz.svjis.bean.SliderImpl;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
+import cz.svjis.validator.Validator;
 import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 
@@ -30,23 +31,34 @@ public class RedactionArticleListCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+
+        String parSection = getRequest().getParameter("section");
+        String parPageNo = getRequest().getParameter("pageNo");
+        String parRoleId = getRequest().getParameter("roleId");
+        
+        if (!validateInput(parSection, parPageNo, parRoleId)) {
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
+            rd.forward(getRequest(), getResponse());
+            return;
+        }
+        
         MenuDAO menuDao = new MenuDAO(getCnn());
         ArticleDAO articleDao = new ArticleDAO(getCnn());
         RoleDAO roleDao = new RoleDAO(getCnn());
 
         Menu menu = menuDao.getMenu(getCompany().getId());
         int section = 0;
-        if (getRequest().getParameter("section") != null) {
-            section = Integer.valueOf(getRequest().getParameter("section"));
+        if (parSection != null) {
+            section = Integer.valueOf(parSection);
         }
         menu.setActiveSection(section);
         getRequest().setAttribute("menu", menu);
 
         int pageNo = 1;
-        if (getRequest().getParameter("pageNo") != null) {
-            pageNo = Integer.valueOf(getRequest().getParameter("pageNo"));
+        if (parPageNo != null) {
+            pageNo = Integer.valueOf(parPageNo);
         }
-        int roleId = Integer.valueOf((getRequest().getParameter("roleId") == null) ? "0" : getRequest().getParameter("roleId"));
+        int roleId = Integer.valueOf((parRoleId == null) ? "0" : parRoleId);
         SliderImpl sl = new SliderImpl();
         sl.setSliderWide(10);
         sl.setCurrentPage(pageNo);
@@ -79,5 +91,26 @@ public class RedactionArticleListCmd extends Command {
 
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Redaction_ArticleList.jsp");
         rd.forward(getRequest(), getResponse());
+    }
+    
+    private boolean validateInput(String parSection, String parPageNo, String parRoleId) {
+        boolean result = true;
+        
+        //-- parArticleId can be null
+        if ((parSection != null) && !Validator.validateInteger(parSection, 0, Validator.maxIntAllowed)) {
+            result = false;
+        }
+        
+        //-- parPageNo can be null
+        if ((parPageNo != null) && !Validator.validateInteger(parPageNo, 0, Validator.maxIntAllowed)) {
+            result = false;
+        }
+        
+        //-- parRoleId can be null
+        if ((parRoleId != null) && !Validator.validateInteger(parRoleId, 0, Validator.maxIntAllowed)) {
+            result = false;
+        }
+        
+        return result;
     }
 }

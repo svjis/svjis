@@ -13,6 +13,7 @@ import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
+import cz.svjis.validator.Validator;
 import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 
@@ -28,6 +29,15 @@ public class UserListCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        String parRoleId = getRequest().getParameter("roleId");
+        
+        if (!validateInput(parRoleId)) {
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
+            rd.forward(getRequest(), getResponse());
+            return;
+        }
+        
         CompanyDAO compDao = new CompanyDAO(getCnn());
         RoleDAO roleDao = new RoleDAO(getCnn());
         UserDAO userDao = new UserDAO(getCnn());
@@ -36,10 +46,21 @@ public class UserListCmd extends Command {
         getRequest().setAttribute("currCompany", currCompany);
         ArrayList<Role> roleList = roleDao.getRoleList(getCompany().getId());
         getRequest().setAttribute("roleList", roleList);
-        int roleId = Integer.valueOf((getRequest().getParameter("roleId") == null) ? "0" : getRequest().getParameter("roleId"));
+        int roleId = Integer.valueOf((parRoleId == null) ? "0" : parRoleId);
         ArrayList<User> userList = userDao.getUserList(getCompany().getId(), false, roleId, false);
         getRequest().setAttribute("userList", userList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_userList.jsp");
         rd.forward(getRequest(), getResponse());
+    }
+    
+    private boolean validateInput(String parRoleId) {
+        boolean result = true;
+        
+        //-- parRoleId can be null
+        if ((parRoleId != null) && !Validator.validateInteger(parRoleId, 0, Validator.maxIntAllowed)) {
+            result = false;
+        }
+
+        return result;
     }
 }

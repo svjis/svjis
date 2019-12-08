@@ -68,7 +68,7 @@ public class Dispatcher extends HttpServlet {
             String parPage = request.getParameter("page");
             
             if (!validateInput(parSetCompany, parPage)) {
-                RequestDispatcher rd = request.getRequestDispatcher("/BadPage.jsp");
+                RequestDispatcher rd = request.getRequestDispatcher("/InputValidationError.jsp");
                 rd.forward(request, response);
                 return;
             }

@@ -12,6 +12,7 @@ package cz.svjis.validator;
 public class Validator {
     
     public static final int maxIntAllowed = 10000000;
+    public static final int maxStringLenAllowed = 1000000;
     
     public static boolean validateInteger(String s, int minInt, int maxInt) {
         int i;
@@ -64,5 +65,20 @@ public class Validator {
         }
         
         return true;
+    }
+    
+    public static String fixTextInput(String input, boolean enableHtml) {
+        String result = input;
+        
+        if (result == null) {
+            return null;
+        }
+        
+        if (!enableHtml) {
+            result = result.replaceAll("<", "&lt;");
+            result = result.replaceAll(">", "&gt;");
+        }
+        
+        return result;
     }
 }
