@@ -92,7 +92,7 @@ public class UserSaveCmd extends Command {
         if (!userDao.testLoginValidity(u.getLogin())) {
             message += getLanguage().getText("Login is not valid.") + " (" + u.getLogin() + ")<br>";
         }
-        if (!userDao.testLoginDuplicity(u.getLogin(), u.getId())) {
+        if (!userDao.testLoginDuplicity(u.getLogin(), u.getId(), u.getCompanyId())) {
             message += getLanguage().getText("Login already exists.") + " (" + u.getLogin() + ")<br>";
         }
         //if (!userDao.testPasswordValidity(u.getPassword())) {

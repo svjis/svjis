@@ -539,9 +539,9 @@ public class UserDAO {
         cnn.setAutoCommit(true);
     }
     
-    public boolean testLoginDuplicity(String login, int userId) throws SQLException {
+    public boolean testLoginDuplicity(String login, int userId, int companyId) throws SQLException {
         boolean result = true;
-        String select = "SELECT a.ID FROM \"USER\" a WHERE (upper(a.LOGIN) = upper('" + login + "')) and (a.ID <> " + userId + ")";
+        String select = "SELECT a.ID FROM \"USER\" a WHERE (upper(a.LOGIN) = upper('" + login + "')) and (a.ID <> " + userId + ") and (a.COMPANY_ID = " + companyId + ")";
         Statement st = cnn.createStatement();
         ResultSet rs = st.executeQuery(select);
         if (rs.next()) {
