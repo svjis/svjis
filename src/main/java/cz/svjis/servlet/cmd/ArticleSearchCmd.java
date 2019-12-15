@@ -73,7 +73,9 @@ public class ArticleSearchCmd extends Command {
                 Integer.valueOf(getSetup().getProperty("article.page.size")),
                 true, false);
         getRequest().setAttribute("articleList", articleList);
-        ArrayList<Article> articleTopList = articleDao.getArticleTopList(getUser(), Integer.valueOf(getSetup().getProperty("article.top.size")));
+        ArrayList<Article> articleTopList = articleDao.getArticleTopList(getUser(), 
+                Integer.valueOf(getSetup().getProperty("article.top.size")),
+                (getSetup().getProperty("article.top.months") != null) ? Integer.valueOf(getSetup().getProperty("article.top.months")) : 12);
         getRequest().setAttribute("articleTopList", articleTopList);
         ArticleListInfo articleListInfo = new ArticleListInfo();
         articleListInfo.setNumOfArticles(articleDao.getNumOfArticlesFromSearch(parSearch, getUser(),
