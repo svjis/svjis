@@ -34,11 +34,11 @@ public class UserDAO {
      * @param companyId ID of company
      * @param inPhoneListOnly Gives user list from phonel ist only
      * @param roleId Gives users owning specified role (0 = give all users)
-     * @param enabledUsersOnly Gives only enabled users
+     * @param enabled Gives enabled or disabled users
      * @return List of users
      * @throws SQLException 
      */
-    public ArrayList<User> getUserList(int companyId, boolean inPhoneListOnly, int roleId, boolean enabledUsersOnly) throws SQLException {
+    public ArrayList<User> getUserList(int companyId, boolean inPhoneListOnly, int roleId, boolean enabled) throws SQLException {
         ArrayList<User> result = new ArrayList<User>();
         String filter = "";
         
@@ -50,10 +50,8 @@ public class UserDAO {
             filter += "AND (b.ROLE_ID IS NOT NULL) ";
         }
         
-        if (enabledUsersOnly) {
-            filter += "AND (a.ENABLED = 1) ";
-        }
-        
+        filter += "AND (a.ENABLED = " + ((enabled) ? "1" : "0") + ") ";
+
         String select = "SELECT "
                 + "a.ID, "
                 + "a.COMPANY_ID, "

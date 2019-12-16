@@ -42,12 +42,14 @@ public class UserListCmd extends Command {
         RoleDAO roleDao = new RoleDAO(getCnn());
         UserDAO userDao = new UserDAO(getCnn());
 
+        boolean disabledUsers = (getRequest().getParameter("disabledUsers") == null) ? false : true;
+        getRequest().setAttribute("disabledUsers", new cz.svjis.bean.Boolean(disabledUsers));
         Company currCompany = compDao.getCompany(getCompany().getId());
         getRequest().setAttribute("currCompany", currCompany);
         ArrayList<Role> roleList = roleDao.getRoleList(getCompany().getId());
         getRequest().setAttribute("roleList", roleList);
         int roleId = Integer.valueOf((parRoleId == null) ? "0" : parRoleId);
-        ArrayList<User> userList = userDao.getUserList(getCompany().getId(), false, roleId, false);
+        ArrayList<User> userList = userDao.getUserList(getCompany().getId(), false, roleId, !disabledUsers);
         getRequest().setAttribute("userList", userList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_userList.jsp");
         rd.forward(getRequest(), getResponse());
