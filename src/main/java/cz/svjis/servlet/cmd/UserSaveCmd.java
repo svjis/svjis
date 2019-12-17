@@ -103,10 +103,10 @@ public class UserSaveCmd extends Command {
         //    message += language.getText("Password is too short. Minimum is 6 characters.") + "<br>";
         //}
         if (sendCredentials && (u.getPassword() == null || u.getPassword().equals(""))) {
-            message += getLanguage().getText("Password is missing") + "<br>";
+            message += getLanguage().getText("Password is missing.") + "<br>";
         }
         if (sendCredentials && (u.geteMail() == null || u.geteMail().equals(""))) {
-            message += getLanguage().getText("E-Mail is missing") + "<br>";
+            message += getLanguage().getText("E-Mail is missing.") + "<br>";
         }
         if (message.equals("")) {
             if (u.getId() == 0) {
@@ -114,7 +114,7 @@ public class UserSaveCmd extends Command {
             } else {
                 userDao.modifyUser(u);
             }
-            message = getLanguage().getText("User has been saved.");
+            message = getLanguage().getText("User has been saved.") + "<br>";
 
             if (sendCredentials) {
                 String logins = "Login: " + u.getLogin() + " " + "Password: " + u.getPassword() + "<br>";
@@ -127,7 +127,7 @@ public class UserSaveCmd extends Command {
                         getSetup().getProperty("mail.password"),
                         getSetup().getProperty("mail.sender"));
                 mailDao.sendInstantMail(u.geteMail(), getCompany().getName(), body);
-                message += getLanguage().getText("Credentials has been send by e-mail.");
+                message += getLanguage().getText("Credentials has been send by e-mail.") + "<br>";
             }
         }
         Company currCompany = compDao.getCompany(getCompany().getId());

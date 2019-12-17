@@ -1622,5 +1622,13 @@ INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Inquiry log', '
 INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Inquiry log', '2', 'Inquiry log');
 INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Option', '1', 'Volba');
 INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Option', '2', 'Option');
-INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Disabled users', '2', 'Zakázaní uživatelé');
+INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Disabled users', '1', 'Zakázaní uživatelé');
 INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Disabled users', '2', 'Disabled users');
+INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Password is missing.', '1', 'Heslo je nevyplněné.');
+INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Password is missing.', '2', 'Password is missing.');
+INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('E-Mail is missing.', '1', 'E-Mail je nevyplněný.');
+INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('E-Mail is missing.', '2', 'E-Mail is missing.');
+INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Credentials has been send by e-mail.', '1', 'Přihlášení bylo odeslané e-mailem.');
+INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Credentials has been send by e-mail.', '2', 'Credentials has been send by e-mail.');
+INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Send credentials by e-mail', '1', 'Odeslat přihlášení e-mailem');
+INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Send credentials by e-mail', '2', 'Send credentials by e-mail');
