@@ -9,6 +9,7 @@ import cz.svjis.bean.Company;
 import cz.svjis.bean.CompanyDAO;
 import cz.svjis.bean.Language;
 import cz.svjis.bean.LanguageDAO;
+import cz.svjis.bean.MailDAO;
 import cz.svjis.bean.Role;
 import cz.svjis.bean.RoleDAO;
 import cz.svjis.bean.User;
@@ -88,6 +89,9 @@ public class UserSaveCmd extends Command {
             }
         }
         u.setRoles(uRoles);
+
+        boolean sendCredentials = getRequest().getParameter("sendCredentials") != null;
+
         String message = "";
         if (!userDao.testLoginValidity(u.getLogin())) {
             message += getLanguage().getText("Login is not valid.") + " (" + u.getLogin() + ")<br>";
@@ -98,6 +102,12 @@ public class UserSaveCmd extends Command {
         //if (!userDao.testPasswordValidity(u.getPassword())) {
         //    message += language.getText("Password is too short. Minimum is 6 characters.") + "<br>";
         //}
+        if (sendCredentials && (u.getPassword() == null || u.getPassword().equals(""))) {
+            message += getLanguage().getText("Password is missing") + "<br>";
+        }
+        if (sendCredentials && (u.geteMail() == null || u.geteMail().equals(""))) {
+            message += getLanguage().getText("E-Mail is missing") + "<br>";
+        }
         if (message.equals("")) {
             if (u.getId() == 0) {
                 u.setId(userDao.insertUser(u));
@@ -105,6 +115,20 @@ public class UserSaveCmd extends Command {
                 userDao.modifyUser(u);
             }
             message = getLanguage().getText("User has been saved.");
+
+            if (sendCredentials) {
+                String logins = "Login: " + u.getLogin() + " " + "Password: " + u.getPassword() + "<br>";
+                String body = getSetup().getProperty("mail.template.lost.password");
+                body = String.format(body, logins);
+                MailDAO mailDao = new MailDAO(
+                        getCnn(),
+                        getSetup().getProperty("mail.smtp"),
+                        getSetup().getProperty("mail.login"),
+                        getSetup().getProperty("mail.password"),
+                        getSetup().getProperty("mail.sender"));
+                mailDao.sendInstantMail(u.geteMail(), getCompany().getName(), body);
+                message += getLanguage().getText("Credentials has been send by e-mail.");
+            }
         }
         Company currCompany = compDao.getCompany(getCompany().getId());
         getRequest().setAttribute("currCompany", currCompany);
@@ -113,6 +137,7 @@ public class UserSaveCmd extends Command {
         getRequest().setAttribute("languageList", languageList);
         ArrayList<Role> roleList = roleDao.getRoleList(getCompany().getId());
         getRequest().setAttribute("roleList", roleList);
+        getRequest().setAttribute("sendCredentials", new cz.svjis.bean.Boolean(sendCredentials));
         getRequest().setAttribute("message", message);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_userDetail.jsp");
         rd.forward(getRequest(), getResponse());
