@@ -14,6 +14,7 @@ import cz.svjis.bean.Role;
 import cz.svjis.bean.RoleDAO;
 import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
+import cz.svjis.common.RandomString;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -103,9 +104,9 @@ public class UserSaveCmd extends Command {
         //if (!userDao.testPasswordValidity(u.getPassword())) {
         //    errorMessage += language.getText("Password is too short. Minimum is 6 characters.") + "<br>";
         //}
-        if (sendCredentials && (u.getPassword() == null || u.getPassword().equals(""))) {
-            errorMessage += getLanguage().getText("Password is missing.") + "<br>";
-        }
+        //if (sendCredentials && (u.getPassword() == null || u.getPassword().equals(""))) {
+        //    errorMessage += getLanguage().getText("Password is missing.") + "<br>";
+        //}
         if (sendCredentials && (u.geteMail() == null || u.geteMail().equals(""))) {
             errorMessage += getLanguage().getText("E-Mail is missing.") + "<br>";
         }
@@ -118,6 +119,10 @@ public class UserSaveCmd extends Command {
             message = getLanguage().getText("User has been saved.") + "<br>";
 
             if (sendCredentials) {
+                if ((u.getPassword() == null || u.getPassword().equals(""))) {
+                    u.setPassword(RandomString.randomString(8));
+                    userDao.storeNewPassword(u.getCompanyId(), u.getLogin(), u.getPassword());
+                }
                 String logins = "Login: " + u.getLogin() + " " + "Password: " + u.getPassword() + "<br>";
                 String body = getSetup().getProperty("mail.template.lost.password");
                 body = String.format(body, logins);
