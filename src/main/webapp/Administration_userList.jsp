@@ -9,6 +9,7 @@
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="roleList" scope="request" class="java.util.ArrayList" />
 <jsp:useBean id="userList" scope="request" class="java.util.ArrayList" />
+<jsp:useBean id="disabledUsers" scope="request" class="cz.svjis.bean.Boolean" />
 
 <jsp:include page="_header.jsp" />
 <jsp:include page="_tray.jsp" />
@@ -27,7 +28,17 @@
                                 [<a href="Dispatcher?page=userEdit&id=0"><%=language.getText("Add new user") %></a>]&nbsp;
                                 [<a href="Upload?page=exportUserListToXls"><%=language.getText("Export to Excel") %></a>]&nbsp;
                             </td>
+
                             <td align="right">
+                                <%=language.getText("Disabled users") %>:&nbsp;
+                            </td>
+                            <td align="right">
+                                <form action="Dispatcher" method="post">
+                                    <input type="hidden" name="page" value="userList" />
+                                    <input type="checkbox" name="disabledUsers"  onchange='this.form.submit()' <%=(disabledUsers.isValue()) ? "checked" : "" %> />
+                                </form>
+                            </td>
+
                             <td align="right">
                                 <%=language.getText("Role filter") %>:&nbsp;
                             </td>
@@ -50,7 +61,7 @@
                                         %>
                                         <option value="<%=r.getId() %>" <%=sel %>><%=r.getDescription() %></option>
                                         <% } %>
-                                        </select>
+                                    </select>
                                 </form>
                             </td>
                         </tr>

@@ -12,7 +12,9 @@
 <jsp:useBean id="cUser" scope="request" class="cz.svjis.bean.User" />
 <jsp:useBean id="languageList" scope="request" class="java.util.ArrayList" />
 <jsp:useBean id="roleList" scope="request" class="java.util.ArrayList" />
+<jsp:useBean id="sendCredentials" scope="request" class="cz.svjis.bean.Boolean" />
 <jsp:useBean id="message" scope="request" class="java.lang.String" />
+<jsp:useBean id="errorMessage" scope="request" class="java.lang.String" />
 
 <jsp:include page="_header.jsp" />
 <jsp:include page="_tray.jsp" />
@@ -25,7 +27,8 @@
             <div id="content-main">
                 <div id="content-main-in">
                     <h1 class="page-title"><%=language.getText("User") %></h1>
-                    <strong><%=message %></strong>
+                    <strong class="message"><%=message %></strong>
+                    <strong class="error-message"><%=errorMessage %></strong>
                     <form action="Dispatcher" method="post">
                         <input type="hidden" name="page" value="userSave" />
                         <input type="hidden" name="id" value="<%=cUser.getId() %>" />
@@ -102,6 +105,10 @@
                             <p>
                                 <label id="common-label" for="common-input"><%=language.getText("Password") %></label>
                                 <input id="common-input" type="password" name="password" maxlength="20" size="30" value="<%=cUser.getPassword() %>" />
+                            </p>
+                            <p>
+                                <label id="common-label" for="common-input"><%=language.getText("Send credentials by e-mail") %></label>
+                                <input id="common-input" type="checkbox" name="sendCredentials" <%=(sendCredentials.isValue()) ? "checked" : "" %> />
                             </p>
                             <p>
                                 <label id="common-label" for="common-input"><%=language.getText("Enabled") %></label>

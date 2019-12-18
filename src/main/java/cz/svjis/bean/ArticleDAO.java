@@ -9,7 +9,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -24,15 +27,22 @@ public class ArticleDAO {
         this.cnn = cnn;
     }
     
-    public ArrayList<Article> getArticleTopList(User u, int top) throws SQLException {
+    public ArrayList<Article> getArticleTopList(User u, int top, int cnt_last_months) throws SQLException {
         ArrayList<Article> result = new ArrayList<Article>();
         
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date d = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(d);
+        c.add(Calendar.MONTH, -1 * cnt_last_months);
+        d = c.getTime();
+
         String select = "SELECT FIRST " + top + " " +
                         "    a.ID, " +
                         "    a.HEADER, " +
                         "    l.CNT " +
                         "FROM ARTICLE a " +
-                        "LEFT JOIN (SELECT l.ARTICLE_ID, count(*) as CNT FROM LOG l WHERE l.OPERATION_ID = 3 GROUP BY l.ARTICLE_ID) l " +
+                        "LEFT JOIN (SELECT l.ARTICLE_ID, count(*) as CNT FROM LOG l WHERE l.OPERATION_ID = 3 AND l.\"TIME\" > '" + sdf.format(d) + "' GROUP BY l.ARTICLE_ID) l " +
                         "    ON (l.ARTICLE_ID = a.ID) " +
                         "LEFT JOIN ARTICLE_IS_VISIBLE_TO_ROLE b " +
                         "    ON (b.ARTICLE_ID = a.ID) " +
