@@ -21,8 +21,8 @@ public class PersonalPasswordChangeCmd extends Command {
     
     @Override
     public void execute() throws Exception {
-        String message = "";
-        getRequest().setAttribute("message", message);
+        getRequest().setAttribute("message", "");
+        getRequest().setAttribute("errorMessage", "");
         RequestDispatcher rd = getRequest().getRequestDispatcher("/PersonalSettings_passwordChange.jsp");
         rd.forward(getRequest(), getResponse());
     }

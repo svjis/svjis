@@ -93,22 +93,23 @@ public class UserSaveCmd extends Command {
         boolean sendCredentials = getRequest().getParameter("sendCredentials") != null;
 
         String message = "";
+        String errorMessage = "";
         if (!userDao.testLoginValidity(u.getLogin())) {
-            message += getLanguage().getText("Login is not valid.") + " (" + u.getLogin() + ")<br>";
+            errorMessage += getLanguage().getText("Login is not valid.") + " (" + u.getLogin() + ")<br>";
         }
         if (!userDao.testLoginDuplicity(u.getLogin(), u.getId(), u.getCompanyId())) {
-            message += getLanguage().getText("Login already exists.") + " (" + u.getLogin() + ")<br>";
+            errorMessage += getLanguage().getText("Login already exists.") + " (" + u.getLogin() + ")<br>";
         }
         //if (!userDao.testPasswordValidity(u.getPassword())) {
-        //    message += language.getText("Password is too short. Minimum is 6 characters.") + "<br>";
+        //    errorMessage += language.getText("Password is too short. Minimum is 6 characters.") + "<br>";
         //}
         if (sendCredentials && (u.getPassword() == null || u.getPassword().equals(""))) {
-            message += getLanguage().getText("Password is missing.") + "<br>";
+            errorMessage += getLanguage().getText("Password is missing.") + "<br>";
         }
         if (sendCredentials && (u.geteMail() == null || u.geteMail().equals(""))) {
-            message += getLanguage().getText("E-Mail is missing.") + "<br>";
+            errorMessage += getLanguage().getText("E-Mail is missing.") + "<br>";
         }
-        if (message.equals("")) {
+        if (errorMessage.equals("")) {
             if (u.getId() == 0) {
                 u.setId(userDao.insertUser(u));
             } else {
@@ -139,6 +140,7 @@ public class UserSaveCmd extends Command {
         getRequest().setAttribute("roleList", roleList);
         getRequest().setAttribute("sendCredentials", new cz.svjis.bean.Boolean(sendCredentials));
         getRequest().setAttribute("message", message);
+        getRequest().setAttribute("errorMessage", errorMessage);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_userDetail.jsp");
         rd.forward(getRequest(), getResponse());
     }

@@ -8,6 +8,7 @@
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
 <jsp:useBean id="message" scope="request" class="java.lang.String" />
+<jsp:useBean id="errorMessage" scope="request" class="java.lang.String" />
 
 <jsp:include page="_header.jsp" />
 <jsp:include page="_tray.jsp" />
@@ -20,7 +21,8 @@
             <div id="content-main">
                 <div id="content-main-in">
                     <h1 class="page-title"><%=user.getSalutation() %> <%=user.getFirstName() %> <%=user.getLastName() %></h1>
-                    <strong><%=message %></strong>
+                    <strong class="message"><%=message %></strong>
+                    <strong class="error-message"><%=errorMessage %></strong>
                     <form action="Dispatcher" method="post">
                         <input type="hidden" name="page" value="psPasswordChangeSave" />
                         <fieldset>
