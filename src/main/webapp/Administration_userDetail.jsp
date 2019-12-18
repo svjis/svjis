@@ -14,6 +14,7 @@
 <jsp:useBean id="roleList" scope="request" class="java.util.ArrayList" />
 <jsp:useBean id="sendCredentials" scope="request" class="cz.svjis.bean.Boolean" />
 <jsp:useBean id="message" scope="request" class="java.lang.String" />
+<jsp:useBean id="errorMessage" scope="request" class="java.lang.String" />
 
 <jsp:include page="_header.jsp" />
 <jsp:include page="_tray.jsp" />
@@ -26,7 +27,8 @@
             <div id="content-main">
                 <div id="content-main-in">
                     <h1 class="page-title"><%=language.getText("User") %></h1>
-                    <strong><%=message %></strong>
+                    <strong class="message"><%=message %></strong>
+                    <strong class="error-message"><%=errorMessage %></strong>
                     <form action="Dispatcher" method="post">
                         <input type="hidden" name="page" value="userSave" />
                         <input type="hidden" name="id" value="<%=cUser.getId() %>" />
