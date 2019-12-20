@@ -23,6 +23,10 @@ import cz.svjis.servlet.cmd.CompanyDetailCmd;
 import cz.svjis.servlet.cmd.CompanySaveCmd;
 import cz.svjis.servlet.cmd.ContactCompanyCmd;
 import cz.svjis.servlet.cmd.ContactPhoneListCmd;
+import cz.svjis.servlet.cmd.FaultReportingDetailCmd;
+import cz.svjis.servlet.cmd.FaultReportingEditCmd;
+import cz.svjis.servlet.cmd.FaultReportingSaveCmd;
+import cz.svjis.servlet.cmd.FaultReportingListCmd;
 import cz.svjis.servlet.cmd.LoginCmd;
 import cz.svjis.servlet.cmd.LogoutCmd;
 import cz.svjis.servlet.cmd.LostPasswordCmd;
@@ -239,6 +243,27 @@ public class CmdFactory {
             }
             if (page.equals("redactionArticleMenuDelete")) {
                 return new RedactionArticleMenuDeleteCmd(ctx);
+            }
+        }
+        
+        // *******************
+        // * Fault reporting *
+        // *******************
+        if (ctx.getUser().hasPermission("menu_fault_reporting")) {
+            if (page.startsWith("faultReportingList")) {
+                return new FaultReportingListCmd(ctx);
+            }
+
+            if (page.equals("faultReportingEdit")) {
+                return new FaultReportingEditCmd(ctx);
+            }
+
+            if (page.equals("faultReportingSave")) {
+                return new FaultReportingSaveCmd(ctx);
+            }
+            
+            if (page.equals("faultDetail")) {
+                return new FaultReportingDetailCmd(ctx);
             }
         }
 

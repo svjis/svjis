@@ -108,6 +108,36 @@ public class UserDAO {
         return result;
     }
     
+    public ArrayList<User> getUserListByPermission(int companyId, String permission) throws SQLException {
+        ArrayList<User> result = new ArrayList<User>();
+        String select = "SELECT a.ID, a.COMPANY_ID, a.FIRST_NAME, a.LAST_NAME, a.E_MAIL, d.DESCRIPTION\n" +
+                        "FROM \"USER\" a\n" +
+                        "LEFT JOIN USER_HAS_ROLE b on b.USER_ID = a.ID\n" +
+                        "LEFT JOIN ROLE_HAS_PERMISSION c on c.ROLE_ID = b.ROLE_ID\n" +
+                        "LEFT JOIN PERMISSION d on d.ID = c.PERMISSION_ID\n" +
+                        "where a.COMPANY_ID = ? and d.DESCRIPTION = ? and a.ENABLED = 1\n" +
+                        "group by a.ID, a.COMPANY_ID, a.FIRST_NAME, a.E_MAIL, a.LAST_NAME, d.DESCRIPTION\n" +
+                        "order by a.FIRST_NAME, a.LAST_NAME";
+        
+        PreparedStatement ps = cnn.prepareStatement(select);
+        ps.setInt(1, companyId);
+        ps.setString(2, permission);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            User u = new User();
+            u.setId(rs.getInt("ID"));
+            u.setCompanyId(rs.getInt("COMPANY_ID"));
+            u.setFirstName(rs.getString("FIRST_NAME"));
+            u.setLastName(rs.getString("LAST_NAME"));
+            u.seteMail(rs.getString("E_MAIL"));
+            result.add(u);
+        }
+        rs.close();
+        ps.close();
+        
+        return result;
+    }
+    
     public User getUser(int companyId, int userId) throws SQLException {
         User result = null;
         String select = "SELECT "

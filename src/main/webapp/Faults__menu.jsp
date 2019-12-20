@@ -1,0 +1,40 @@
+<%-- 
+    Document   : Faults__menu
+    Created on : 20.12.2019, 10:34:57
+    Author     : jarberan
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
+
+<%
+    String p = request.getParameter("page");
+    if (p == null) {
+        p = "faultReportingList";
+    }
+%>
+
+<!-- Aside -->
+        <div id="aside">
+
+            <div id="aside-top"></div>
+            
+            <!-- Categories -->
+            <div class="padding">
+                <h4 class="nom"><%=language.getText("Fault reporting") %>:</h4>
+            </div> <!-- /padding -->
+            
+            <ul class="nav">
+                <li <%=(p.equals("faultReportingList") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=faultReportingList"><%=language.getText("All open") %></a></li>                
+                <li <%=(p.equals("faultReportingListCreatedByMe") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=faultReportingListCreatedByMe"><%=language.getText("Reported by me") %></a></li>
+                <li <%=(p.equals("faultReportingListAssignedToMe") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=faultReportingListAssignedToMe"><%=language.getText("Assigned to me") %></a></li>
+                <li <%=(p.equals("faultReportingListClosed") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=faultReportingListClosed"><%=language.getText("All closed") %></a></li>
+            </ul>
+            
+            <jsp:include page="_menu_login.jsp" />
+            
+        <hr class="noscreen" />          
+        </div> <!-- /aside -->
+        
+        <div id="aside-bottom"></div>
+
