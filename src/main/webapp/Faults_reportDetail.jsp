@@ -4,6 +4,7 @@
     Author     : jarberan
 --%>
 
+<%@page import="cz.svjis.bean.FaultReportComment"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="cz.svjis.bean.Language"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -58,6 +59,47 @@
                             <td class="list"><%=report.getDescription().replaceAll("\n", "<br>") %></td>
                         </tr>
                     </table>
+                        
+                    <%
+                        if ((report.getFaultReportCommentList() != null) && (report.getFaultReportCommentList().size() != 0)) {
+                    %>
+                        <h2 class="article-title"><%=language.getText("Comments:") %></h2>
+
+                        <%
+                            SimpleDateFormat sdft = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+                            for (FaultReportComment c : report.getFaultReportCommentList()) {
+                        %>
+                            <div class="article box">
+                            <strong><%=c.getUser().getFirstName() %>&nbsp;<%=c.getUser().getLastName() %> <%=sdft.format(c.getInsertionTime()) %></strong><br>
+                            <%=c.getBody().replace("\n", "<br>") %>
+                            </div>
+                        <%
+                            }
+                        %>
+                    <%
+                       }
+                    %>
+                      
+                    
+                    <%
+                        if (user.hasPermission("fault_reporting_comment") && (!report.isClosed())) {
+                    %>
+                        <p>
+                           <form action="Dispatcher" method="post">
+                                <input type="hidden" name="page" value="faultInsertComment">
+                                <input type="hidden" name="id" value="<%=report.getId() %>">
+                                <textarea
+                                name="body"
+                                rows=10 cols=80
+                                wrap
+                                ></textarea><br>
+
+                                <p><input id="comment-submit" type="submit" value="<%=language.getText("Insert comment") %>" name="submit">
+                            </form>
+                        </p>
+                    <%
+                       }
+                    %>
                 </div> <!-- /content-main-in -->
             </div> <!-- /content-main -->
             <hr class="noscreen" />

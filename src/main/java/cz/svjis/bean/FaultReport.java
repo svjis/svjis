@@ -5,6 +5,7 @@
  */
 package cz.svjis.bean;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -21,6 +22,7 @@ public class FaultReport {
     private User createdByUser;
     private User assignedToUser;
     private boolean closed;
+    private ArrayList<FaultReportComment> FaultReportCommentList = new ArrayList<FaultReportComment>();
     
     public FaultReport() {
         clear();
@@ -147,6 +149,20 @@ public class FaultReport {
      */
     public void setClosed(boolean closed) {
         this.closed = closed;
+    }
+
+    /**
+     * @return the FaultReportCommentList
+     */
+    public ArrayList<FaultReportComment> getFaultReportCommentList() {
+        return FaultReportCommentList;
+    }
+
+    /**
+     * @param FaultReportCommentList the FaultReportCommentList to set
+     */
+    public void setFaultReportCommentList(ArrayList<FaultReportComment> FaultReportCommentList) {
+        this.FaultReportCommentList = FaultReportCommentList;
     }
     
 }
