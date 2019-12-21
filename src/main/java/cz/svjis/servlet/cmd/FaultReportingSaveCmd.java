@@ -6,7 +6,7 @@
 package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.FaultReport;
-import cz.svjis.bean.FaultReportingDAO;
+import cz.svjis.bean.FaultReportDAO;
 import cz.svjis.bean.UserDAO;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
@@ -38,7 +38,7 @@ public class FaultReportingSaveCmd extends Command {
             return;
         }
         
-        FaultReportingDAO faultDao = new FaultReportingDAO(getCnn());
+        FaultReportDAO faultDao = new FaultReportDAO(getCnn());
         UserDAO userDao = new UserDAO(getCnn());
         
         FaultReport f = new FaultReport();
@@ -67,6 +67,7 @@ public class FaultReportingSaveCmd extends Command {
         
         String url = "Dispatcher?page=faultReportingList";
         getRequest().setAttribute("url", url);
+        
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
     }

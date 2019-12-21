@@ -6,7 +6,8 @@
 package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.FaultReport;
-import cz.svjis.bean.FaultReportingDAO;
+import cz.svjis.bean.FaultReportDAO;
+import cz.svjis.bean.FaultReportMenuCounters;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -33,10 +34,13 @@ public class FaultReportingDetailCmd extends Command {
             return;
         }
         
-        FaultReportingDAO faultDao = new FaultReportingDAO(getCnn());
+        FaultReportDAO faultDao = new FaultReportDAO(getCnn());
         FaultReport report = faultDao.getFault(getCompany().getId(), Integer.valueOf(parId));
-        
         getRequest().setAttribute("report", report);
+        
+        FaultReportMenuCounters counters = faultDao.getMenuCounters(getCompany().getId(), getUser().getId());
+        getRequest().setAttribute("counters", counters);
+        
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Faults_reportDetail.jsp");
         rd.forward(getRequest(), getResponse());
     }

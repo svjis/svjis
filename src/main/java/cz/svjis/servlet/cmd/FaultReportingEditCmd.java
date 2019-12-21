@@ -6,7 +6,8 @@
 package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.FaultReport;
-import cz.svjis.bean.FaultReportingDAO;
+import cz.svjis.bean.FaultReportDAO;
+import cz.svjis.bean.FaultReportMenuCounters;
 import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
 import cz.svjis.servlet.CmdContext;
@@ -36,7 +37,7 @@ public class FaultReportingEditCmd extends Command {
             return;
         }
         
-        FaultReportingDAO faultDao = new FaultReportingDAO(getCnn());
+        FaultReportDAO faultDao = new FaultReportDAO(getCnn());
         UserDAO userDao = new UserDAO(getCnn());
         
         FaultReport report = new FaultReport();
@@ -48,6 +49,9 @@ public class FaultReportingEditCmd extends Command {
         
         ArrayList<User> resolverList = userDao.getUserListByPermission(getCompany().getId(), "fault_reporting_resolver");
         getRequest().setAttribute("resolverList", resolverList);
+        
+        FaultReportMenuCounters counters = faultDao.getMenuCounters(getCompany().getId(), getUser().getId());
+        getRequest().setAttribute("counters", counters);
                 
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Faults_reportEdit.jsp");
         rd.forward(getRequest(), getResponse());

@@ -6,7 +6,8 @@
 package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.FaultReport;
-import cz.svjis.bean.FaultReportingDAO;
+import cz.svjis.bean.FaultReportDAO;
+import cz.svjis.bean.FaultReportMenuCounters;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class FaultReportingListCmd extends Command {
     public void execute() throws Exception {
         String parPage = getRequest().getParameter("page");
         
-        FaultReportingDAO faultDao = new FaultReportingDAO(getCnn());
+        FaultReportDAO faultDao = new FaultReportDAO(getCnn());
         
         ArrayList<FaultReport> reportList = new ArrayList<FaultReport>();
         if (parPage.equals("faultReportingList")) {
@@ -43,6 +44,10 @@ public class FaultReportingListCmd extends Command {
         }
 
         getRequest().setAttribute("reportList", reportList);
+        
+        FaultReportMenuCounters counters = faultDao.getMenuCounters(getCompany().getId(), getUser().getId());
+        getRequest().setAttribute("counters", counters);
+        
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Faults_reportList.jsp");
         rd.forward(getRequest(), getResponse());
     }

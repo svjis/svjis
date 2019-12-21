@@ -16,11 +16,11 @@ import java.util.Date;
  *
  * @author jarberan
  */
-public class FaultReportingDAO {
+public class FaultReportDAO {
     
     private Connection cnn;
     
-    public FaultReportingDAO (Connection cnn) {
+    public FaultReportDAO (Connection cnn) {
         this.cnn = cnn;
     }
     
@@ -201,5 +201,31 @@ public class FaultReportingDAO {
 
         ps.execute();
         ps.close();
+    }
+    
+    public FaultReportMenuCounters getMenuCounters(int companyId, int userId) throws SQLException {
+        FaultReportMenuCounters result = new FaultReportMenuCounters();
+        String select = "SELECT\n" +
+                        "    (SELECT count (*) FROM FAULT_REPORT a WHERE a.COMPANY_ID = c.ID AND a.CLOSED = 0) AS CNT_ALL,\n" +
+                        "    (SELECT count (*) FROM FAULT_REPORT a WHERE a.COMPANY_ID = c.ID AND a.CREATED_BY_USER_ID = ?) AS CNT_CRT,\n" +
+                        "    (SELECT count (*) FROM FAULT_REPORT a WHERE a.COMPANY_ID = c.ID AND a.ASSIGNED_TO_USER_ID = ?) AS CNT_ASG,\n" +
+                        "    (SELECT count (*) FROM FAULT_REPORT a WHERE a.COMPANY_ID = c.ID AND a.CLOSED = 1) AS CNT_CLOSED\n" +
+                        "FROM COMPANY c WHERE c.ID = ?;";
+        
+        PreparedStatement ps = cnn.prepareStatement(select);
+        ps.setInt(1, userId);
+        ps.setInt(2, userId);
+        ps.setInt(3, companyId);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            result.setAllOpenCnt(rs.getInt("CNT_ALL"));
+            result.setAllCreatedByMeCnt(rs.getInt("CNT_CRT"));
+            result.setAllAssignedToMeCnt(rs.getInt("CNT_ASG"));
+            result.setAllClosedCnt(rs.getInt("CNT_CLOSED"));
+        }
+        rs.close();
+        ps.close();
+        
+        return result;
     }
 }
