@@ -41,7 +41,7 @@ public class FaultReportingEditCmd extends Command {
         
         FaultReport report = new FaultReport();
         int id = Integer.valueOf(parId);
-        if (id != 0) {
+        if ((id != 0) && getUser().hasPermission("fault_reporting_resolver")) {
             report = faultDao.getFault(getCompany().getId(), id);
         }
         getRequest().setAttribute("report", report);

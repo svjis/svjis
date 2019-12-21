@@ -183,7 +183,7 @@ public class FaultReportingDAO {
     }
     
     public void modifyFault(FaultReport f) throws SQLException {
-        String update = "UPDATE FAULT_REPORT \n" +
+        String update = "UPDATE FAULT_REPORT a \n" +
                         "SET a.SUBJECT = ?, a.DESCRIPTION = ?, a.ASSIGNED_TO_USER_ID = ?, a.CLOSED = ?\n" +
                         "WHERE a.COMPANY_ID = ? AND a.ID = ? ;";
         

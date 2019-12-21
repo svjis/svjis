@@ -25,8 +25,9 @@
             <div id="content-main">
                 <div id="content-main-in">
                     <h1 class="page-title"><%=language.getText("Fault reporting") %></h1>
+                    <% if (user.hasPermission("fault_reporting_resolver")) { %>
                     [<a href="Dispatcher?page=faultReportingEdit&id=<%=report.getId() %>"><%=language.getText("Edit") %></a>]<br>
-                    
+                    <% } %>
                     <table class="list">
                         <tr>
                             <th class="list"><%=language.getText("Ticket id") %></th>

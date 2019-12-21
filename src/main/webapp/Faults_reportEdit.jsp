@@ -27,7 +27,7 @@
                     <h1 class="page-title"><%=language.getText("Fault reporting") %></h1>
                     <form action="Dispatcher" method="post">
                         <input type="hidden" name="page" value="faultReportingSave">
-                        <input type="hidden" name="id" value="0">
+                        <input type="hidden" name="id" value="<%=report.getId()  %>">
                         
                         <p>
                             <%=language.getText("Subject") %><br>
@@ -35,7 +35,7 @@
                         </p>
                         
                         <p>
-                        <%=language.getText("Body") %><br>
+                        <%=language.getText("Description") %><br>
                         <textarea
                             name="body"
                             id="common-textarea"
@@ -44,6 +44,8 @@
                             ><%=report.getDescription() %></textarea>
                         </p>
                         
+                        <% if (user.hasPermission("fault_reporting_resolver")) { %>
+
                         <p>
                         <%=language.getText("Resolver") %><br>
                         <select name="resolverId" id="common-input">
@@ -63,6 +65,8 @@
                             <input id="common-input" type="checkbox" name="closed" <%=(report.isClosed()) ? "checked" : "" %>>
                         </p>
                         
+                        <% } %>
+
                         <p>
                             <input type="submit" value="<%=language.getText("Save") %>" />
                         </p>

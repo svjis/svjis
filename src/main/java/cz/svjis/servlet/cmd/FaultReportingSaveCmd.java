@@ -11,7 +11,6 @@ import cz.svjis.bean.UserDAO;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
-import java.util.ArrayList;
 import java.util.Date;
 import javax.servlet.RequestDispatcher;
 
@@ -47,19 +46,26 @@ public class FaultReportingSaveCmd extends Command {
         f.setCompanyId(getCompany().getId());
         f.setSubject(parSubject);
         f.setDescription(parBody);
-        f.setCreatedByUser(getUser());
-        int resolver = Integer.valueOf(parResolver);
-        f.setAssignedToUser((resolver != 0) ? userDao.getUser(getCompany().getId(), resolver) : null);
-        f.setCreationDate(new Date());
-        f.setClosed((getRequest().getParameter("closed") != null) ? true : false);
-        
         if (f.getId() == 0) {
-            faultDao.insertFault(f);
+            f.setCreatedByUser(getUser());
+            f.setCreationDate(new Date());
+        }
+        if (getUser().hasPermission("fault_reporting_resolver")) {
+            int resolver = Integer.valueOf(parResolver);
+            f.setAssignedToUser((resolver != 0) ? userDao.getUser(getCompany().getId(), resolver) : null);
+            f.setClosed((getRequest().getParameter("closed") != null) ? true : false);
+        }
+        if (f.getId() == 0) {
+            if (getUser().hasPermission("fault_reporting_reporter")) {
+                faultDao.insertFault(f);
+            }
         } else {
-            faultDao.modifyFault(f);
+            if (getUser().hasPermission("fault_reporting_resolver")) {
+                faultDao.modifyFault(f);
+            }
         }
         
-        String url = "Dispatcher?page=faultReportingListCreatedByMe";
+        String url = "Dispatcher?page=faultReportingList";
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
@@ -80,7 +86,7 @@ public class FaultReportingSaveCmd extends Command {
             result = false;
         }
         
-        if (!Validator.validateInteger(parResolver, 0, Validator.maxIntAllowed)) {
+        if ((parResolver != null) && !Validator.validateInteger(parResolver, 0, Validator.maxIntAllowed)) {
             result = false;
         }
         
