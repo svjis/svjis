@@ -222,6 +222,7 @@ public class Dispatcher extends HttpServlet {
         if (u.hasPermission("menu_building_units")) result.add(new SystemMenuEntry("Units", "Dispatcher?page=myBuildingUnitList"));
         if (u.hasPermission("menu_personal_settings")) result.add(new SystemMenuEntry("Personal settings", "Dispatcher?page=psUserDetail"));
         if (u.hasPermission("menu_redaction")) result.add(new SystemMenuEntry("Redaction", "Dispatcher?page=redactionArticleList"));
+        if (u.hasPermission("menu_fault_reporting")) result.add(new SystemMenuEntry("Fault reporting", "Dispatcher?page=faultReportingList"));
         if (u.hasPermission("menu_administration")) result.add(new SystemMenuEntry("Administration", "Dispatcher?page=companyDetail"));
         
         return result;
