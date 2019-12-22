@@ -55,7 +55,7 @@ public class ArticleInsertCommentCmd extends Command {
             // insert comment
             ArticleComment ac = new ArticleComment();
             ac.setArticleId(article.getId());
-            ac.setUserId(getUser().getId());
+            ac.setUser(getUser());
             ac.setInsertionTime(new Date());
             ac.setBody(parBody);
             articleDao.insertArticleComment(ac);
