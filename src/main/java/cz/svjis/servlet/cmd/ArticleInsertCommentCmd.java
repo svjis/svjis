@@ -62,7 +62,7 @@ public class ArticleInsertCommentCmd extends Command {
 
             // send notification
             String subject = getCompany().getInternetDomain() + ": " + article.getHeader() + " (New comment)";
-            String body = getSetup().getProperty("mail.template.comment.notification");
+            String tBody = getSetup().getProperty("mail.template.comment.notification");
             MailDAO mailDao = new MailDAO(
                     getCnn(),
                     getSetup().getProperty("mail.smtp"),
@@ -75,7 +75,7 @@ public class ArticleInsertCommentCmd extends Command {
                 if (u.getId() == getUser().getId()) {
                     continue;
                 }
-                body = String.format(body,
+                String body = String.format(tBody,
                         getUser().getFirstName() + " " + getUser().getLastName(),
                         "<a href=\"http://" + getCompany().getInternetDomain() + "/Dispatcher?page=articleDetail&id=" + article.getId() + "\">" + article.getHeader() + "</a>",
                         ac.getBody().replace("\n", "<br>"));

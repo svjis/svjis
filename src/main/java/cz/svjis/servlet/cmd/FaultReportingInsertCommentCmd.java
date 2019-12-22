@@ -57,7 +57,7 @@ public class FaultReportingInsertCommentCmd extends Command {
             
             // send notification
             String subject = getCompany().getInternetDomain() + ": #" + report.getId() + " - " + report.getSubject() + " (New comment)";
-            String body = getSetup().getProperty("mail.template.fault.comment.notification");
+            String tBody = getSetup().getProperty("mail.template.fault.comment.notification");
             MailDAO mailDao = new MailDAO(
                     getCnn(),
                     getSetup().getProperty("mail.smtp"),
@@ -70,7 +70,7 @@ public class FaultReportingInsertCommentCmd extends Command {
                 if (u.getId() == getUser().getId()) {
                     continue;
                 }
-                body = String.format(body,
+                String body = String.format(tBody,
                         getUser().getFirstName() + " " + getUser().getLastName(),
                         "<a href=\"http://" + getCompany().getInternetDomain() + "/Dispatcher?page=faultDetail&id=" + report.getId() + "\">#" + report.getId() + " - " + report.getSubject() + "</a>",
                         c.getBody().replace("\n", "<br>"));
