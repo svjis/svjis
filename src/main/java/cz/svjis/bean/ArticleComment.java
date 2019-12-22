@@ -13,7 +13,6 @@ import java.util.Date;
 public class ArticleComment {
     private int id;
     private int articleId;
-    private int userId;
     private User user;
     private Date insertionTime;
     private String body;
@@ -44,20 +43,6 @@ public class ArticleComment {
      */
     public void setArticleId(int articleId) {
         this.articleId = articleId;
-    }
-
-    /**
-     * @return the userId
-     */
-    public int getUserId() {
-        return userId;
-    }
-
-    /**
-     * @param userId the userId to set
-     */
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     /**
