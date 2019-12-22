@@ -27,7 +27,7 @@
                     <% if (user.hasPermission("fault_reporting_reporter")) { %>
                     [<a href="Dispatcher?page=faultReportingEdit&id=0"><%=language.getText("Report new fault") %></a>]<br>
                     <% } %>
-                    <table class="list">
+                    <table width="100%" class="list">
                         <tr>
                             <th class="list">&nbsp;</th>
                             <th class="list"><%=language.getText("Ticket id") %></th>
