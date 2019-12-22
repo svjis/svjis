@@ -57,7 +57,8 @@ public class FaultReportingSaveCmd extends Command {
         }
         if (f.getId() == 0) {
             if (getUser().hasPermission("fault_reporting_reporter")) {
-                faultDao.insertFault(f);
+                int newId = faultDao.insertFault(f);
+                f.setId(newId);
             }
         } else {
             if (getUser().hasPermission("fault_reporting_resolver")) {
@@ -65,7 +66,7 @@ public class FaultReportingSaveCmd extends Command {
             }
         }
         
-        String url = "Dispatcher?page=faultReportingList";
+        String url = "Dispatcher?page=faultDetail&id=" + f.getId();
         getRequest().setAttribute("url", url);
         
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");

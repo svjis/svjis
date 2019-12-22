@@ -25,22 +25,14 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h1 class="page-title"><%=language.getText("Fault reporting") %></h1>
+                    <h1 class="page-title">#<%=report.getId() %>&nbsp;-&nbsp;<%=report.getSubject() %></h1>
                     <% if (user.hasPermission("fault_reporting_resolver")) { %>
                     [<a href="Dispatcher?page=faultReportingEdit&id=<%=report.getId() %>"><%=language.getText("Edit") %></a>]<br>
                     <% } %>
-                    <table class="list">
-                        <tr>
-                            <th class="list"><%=language.getText("Ticket id") %></th>
-                            <td class="list" style="text-align: right"><%=report.getId() %></td>
-                        </tr>
+                    <table class="list" width="50%">
                         <tr>
                             <th class="list"><%=language.getText("Date") %></th>
                             <td class="list"><%=sdf.format(report.getCreationDate()) %></td>
-                        </tr>
-                        <tr>
-                            <th class="list"><%=language.getText("Subject") %></th>
-                            <td class="list"><%=report.getSubject() %></td>
                         </tr>
                         <tr>
                             <th class="list"><%=language.getText("User") %></th>
