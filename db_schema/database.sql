@@ -867,6 +867,7 @@ BEGIN
   INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('mail.template.article.notification', :COMPANY_ID, 'Dobrý den,<br><br>rádi bychom Vás upozornili na následující článek na stránkách SVJ. <br><br>%s<br><br>S pozdravem,<br>Výbor SVJ');
   INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('mail.template.comment.notification', :COMPANY_ID, 'Uživatel %s přidal nový komentář k článku %s: <br><br><br>%s');
   INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('mail.template.fault.comment.notification', :COMPANY_ID, 'Uživatel %s přidal nový komentář k závadě %s: <br><br><br>%s');
+  INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('mail.template.fault.notification', :COMPANY_ID, 'Uživatel %s vložil novou závadu %s: <br><br><br>%s');
   INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('mail.template.lost.password', :COMPANY_ID, '<html><body>Dobrý den,<br>Vaše přihlašovací údaje jsou:<br><br>%s<br><br>Web SVJ</body></html>');
  
 END^

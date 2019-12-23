@@ -108,7 +108,7 @@ public class UserDAO {
         return result;
     }
     
-    public ArrayList<User> getUserListByPermission(int companyId, String permission) throws SQLException {
+    public ArrayList<User> getUserListWithPermission(int companyId, String permission) throws SQLException {
         ArrayList<User> result = new ArrayList<User>();
         String select = "SELECT a.ID, a.COMPANY_ID, a.FIRST_NAME, a.LAST_NAME, a.E_MAIL, d.DESCRIPTION\n" +
                         "FROM \"USER\" a\n" +
