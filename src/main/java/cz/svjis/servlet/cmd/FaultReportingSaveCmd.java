@@ -7,10 +7,13 @@ package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.FaultReport;
 import cz.svjis.bean.FaultReportDAO;
+import cz.svjis.bean.MailDAO;
+import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
+import java.util.ArrayList;
 import java.util.Date;
 import javax.servlet.RequestDispatcher;
 
@@ -59,6 +62,28 @@ public class FaultReportingSaveCmd extends Command {
             if (getUser().hasPermission("fault_reporting_reporter")) {
                 int newId = faultDao.insertFault(f);
                 f.setId(newId);
+                
+                // send notification
+                String subject = getCompany().getInternetDomain() + ": #" + f.getId() + " - " + f.getSubject();
+                String tBody = getSetup().getProperty("mail.template.fault.notification");
+                MailDAO mailDao = new MailDAO(
+                        getCnn(),
+                        getSetup().getProperty("mail.smtp"),
+                        getSetup().getProperty("mail.login"),
+                        getSetup().getProperty("mail.password"),
+                        getSetup().getProperty("mail.sender"));
+
+                ArrayList<User> userList = userDao.getUserListWithPermission(getCompany().getId(), "fault_reporting_resolver");
+                for (User u : userList) {
+                    if ((u.getId() == getUser().getId()) || (u.geteMail().equals(""))) {
+                        continue;
+                    }
+                    String body = String.format(tBody,
+                            getUser().getFirstName() + " " + getUser().getLastName(),
+                            "<a href=\"http://" + getCompany().getInternetDomain() + "/Dispatcher?page=faultDetail&id=" + f.getId() + "\">#" + f.getId() + " - " + f.getSubject() + "</a>",
+                            f.getDescription().replace("\n", "<br>"));
+                    mailDao.queueMail(getCompany().getId(), u.geteMail(), subject, body);
+                }
             }
         } else {
             if (getUser().hasPermission("fault_reporting_resolver")) {
