@@ -16,7 +16,7 @@
 <jsp:include page="_tray.jsp" />
 
 <%
-    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 %>
     <!-- Columns -->
     <div id="cols" class="box">
