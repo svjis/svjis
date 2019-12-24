@@ -211,8 +211,8 @@ public class FaultReportDAO {
         FaultReportMenuCounters result = new FaultReportMenuCounters();
         String select = "SELECT\n" +
                         "    (SELECT count (*) FROM FAULT_REPORT a WHERE a.COMPANY_ID = c.ID AND a.CLOSED = 0) AS CNT_ALL,\n" +
-                        "    (SELECT count (*) FROM FAULT_REPORT a WHERE a.COMPANY_ID = c.ID AND a.CREATED_BY_USER_ID = ?) AS CNT_CRT,\n" +
-                        "    (SELECT count (*) FROM FAULT_REPORT a WHERE a.COMPANY_ID = c.ID AND a.ASSIGNED_TO_USER_ID = ?) AS CNT_ASG,\n" +
+                        "    (SELECT count (*) FROM FAULT_REPORT a WHERE a.COMPANY_ID = c.ID AND a.CREATED_BY_USER_ID = ? AND a.CLOSED = 0) AS CNT_CRT,\n" +
+                        "    (SELECT count (*) FROM FAULT_REPORT a WHERE a.COMPANY_ID = c.ID AND a.ASSIGNED_TO_USER_ID = ? AND a.CLOSED = 0) AS CNT_ASG,\n" +
                         "    (SELECT count (*) FROM FAULT_REPORT a WHERE a.COMPANY_ID = c.ID AND a.CLOSED = 1) AS CNT_CLOSED\n" +
                         "FROM COMPANY c WHERE c.ID = ?;";
         

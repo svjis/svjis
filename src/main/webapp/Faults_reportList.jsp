@@ -40,15 +40,16 @@
                         <%
                         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
                         for (FaultReport f : (ArrayList<FaultReport>) reportList) {
+                            String stl = (f.isClosed()) ? "background-color:#d0d0d0;text-decoration: line-through;" : "";
                         %>
                         <tr>
-                            <td class="list"><a href="Dispatcher?page=faultDetail&id=<%=f.getId() %>"><img src="gfx/find.png" border="0" title="View"></a></td>
-                            <td class="list" style="text-align: right"><%=f.getId() %></td>
-                            <td class="list"><%=sdf.format(f.getCreationDate()) %></td>
-                            <td class="list"><%=f.getSubject() %></td>
-                            <td class="list"><%=f.getCreatedByUser().getFirstName() %>&nbsp;<%=f.getCreatedByUser().getLastName() %></td>
-                            <td class="list"><%=(f.getAssignedToUser() != null) ? (f.getAssignedToUser().getFirstName() + "&nbsp;" +f.getAssignedToUser().getLastName()) : "&nbsp;" %></td>
-                            <td class="list"><%=(f.isClosed()) ? language.getText("yes") : language.getText("no") %></td>
+                            <td class="list" style="<%=stl %>"><a href="Dispatcher?page=faultDetail&id=<%=f.getId() %>"><img src="gfx/find.png" border="0" title="View"></a></td>
+                            <td class="list" style="<%=stl %>text-align: right;"><%=f.getId() %></td>
+                            <td class="list" style="<%=stl %>"><%=sdf.format(f.getCreationDate()) %></td>
+                            <td class="list" style="<%=stl %>"><%=f.getSubject() %></td>
+                            <td class="list" style="<%=stl %>"><%=f.getCreatedByUser().getFirstName() %>&nbsp;<%=f.getCreatedByUser().getLastName() %></td>
+                            <td class="list" style="<%=stl %>"><%=(f.getAssignedToUser() != null) ? (f.getAssignedToUser().getFirstName() + "&nbsp;" +f.getAssignedToUser().getLastName()) : "&nbsp;" %></td>
+                            <td class="list" style="<%=stl %>"><%=(f.isClosed()) ? language.getText("yes") : language.getText("no") %></td>
                         </tr>
                         <%
                             }
