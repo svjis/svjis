@@ -25,6 +25,7 @@ import cz.svjis.servlet.cmd.ContactCompanyCmd;
 import cz.svjis.servlet.cmd.ContactPhoneListCmd;
 import cz.svjis.servlet.cmd.FaultReportingDetailCmd;
 import cz.svjis.servlet.cmd.FaultReportingEditCmd;
+import cz.svjis.servlet.cmd.FaultReportingFastCmd;
 import cz.svjis.servlet.cmd.FaultReportingInsertCommentCmd;
 import cz.svjis.servlet.cmd.FaultReportingSaveCmd;
 import cz.svjis.servlet.cmd.FaultReportingListCmd;
@@ -269,6 +270,10 @@ public class CmdFactory {
             
             if (page.equals("faultInsertComment")) {
                 return new FaultReportingInsertCommentCmd(ctx);
+            }
+            
+            if (page.equals("faultReportingFast")) {
+                return new FaultReportingFastCmd(ctx);
             }
         }
 

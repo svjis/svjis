@@ -27,7 +27,14 @@
                 <div id="content-main-in">
                     <h1 class="page-title">#<%=report.getId() %>&nbsp;-&nbsp;<%=report.getSubject() %></h1>
                     <% if (user.hasPermission("fault_reporting_resolver")) { %>
-                    [<a href="Dispatcher?page=faultReportingEdit&id=<%=report.getId() %>"><%=language.getText("Edit") %></a>]<br>
+                    [<a href="Dispatcher?page=faultReportingEdit&id=<%=report.getId() %>"><%=language.getText("Edit") %></a>]&nbsp;
+                        <% if (report.getAssignedToUser() == null) { %>
+                        [<a href="Dispatcher?page=faultReportingFast&id=<%=report.getId() %>&takeTicket=1"><%=language.getText("Take this ticket") %></a>]&nbsp;
+                        <% } %>
+                        <% if ((report.getAssignedToUser() != null) && (report.getAssignedToUser().getId() == user.getId()) && !report.isClosed()) { %>
+                        [<a href="Dispatcher?page=faultReportingFast&id=<%=report.getId() %>&closeTicket=1"><%=language.getText("Close this ticket") %></a>]&nbsp;
+                        <% } %>
+                        <br>
                     <% } %>
                     <table class="list" width="50%">
                         <tr>
