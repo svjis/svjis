@@ -624,8 +624,8 @@ public class ArticleDAO {
             ArticleComment a = new ArticleComment();
             a.setId(rs.getInt("ID"));
             a.setArticleId(rs.getInt("ARTICLE_ID"));
-            a.setUserId(rs.getInt("USER_ID"));
             a.setUser(new User());
+            a.getUser().setId(rs.getInt("USER_ID"));
             a.getUser().setFirstName(rs.getString("FIRST_NAME"));
             a.getUser().setLastName(rs.getString("LAST_NAME"));
             a.setInsertionTime(rs.getTimestamp("INSERTION_TIME"));
@@ -640,7 +640,7 @@ public class ArticleDAO {
         String insert = "INSERT INTO ARTICLE_COMMENT (ARTICLE_ID, USER_ID, INSERTION_TIME, BODY) VALUES (?,?,?,?)";
         PreparedStatement ps = cnn.prepareStatement(insert);
         ps.setInt(1, c.getArticleId());
-        ps.setInt(2, c.getUserId());
+        ps.setInt(2, c.getUser().getId());
         ps.setTimestamp(3, new java.sql.Timestamp(c.getInsertionTime().getTime()));
         ps.setString(4, c.getBody());
         ps.execute();

@@ -1,5 +1,6 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package cz.svjis.bean;
@@ -8,11 +9,11 @@ import java.util.Date;
 
 /**
  *
- * @author berk
+ * @author jarberan
  */
-public class ArticleComment {
+public class FaultReportComment {
     private int id;
-    private int articleId;
+    private int faultReportId;
     private User user;
     private Date insertionTime;
     private String body;
@@ -32,17 +33,31 @@ public class ArticleComment {
     }
 
     /**
-     * @return the articleId
+     * @return the faultReportId
      */
-    public int getArticleId() {
-        return articleId;
+    public int getFaultReportId() {
+        return faultReportId;
     }
 
     /**
-     * @param articleId the articleId to set
+     * @param faultReportId the faultReportId to set
      */
-    public void setArticleId(int articleId) {
-        this.articleId = articleId;
+    public void setFaultReportId(int faultReportId) {
+        this.faultReportId = faultReportId;
+    }
+
+    /**
+     * @return the user
+     */
+    public User getUser() {
+        return user;
+    }
+
+    /**
+     * @param user the user to set
+     */
+    public void setUser(User user) {
+        this.user = user;
     }
 
     /**
@@ -71,19 +86,5 @@ public class ArticleComment {
      */
     public void setBody(String body) {
         this.body = body;
-    }
-
-    /**
-     * @return the user
-     */
-    public User getUser() {
-        return user;
-    }
-
-    /**
-     * @param user the user to set
-     */
-    public void setUser(User user) {
-        this.user = user;
     }
 }

@@ -5,9 +5,9 @@
  */
 package cz.svjis.servlet.cmd;
 
-import cz.svjis.bean.Article;
-import cz.svjis.bean.ArticleComment;
-import cz.svjis.bean.ArticleDAO;
+import cz.svjis.bean.FaultReport;
+import cz.svjis.bean.FaultReportComment;
+import cz.svjis.bean.FaultReportDAO;
 import cz.svjis.bean.MailDAO;
 import cz.svjis.bean.User;
 import cz.svjis.servlet.CmdContext;
@@ -19,18 +19,18 @@ import javax.servlet.RequestDispatcher;
 
 /**
  *
- * @author jaroslav_b
+ * @author jarberan
  */
-public class ArticleInsertCommentCmd extends Command {
-
-    public ArticleInsertCommentCmd(CmdContext ctx) {
+public class FaultReportingInsertCommentCmd extends Command {
+    
+    public FaultReportingInsertCommentCmd(CmdContext ctx) {
         super(ctx);
     }
-
+    
     @Override
     public void execute() throws Exception {
         
-        String parId = getRequest().getParameter("id");
+        String parId = Validator.fixTextInput(getRequest().getParameter("id"), false);
         String parBody = Validator.fixTextInput(getRequest().getParameter("body"), false);
         
         if (!validateInput(parId, parBody)) {
@@ -38,31 +38,26 @@ public class ArticleInsertCommentCmd extends Command {
             rd.forward(getRequest(), getResponse());
             return;
         }
-
-        ArticleDAO articleDao = new ArticleDAO(getCnn());
-
-        int articleId = Integer.valueOf(parId);
-        Article article = articleDao.getArticle(getUser(),
-                articleId);
-        getRequest().setAttribute("article", article);
-
-        if ((article != null)
-                && article.isCommentsAllowed()
-                && getUser().hasPermission("can_insert_article_comment")
+        
+        FaultReportDAO faultDao = new FaultReportDAO(getCnn());
+        
+        FaultReport report = faultDao.getFault(getCompany().getId(), Integer.valueOf(parId));
+        
+        if ((report.getId() != 0) 
+                && (!report.isClosed()) 
+                && getUser().hasPermission("fault_reporting_comment")
                 && (parBody != null)
                 && (!parBody.equals(""))) {
-
-            // insert comment
-            ArticleComment ac = new ArticleComment();
-            ac.setArticleId(article.getId());
-            ac.setUser(getUser());
-            ac.setInsertionTime(new Date());
-            ac.setBody(parBody);
-            articleDao.insertArticleComment(ac);
-
+            FaultReportComment c = new FaultReportComment();
+            c.setFaultReportId(report.getId());
+            c.setInsertionTime(new Date());
+            c.setUser(getUser());
+            c.setBody(parBody);
+            faultDao.insertFaultReportComment(c);
+            
             // send notification
-            String subject = getCompany().getInternetDomain() + ": " + article.getHeader() + " (New comment)";
-            String tBody = getSetup().getProperty("mail.template.comment.notification");
+            String subject = getCompany().getInternetDomain() + ": #" + report.getId() + " - " + report.getSubject() + " (New comment)";
+            String tBody = getSetup().getProperty("mail.template.fault.comment.notification");
             MailDAO mailDao = new MailDAO(
                     getCnn(),
                     getSetup().getProperty("mail.smtp"),
@@ -70,34 +65,34 @@ public class ArticleInsertCommentCmd extends Command {
                     getSetup().getProperty("mail.password"),
                     getSetup().getProperty("mail.sender"));
 
-            ArrayList<User> userList = articleDao.getUserListForNotificationAboutNewComment(article.getId());
+            ArrayList<User> userList = faultDao.getUserListForNotificationAboutNewComment(report.getId());
             for (User u : userList) {
                 if (u.getId() == getUser().getId()) {
                     continue;
                 }
                 String body = String.format(tBody,
                         getUser().getFirstName() + " " + getUser().getLastName(),
-                        "<a href=\"http://" + getCompany().getInternetDomain() + "/Dispatcher?page=articleDetail&id=" + article.getId() + "\">" + article.getHeader() + "</a>",
-                        ac.getBody().replace("\n", "<br>"));
+                        "<a href=\"http://" + getCompany().getInternetDomain() + "/Dispatcher?page=faultDetail&id=" + report.getId() + "\">#" + report.getId() + " - " + report.getSubject() + "</a>",
+                        c.getBody().replace("\n", "<br>"));
                 mailDao.queueMail(getCompany().getId(), u.geteMail(), subject, body);
             }
         }
-
-        String url = "Dispatcher?page=articleDetail&id=" + article.getId();
+        
+        String url = "Dispatcher?page=faultDetail&id=" + parId;
         getRequest().setAttribute("url", url);
+        
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
     }
     
-    
-    private boolean validateInput(String id, String body) {
+    private boolean validateInput(String parId, String parBody) {
         boolean result = true;
         
-        if (!Validator.validateInteger(id, 0, Validator.maxIntAllowed)) {
+        if (!Validator.validateInteger(parId, 0, Validator.maxIntAllowed)) {
             result = false;
         }
         
-        if ((body != null) && !Validator.validateString(body, 0, 10000)) {
+        if (!Validator.validateString(parBody, 0, Validator.maxStringLenAllowed)) {
             result = false;
         }
         
