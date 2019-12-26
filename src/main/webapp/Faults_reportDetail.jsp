@@ -36,10 +36,10 @@
                         <% } %>
                         <br>
                     <% } %>
-                    <table class="list" width="50%">
+                    <table class="list" width="90%">
                         <tr>
-                            <th class="list"><%=language.getText("Date") %></th>
-                            <td class="list"><%=sdf.format(report.getCreationDate()) %></td>
+                            <th class="list" width="25%"><%=language.getText("Date") %></th>
+                            <td class="list" width="75%"><%=sdf.format(report.getCreationDate()) %></td>
                         </tr>
                         <tr>
                             <th class="list"><%=language.getText("User") %></th>
