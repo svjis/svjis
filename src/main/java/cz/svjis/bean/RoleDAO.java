@@ -66,7 +66,7 @@ public class RoleDAO {
                 + "a.COMPANY_ID, "
                 + "a.DESCRIPTION, "
                 + "(SELECT count(*) FROM USER_HAS_ROLE h WHERE (h.ROLE_ID = a.ID)) AS USERS "
-                + "FROM \"ROLE\" a WHERE (a.COMPANY_ID = ?) ORDER BY a.ID";
+                + "FROM \"ROLE\" a WHERE (a.COMPANY_ID = ?) ORDER BY a.DESCRIPTION collate UNICODE_CI_AI";
         PreparedStatement ps = cnn.prepareStatement(select);
         ps.setInt(1, companyId);
         ResultSet rs = ps.executeQuery();
