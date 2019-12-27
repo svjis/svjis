@@ -131,19 +131,20 @@
                     <%
                         if ((article.isCommentsAllowed()) && (user.hasPermission("can_insert_article_comment"))) {
                     %>
-                        <p>
-                           <form action="Dispatcher" method="post">
-                                <input type="hidden" name="page" value="insertArticleComment">
-                                <input type="hidden" name="id" value="<%=article.getId() %>">
-                                <textarea
-                                name="body"
-                                rows=10 cols=80
-                                wrap
-                                ></textarea><br>
-
-                                <p><input id="comment-submit" type="submit" value="<%=language.getText("Insert comment") %>" name="submit">
-                            </form>
-                        </p>
+                        <form action="Dispatcher" method="post">
+                             <input type="hidden" name="page" value="insertArticleComment">
+                             <input type="hidden" name="id" value="<%=article.getId() %>">
+                             <p>
+                                 <textarea
+                                 name="body"
+                                 rows=5 cols=50
+                                 wrap
+                                 ></textarea>
+                             </p>
+                             <p>
+                                 <input id="comment-submit" type="submit" value="<%=language.getText("Insert comment") %>" name="submit">
+                             </p>
+                         </form>
                     <%
                        }
                     %>

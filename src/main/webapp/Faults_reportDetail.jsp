@@ -83,19 +83,20 @@
                     <%
                         if (user.hasPermission("fault_reporting_comment") && (!report.isClosed())) {
                     %>
-                        <p>
-                           <form action="Dispatcher" method="post">
-                                <input type="hidden" name="page" value="faultInsertComment">
-                                <input type="hidden" name="id" value="<%=report.getId() %>">
-                                <textarea
-                                name="body"
-                                rows=10 cols=80
-                                wrap
-                                ></textarea><br>
-
-                                <p><input id="comment-submit" type="submit" value="<%=language.getText("Insert comment") %>" name="submit">
-                            </form>
-                        </p>
+                        <form action="Dispatcher" method="post">
+                             <input type="hidden" name="page" value="faultInsertComment">
+                             <input type="hidden" name="id" value="<%=report.getId() %>">
+                             <p>
+                                 <textarea
+                                 name="body"
+                                 rows=5 cols=50
+                                 wrap
+                                 ></textarea>
+                             </p>
+                             <p>
+                                 <input id="comment-submit" type="submit" value="<%=language.getText("Insert comment") %>" name="submit">
+                             </p>
+                         </form>
                     <%
                        }
                     %>
