@@ -35,10 +35,20 @@ public class RoleDeleteCmd extends Command {
         
         RoleDAO roleDao = new RoleDAO(getCnn());
 
-        Role role = new Role();
-        role.setId(Integer.valueOf(parId));
-        role.setCompanyId(getCompany().getId());
-        roleDao.deleteRole(role);
+        Role role = roleDao.getRole(getCompany().getId(), Integer.valueOf(parId));
+        if ((role != null)) {
+            if (role.getNumOfUsers() != 0) {
+                String message = "Cannot delete role which is not empty.";
+                getRequest().setAttribute("messageHeader", "Error");
+                getRequest().setAttribute("message", message);
+                RequestDispatcher rd = getRequest().getRequestDispatcher("/_message.jsp");
+                rd.forward(getRequest(), getResponse());
+                return;
+            } else {
+                roleDao.deleteRole(role.getCompanyId(), role.getId());
+            }
+        }
+        
         String url = "Dispatcher?page=roleList";
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");

@@ -26,7 +26,12 @@ public class RoleDAO {
     
     public Role getRole(int companyId, int roleId) throws SQLException  {
         Role result = null;
-        String select = "SELECT a.ID, a.COMPANY_ID, a.DESCRIPTION FROM \"ROLE\" a WHERE (a.COMPANY_ID = ?) AND (a.ID = ?)";
+        String select = "SELECT \n" +
+                        "    a.ID, \n" +
+                        "    a.COMPANY_ID, \n" +
+                        "    a.DESCRIPTION, \n" +
+                        "    (SELECT count(*) FROM USER_HAS_ROLE h WHERE (h.ROLE_ID = a.ID)) AS USERS \n" +
+                        "FROM \"ROLE\" a WHERE (a.COMPANY_ID = ?) AND (a.ID = ?)";
         PreparedStatement ps = cnn.prepareStatement(select);
         ps.setInt(1, companyId);
         ps.setInt(2, roleId);
@@ -36,6 +41,7 @@ public class RoleDAO {
             result.setId(rs.getInt("ID"));
             result.setCompanyId(rs.getInt("COMPANY_ID"));
             result.setDescription(rs.getString("DESCRIPTION"));
+            result.setNumOfUsers(rs.getInt("USERS"));
         }
         rs.close();
         ps.close();
@@ -155,17 +161,11 @@ public class RoleDAO {
         ps.close();
     }
     
-    public void deleteRole(Role role) throws SQLException {
-        String delete = "DELETE FROM ROLE_HAS_PERMISSION WHERE (ROLE_ID = ?)";
+    public void deleteRole(int companyId, int roleId) throws SQLException {
+        String delete = "DELETE FROM \"ROLE\" WHERE (ID = ?) and (COMPANY_ID = ?)";
         PreparedStatement ps = cnn.prepareStatement(delete);
-        ps.setInt(1, role.getId());
-        ps.execute();
-        ps.close();
-        
-        String delete2 = "DELETE FROM \"ROLE\" WHERE (ID = ?) and (COMPANY_ID = ?)";
-        ps = cnn.prepareStatement(delete2);
-        ps.setInt(1, role.getId());
-        ps.setInt(2, role.getCompanyId());
+        ps.setInt(1, roleId);
+        ps.setInt(2, companyId);
         ps.execute();
         ps.close();
     }
