@@ -144,10 +144,95 @@ public class FaultReportDAO {
         ps.close();
         
         if (result != null) {
+            result.setAttachmentList(this.getFaultReportAttachmentList(result.getId()));
             result.setFaultReportCommentList(this.getFaultReportCommentList(result.getId()));
         }
         
         return result;
+    }
+    
+    private ArrayList<FaultReportAttachment> getFaultReportAttachmentList(int reportId) throws SQLException {
+        ArrayList<FaultReportAttachment> result = new ArrayList<FaultReportAttachment>();
+        String select = "SELECT "
+                + "a.ID, "
+                + "a.FAULT_REPORT_ID, "
+                + "a.USER_ID, "
+                + "a.UPLOAD_TIME, "
+                + "a.CONTENT_TYPE, "
+                + "a.FILENAME "
+                //+ "a.DATA "
+                + "FROM FAULT_REPORT_ATTACHMENT a "
+                + "WHERE (a.FAULT_REPORT_ID = ?) "
+                + "ORDER BY a.ID";
+        
+        PreparedStatement ps = cnn.prepareStatement(select);
+        ps.setInt(1, reportId);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            FaultReportAttachment a = new FaultReportAttachment();
+            a.setId(rs.getInt("ID"));
+            a.setFaultReportId(rs.getInt("FAULT_REPORT_ID"));
+            a.setUserId(rs.getInt("USER_ID"));
+            a.setUploadTime(rs.getTimestamp("UPLOAD_TIME"));
+            a.setContentType(rs.getString("CONTENT_TYPE"));
+            a.setFileName(rs.getString("FILENAME"));
+            result.add(a);
+        }
+        ps.close();
+        return result;
+    }
+    
+    public void insertFaultReportAttachment(FaultReportAttachment fa) throws SQLException {
+        String insert = "INSERT INTO FAULT_REPORT_ATTACHMENT (FAULT_REPORT_ID, USER_ID, UPLOAD_TIME, CONTENT_TYPE, FILENAME, DATA) VALUES (?,?,?,?,?,?)";
+        PreparedStatement ps = cnn.prepareStatement(insert);
+        ps.setInt(1, fa.getFaultReportId());
+        ps.setInt(2, fa.getUserId());
+        ps.setTimestamp(3, new java.sql.Timestamp(fa.getUploadTime().getTime()));
+        ps.setString(4, fa.getContentType());
+        ps.setString(5, fa.getFileName());
+        ps.setBytes(6, fa.getData());
+        ps.execute();
+        ps.close();
+    }
+    
+    public FaultReportAttachment getFaultReportAttachment(int id) throws SQLException {
+        FaultReportAttachment result = null;
+        String select = "SELECT "
+                + "a.ID, "
+                + "a.FAULT_REPORT_ID, "
+                + "a.USER_ID, "
+                + "a.UPLOAD_TIME, "
+                + "a.CONTENT_TYPE, "
+                + "a.FILENAME, "
+                + "a.DATA "
+                + "FROM FAULT_REPORT_ATTACHMENT a "
+                + "WHERE (a.ID = ?) ";
+        
+        PreparedStatement ps = cnn.prepareStatement(select);
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            result = new FaultReportAttachment();
+            result.setId(rs.getInt("ID"));
+            result.setFaultReportId(rs.getInt("FAULT_REPORT_ID"));
+            result.setUserId(rs.getInt("USER_ID"));
+            result.setUploadTime(rs.getTimestamp("UPLOAD_TIME"));
+            result.setContentType(rs.getString("CONTENT_TYPE"));
+            result.setFileName(rs.getString("FILENAME"));
+            java.sql.Blob blob = null;
+            blob = rs.getBlob("DATA");
+            result.setData(blob.getBytes(1, (int) blob.length()));
+        }
+        ps.close();
+        return result;
+    }
+    
+    public void deleteFaultAttachment(int id) throws SQLException {
+        String delete = "DELETE FROM FAULT_REPORT_ATTACHMENT a WHERE (a.ID = ?)";
+        PreparedStatement ps = cnn.prepareStatement(delete);
+        ps.setInt(1, id);
+        ps.execute();
+        ps.close();
     }
     
     public int insertFault(FaultReport f) throws SQLException {

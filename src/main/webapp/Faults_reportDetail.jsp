@@ -4,10 +4,14 @@
     Author     : jarberan
 --%>
 
-<%@page import="cz.svjis.bean.FaultReportComment"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<%@page import="java.io.File"%>
+<%@page import="cz.svjis.bean.FaultReportAttachment"%>
+<%@page import="cz.svjis.bean.FaultReportComment"%>
 <%@page import="cz.svjis.bean.Language"%>
 <%@page import="java.text.SimpleDateFormat"%>
+
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
 <jsp:useBean id="report" scope="request" class="cz.svjis.bean.FaultReport" />
@@ -58,6 +62,50 @@
                             <td class="list"><%=report.getDescription().replaceAll("\n", "<br>") %></td>
                         </tr>
                     </table>
+                        
+                    <% if (report.getId() != 0) { %>
+                    <form action="Dispatcher?page=faultReportingAttachmentSave&reportId=<%=report.getId() %>" enctype="multipart/form-data" method="post">
+                        <fieldset>
+                            <legend><%=language.getText("Attachments") %></legend>
+                            <%
+                                if ((report.getAttachmentList() != null) && (report.getAttachmentList().size() != 0)) {
+                            %>
+                            <p>
+                            <table class="list">
+                                <tr>
+                                    <th class="list" colspan="3"><%=language.getText("File") %></th>
+                                </tr>
+                                <%
+                                for (FaultReportAttachment a: report.getAttachmentList()) {
+                                    String icon = "gfx/Files_unknown.gif";
+                                    String extension = a.getFileName().toLowerCase().substring(a.getFileName().lastIndexOf(".") + 1);
+                                    File f = new File(request.getServletContext().getRealPath("/gfx") + "/Files_" + extension + ".gif");
+                                    if (f.exists()) {
+                                        icon = "gfx/Files_" + extension + ".gif";
+                                    }
+                                %>
+                                <tr>
+                                    <td class="list"><img src="<%=icon%>" border="0"></td>
+                                    <td class="list"><a href="Upload?page=faultReportingDownload&id=<%=a.getId() %>"><%=a.getFileName() %></a></td>
+                                    <td class="list"><a onclick="if (!confirm('<%=language.getText("Really do you want to remove attachment") %> <%=a.getFileName() %> ?')) return false;" href="Dispatcher?page=faultReportingAttachmentDelete&id=<%=a.getId() %>&faultReportId=<%=a.getFaultReportId() %>"><%=language.getText("Delete") %></a></td>
+                                </tr>
+                                <%
+                                }
+                                %>
+                            </table>
+                            <p>
+                            <%
+                               }
+                            %>
+                            <% if (!report.isClosed()) { %>
+                            <p>
+                                <input type="file" name="attachment" size="40">
+                                <input type="submit" value="<%=language.getText("Insert attachment") %>">
+                            </p>
+                            <% } %>
+                        </fieldset>
+                    </form>
+                    <% } %>
                         
                     <%
                         if ((report.getFaultReportCommentList() != null) && (report.getFaultReportCommentList().size() != 0)) {

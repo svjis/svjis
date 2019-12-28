@@ -9,6 +9,7 @@ import cz.svjis.servlet.cmd.BuildingPictureCmd;
 import cz.svjis.servlet.cmd.DownloadCmd;
 import cz.svjis.servlet.cmd.ExportBuildingUnitListToXlsCmd;
 import cz.svjis.servlet.cmd.ExportUserListToXlsCmd;
+import cz.svjis.servlet.cmd.FaultReportingDownloadCmd;
 
 /**
  *
@@ -26,6 +27,9 @@ public class CmdFactoryUpload {
             return new BuildingPictureCmd(ctx);
         }
         
+        // ******************
+        // * Administration *
+        // ******************
         if (ctx.getUser().hasPermission("menu_administration")) {
             
             if (page.equals("exportBuildingUnitListToXls")) {
@@ -34,6 +38,15 @@ public class CmdFactoryUpload {
             
             if (page.equals("exportUserListToXls")) {
                 return new ExportUserListToXlsCmd(ctx);
+            }
+        }
+        
+        // *******************
+        // * Fault reporting *
+        // *******************
+        if (ctx.getUser().hasPermission("menu_fault_reporting")) {
+            if (page.equals("faultReportingDownload")) {
+                return new FaultReportingDownloadCmd(ctx);
             }
         }
         
