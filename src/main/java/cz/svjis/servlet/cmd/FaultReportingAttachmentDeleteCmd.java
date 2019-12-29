@@ -38,6 +38,11 @@ public class FaultReportingAttachmentDeleteCmd extends Command {
 
         int id = Integer.parseInt(parId);
         FaultReportAttachment fa = faultDao.getFaultReportAttachment(id);
+        if (fa == null) {
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
+            rd.forward(getRequest(), getResponse());
+            return;
+        }
         FaultReport f = faultDao.getFault(getCompany().getId(), fa.getFaultReportId());
         if ((f != null) && (!f.isClosed()) && (fa.getUser().getId() == getUser().getId())) {
             faultDao.deleteFaultAttachment(id);
