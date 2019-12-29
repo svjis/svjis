@@ -36,7 +36,9 @@ public class DownloadCmd extends Command {
         
         ArticleDAO dao = new ArticleDAO(getCnn());
         ArticleAttachment aa = dao.getArticleAttachment(Integer.parseInt(parId));
-        if (dao.getArticle(getUser(), aa.getArticleId()) == null) {
+        if ((aa == null) || (dao.getArticle(getUser(), aa.getArticleId()) == null)) {
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
+            rd.forward(getRequest(), getResponse());
             return;
         }
         HttpUtils.writeBinaryData(aa.getContentType(), aa.getFileName(), aa.getData(), getRequest(), getResponse());

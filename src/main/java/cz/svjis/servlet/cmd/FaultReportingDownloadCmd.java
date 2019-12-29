@@ -36,7 +36,9 @@ public class FaultReportingDownloadCmd extends Command {
         
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
         FaultReportAttachment fa = faultDao.getFaultReportAttachment(Integer.parseInt(parId));
-        if (faultDao.getFault(getCompany().getId(), fa.getFaultReportId()) == null) {
+        if ((fa == null) || (faultDao.getFault(getCompany().getId(), fa.getFaultReportId()) == null)) {
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
+            rd.forward(getRequest(), getResponse());
             return;
         }
         HttpUtils.writeBinaryData(fa.getContentType(), fa.getFileName(), fa.getData(), getRequest(), getResponse());
