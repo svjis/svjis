@@ -8,10 +8,12 @@
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="cz.svjis.bean.FaultReport"%>
+<%@page import="cz.svjis.bean.SliderItem"%>
 
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
 <jsp:useBean id="reportList" scope="request" class="java.util.ArrayList" />
+<jsp:useBean id="slider" scope="request" class="cz.svjis.bean.SliderImpl" />
 
 <jsp:include page="_header.jsp" />
 <jsp:include page="_tray.jsp" />
@@ -55,6 +57,29 @@
                             }
                         %>
                     </table>
+                    
+                    <p class="t-left">
+                        <% if (slider.getTotalNumOfPages() > 1) { %>
+                        <strong><%=language.getText("Pages:") %></strong>&nbsp;
+                        <%
+                        String search = "";
+                        String pageId = "page=" + request.getParameter("page") + "&";
+                        //if ((request.getParameter("search") != null) && (!request.getParameter("search").equals(""))) {
+                        //    search = "search=" + URLEncoder.encode(request.getParameter("search"), "UTF-8") + "&";
+                        //    pageId = "page=search&";
+                        //}
+                        for (SliderItem item : slider.getItemList()) {
+                            if (item.isCurrent()) {
+                                out.println("<b>" + item.getLabel() + "</b>&nbsp;");
+                            } else {
+                                out.println("<a href=\"Dispatcher?" + pageId + search + "pageNo=" + item.getPage() + "\">" + item.getLabel() + "</a>&nbsp;");
+                            }
+                        }
+                        %>
+                        
+                        <% } %>
+                    </p>
+                    
                 </div> <!-- /content-main-in -->
             </div> <!-- /content-main -->
             <hr class="noscreen" />

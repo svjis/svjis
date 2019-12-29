@@ -24,23 +24,60 @@ public class FaultReportDAO {
         this.cnn = cnn;
     }
     
-    public ArrayList<FaultReport> getFaultList(int companyId, int closed) throws SQLException {
-        return getFaultList(companyId, closed, "WHERE a.COMPANY_ID = ? AND a.CLOSED = ? ");
+    public int getNumOfFaults(int companyId, int closed) throws SQLException {
+        return getFaultListSize(companyId, closed, "WHERE a.COMPANY_ID = ? AND a.CLOSED = ? ");
     }
     
-    public ArrayList<FaultReport> getFaultListByCreator(int companyId, int userId) throws SQLException {
-        return getFaultList(companyId, userId, "WHERE a.COMPANY_ID = ? AND a.CREATED_BY_USER_ID = ? ");
+    public ArrayList<FaultReport> getFaultList(int companyId, int pageNo, int pageSize, int closed) throws SQLException {
+        return getFaultList(companyId, pageNo, pageSize, closed, "WHERE a.COMPANY_ID = ? AND a.CLOSED = ? ");
     }
     
-    public ArrayList<FaultReport> getFaultListByResolver(int companyId, int userId) throws SQLException {
-        return getFaultList(companyId, userId, "WHERE a.COMPANY_ID = ? AND a.ASSIGNED_TO_USER_ID = ? ");
+    public int getNumOfFaultsByCreator(int companyId, int userId) throws SQLException {
+        return getFaultListSize(companyId, userId, "WHERE a.COMPANY_ID = ? AND a.CREATED_BY_USER_ID = ? ");
     }
     
-    private ArrayList<FaultReport> getFaultList(int companyId, int value, String where) throws SQLException {
+    public ArrayList<FaultReport> getFaultListByCreator(int companyId, int pageNo, int pageSize, int userId) throws SQLException {
+        return getFaultList(companyId, pageNo, pageSize, userId, "WHERE a.COMPANY_ID = ? AND a.CREATED_BY_USER_ID = ? ");
+    }
+    
+    public int getNumOfFaultsByResolver(int companyId, int userId) throws SQLException {
+        return getFaultListSize(companyId, userId, "WHERE a.COMPANY_ID = ? AND a.ASSIGNED_TO_USER_ID = ? ");
+    }
+    
+    public ArrayList<FaultReport> getFaultListByResolver(int companyId, int pageNo, int pageSize, int userId) throws SQLException {
+        return getFaultList(companyId, pageNo, pageSize, userId, "WHERE a.COMPANY_ID = ? AND a.ASSIGNED_TO_USER_ID = ? ");
+    }
+    
+    private int getFaultListSize(int companyId, int value, String where) throws SQLException {
+        
+        int result = 0;
+        
+        String select = "SELECT \n" +
+                        "    count(*) AS CNT \n" +
+                        "FROM FAULT_REPORT a \n" +
+                        "LEFT JOIN \"USER\" cr on cr.ID = a.CREATED_BY_USER_ID \n" +
+                        "LEFT JOIN \"USER\" ass on ass.ID = a.ASSIGNED_TO_USER_ID \n" +
+                        where +
+                        ";";
+        
+        PreparedStatement ps = cnn.prepareStatement(select);
+        ps.setInt(1, companyId);
+        ps.setInt(2, value);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            result = rs.getInt("CNT");
+        }
+        rs.close();
+        ps.close();
+        
+        return result;
+    }
+    
+    private ArrayList<FaultReport> getFaultList(int companyId, int pageNo, int pageSize, int value, String where) throws SQLException {
         
         ArrayList<FaultReport> result = new ArrayList<FaultReport>();
         
-        String select = "SELECT \n" +
+        String select = "SELECT FIRST " + (pageNo * pageSize) + "\n" +
                         "    a.ID, \n" +
                         "    a.COMPANY_ID, \n" +
                         "    a.SUBJECT, \n" +
@@ -63,28 +100,43 @@ public class FaultReportDAO {
         ps.setInt(1, companyId);
         ps.setInt(2, value);
         ResultSet rs = ps.executeQuery();
+        
+        int cPageNo = 1;
+        int cArtNo = 0;
+        
         while (rs.next()) {
-            FaultReport f = new FaultReport();
-            f.setId(rs.getInt("ID"));
-            f.setCompanyId(rs.getInt("COMPANY_ID"));
-            f.setSubject(rs.getString("SUBJECT"));
-            f.setCreationDate(new Date(rs.getTimestamp("CREATION_DATE").getTime()));
-            if (rs.getInt("CREATED_BY_USER_ID") != 0) {
-                User u = new User();
-                u.setId(rs.getInt("CREATED_BY_USER_ID"));
-                u.setFirstName(rs.getString("CR_FIRST_NAME"));
-                u.setLastName(rs.getString("CR_LAST_NAME"));
-                f.setCreatedByUser(u);
+            if (cPageNo == pageNo) {
+                FaultReport f = new FaultReport();
+                f.setId(rs.getInt("ID"));
+                f.setCompanyId(rs.getInt("COMPANY_ID"));
+                f.setSubject(rs.getString("SUBJECT"));
+                f.setCreationDate(new Date(rs.getTimestamp("CREATION_DATE").getTime()));
+                if (rs.getInt("CREATED_BY_USER_ID") != 0) {
+                    User u = new User();
+                    u.setId(rs.getInt("CREATED_BY_USER_ID"));
+                    u.setFirstName(rs.getString("CR_FIRST_NAME"));
+                    u.setLastName(rs.getString("CR_LAST_NAME"));
+                    f.setCreatedByUser(u);
+                }
+                if (rs.getInt("ASSIGNED_TO_USER_ID") != 0) {
+                    User u = new User();
+                    u.setId(rs.getInt("ASSIGNED_TO_USER_ID"));
+                    u.setFirstName(rs.getString("AS_FIRST_NAME"));
+                    u.setLastName(rs.getString("AS_LAST_NAME"));
+                    f.setAssignedToUser(u);
+                }
+                f.setClosed(rs.getBoolean("CLOSED"));
+                result.add(f);   
             }
-            if (rs.getInt("ASSIGNED_TO_USER_ID") != 0) {
-                User u = new User();
-                u.setId(rs.getInt("ASSIGNED_TO_USER_ID"));
-                u.setFirstName(rs.getString("AS_FIRST_NAME"));
-                u.setLastName(rs.getString("AS_LAST_NAME"));
-                f.setAssignedToUser(u);
+            
+            cArtNo++;
+            if (cArtNo == pageSize) {
+                cPageNo++;
+                cArtNo = 0;
             }
-            f.setClosed(rs.getBoolean("CLOSED"));
-            result.add(f);
+            if (cPageNo > pageNo) {
+                break;
+            }
         }
         rs.close();
         ps.close();
