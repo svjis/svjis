@@ -40,7 +40,7 @@
                         <% } %>
                         <br>
                     <% } %>
-                    <table class="list" width="90%">
+                    <table class="list" width="95%">
                         <tr>
                             <th class="list" width="25%"><%=language.getText("Date") %></th>
                             <td class="list" width="75%"><%=sdf.format(report.getCreationDate()) %></td>
@@ -73,7 +73,11 @@
                             <p>
                             <table class="list">
                                 <tr>
-                                    <th class="list" colspan="3"><%=language.getText("File") %></th>
+                                    <th class="list">&nbsp;</th>
+                                    <th class="list"><%=language.getText("File") %></th>
+                                    <th class="list"><%=language.getText("User") %></th>
+                                    <th class="list"><%=language.getText("Time") %></th>
+                                    <th class="list">&nbsp;</th>
                                 </tr>
                                 <%
                                 for (FaultReportAttachment a: report.getAttachmentList()) {
@@ -87,7 +91,15 @@
                                 <tr>
                                     <td class="list"><img src="<%=icon%>" border="0"></td>
                                     <td class="list"><a href="Upload?page=faultReportingDownload&id=<%=a.getId() %>"><%=a.getFileName() %></a></td>
-                                    <td class="list"><a onclick="if (!confirm('<%=language.getText("Really do you want to remove attachment") %> <%=a.getFileName() %> ?')) return false;" href="Dispatcher?page=faultReportingAttachmentDelete&id=<%=a.getId() %>&faultReportId=<%=a.getFaultReportId() %>"><%=language.getText("Delete") %></a></td>
+                                    <td class="list"><%=a.getUser().getFirstName() %>&nbsp;<%=a.getUser().getLastName() %></td>
+                                    <td class="list"><%=sdf.format(a.getUploadTime()) %></td>
+                                    <td class="list">
+                                        <% if ((!report.isClosed()) && (user.getId() == a.getUser().getId())) { %>
+                                            <a onclick="if (!confirm('<%=language.getText("Really do you want to remove attachment") %> <%=a.getFileName() %> ?')) return false;" href="Dispatcher?page=faultReportingAttachmentDelete&id=<%=a.getId() %>"><%=language.getText("Delete") %></a>
+                                        <% } else { %>
+                                            &nbsp;
+                                        <% } %>
+                                    </td>
                                 </tr>
                                 <%
                                 }

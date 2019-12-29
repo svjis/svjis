@@ -14,7 +14,7 @@ import java.util.Date;
 public class FaultReportAttachment {
     private int id;
     private int faultReportId;
-    private int userId;
+    private User user;
     private Date uploadTime;
     private String contentType;
     private String fileName;
@@ -49,17 +49,17 @@ public class FaultReportAttachment {
     }
 
     /**
-     * @return the userId
+     * @return the user
      */
-    public int getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
     /**
-     * @param userId the userId to set
+     * @param user the userId to set
      */
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     /**

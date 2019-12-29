@@ -5,6 +5,7 @@
  */
 package cz.svjis.servlet.cmd;
 
+import cz.svjis.bean.FaultReport;
 import cz.svjis.bean.FaultReportAttachment;
 import cz.svjis.bean.FaultReportDAO;
 import cz.svjis.servlet.CmdContext;
@@ -58,10 +59,12 @@ public class FaultReportingAttachmentSaveCmd extends Command {
                 fa.setFileName(fileName);
                 fa.setContentType(item.getContentType());
                 fa.setData(item.get());
-                fa.setUserId(getUser().getId());
+                fa.setUser(getUser());
                 fa.setFaultReportId(reportId);
                 fa.setUploadTime(new Date());
-                if (!fa.getFileName().equals("")) {
+                
+                FaultReport fr = faultDao.getFault(getCompany().getId(), fa.getFaultReportId());
+                if ((fr != null) && (!fr.isClosed()) && !fa.getFileName().equals("")) {
                     faultDao.insertFaultReportAttachment(fa);
                 }
             }
