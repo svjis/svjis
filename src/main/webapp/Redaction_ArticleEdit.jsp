@@ -171,7 +171,7 @@
                                 <tr>
                                     <td class="list"><img src="<%=icon%>" border="0"></td>
                                     <td class="list"><a href="Upload?page=download&id=<%=a.getId() %>"><%=a.getFileName() %></a></td>
-                                    <td class="list"><a onclick="if (!confirm('<%=language.getText("Really do you want to remove attachment") %> <%=a.getFileName() %> ?')) return false;" href="Dispatcher?page=redactionArticleAttachmentDelete&id=<%=a.getId() %>&articleId=<%=a.getArticleId() %>"><%=language.getText("Delete") %></a></td>
+                                    <td class="list"><a onclick="if (!confirm('<%=language.getText("Really do you want to remove attachment") %> <%=a.getFileName() %> ?')) return false;" href="Dispatcher?page=redactionArticleAttachmentDelete&id=<%=a.getId() %>"><%=language.getText("Delete") %></a></td>
                                 </tr>
                                 <%
                                 }
