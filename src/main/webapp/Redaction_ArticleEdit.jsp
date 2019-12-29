@@ -160,9 +160,7 @@
                                     <th class="list" colspan="3"><%=language.getText("File") %></th>
                                 </tr>
                                 <%
-                                Iterator<ArticleAttachment> attachI = article.getAttachmentList().iterator();
-                                while (attachI.hasNext()) {
-                                    ArticleAttachment a = attachI.next();
+                                for (ArticleAttachment a: article.getAttachmentList()) {
                                     String icon = "gfx/Files_unknown.gif";
                                     String extension = a.getFileName().toLowerCase().substring(a.getFileName().lastIndexOf(".") + 1);
                                     File f = new File(request.getServletContext().getRealPath("/gfx") + "/Files_" + extension + ".gif");

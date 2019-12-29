@@ -22,6 +22,7 @@ public class FaultReport {
     private User createdByUser;
     private User assignedToUser;
     private boolean closed;
+    private ArrayList<FaultReportAttachment> attachmentList;
     private ArrayList<FaultReportComment> FaultReportCommentList = new ArrayList<FaultReportComment>();
     
     public FaultReport() {
@@ -163,6 +164,20 @@ public class FaultReport {
      */
     public void setFaultReportCommentList(ArrayList<FaultReportComment> FaultReportCommentList) {
         this.FaultReportCommentList = FaultReportCommentList;
+    }
+
+    /**
+     * @return the attachmentList
+     */
+    public ArrayList<FaultReportAttachment> getAttachmentList() {
+        return attachmentList;
+    }
+
+    /**
+     * @param attachmentList the attachmentList to set
+     */
+    public void setAttachmentList(ArrayList<FaultReportAttachment> attachmentList) {
+        this.attachmentList = attachmentList;
     }
     
 }
