@@ -45,13 +45,13 @@ public class SliderImpl implements Slider {
         SliderItem si;
         si = new SliderItem();
         si.setPage(1);
-        si.setLabel("<<");
+        si.setLabel("&lt;&lt;");
         si.setCurrent(false);
         itemList.add(si);
         
         si = new SliderItem();
         si.setPage((currentPage > 1) ? currentPage - 1 : 1);
-        si.setLabel("<");
+        si.setLabel("&lt;");
         si.setCurrent(false);
         itemList.add(si);
             
@@ -69,13 +69,13 @@ public class SliderImpl implements Slider {
         
         si = new SliderItem();
         si.setPage((currentPage < totalNumOfPages) ? currentPage + 1 : totalNumOfPages);
-        si.setLabel(">");
+        si.setLabel("&gt;");
         si.setCurrent(false);
         itemList.add(si);
         
         si = new SliderItem();
         si.setPage(totalNumOfPages);
-        si.setLabel(">>");
+        si.setLabel("&gt;&gt;");
         si.setCurrent(false);
         itemList.add(si);
     }
