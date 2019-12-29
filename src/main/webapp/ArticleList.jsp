@@ -11,6 +11,7 @@
 <%@page import="cz.svjis.bean.MiniNews"%>
 <%@page import="java.net.URLEncoder"%>
 <%@page import="cz.svjis.bean.Article"%>
+<%@page import="cz.svjis.bean.SliderItem"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -88,9 +89,7 @@
                             search = "search=" + URLEncoder.encode(request.getParameter("search"), "UTF-8") + "&";
                             pageId = "page=search&";
                         }
-                        Iterator<cz.svjis.bean.SliderItem> slIt = slider.getItemList().iterator();
-                        while (slIt.hasNext()) {
-                            cz.svjis.bean.SliderItem item = slIt.next();
+                        for (SliderItem item: slider.getItemList()) {
                             if (item.isCurrent()) {
                                 out.println("<b>" + item.getLabel() + "</b>&nbsp;");
                             } else {

@@ -887,6 +887,7 @@ BEGIN
   INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('article.top.months', :COMPANY_ID, '3');
   INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('article.top.size', :COMPANY_ID, '5');
   INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('error.report.recipient', :COMPANY_ID, 'admin@mycompany.com');
+  INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('faults.page.size', :COMPANY_ID, '10');
   --INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('google.analytics.id', :COMPANY_ID, '');
   INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('http.meta.description', :COMPANY_ID, 'stránky Společenství vlastníků');
   INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('http.meta.keywords', :COMPANY_ID, 'svj, společenství');
