@@ -37,7 +37,10 @@
                 <li <%=(p.equals("faultReportingListClosed") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=faultReportingListClosed"><%=language.getText("All closed") %>&nbsp;(<%=counters.getAllClosedCnt() %>)</a></li>
             </ul>
             
+            <div class="padding">
+            <jsp:include page="_menu_search_faults.jsp" />
             <jsp:include page="_menu_login.jsp" />
+            </div> <!-- /padding -->
             
         <hr class="noscreen" />          
         </div> <!-- /aside -->

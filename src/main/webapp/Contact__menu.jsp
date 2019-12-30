@@ -32,7 +32,9 @@
                 <% } %>
             </ul>
             
+            <div class="padding">
             <jsp:include page="_menu_login.jsp" />
+            </div> <!-- /padding -->
             
         <hr class="noscreen" />          
         </div> <!-- /aside -->
