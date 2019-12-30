@@ -10,32 +10,12 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="cz.svjis.bean.FaultReport"%>
 <%@page import="cz.svjis.bean.SliderItem"%>
+<%@page import="cz.svjis.common.HttpUtils"%>
 
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
 <jsp:useBean id="reportList" scope="request" class="java.util.ArrayList" />
 <jsp:useBean id="slider" scope="request" class="cz.svjis.bean.SliderImpl" />
-
-<%!
-    private static String highlight(String string, String regex) {
-        String result = string;
-        if (regex != null) {
-            java.util.regex.Pattern p = java.util.regex.Pattern.compile(regex, java.util.regex.Pattern.CASE_INSENSITIVE);
-            java.util.regex.Matcher m = p.matcher(string);
-            StringBuffer sb = new StringBuffer();
-            while (m.find()) {
-                String replacement = "";
-                replacement += "<b style=\"color:black;background-color:#ffff66\">";
-                replacement += m.group();
-                replacement += "</b>";
-                m.appendReplacement(sb, replacement);
-            }
-            m.appendTail(sb);
-            result = sb.toString();
-        }
-        return result;
-    }
-%>
 
 <jsp:include page="_header.jsp" />
 <jsp:include page="_tray.jsp" />
@@ -70,7 +50,7 @@
                             <td class="list" style="<%=stl %>"><a href="Dispatcher?page=faultDetail&id=<%=f.getId() %><%=(request.getParameter("search") != null) ? "&search=" + URLEncoder.encode(request.getParameter("search"), "UTF-8") : "" %>"><img src="gfx/find.png" border="0" title="View"></a></td>
                             <td class="list" style="<%=stl %>text-align: right;"><%=f.getId() %></td>
                             <td class="list" style="<%=stl %>"><%=sdf.format(f.getCreationDate()) %></td>
-                            <td class="list" style="<%=stl %>"><%=highlight(f.getSubject(), request.getParameter("search")) %></td>
+                            <td class="list" style="<%=stl %>"><%=HttpUtils.highlight(f.getSubject(), request.getParameter("search")) %></td>
                             <td class="list" style="<%=stl %>"><%=f.getCreatedByUser().getFirstName() %>&nbsp;<%=f.getCreatedByUser().getLastName() %></td>
                             <td class="list" style="<%=stl %>"><%=(f.getAssignedToUser() != null) ? (f.getAssignedToUser().getFirstName() + "&nbsp;" +f.getAssignedToUser().getLastName()) : "&nbsp;" %></td>
                             <td class="list" style="<%=stl %>"><%=(f.isClosed()) ? language.getText("yes") : language.getText("no") %></td>

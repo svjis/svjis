@@ -73,9 +73,7 @@ public class FaultReportDAO {
     }
     
     private ArrayList<FaultReport> getFaultList(int companyId, int pageNo, int pageSize, int value, String where) throws SQLException {
-        
-        ArrayList<FaultReport> result = new ArrayList<FaultReport>();
-        
+
         String select = "SELECT FIRST " + (pageNo * pageSize) + "\n" +
                         "    a.ID, \n" +
                         "    a.COMPANY_ID, \n" +
@@ -99,41 +97,7 @@ public class FaultReportDAO {
         ps.setInt(1, companyId);
         ps.setInt(2, value);
         ResultSet rs = ps.executeQuery();
-        
-        int cPageNo = 1;
-        int cArtNo = 0;
-        
-        while (rs.next()) {
-            if (cPageNo == pageNo) {
-                FaultReport f = new FaultReport();
-                f.setId(rs.getInt("ID"));
-                f.setCompanyId(rs.getInt("COMPANY_ID"));
-                f.setSubject(rs.getString("SUBJECT"));
-                f.setCreationDate(new Date(rs.getTimestamp("CREATION_DATE").getTime()));
-                if (rs.getInt("CREATED_BY_USER_ID") != 0) {
-                    User u = new User();
-                    u.setId(rs.getInt("CREATED_BY_USER_ID"));
-                    u.setFirstName(rs.getString("CR_FIRST_NAME"));
-                    u.setLastName(rs.getString("CR_LAST_NAME"));
-                    f.setCreatedByUser(u);
-                }
-                if (rs.getInt("ASSIGNED_TO_USER_ID") != 0) {
-                    User u = new User();
-                    u.setId(rs.getInt("ASSIGNED_TO_USER_ID"));
-                    u.setFirstName(rs.getString("AS_FIRST_NAME"));
-                    u.setLastName(rs.getString("AS_LAST_NAME"));
-                    f.setAssignedToUser(u);
-                }
-                f.setClosed(rs.getBoolean("CLOSED"));
-                result.add(f);   
-            }
-            
-            cArtNo++;
-            if (cArtNo == pageSize) {
-                cPageNo++;
-                cArtNo = 0;
-            }
-        }
+        ArrayList<FaultReport> result = getFaultReportListFromResultSet(rs, pageNo, pageSize);
         rs.close();
         ps.close();
         
@@ -167,8 +131,6 @@ public class FaultReportDAO {
     
     public ArrayList<FaultReport> getFaultListFromSearch(int companyId, int pageNo, int pageSize, String search) throws SQLException {
         
-        ArrayList<FaultReport> result = new ArrayList<FaultReport>();
-        
         String select = "SELECT FIRST " + (pageNo * pageSize) + "\n" +
                         "    a.ID, \n" +
                         "    a.COMPANY_ID, \n" +
@@ -194,6 +156,15 @@ public class FaultReportDAO {
         PreparedStatement ps = cnn.prepareStatement(select);
         ps.setInt(1, companyId);
         ResultSet rs = ps.executeQuery();
+        ArrayList<FaultReport> result = getFaultReportListFromResultSet(rs, pageNo, pageSize);
+        rs.close();
+        ps.close();
+        
+        return result;
+    }
+    
+    private ArrayList<FaultReport> getFaultReportListFromResultSet(ResultSet rs, int pageNo, int pageSize) throws SQLException {
+        ArrayList<FaultReport> result = new ArrayList<FaultReport>();
         
         int cPageNo = 1;
         int cArtNo = 0;
@@ -229,8 +200,6 @@ public class FaultReportDAO {
                 cArtNo = 0;
             }
         }
-        rs.close();
-        ps.close();
         
         return result;
     }

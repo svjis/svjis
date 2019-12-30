@@ -4,9 +4,10 @@
     Author     : berk
 --%>
 
+<%@page import="cz.svjis.bean.ArticleAttachment"%>
+<%@page import="cz.svjis.common.HttpUtils"%>
 <%@page import="cz.svjis.bean.ArticleComment"%>
 <%@page import="java.io.File"%>
-<%@page import="cz.svjis.bean.ArticleAttachment"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -14,26 +15,6 @@
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="article" scope="request" class="cz.svjis.bean.Article" />
 
-<%!
-    private static String highlight(String string, String regex) {
-        String result = string;
-        if (regex != null) {
-            java.util.regex.Pattern p = java.util.regex.Pattern.compile(regex, java.util.regex.Pattern.CASE_INSENSITIVE);
-            java.util.regex.Matcher m = p.matcher(string);
-            StringBuffer sb = new StringBuffer();
-            while (m.find()) {
-                String replacement = "";
-                replacement += "<b style=\"color:black;background-color:#ffff66\">";
-                replacement += m.group();
-                replacement += "</b>";
-                m.appendReplacement(sb, replacement);
-            }
-            m.appendTail(sb);
-            result = sb.toString();
-        }
-        return result;
-    }
-%>
 
 <%
     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
@@ -61,14 +42,14 @@
                     %>
                     <div class="article-detail">
                     <div class="article-desc">
-                    <h1 class="article-title"><%=highlight(article.getHeader(), request.getParameter("search")) %></h1>
+                    <h1 class="article-title"><%=HttpUtils.highlight(article.getHeader(), request.getParameter("search")) %></h1>
                     <p class="info">
                         <%=language.getText("Published:") %> <strong><%=sdf.format(article.getCreationDate()) %></strong> 
                         <%=language.getText("by:") %> <strong><%=article.getAuthor().getFirstName() %> <%=article.getAuthor().getLastName() %></strong> 
                         <%=(article.getCommentList().size() != 0) ? language.getText("Comments:") + " <strong>" + article.getCommentList().size() + "</strong>" : "" %>
                     </p> 
-                    <%=highlight(article.getDescription(), request.getParameter("search")) %>
-                    <%=highlight(body, request.getParameter("search")) %>
+                    <%=HttpUtils.highlight(article.getDescription(), request.getParameter("search")) %>
+                    <%=HttpUtils.highlight(body, request.getParameter("search")) %>
                     </div>
                     </div>
                     

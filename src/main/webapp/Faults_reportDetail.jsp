@@ -9,33 +9,13 @@
 <%@page import="java.io.File"%>
 <%@page import="cz.svjis.bean.FaultReportAttachment"%>
 <%@page import="cz.svjis.bean.FaultReportComment"%>
+<%@page import="cz.svjis.common.HttpUtils"%>
 <%@page import="cz.svjis.bean.Language"%>
 <%@page import="java.text.SimpleDateFormat"%>
 
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
 <jsp:useBean id="report" scope="request" class="cz.svjis.bean.FaultReport" />
-
-<%!
-    private static String highlight(String string, String regex) {
-        String result = string;
-        if (regex != null) {
-            java.util.regex.Pattern p = java.util.regex.Pattern.compile(regex, java.util.regex.Pattern.CASE_INSENSITIVE);
-            java.util.regex.Matcher m = p.matcher(string);
-            StringBuffer sb = new StringBuffer();
-            while (m.find()) {
-                String replacement = "";
-                replacement += "<b style=\"color:black;background-color:#ffff66\">";
-                replacement += m.group();
-                replacement += "</b>";
-                m.appendReplacement(sb, replacement);
-            }
-            m.appendTail(sb);
-            result = sb.toString();
-        }
-        return result;
-    }
-%>
 
 <jsp:include page="_header.jsp" />
 <jsp:include page="_tray.jsp" />
@@ -50,7 +30,7 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h1 class="page-title">#<%=report.getId() %>&nbsp;-&nbsp;<%=highlight(report.getSubject(), request.getParameter("search")) %></h1>
+                    <h1 class="page-title">#<%=report.getId() %>&nbsp;-&nbsp;<%=HttpUtils.highlight(report.getSubject(), request.getParameter("search")) %></h1>
                     <% if (user.hasPermission("fault_reporting_resolver")) { %>
                     [<a href="Dispatcher?page=faultReportingEdit&id=<%=report.getId() %>"><%=language.getText("Edit") %></a>]&nbsp;
                         <% if (report.getAssignedToUser() == null) { %>
@@ -80,7 +60,7 @@
                         </tr>
                         <tr>
                             <th class="list"><%=language.getText("Description") %></th>
-                            <td class="list"><%=highlight(report.getDescription(), request.getParameter("search")).replaceAll("\n", "<br>") %></td>
+                            <td class="list"><%=HttpUtils.highlight(report.getDescription(), request.getParameter("search")).replaceAll("\n", "<br>") %></td>
                         </tr>
                     </table>
                         
