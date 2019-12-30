@@ -49,7 +49,6 @@ public class FaultReportDAO {
     }
     
     private int getFaultListSize(int companyId, int value, String where) throws SQLException {
-        
         int result = 0;
         
         String select = "SELECT \n" +
@@ -134,8 +133,100 @@ public class FaultReportDAO {
                 cPageNo++;
                 cArtNo = 0;
             }
-            if (cPageNo > pageNo) {
-                break;
+        }
+        rs.close();
+        ps.close();
+        
+        return result;
+    }
+    
+    public int getFaultListSizeFromSearch(int companyId, String search) throws SQLException {
+        int result = 0;
+        
+        String select = "SELECT \n" +
+                        "    count(*) AS CNT \n" +
+                        "FROM FAULT_REPORT a \n" +
+                        "LEFT JOIN \"USER\" cr on cr.ID = a.CREATED_BY_USER_ID \n" +
+                        "LEFT JOIN \"USER\" ass on ass.ID = a.ASSIGNED_TO_USER_ID \n" +
+                        "WHERE a.COMPANY_ID = ? AND (\n" +
+                            "(UPPER(a.SUBJECT) like UPPER('%" + search + "%')) OR \n" +
+                            "(UPPER(a.DESCRIPTION) like UPPER('%" + search + "%')) \n" +
+                        ");";
+        
+        PreparedStatement ps = cnn.prepareStatement(select);
+        ps.setInt(1, companyId);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            result = rs.getInt("CNT");
+        }
+        rs.close();
+        ps.close();
+        
+        return result;        
+    }
+    
+    public ArrayList<FaultReport> getFaultListFromSearch(int companyId, int pageNo, int pageSize, String search) throws SQLException {
+        
+        ArrayList<FaultReport> result = new ArrayList<FaultReport>();
+        
+        String select = "SELECT FIRST " + (pageNo * pageSize) + "\n" +
+                        "    a.ID, \n" +
+                        "    a.COMPANY_ID, \n" +
+                        "    a.SUBJECT, \n" +
+                        "    a.DESCRIPTION, \n" +
+                        "    a.CREATION_DATE, \n" +
+                        "    a.CREATED_BY_USER_ID, \n" +
+                        "    cr.FIRST_NAME as CR_FIRST_NAME, \n" +
+                        "    cr.LAST_NAME as CR_LAST_NAME, \n" +
+                        "    a.ASSIGNED_TO_USER_ID, \n" +
+                        "    ass.FIRST_NAME as AS_FIRST_NAME, \n" +
+                        "    ass.LAST_NAME as AS_LAST_NAME, \n" +
+                        "    a.CLOSED\n" +
+                        "FROM FAULT_REPORT a \n" +
+                        "LEFT JOIN \"USER\" cr on cr.ID = a.CREATED_BY_USER_ID \n" +
+                        "LEFT JOIN \"USER\" ass on ass.ID = a.ASSIGNED_TO_USER_ID \n" +
+                        "WHERE a.COMPANY_ID = ? AND (\n" +
+                            "(UPPER(a.SUBJECT) like UPPER('%" + search + "%')) OR \n" +
+                            "(UPPER(a.DESCRIPTION) like UPPER('%" + search + "%')) \n" +
+                        ") \n" +
+                        "ORDER BY a.CREATION_DATE desc;";
+        
+        PreparedStatement ps = cnn.prepareStatement(select);
+        ps.setInt(1, companyId);
+        ResultSet rs = ps.executeQuery();
+        
+        int cPageNo = 1;
+        int cArtNo = 0;
+        
+        while (rs.next()) {
+            if (cPageNo == pageNo) {
+                FaultReport f = new FaultReport();
+                f.setId(rs.getInt("ID"));
+                f.setCompanyId(rs.getInt("COMPANY_ID"));
+                f.setSubject(rs.getString("SUBJECT"));
+                f.setCreationDate(new Date(rs.getTimestamp("CREATION_DATE").getTime()));
+                if (rs.getInt("CREATED_BY_USER_ID") != 0) {
+                    User u = new User();
+                    u.setId(rs.getInt("CREATED_BY_USER_ID"));
+                    u.setFirstName(rs.getString("CR_FIRST_NAME"));
+                    u.setLastName(rs.getString("CR_LAST_NAME"));
+                    f.setCreatedByUser(u);
+                }
+                if (rs.getInt("ASSIGNED_TO_USER_ID") != 0) {
+                    User u = new User();
+                    u.setId(rs.getInt("ASSIGNED_TO_USER_ID"));
+                    u.setFirstName(rs.getString("AS_FIRST_NAME"));
+                    u.setLastName(rs.getString("AS_LAST_NAME"));
+                    f.setAssignedToUser(u);
+                }
+                f.setClosed(rs.getBoolean("CLOSED"));
+                result.add(f);   
+            }
+            
+            cArtNo++;
+            if (cArtNo == pageSize) {
+                cPageNo++;
+                cArtNo = 0;
             }
         }
         rs.close();

@@ -204,9 +204,6 @@ public class ArticleDAO {
                 cPageNo++;
                 cArtNo = 0;
             }
-            if (cPageNo > pageNo) {
-                break;
-            }
         }
         rs.close();
         st.close();

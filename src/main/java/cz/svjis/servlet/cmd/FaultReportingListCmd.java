@@ -29,8 +29,9 @@ public class FaultReportingListCmd extends Command {
     public void execute() throws Exception {
         String parPage = getRequest().getParameter("page");
         String parPageNo = getRequest().getParameter("pageNo");
+        String parSearch = Validator.fixTextInput(getRequest().getParameter("search"), false);
         
-        if (!validateInput(parPageNo)) {
+        if (!validateInput(parPageNo, parSearch)) {
             RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
             rd.forward(getRequest(), getResponse());
             return;
@@ -63,6 +64,10 @@ public class FaultReportingListCmd extends Command {
             sl.setTotalNumOfItems(faultDao.getNumOfFaults(getCompany().getId(), 1));
             reportList = faultDao.getFaultList(getCompany().getId(), pageNo, pageSize, 1);
         }
+        if (parPage.equals("faultReportingListSearch")) {
+            sl.setTotalNumOfItems(faultDao.getFaultListSizeFromSearch(getCompany().getId(), parSearch));
+            reportList = faultDao.getFaultListFromSearch(getCompany().getId(), pageNo, pageSize, parSearch);
+        }
 
         getRequest().setAttribute("slider", sl);
         getRequest().setAttribute("reportList", reportList);
@@ -74,11 +79,16 @@ public class FaultReportingListCmd extends Command {
         rd.forward(getRequest(), getResponse());
     }
     
-    private boolean validateInput(String pageNo) {
+    private boolean validateInput(String pageNo, String parSearch) {
         boolean result = true;
         
         //-- pageNo can be null
         if ((pageNo != null) && !Validator.validateInteger(pageNo, 0, Validator.maxIntAllowed)) {
+            result = false;
+        }
+        
+        //-- parSearch can be null
+        if ((parSearch != null) && !Validator.validateString(parSearch, 0, Validator.maxStringLenAllowed)) {
             result = false;
         }
         

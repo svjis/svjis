@@ -38,6 +38,7 @@
             </ul>
             
             <div class="padding">
+            <jsp:include page="_menu_search_faults.jsp" />
             <jsp:include page="_menu_login.jsp" />
             </div> <!-- /padding -->
             
