@@ -1,0 +1,121 @@
+/*****************************************************************************
+ * Page structure
+ *****************************************************************************/
+
+body {
+        font-family:"Courier New", Courier, monospace;
+        font-size:13px;
+	text-align: left;
+        color: #102010;
+	background-color:white;
+        background-image:url('../gfx/bmain.gif');
+	margin-left: 65px;
+	margin-top: 20px;
+}
+
+
+
+/*****************************************************************************
+ * Appearance
+ *****************************************************************************/
+
+img {
+        border-width: 0px;
+}
+
+a:link {
+	color: #0066FF;
+	text-decoration: underline
+}
+
+a:visited {
+	color: #AA0066;
+	text-decoration: underline
+}
+
+a:hover { 
+	color: #FF0080;
+	text-decoration: underline
+}
+
+a:active {
+	color: #AA0066;
+	text-decoration: underline
+}
+
+p {
+        margin: 10px 1px 10px 1px;
+}
+
+hr {
+        width: 95%;
+        margin: 0px 0px 0px 0px;
+        height:2px;
+}
+
+pre {
+        color: #102010;
+        margin-top: 10px;
+        margin-bottom: 10px;
+
+        /* make the text wrap in the pre */
+        white-space: pre-wrap;       /* css-3 */
+        white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+        white-space: -pre-wrap;      /* Opera 4-6 */
+        white-space: -o-pre-wrap;    /* Opera 7 */
+        word-wrap: break-word;       /* Internet Explorer 5.5+ */
+        
+        -moz-border-radius: 8px;
+        -webkit-border-radius: 8px;
+        -khtml-border-radius: 8px;
+        border-radius: 8px;
+}
+
+/*****************************************************************************
+ * Source
+ *****************************************************************************/
+.source { 
+        font-family:"Courier New", Courier, monospace;
+        background-color: #F9F9F9;
+        border: 1px #DDD solid;
+        padding: 3px;
+        min-width: 30em;
+        max-width: 80em;
+        margin-left: 20px;
+}
+.source .comment { color: green; }
+.source .string { color: red; }
+.source .keyword { color: blue; }
+.source .psymbol { text-decoration: underline; }
+.source .param { font-style: italic; }
+
+
+/*****************************************************************************
+ * pre text
+ *****************************************************************************/
+.pretext { 
+        font-family:"Courier New", Courier, monospace;
+        background-color: #FDFDFD;
+        border: 1px #DDD solid;
+        padding: 3px;
+        min-width: 30em;
+        max-width: 60em;
+        margin-left: 10px;
+}
+.pretext .blue { color: blue; }
+.pretext .red { color: red; }
+.pretext .superscript { font-size:xx-small; vertical-align:top; }
+.pretext .subscript { font-size:xx-small; vertical-align:bottom; }
+
+
+/*****************************************************************************
+ * book pages
+ *****************************************************************************/
+#book_container {
+  min-width: 30em;
+  max-width: 60em;
+  padding: 1px 0;
+  clear: both;
+  /*    top bottom right left */
+  margin: 0px auto auto 10px;
+}
