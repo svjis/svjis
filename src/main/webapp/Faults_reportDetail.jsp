@@ -22,6 +22,7 @@
 
 <%
     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+    String stl = (report.isClosed()) ? "text-decoration: line-through;" : "";
 %>
     <!-- Columns -->
     <div id="cols" class="box">
@@ -30,7 +31,7 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h1 class="page-title">#<%=report.getId() %>&nbsp;-&nbsp;<%=HttpUtils.highlight(report.getSubject(), request.getParameter("search")) %></h1>
+                    <h1 class="page-title" style="<%=stl %>">#<%=report.getId() %>&nbsp;-&nbsp;<%=HttpUtils.highlight(report.getSubject(), request.getParameter("search")) %></h1>
                     <% if (user.hasPermission("fault_reporting_resolver")) { %>
                     [<a href="Dispatcher?page=faultReportingEdit&id=<%=report.getId() %>"><%=language.getText("Edit") %></a>]&nbsp;
                         <% if (report.getAssignedToUser() == null) { %>
