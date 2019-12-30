@@ -5,6 +5,8 @@
 --%>
 
 
+<%@page import="java.util.List"%>
+<%@page import="cz.svjis.bean.Company"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="companyList" scope="request" class="java.util.ArrayList" />
 
@@ -12,16 +14,15 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link type="text/css" rel="stylesheet" href="css/style-for-list.css" />
         <title>Company list</title>
     </head>
 
     <body>
-        <h1>SVJ list</h1>
+        <h1>List of SVJ</h1>
         <%
         String letter = "";
-        java.util.Iterator<cz.svjis.bean.Company> compI = companyList.iterator();
-        while (compI.hasNext()) {
-            cz.svjis.bean.Company c = compI.next();
+        for (Company c: (List<Company>) companyList) {
 
             if (!letter.equals(c.getName().substring(0, 1))) {
                 letter = c.getName().substring(0,1);
