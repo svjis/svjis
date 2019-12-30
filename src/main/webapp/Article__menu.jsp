@@ -51,7 +51,10 @@
                 <%=writeSubMenu(menu.getMenu(), (request.getParameter("section") != null) ? Integer.valueOf(request.getParameter("section")) : 0, true) %>
             </ul>
                 
+            <div class="padding">
+            <jsp:include page="_menu_search.jsp" />
             <jsp:include page="_menu_login.jsp" />
+            </div> <!-- /padding -->
             
         <hr class="noscreen" />          
         </div> <!-- /aside -->
