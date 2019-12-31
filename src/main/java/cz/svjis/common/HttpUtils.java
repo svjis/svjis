@@ -46,4 +46,23 @@ public class HttpUtils {
             }
         }
     }
+    
+    public static String highlight(String string, String regex) {
+        String result = string;
+        if (regex != null) {
+            java.util.regex.Pattern p = java.util.regex.Pattern.compile(regex, java.util.regex.Pattern.CASE_INSENSITIVE);
+            java.util.regex.Matcher m = p.matcher(string);
+            StringBuffer sb = new StringBuffer();
+            while (m.find()) {
+                String replacement = "";
+                replacement += "<b style=\"color:black;background-color:#ffff66\">";
+                replacement += m.group();
+                replacement += "</b>";
+                m.appendReplacement(sb, replacement);
+            }
+            m.appendTail(sb);
+            result = sb.toString();
+        }
+        return result;
+    }
 }

@@ -23,6 +23,8 @@ import cz.svjis.servlet.cmd.CompanyDetailCmd;
 import cz.svjis.servlet.cmd.CompanySaveCmd;
 import cz.svjis.servlet.cmd.ContactCompanyCmd;
 import cz.svjis.servlet.cmd.ContactPhoneListCmd;
+import cz.svjis.servlet.cmd.FaultReportingAttachmentDeleteCmd;
+import cz.svjis.servlet.cmd.FaultReportingAttachmentSaveCmd;
 import cz.svjis.servlet.cmd.FaultReportingDetailCmd;
 import cz.svjis.servlet.cmd.FaultReportingEditCmd;
 import cz.svjis.servlet.cmd.FaultReportingFastCmd;
@@ -274,6 +276,14 @@ public class CmdFactory {
             
             if (page.equals("faultReportingFast")) {
                 return new FaultReportingFastCmd(ctx);
+            }
+            
+            if (page.equals("faultReportingAttachmentSave")) {
+                return new FaultReportingAttachmentSaveCmd(ctx);
+            }
+            
+            if (page.equals("faultReportingAttachmentDelete")) {
+                return new FaultReportingAttachmentDeleteCmd(ctx);
             }
         }
 

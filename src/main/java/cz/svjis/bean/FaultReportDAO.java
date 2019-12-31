@@ -24,23 +24,57 @@ public class FaultReportDAO {
         this.cnn = cnn;
     }
     
-    public ArrayList<FaultReport> getFaultList(int companyId, int closed) throws SQLException {
-        return getFaultList(companyId, closed, "WHERE a.COMPANY_ID = ? AND a.CLOSED = ? ");
+    public int getNumOfFaults(int companyId, int closed) throws SQLException {
+        return getFaultListSize(companyId, closed, "WHERE a.COMPANY_ID = ? AND a.CLOSED = ? ");
     }
     
-    public ArrayList<FaultReport> getFaultListByCreator(int companyId, int userId) throws SQLException {
-        return getFaultList(companyId, userId, "WHERE a.COMPANY_ID = ? AND a.CREATED_BY_USER_ID = ? ");
+    public ArrayList<FaultReport> getFaultList(int companyId, int pageNo, int pageSize, int closed) throws SQLException {
+        return getFaultList(companyId, pageNo, pageSize, closed, "WHERE a.COMPANY_ID = ? AND a.CLOSED = ? ");
     }
     
-    public ArrayList<FaultReport> getFaultListByResolver(int companyId, int userId) throws SQLException {
-        return getFaultList(companyId, userId, "WHERE a.COMPANY_ID = ? AND a.ASSIGNED_TO_USER_ID = ? ");
+    public int getNumOfFaultsByCreator(int companyId, int userId) throws SQLException {
+        return getFaultListSize(companyId, userId, "WHERE a.COMPANY_ID = ? AND a.CREATED_BY_USER_ID = ? ");
     }
     
-    private ArrayList<FaultReport> getFaultList(int companyId, int value, String where) throws SQLException {
-        
-        ArrayList<FaultReport> result = new ArrayList<FaultReport>();
+    public ArrayList<FaultReport> getFaultListByCreator(int companyId, int pageNo, int pageSize, int userId) throws SQLException {
+        return getFaultList(companyId, pageNo, pageSize, userId, "WHERE a.COMPANY_ID = ? AND a.CREATED_BY_USER_ID = ? ");
+    }
+    
+    public int getNumOfFaultsByResolver(int companyId, int userId) throws SQLException {
+        return getFaultListSize(companyId, userId, "WHERE a.COMPANY_ID = ? AND a.ASSIGNED_TO_USER_ID = ? ");
+    }
+    
+    public ArrayList<FaultReport> getFaultListByResolver(int companyId, int pageNo, int pageSize, int userId) throws SQLException {
+        return getFaultList(companyId, pageNo, pageSize, userId, "WHERE a.COMPANY_ID = ? AND a.ASSIGNED_TO_USER_ID = ? ");
+    }
+    
+    private int getFaultListSize(int companyId, int value, String where) throws SQLException {
+        int result = 0;
         
         String select = "SELECT \n" +
+                        "    count(*) AS CNT \n" +
+                        "FROM FAULT_REPORT a \n" +
+                        "LEFT JOIN \"USER\" cr on cr.ID = a.CREATED_BY_USER_ID \n" +
+                        "LEFT JOIN \"USER\" ass on ass.ID = a.ASSIGNED_TO_USER_ID \n" +
+                        where +
+                        ";";
+        
+        PreparedStatement ps = cnn.prepareStatement(select);
+        ps.setInt(1, companyId);
+        ps.setInt(2, value);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            result = rs.getInt("CNT");
+        }
+        rs.close();
+        ps.close();
+        
+        return result;
+    }
+    
+    private ArrayList<FaultReport> getFaultList(int companyId, int pageNo, int pageSize, int value, String where) throws SQLException {
+
+        String select = "SELECT FIRST " + (pageNo * pageSize) + "\n" +
                         "    a.ID, \n" +
                         "    a.COMPANY_ID, \n" +
                         "    a.SUBJECT, \n" +
@@ -63,31 +97,109 @@ public class FaultReportDAO {
         ps.setInt(1, companyId);
         ps.setInt(2, value);
         ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            FaultReport f = new FaultReport();
-            f.setId(rs.getInt("ID"));
-            f.setCompanyId(rs.getInt("COMPANY_ID"));
-            f.setSubject(rs.getString("SUBJECT"));
-            f.setCreationDate(new Date(rs.getTimestamp("CREATION_DATE").getTime()));
-            if (rs.getInt("CREATED_BY_USER_ID") != 0) {
-                User u = new User();
-                u.setId(rs.getInt("CREATED_BY_USER_ID"));
-                u.setFirstName(rs.getString("CR_FIRST_NAME"));
-                u.setLastName(rs.getString("CR_LAST_NAME"));
-                f.setCreatedByUser(u);
-            }
-            if (rs.getInt("ASSIGNED_TO_USER_ID") != 0) {
-                User u = new User();
-                u.setId(rs.getInt("ASSIGNED_TO_USER_ID"));
-                u.setFirstName(rs.getString("AS_FIRST_NAME"));
-                u.setLastName(rs.getString("AS_LAST_NAME"));
-                f.setAssignedToUser(u);
-            }
-            f.setClosed(rs.getBoolean("CLOSED"));
-            result.add(f);
+        ArrayList<FaultReport> result = getFaultReportListFromResultSet(rs, pageNo, pageSize);
+        rs.close();
+        ps.close();
+        
+        return result;
+    }
+    
+    public int getFaultListSizeFromSearch(int companyId, String search) throws SQLException {
+        int result = 0;
+        
+        String select = "SELECT \n" +
+                        "    count(*) AS CNT \n" +
+                        "FROM FAULT_REPORT a \n" +
+                        "LEFT JOIN \"USER\" cr on cr.ID = a.CREATED_BY_USER_ID \n" +
+                        "LEFT JOIN \"USER\" ass on ass.ID = a.ASSIGNED_TO_USER_ID \n" +
+                        "WHERE a.COMPANY_ID = ? AND (\n" +
+                            "(UPPER(a.SUBJECT) like UPPER('%" + search + "%')) OR \n" +
+                            "(UPPER(a.DESCRIPTION) like UPPER('%" + search + "%')) \n" +
+                        ");";
+        
+        PreparedStatement ps = cnn.prepareStatement(select);
+        ps.setInt(1, companyId);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            result = rs.getInt("CNT");
         }
         rs.close();
         ps.close();
+        
+        return result;        
+    }
+    
+    public ArrayList<FaultReport> getFaultListFromSearch(int companyId, int pageNo, int pageSize, String search) throws SQLException {
+        
+        String select = "SELECT FIRST " + (pageNo * pageSize) + "\n" +
+                        "    a.ID, \n" +
+                        "    a.COMPANY_ID, \n" +
+                        "    a.SUBJECT, \n" +
+                        "    a.DESCRIPTION, \n" +
+                        "    a.CREATION_DATE, \n" +
+                        "    a.CREATED_BY_USER_ID, \n" +
+                        "    cr.FIRST_NAME as CR_FIRST_NAME, \n" +
+                        "    cr.LAST_NAME as CR_LAST_NAME, \n" +
+                        "    a.ASSIGNED_TO_USER_ID, \n" +
+                        "    ass.FIRST_NAME as AS_FIRST_NAME, \n" +
+                        "    ass.LAST_NAME as AS_LAST_NAME, \n" +
+                        "    a.CLOSED\n" +
+                        "FROM FAULT_REPORT a \n" +
+                        "LEFT JOIN \"USER\" cr on cr.ID = a.CREATED_BY_USER_ID \n" +
+                        "LEFT JOIN \"USER\" ass on ass.ID = a.ASSIGNED_TO_USER_ID \n" +
+                        "WHERE a.COMPANY_ID = ? AND (\n" +
+                            "(UPPER(a.SUBJECT) like UPPER('%" + search + "%')) OR \n" +
+                            "(UPPER(a.DESCRIPTION) like UPPER('%" + search + "%')) \n" +
+                        ") \n" +
+                        "ORDER BY a.CREATION_DATE desc;";
+        
+        PreparedStatement ps = cnn.prepareStatement(select);
+        ps.setInt(1, companyId);
+        ResultSet rs = ps.executeQuery();
+        ArrayList<FaultReport> result = getFaultReportListFromResultSet(rs, pageNo, pageSize);
+        rs.close();
+        ps.close();
+        
+        return result;
+    }
+    
+    private ArrayList<FaultReport> getFaultReportListFromResultSet(ResultSet rs, int pageNo, int pageSize) throws SQLException {
+        ArrayList<FaultReport> result = new ArrayList<FaultReport>();
+        
+        int cPageNo = 1;
+        int cArtNo = 0;
+        
+        while (rs.next()) {
+            if (cPageNo == pageNo) {
+                FaultReport f = new FaultReport();
+                f.setId(rs.getInt("ID"));
+                f.setCompanyId(rs.getInt("COMPANY_ID"));
+                f.setSubject(rs.getString("SUBJECT"));
+                f.setCreationDate(new Date(rs.getTimestamp("CREATION_DATE").getTime()));
+                if (rs.getInt("CREATED_BY_USER_ID") != 0) {
+                    User u = new User();
+                    u.setId(rs.getInt("CREATED_BY_USER_ID"));
+                    u.setFirstName(rs.getString("CR_FIRST_NAME"));
+                    u.setLastName(rs.getString("CR_LAST_NAME"));
+                    f.setCreatedByUser(u);
+                }
+                if (rs.getInt("ASSIGNED_TO_USER_ID") != 0) {
+                    User u = new User();
+                    u.setId(rs.getInt("ASSIGNED_TO_USER_ID"));
+                    u.setFirstName(rs.getString("AS_FIRST_NAME"));
+                    u.setLastName(rs.getString("AS_LAST_NAME"));
+                    f.setAssignedToUser(u);
+                }
+                f.setClosed(rs.getBoolean("CLOSED"));
+                result.add(f);   
+            }
+            
+            cArtNo++;
+            if (cArtNo == pageSize) {
+                cPageNo++;
+                cArtNo = 0;
+            }
+        }
         
         return result;
     }
@@ -144,10 +256,113 @@ public class FaultReportDAO {
         ps.close();
         
         if (result != null) {
+            result.setAttachmentList(this.getFaultReportAttachmentList(result.getId()));
             result.setFaultReportCommentList(this.getFaultReportCommentList(result.getId()));
         }
         
         return result;
+    }
+    
+    private ArrayList<FaultReportAttachment> getFaultReportAttachmentList(int reportId) throws SQLException {
+        ArrayList<FaultReportAttachment> result = new ArrayList<FaultReportAttachment>();
+        String select = "SELECT "
+                + "a.ID, "
+                + "a.FAULT_REPORT_ID, "
+                + "a.USER_ID, "
+                + "b.COMPANY_ID, "
+                + "b.FIRST_NAME, "
+                + "b.LAST_NAME, "
+                + "a.UPLOAD_TIME, "
+                + "a.CONTENT_TYPE, "
+                + "a.FILENAME "
+                //+ "a.DATA "
+                + "FROM FAULT_REPORT_ATTACHMENT a "
+                + "LEFT JOIN \"USER\" b on b.ID = a.USER_ID "
+                + "WHERE (a.FAULT_REPORT_ID = ?) "
+                + "ORDER BY a.ID";
+        
+        PreparedStatement ps = cnn.prepareStatement(select);
+        ps.setInt(1, reportId);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            FaultReportAttachment a = new FaultReportAttachment();
+            a.setId(rs.getInt("ID"));
+            a.setFaultReportId(rs.getInt("FAULT_REPORT_ID"));
+            User u = new User();
+            u.setId(rs.getInt("USER_ID"));
+            u.setCompanyId(rs.getInt("COMPANY_ID"));
+            u.setFirstName(rs.getString("FIRST_NAME"));
+            u.setLastName(rs.getString("LAST_NAME"));
+            a.setUser(u);
+            a.setUploadTime(rs.getTimestamp("UPLOAD_TIME"));
+            a.setContentType(rs.getString("CONTENT_TYPE"));
+            a.setFileName(rs.getString("FILENAME"));
+            result.add(a);
+        }
+        ps.close();
+        return result;
+    }
+    
+    public void insertFaultReportAttachment(FaultReportAttachment fa) throws SQLException {
+        String insert = "INSERT INTO FAULT_REPORT_ATTACHMENT (FAULT_REPORT_ID, USER_ID, UPLOAD_TIME, CONTENT_TYPE, FILENAME, DATA) VALUES (?,?,?,?,?,?)";
+        PreparedStatement ps = cnn.prepareStatement(insert);
+        ps.setInt(1, fa.getFaultReportId());
+        ps.setInt(2, fa.getUser().getId());
+        ps.setTimestamp(3, new java.sql.Timestamp(fa.getUploadTime().getTime()));
+        ps.setString(4, fa.getContentType());
+        ps.setString(5, fa.getFileName());
+        ps.setBytes(6, fa.getData());
+        ps.execute();
+        ps.close();
+    }
+    
+    public FaultReportAttachment getFaultReportAttachment(int id) throws SQLException {
+        FaultReportAttachment result = null;
+        String select = "SELECT "
+                + "a.ID, "
+                + "a.FAULT_REPORT_ID, "
+                + "a.USER_ID, "
+                + "b.COMPANY_ID, "
+                + "b.FIRST_NAME, "
+                + "b.LAST_NAME, "
+                + "a.UPLOAD_TIME, "
+                + "a.CONTENT_TYPE, "
+                + "a.FILENAME, "
+                + "a.DATA "
+                + "FROM FAULT_REPORT_ATTACHMENT a "
+                + "LEFT JOIN \"USER\" b on b.ID = a.USER_ID "
+                + "WHERE (a.ID = ?) ";
+        
+        PreparedStatement ps = cnn.prepareStatement(select);
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            result = new FaultReportAttachment();
+            result.setId(rs.getInt("ID"));
+            result.setFaultReportId(rs.getInt("FAULT_REPORT_ID"));
+            User u = new User();
+            u.setId(rs.getInt("USER_ID"));
+            u.setCompanyId(rs.getInt("COMPANY_ID"));
+            u.setFirstName(rs.getString("FIRST_NAME"));
+            u.setLastName(rs.getString("LAST_NAME"));
+            result.setUser(u);
+            result.setUploadTime(rs.getTimestamp("UPLOAD_TIME"));
+            result.setContentType(rs.getString("CONTENT_TYPE"));
+            result.setFileName(rs.getString("FILENAME"));
+            java.sql.Blob blob = null;
+            blob = rs.getBlob("DATA");
+            result.setData(blob.getBytes(1, (int) blob.length()));
+        }
+        ps.close();
+        return result;
+    }
+    
+    public void deleteFaultAttachment(int id) throws SQLException {
+        String delete = "DELETE FROM FAULT_REPORT_ATTACHMENT a WHERE (a.ID = ?)";
+        PreparedStatement ps = cnn.prepareStatement(delete);
+        ps.setInt(1, id);
+        ps.execute();
+        ps.close();
     }
     
     public int insertFault(FaultReport f) throws SQLException {

@@ -35,7 +35,9 @@
                 <li <%=(p.startsWith("messagesPending") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=messagesPending"><%=language.getText("Messages pending") %> (<%=currCompany.getMessageCnt() %>)</a></li>
             </ul>
             
+            <div class="padding">
             <jsp:include page="_menu_login.jsp" />
+            </div> <!-- /padding -->
             
         <hr class="noscreen" />          
         </div> <!-- /aside -->

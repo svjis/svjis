@@ -11,8 +11,11 @@
 <%@page import="cz.svjis.bean.MiniNews"%>
 <%@page import="java.net.URLEncoder"%>
 <%@page import="cz.svjis.bean.Article"%>
+<%@page import="cz.svjis.bean.SliderItem"%>
+<%@page import="cz.svjis.common.HttpUtils"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.text.SimpleDateFormat"%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="slider" scope="request" class="cz.svjis.bean.SliderImpl" />
@@ -21,27 +24,6 @@
 <jsp:useBean id="articleListInfo" scope="request" class="cz.svjis.bean.ArticleListInfo" />
 <jsp:useBean id="miniNewsList" scope="request" class="java.util.ArrayList" />
 <jsp:useBean id="inquiryList" scope="request" class="java.util.ArrayList" />
-
-<%!
-    private static String highlight(String string, String regex) {
-        String result = string;
-        if (regex != null) {
-            java.util.regex.Pattern p = java.util.regex.Pattern.compile(regex, java.util.regex.Pattern.CASE_INSENSITIVE);
-            java.util.regex.Matcher m = p.matcher(string);
-            StringBuffer sb = new StringBuffer();
-            while (m.find()) {
-                String replacement = "";
-                replacement += "<b style=\"color:black;background-color:#ffff66\">";
-                replacement += m.group();
-                replacement += "</b>";
-                m.appendReplacement(sb, replacement);
-            }
-            m.appendTail(sb);
-            result = sb.toString();
-        }
-        return result;
-    }
-%>
 
 <%
     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
@@ -69,9 +51,9 @@
                     <!-- Article -->
                     <div class="article box">
                         <div class="article-desc">
-                            <h1 class="article-title-list"><a href="Dispatcher?page=articleDetail&id=<%=a.getId() %><%=(request.getParameter("search") != null) ? "&search=" + URLEncoder.encode(request.getParameter("search"), "UTF-8") : "" %>"><%=highlight(a.getHeader(), request.getParameter("search")) %></a></h1>
+                            <h1 class="article-title-list"><a href="Dispatcher?page=articleDetail&id=<%=a.getId() %><%=(request.getParameter("search") != null) ? "&search=" + URLEncoder.encode(request.getParameter("search"), "UTF-8") : "" %>"><%=HttpUtils.highlight(a.getHeader(), request.getParameter("search")) %></a></h1>
                             <p class="info"><%=language.getText("Published:") %> <strong><%=sdf.format(a.getCreationDate()) %></strong> <%=language.getText("by:") %> <strong><%=a.getAuthor().getFirstName() %> <%=a.getAuthor().getLastName() %></strong> <%=(a.getNumOfComments() != 0) ? language.getText("Comments:") + " <strong>" + a.getNumOfComments() + "</strong>" : "" %></p> 
-                            <%=highlight(a.getDescription(), request.getParameter("search")) %>
+                            <%=HttpUtils.highlight(a.getDescription(), request.getParameter("search")) %>
                         </div>
                     </div> <!-- /article -->
                     <%
@@ -88,9 +70,7 @@
                             search = "search=" + URLEncoder.encode(request.getParameter("search"), "UTF-8") + "&";
                             pageId = "page=search&";
                         }
-                        Iterator<cz.svjis.bean.SliderItem> slIt = slider.getItemList().iterator();
-                        while (slIt.hasNext()) {
-                            cz.svjis.bean.SliderItem item = slIt.next();
+                        for (SliderItem item: slider.getItemList()) {
                             if (item.isCurrent()) {
                                 out.println("<b>" + item.getLabel() + "</b>&nbsp;");
                             } else {

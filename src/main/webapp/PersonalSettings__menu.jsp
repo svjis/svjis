@@ -30,7 +30,9 @@
                 <li <%=(p.startsWith("psPasswordChange") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=psPasswordChange"><%=language.getText("Password change") %></a></li>
             </ul>
             
+            <div class="padding">
             <jsp:include page="_menu_login.jsp" />
+            </div> <!-- /padding -->
             
         <hr class="noscreen" />          
         </div> <!-- /aside -->

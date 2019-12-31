@@ -28,7 +28,9 @@
                 <li <%=(p.startsWith("myBuildingUnitList") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=myBuildingUnitList"><%=language.getText("Building unit list") %></a></li>
             </ul>
             
+            <div class="padding">
             <jsp:include page="_menu_login.jsp" />
+            </div> <!-- /padding -->
             
         <hr class="noscreen" />          
         </div> <!-- /aside -->

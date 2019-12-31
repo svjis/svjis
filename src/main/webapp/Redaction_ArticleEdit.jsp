@@ -160,9 +160,7 @@
                                     <th class="list" colspan="3"><%=language.getText("File") %></th>
                                 </tr>
                                 <%
-                                Iterator<ArticleAttachment> attachI = article.getAttachmentList().iterator();
-                                while (attachI.hasNext()) {
-                                    ArticleAttachment a = attachI.next();
+                                for (ArticleAttachment a: article.getAttachmentList()) {
                                     String icon = "gfx/Files_unknown.gif";
                                     String extension = a.getFileName().toLowerCase().substring(a.getFileName().lastIndexOf(".") + 1);
                                     File f = new File(request.getServletContext().getRealPath("/gfx") + "/Files_" + extension + ".gif");
@@ -173,7 +171,7 @@
                                 <tr>
                                     <td class="list"><img src="<%=icon%>" border="0"></td>
                                     <td class="list"><a href="Upload?page=download&id=<%=a.getId() %>"><%=a.getFileName() %></a></td>
-                                    <td class="list"><a onclick="if (!confirm('<%=language.getText("Really do you want to remove attachment") %> <%=a.getFileName() %> ?')) return false;" href="Dispatcher?page=redactionArticleAttachmentDelete&id=<%=a.getId() %>&articleId=<%=a.getArticleId() %>"><%=language.getText("Delete") %></a></td>
+                                    <td class="list"><a onclick="if (!confirm('<%=language.getText("Really do you want to remove attachment") %> <%=a.getFileName() %> ?')) return false;" href="Dispatcher?page=redactionArticleAttachmentDelete&id=<%=a.getId() %>"><%=language.getText("Delete") %></a></td>
                                 </tr>
                                 <%
                                 }

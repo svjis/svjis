@@ -5,8 +5,8 @@
  */
 package cz.svjis.servlet.cmd;
 
-import cz.svjis.bean.ArticleAttachment;
-import cz.svjis.bean.ArticleDAO;
+import cz.svjis.bean.FaultReportAttachment;
+import cz.svjis.bean.FaultReportDAO;
 import cz.svjis.common.HttpUtils;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
@@ -15,14 +15,14 @@ import javax.servlet.RequestDispatcher;
 
 /**
  *
- * @author jaroslav_b
+ * @author jarberan
  */
-public class DownloadCmd extends Command {
-
-    public DownloadCmd(CmdContext ctx) {
+public class FaultReportingDownloadCmd extends Command {
+    
+    public FaultReportingDownloadCmd(CmdContext ctx) {
         super(ctx);
     }
-
+    
     @Override
     public void execute() throws Exception {
         
@@ -34,14 +34,14 @@ public class DownloadCmd extends Command {
             return;
         }
         
-        ArticleDAO dao = new ArticleDAO(getCnn());
-        ArticleAttachment aa = dao.getArticleAttachment(Integer.parseInt(parId));
-        if ((aa == null) || (dao.getArticle(getUser(), aa.getArticleId()) == null)) {
+        FaultReportDAO faultDao = new FaultReportDAO(getCnn());
+        FaultReportAttachment fa = faultDao.getFaultReportAttachment(Integer.parseInt(parId));
+        if ((fa == null) || (faultDao.getFault(getCompany().getId(), fa.getFaultReportId()) == null)) {
             RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
             rd.forward(getRequest(), getResponse());
             return;
         }
-        HttpUtils.writeBinaryData(aa.getContentType(), aa.getFileName(), aa.getData(), getRequest(), getResponse());
+        HttpUtils.writeBinaryData(fa.getContentType(), fa.getFileName(), fa.getData(), getRequest(), getResponse());
     }
     
     private boolean validateInput(String id) {

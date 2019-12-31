@@ -5,8 +5,9 @@
  */
 package cz.svjis.servlet.cmd;
 
-import cz.svjis.bean.Role;
-import cz.svjis.bean.RoleDAO;
+import cz.svjis.bean.FaultReport;
+import cz.svjis.bean.FaultReportAttachment;
+import cz.svjis.bean.FaultReportDAO;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -14,17 +15,17 @@ import javax.servlet.RequestDispatcher;
 
 /**
  *
- * @author jaroslav_b
+ * @author jarberan
  */
-public class RoleDeleteCmd extends Command {
-
-    public RoleDeleteCmd(CmdContext ctx) {
+public class FaultReportingAttachmentDeleteCmd extends Command {
+    
+    public FaultReportingAttachmentDeleteCmd(CmdContext ctx) {
         super(ctx);
     }
-
+    
     @Override
     public void execute() throws Exception {
-        
+
         String parId = getRequest().getParameter("id");
         
         if (!validateInput(parId)) {
@@ -33,23 +34,20 @@ public class RoleDeleteCmd extends Command {
             return;
         }
         
-        RoleDAO roleDao = new RoleDAO(getCnn());
+        FaultReportDAO faultDao = new FaultReportDAO(getCnn());
 
-        Role role = roleDao.getRole(getCompany().getId(), Integer.valueOf(parId));
-        if ((role != null)) {
-            if (role.getNumOfUsers() != 0) {
-                String message = "Cannot delete role which is not empty.";
-                getRequest().setAttribute("messageHeader", "Error");
-                getRequest().setAttribute("message", message);
-                RequestDispatcher rd = getRequest().getRequestDispatcher("/_message.jsp");
-                rd.forward(getRequest(), getResponse());
-                return;
-            } else {
-                roleDao.deleteRole(role.getCompanyId(), role.getId());
-            }
+        int id = Integer.parseInt(parId);
+        FaultReportAttachment fa = faultDao.getFaultReportAttachment(id);
+        if (fa == null) {
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
+            rd.forward(getRequest(), getResponse());
+            return;
         }
-        
-        String url = "Dispatcher?page=roleList";
+        FaultReport f = faultDao.getFault(getCompany().getId(), fa.getFaultReportId());
+        if ((f != null) && (!f.isClosed()) && (fa.getUser().getId() == getUser().getId())) {
+            faultDao.deleteFaultAttachment(id);
+        }
+        String url = "Dispatcher?page=faultDetail&id=" + fa.getFaultReportId();
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
@@ -61,7 +59,7 @@ public class RoleDeleteCmd extends Command {
         if (!Validator.validateInteger(parId, 0, Validator.maxIntAllowed)) {
             result = false;
         }
-
+        
         return result;
     }
 }
