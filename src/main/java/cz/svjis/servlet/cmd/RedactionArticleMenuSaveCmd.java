@@ -25,22 +25,16 @@ public class RedactionArticleMenuSaveCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        String parId = getRequest().getParameter("id");
-        String parDescription = Validator.fixTextInput(getRequest().getParameter("description"), false);
-        String parParentId = getRequest().getParameter("parent");
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+        String parDescription = Validator.getString(getRequest(), "description", 0, 50, false, false);
+        int parParentId = Validator.getInt(getRequest(), "parent", 0, Validator.maxIntAllowed, false);
 
-        if (!validateInput(parId, parDescription, parParentId)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
-        
         MenuDAO menuDao = new MenuDAO(getCnn());
         MenuNode n = new MenuNode();
         
-        n.setId(Integer.parseInt(parId));
+        n.setId(parId);
         n.setDescription(parDescription);
-        n.setParentId(Integer.parseInt(parParentId));
+        n.setParentId(parParentId);
         //-- disable recursive join
         if ((n.getId() != 0) && (n.getId() == n.getParentId())) {
             n.setParentId(0);
@@ -55,23 +49,5 @@ public class RedactionArticleMenuSaveCmd extends Command {
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String parId, String parDescription, String parParentId) {
-        boolean result = true;
-        
-        if (!Validator.validateInteger(parId, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parDescription, 0, 50)) {
-            result = false;
-        }
-        
-        if (!Validator.validateInteger(parParentId, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-        
-        return result;
     }
 }

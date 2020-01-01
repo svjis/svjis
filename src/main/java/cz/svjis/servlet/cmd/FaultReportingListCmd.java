@@ -27,19 +27,14 @@ public class FaultReportingListCmd extends Command {
 
     @Override
     public void execute() throws Exception {
-        String parPage = getRequest().getParameter("page");
-        String parPageNo = getRequest().getParameter("pageNo");
-        String parSearch = Validator.fixTextInput(getRequest().getParameter("search"), false);
         
-        if (!validateInput(parPageNo, parSearch)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
+        String parPage = Validator.getString(getRequest(), "page", 0, Validator.maxStringLenAllowed, false, false);
+        int parPageNo = Validator.getInt(getRequest(), "pageNo", 0, Validator.maxIntAllowed, true);
+        String parSearch = Validator.getString(getRequest(), "search", 0, Validator.maxStringLenAllowed, true, false);
         
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
         
-        int pageNo = (parPageNo == null) ? 1 : Integer.valueOf(parPageNo);
+        int pageNo = (parPageNo == 0) ? 1 : parPageNo;
         int pageSize = (getSetup().getProperty("faults.page.size") == null) ? 10 : Integer.valueOf(getSetup().getProperty("faults.page.size"));
         
         SliderImpl sl = new SliderImpl();
@@ -77,21 +72,5 @@ public class FaultReportingListCmd extends Command {
         
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Faults_reportList.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String pageNo, String parSearch) {
-        boolean result = true;
-        
-        //-- pageNo can be null
-        if ((pageNo != null) && !Validator.validateInteger(pageNo, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-        
-        //-- parSearch can be null
-        if ((parSearch != null) && !Validator.validateString(parSearch, 0, Validator.maxStringLenAllowed)) {
-            result = false;
-        }
-        
-        return result;
     }
 }

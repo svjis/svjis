@@ -29,13 +29,7 @@ public class BuildingUnitListCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        String parTypeId = getRequest().getParameter("typeId");
-
-        if (!validateInput(parTypeId)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
+        int parTypeId = Validator.getInt(getRequest(), "typeId", 0, Validator.maxIntAllowed, true);
 
         CompanyDAO compDao = new CompanyDAO(getCnn());
         BuildingDAO buildingDao = new BuildingDAO(getCnn());
@@ -44,26 +38,12 @@ public class BuildingUnitListCmd extends Command {
         getRequest().setAttribute("currCompany", currCompany);
         ArrayList<BuildingUnitType> buildingUnitType = buildingDao.getBuildingUnitTypeList();
         getRequest().setAttribute("buildingUnitType", buildingUnitType);
-        int typeId = 0;
-        if (parTypeId != null) {
-            typeId = Integer.valueOf(getRequest().getParameter("typeId"));
-        }
+        int typeId = parTypeId;
         ArrayList<BuildingUnit> buildingUnitList = buildingDao.getBuildingUnitList(
                 buildingDao.getBuilding(getCompany().getId()).getId(),
                 typeId);
         getRequest().setAttribute("buildingUnitList", buildingUnitList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_buildingUnitList.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String parTypeId) {
-        boolean result = true;
-        
-        //-- parTypeId can be null
-        if ((parTypeId != null) && !Validator.validateInteger(parTypeId, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-        
-        return result;
     }
 }

@@ -26,35 +26,18 @@ public class RedactionArticleMenuEditCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        String parId = getRequest().getParameter("id");
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
 
-        if (!validateInput(parId)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
-        
         MenuDAO menuDao = new MenuDAO(getCnn());
         
-        int id = Integer.parseInt(parId);
         MenuNode menuNode = new MenuNode();
-        if (id != 0) {
-            menuNode = menuDao.getMenuNode(id, getUser().getCompanyId());
+        if (parId != 0) {
+            menuNode = menuDao.getMenuNode(parId, getUser().getCompanyId());
         }
         getRequest().setAttribute("menuNode", menuNode);
         ArrayList<MenuNode> menuNodeList = menuDao.getMenuNodeList(getUser().getCompanyId());
         getRequest().setAttribute("menuNodeList", menuNodeList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Redaction_ArticleMenuEdit.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String parId) {
-        boolean result = true;
-        
-        if (!Validator.validateInteger(parId, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-        
-        return result;
     }
 }

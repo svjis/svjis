@@ -28,23 +28,14 @@ public class ArticleDetailCmd extends Command {
     @Override
     public void execute() throws Exception {
         
-        String parId = getRequest().getParameter("id");
-        String parSearch = getRequest().getParameter("search");
-        
-        if (!validateInput(parId, parSearch)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+        Validator.getString(getRequest(), "search", 0, 50, true, false);
 
         MenuDAO menuDao = new MenuDAO(getCnn());
         ArticleDAO articleDao = new ArticleDAO(getCnn());
         LogDAO logDao = new LogDAO(getCnn());
 
-        int articleId = 0;
-        if (parId != null) {
-            articleId = Integer.valueOf(parId);
-        }
+        int articleId = parId;
         Article article = articleDao.getArticle(getUser(),
                 articleId);
         if ((article == null) || (article.getId() == 0)) {
@@ -62,20 +53,5 @@ public class ArticleDetailCmd extends Command {
         RequestDispatcher rd = getRequest().getRequestDispatcher("/ArticleDetail.jsp");
         rd.forward(getRequest(), getResponse());
         logDao.log(getUser().getId(), LogDAO.operationTypeRead, article.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
-    }
-    
-    
-    private boolean validateInput(String id, String search) {
-        boolean result = true;
-        
-        if (!Validator.validateInteger(id, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-        
-        if ((search != null) && !Validator.validateString(search, 0, 50)) {
-            result = false;
-        }
-        
-        return result;
     }
 }

@@ -29,18 +29,12 @@ public class LostPasswordSubmitCmd extends Command {
     @Override
     public void execute() throws Exception {
         
-        String email = Validator.fixTextInput(getRequest().getParameter("email"), false);
-        
-        if (!validateInput(email)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
+        String parEmail = Validator.getString(getRequest(), "email", 0, 100, false, false);
 
         UserDAO userDao = new UserDAO(getCnn());
         LogDAO logDao = new LogDAO(getCnn());
 
-        if ((email == null) || (email.equals(""))) {
+        if ((parEmail == null) || (parEmail.equals(""))) {
             String url = "Dispatcher?page=lostPassword";
             getRequest().setAttribute("url", url);
             RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
@@ -48,7 +42,7 @@ public class LostPasswordSubmitCmd extends Command {
             return;
         }
         RequestDispatcher rd = null;
-        ArrayList<User> result = userDao.findLostPassword(getCompany().getId(), email);
+        ArrayList<User> result = userDao.findLostPassword(getCompany().getId(), parEmail);
         if (!result.isEmpty()) {
             String logins = "";
             for (User u : result) {
@@ -65,7 +59,7 @@ public class LostPasswordSubmitCmd extends Command {
                     getSetup().getProperty("mail.login"),
                     getSetup().getProperty("mail.password"),
                     getSetup().getProperty("mail.sender"));
-            mailDao.sendInstantMail(email, getCompany().getName(), body);
+            mailDao.sendInstantMail(parEmail, getCompany().getName(), body);
             getRequest().setAttribute("messageHeader", getLanguage().getText("Password assistance"));
             getRequest().setAttribute("message", getLanguage().getText("Your login and password were sent to your mail."));
             rd = getRequest().getRequestDispatcher("/_message.jsp");
@@ -75,15 +69,5 @@ public class LostPasswordSubmitCmd extends Command {
             rd = getRequest().getRequestDispatcher("/_message.jsp");
         }
         rd.forward(getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String email) {
-        boolean result = true;
-        
-        if (!Validator.validateString(email, 0, 100)) {
-            result = false;
-        }
-        
-        return result;
     }
 }

@@ -33,18 +33,11 @@ public class RedactionArticleAttachmentSaveCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        String parArticleId = getRequest().getParameter("articleId");
-        
-        if (!validateInput(parArticleId)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
-        
+        int parArticleId = Validator.getInt(getRequest(), "articleId", 0, Validator.maxIntAllowed, false);
+
         ArticleDAO articleDao = new ArticleDAO(getCnn());
         LogDAO logDao = new LogDAO(getCnn());
         
-        int articleId = Integer.parseInt(parArticleId);
         FileItemFactory factory = new DiskFileItemFactory();
         ServletFileUpload upload = new ServletFileUpload(factory);
         //upload.setSizeMax(yourMaxRequestSize);
@@ -63,27 +56,17 @@ public class RedactionArticleAttachmentSaveCmd extends Command {
                 aa.setContentType(item.getContentType());
                 aa.setData(item.get());
                 aa.setUserId(getUser().getId());
-                aa.setArticleId(articleId);
+                aa.setArticleId(parArticleId);
                 aa.setUploadTime(new Date());
                 if (!aa.getFileName().equals("")) {
                     articleDao.insertArticleAttachment(aa);
                 }
             }
         }
-        String url = "Dispatcher?page=redactionArticleEdit&id=" + articleId;
+        String url = "Dispatcher?page=redactionArticleEdit&id=" + parArticleId;
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
-        logDao.log(getUser().getId(), LogDAO.operationTypeInsertAttachment, articleId, getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
-    }
-    
-    private boolean validateInput(String parArticleId) {
-        boolean result = true;
-        
-        if (!Validator.validateInteger(parArticleId, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-        
-        return result;
+        logDao.log(getUser().getId(), LogDAO.operationTypeInsertAttachment, parArticleId, getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
     }
 }

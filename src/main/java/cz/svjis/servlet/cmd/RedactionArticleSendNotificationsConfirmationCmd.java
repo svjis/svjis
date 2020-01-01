@@ -30,27 +30,16 @@ public class RedactionArticleSendNotificationsConfirmationCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        String parId = getRequest().getParameter("id");
-        
-        if (!validateInput(parId)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
         
         ArticleDAO articleDao = new ArticleDAO(getCnn());
         LogDAO logDao = new LogDAO(getCnn());
-        
-        int articleId = 0;
-        if (parId != null) {
-            articleId = Integer.valueOf(parId);
-        }
-        
+
         Article article = null;
-        if (articleId == 0) {
+        if (parId == 0) {
             article = new Article();
         } else {
-            article = articleDao.getArticle(getUser(), articleId);
+            article = articleDao.getArticle(getUser(), parId);
         }
         getRequest().setAttribute("article", article);
 
@@ -65,7 +54,7 @@ public class RedactionArticleSendNotificationsConfirmationCmd extends Command {
                 getSetup().getProperty("mail.sender"));
 
         int counter = 0;
-        ArrayList<User> userList = articleDao.getUserListForNotificationAboutNewArticle(articleId);
+        ArrayList<User> userList = articleDao.getUserListForNotificationAboutNewArticle(parId);
         Iterator<User> it = userList.iterator();
         while (it.hasNext()) {
             User u = it.next();
@@ -80,15 +69,5 @@ public class RedactionArticleSendNotificationsConfirmationCmd extends Command {
 
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Redaction_ArticleSendNotificationsConfirmation.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-
-    private boolean validateInput(String parId) {
-        boolean result = true;
-        
-        if (!Validator.validateInteger(parId, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-
-        return result;
     }
 }

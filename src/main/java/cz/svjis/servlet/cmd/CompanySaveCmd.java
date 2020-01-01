@@ -25,22 +25,16 @@ public class CompanySaveCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        String parName = Validator.fixTextInput(getRequest().getParameter("name"), false);
-        String parAddress = Validator.fixTextInput(getRequest().getParameter("address"), false);
-        String parCity = Validator.fixTextInput(getRequest().getParameter("city"), false);
-        String parPostCode = Validator.fixTextInput(getRequest().getParameter("postCode"), false);
-        String parPhone = Validator.fixTextInput(getRequest().getParameter("phone"), false);
-        String parFax = Validator.fixTextInput(getRequest().getParameter("fax"), false);
-        String parEMail = Validator.fixTextInput(getRequest().getParameter("eMail"), false);
-        String parRegNo = Validator.fixTextInput(getRequest().getParameter("registrationNo"), false);
-        String parVatNo = Validator.fixTextInput(getRequest().getParameter("vatRegistrationNo"), false);
-        String parDomain = Validator.fixTextInput(getRequest().getParameter("internetDomain"), false);
-
-        if (!validateInput(parName, parAddress, parCity, parPostCode, parPhone, parFax, parEMail, parRegNo, parVatNo, parDomain)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
+        String parName = Validator.getString(getRequest(), "name", 0, 50, false, false);
+        String parAddress = Validator.getString(getRequest(), "address", 0, 50, false, false);
+        String parCity = Validator.getString(getRequest(), "city", 0, 50, false, false);
+        String parPostCode = Validator.getString(getRequest(), "postCode", 0, 10, false, false);
+        String parPhone = Validator.getString(getRequest(), "phone", 0, 30, false, false);
+        String parFax = Validator.getString(getRequest(), "fax", 0, 30, false, false);
+        String parEMail = Validator.getString(getRequest(), "eMail", 0, 30, false, false);
+        String parRegNo = Validator.getString(getRequest(), "registrationNo", 0, 20, false, false);
+        String parVatNo = Validator.getString(getRequest(), "vatRegistrationNo", 0, 20, false, false);
+        String parDomain = Validator.getString(getRequest(), "internetDomain", 0, 50, false, false);
 
         CompanyDAO compDao = new CompanyDAO(getCnn());
         
@@ -62,51 +56,5 @@ public class CompanySaveCmd extends Command {
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String parName, String parAddress, String parCity, String parPostCode, String parPhone, String parFax, String parEMail, String parRegNo, String parVatNo, String parDomain) {
-        boolean result = true;
-        
-        if (!Validator.validateString(parName, 0, 50)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parAddress, 0, 50)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parCity, 0, 50)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parPostCode, 0, 10)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parPhone, 0, 30)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parFax, 0, 30)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parEMail, 0, 30)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parRegNo, 0, 20)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parVatNo, 0, 20)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parDomain, 0, 50)) {
-            result = false;
-        }
-        
-        return result;
     }
 }

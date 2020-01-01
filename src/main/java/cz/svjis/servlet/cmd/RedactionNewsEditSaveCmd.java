@@ -26,35 +26,29 @@ public class RedactionNewsEditSaveCmd extends Command {
     @Override
     public void execute() throws Exception {
         
-        String parId = getRequest().getParameter("id");
-        String parTime = Validator.fixTextInput(getRequest().getParameter("time"), false);
-        String parLangId = getRequest().getParameter("language");
-        String parBody = Validator.fixTextInput(getRequest().getParameter("body"), true);
-        
-        if (!validateInput(parId, parTime, parLangId, parBody)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
-        
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+        String parTime = Validator.getString(getRequest(), "time", 0, 30, false, false);
+        int parLangId = Validator.getInt(getRequest(), "language", 0, Validator.maxIntAllowed, false);
+        String parBody = Validator.getString(getRequest(), "body", 0, Validator.maxStringLenAllowed, false, true);
+        boolean parPublished = Validator.getBoolean(getRequest(), "publish");
+
         MiniNewsDAO newsDao = new MiniNewsDAO(getCnn());
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 
-        int id = Integer.parseInt(parId);
         MiniNews n = null;
-        if (id == 0) {
+        if (parId == 0) {
             n = new MiniNews();
-            n.setId(id);
+            n.setId(parId);
             n.setCreatedById(getUser().getId());
             n.setCompanyId(getUser().getCompanyId());
         } else {
-            n = newsDao.getMiniNews(getUser(), id);
+            n = newsDao.getMiniNews(getUser(), parId);
         }
         n.setTime(sdf.parse(parTime));
-        n.setLanguageId(Integer.parseInt(parLangId));
-        n.setPublished(getRequest().getParameter("publish") != null);
+        n.setLanguageId(parLangId);
+        n.setPublished(parPublished);
         n.setBody(parBody);
-        if (id == 0) {
+        if (parId == 0) {
             n.setId(newsDao.insertMiniNews(n));
         } else {
             newsDao.modifyMiniNews(n);
@@ -63,27 +57,5 @@ public class RedactionNewsEditSaveCmd extends Command {
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String parId, String parTime, String parLangId, String parBody) {
-        boolean result = true;
-        
-        if (!Validator.validateInteger(parId, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parTime, 0, 30)) {
-            result = false;
-        }
-        
-        if (!Validator.validateInteger(parLangId, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parBody, 0, Validator.maxStringLenAllowed)) {
-            result = false;
-        }
-
-        return result;
     }
 }

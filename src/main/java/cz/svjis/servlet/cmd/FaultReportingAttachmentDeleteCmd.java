@@ -26,17 +26,11 @@ public class FaultReportingAttachmentDeleteCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        String parId = getRequest().getParameter("id");
-        
-        if (!validateInput(parId)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
-        
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
 
-        int id = Integer.parseInt(parId);
+        int id = parId;
         FaultReportAttachment fa = faultDao.getFaultReportAttachment(id);
         if (fa == null) {
             RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
@@ -51,15 +45,5 @@ public class FaultReportingAttachmentDeleteCmd extends Command {
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String parId) {
-        boolean result = true;
-        
-        if (!Validator.validateInteger(parId, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-        
-        return result;
     }
 }

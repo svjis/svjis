@@ -7,6 +7,7 @@ package cz.svjis.servlet;
 import cz.svjis.servlet.cmd.HandleErrorCmd;
 import cz.svjis.bean.Company;
 import cz.svjis.bean.User;
+import cz.svjis.validator.InputValidationException;
 import cz.svjis.validator.Validator;
 import java.io.IOException;
 import java.sql.Connection;
@@ -63,13 +64,7 @@ public class Upload extends HttpServlet {
             cnn = createConnection();
             ctx.setCnn(cnn);
             
-            String parPage = request.getParameter("page");
-            
-            if (!validateInput(parPage)) {
-                RequestDispatcher rd = request.getRequestDispatcher("/InputValidationError.jsp");
-                rd.forward(request, response);
-                return;
-            }
+            String parPage = Validator.getString(request, "page", 0, 100, true, false);
 
             // *****************
             // * Run command   *
@@ -85,6 +80,10 @@ public class Upload extends HttpServlet {
                 cmd.execute();
             }
 
+        } catch (InputValidationException ex) {
+            request.setAttribute("message", ex.getMessage());
+            RequestDispatcher rd = request.getRequestDispatcher("/InputValidationError.jsp");
+            rd.forward(request, response);
         } catch (Exception ex) {
             ex.printStackTrace();
             HandleErrorCmd errCmd = new HandleErrorCmd(ctx, ex);
@@ -152,14 +151,4 @@ public class Upload extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-    
-    private boolean validateInput(String page) {
-        boolean result = true;
-        
-        if ((page != null) && !Validator.validateString(page, 0, 100)) {
-            result = false;
-        }
-        
-        return result;
-    }
 }

@@ -24,34 +24,18 @@ public class UserDeleteCmd extends Command {
 
     @Override
     public void execute() throws Exception {
-        
-        String parId = getRequest().getParameter("id");
-        
-        if (!validateInput(parId)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
-        
+
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+
         UserDAO userDao = new UserDAO(getCnn());
 
         User u = new User();
-        u.setId(Integer.valueOf(parId));
+        u.setId(parId);
         u.setCompanyId(getCompany().getId());
         userDao.deleteUser(u);
         String url = "Dispatcher?page=userList";
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String parId) {
-        boolean result = true;
-        
-        if (!Validator.validateInteger(parId, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-
-        return result;
     }
 }

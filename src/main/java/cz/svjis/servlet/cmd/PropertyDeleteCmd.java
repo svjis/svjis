@@ -24,14 +24,8 @@ public class PropertyDeleteCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        String parKey = getRequest().getParameter("key");
-        
-        if (!validateInput(parKey)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
-        
+        String parKey = Validator.getString(getRequest(), "key", 0, 50, false, false);
+
         ApplicationSetupDAO setupDao = new ApplicationSetupDAO(getCnn());
         
         setupDao.deleteProperty(getCompany().getId(), parKey);
@@ -40,15 +34,5 @@ public class PropertyDeleteCmd extends Command {
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String parKey) {
-        boolean result = true;
-        
-        if (!Validator.validateString(parKey, 0, 50)) {
-            result = false;
-        }
-        
-        return result;
     }
 }

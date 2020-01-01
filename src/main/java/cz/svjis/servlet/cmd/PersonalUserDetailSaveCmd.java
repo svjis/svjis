@@ -26,31 +26,25 @@ public class PersonalUserDetailSaveCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        String parSalutation = Validator.fixTextInput(getRequest().getParameter("salutation"), false);
-        String parFirstName = Validator.fixTextInput(getRequest().getParameter("firstName"), false);
-        String parLastName = Validator.fixTextInput(getRequest().getParameter("lastName"), false);
-        String parLangId = getRequest().getParameter("language");
-        String parAddress = Validator.fixTextInput(getRequest().getParameter("address"), false);
-        String parCity = Validator.fixTextInput(getRequest().getParameter("city"), false);
-        String parPostCode = Validator.fixTextInput(getRequest().getParameter("postCode"), false);
-        String parCountry = Validator.fixTextInput(getRequest().getParameter("country"), false);
-        String parFixedPhone = Validator.fixTextInput(getRequest().getParameter("fixedPhone"), false);
-        String parCellPhone = Validator.fixTextInput(getRequest().getParameter("cellPhone"), false);
-        String parEMail = Validator.fixTextInput(getRequest().getParameter("eMail"), false);
-        
-        if (!validateInput(parSalutation, parFirstName, parLastName, parLangId, parAddress, parCity, parPostCode, parCountry, parFixedPhone, parCellPhone, parEMail)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
-        
+        String parSalutation = Validator.getString(getRequest(), "salutation", 0, 30, false, false);
+        String parFirstName = Validator.getString(getRequest(), "firstName", 0, 30, false, false);
+        String parLastName = Validator.getString(getRequest(), "lastName", 0, 30, false, false);
+        int parLangId = Validator.getInt(getRequest(), "language", 0, Validator.maxIntAllowed, false);
+        String parAddress = Validator.getString(getRequest(), "address", 0, 50, false, false);
+        String parCity = Validator.getString(getRequest(), "city", 0, 50, false, false);
+        String parPostCode = Validator.getString(getRequest(), "postCode", 0, 10, false, false);
+        String parCountry = Validator.getString(getRequest(), "country", 0, 50, false, false);
+        String parFixedPhone = Validator.getString(getRequest(), "fixedPhone", 0, 30, false, false);
+        String parCellPhone = Validator.getString(getRequest(), "cellPhone", 0, 30, false, false);
+        String parEMail = Validator.getString(getRequest(), "eMail", 0, 50, false, false);
+
         LanguageDAO languageDao = new LanguageDAO(getCnn());
         UserDAO userDao = new UserDAO(getCnn());
         
         getUser().setSalutation(parSalutation);
         getUser().setFirstName(parFirstName);
         getUser().setLastName(parLastName);
-        getUser().setLanguageId(Integer.valueOf(parLangId));
+        getUser().setLanguageId(parLangId);
         getUser().setAddress(parAddress);
         getUser().setCity(parCity);
         getUser().setPostCode(parPostCode);
@@ -66,55 +60,5 @@ public class PersonalUserDetailSaveCmd extends Command {
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String parSalutation, String parFirstName, String parLastName, String parLangId, String parAddress, String parCity, String parPostCode, String parCountry, String parFixedPhone, String parCellPhone, String parEMail) {
-        boolean result = true;
-        
-        if (!Validator.validateString(parSalutation, 0, 30)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parFirstName, 0, 30)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parLastName, 0, 30)) {
-            result = false;
-        }
-        
-        if ((parLangId != null) && !Validator.validateInteger(parLangId, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parAddress, 0, 50)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parCity, 0, 50)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parPostCode, 0, 10)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parCountry, 0, 50)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parFixedPhone, 0, 30)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parCellPhone, 0, 30)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parEMail, 0, 50)) {
-            result = false;
-        }
-        
-        return result;
     }
 }

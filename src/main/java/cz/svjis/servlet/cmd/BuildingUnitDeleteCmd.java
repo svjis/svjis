@@ -25,33 +25,17 @@ public class BuildingUnitDeleteCmd extends Command {
     @Override
     public void execute() throws Exception {
         
-        String parId = getRequest().getParameter("id");
-        
-        if (!validateInput(parId)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
         
         BuildingDAO buildingDao = new BuildingDAO(getCnn());
 
         BuildingUnit u = new BuildingUnit();
-        u.setId(Integer.valueOf(parId));
+        u.setId(parId);
         u.setBuildingId(buildingDao.getBuilding(getCompany().getId()).getId());
         buildingDao.deleteBuildingUnit(u);
         String url = "Dispatcher?page=buildingUnitList";
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String parId) {
-        boolean result = true;
-        
-        if (!Validator.validateInteger(parId, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-        
-        return result;
     }
 }

@@ -5,6 +5,8 @@
  */
 package cz.svjis.validator;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  *
  * @author jaroslav_b
@@ -13,8 +15,46 @@ public class Validator {
     
     public static final int maxIntAllowed = 10000000;
     public static final int maxStringLenAllowed = 1000000;
+
     
-    public static boolean validateInteger(String s, int minInt, int maxInt) {
+    public static String getString(HttpServletRequest request, String parName, int minLen, int maxLen, boolean canBeNull, boolean canContainHtmlTags) throws InputValidationException {
+        String val = request.getParameter(parName);
+        String msg = "String parameter %s[%s, %s] is not valid.";
+        
+        if ((val == null) && canBeNull) {
+            return val;
+        }
+        
+        if (!Validator.validateString(val, minLen, maxLen)) {
+            throw new InputValidationException(String.format(msg, parName, String.valueOf(minLen), String.valueOf(maxLen)));
+        }
+        
+        return Validator.fixTextInput(val, canContainHtmlTags);
+    }
+    
+    
+    public static int getInt(HttpServletRequest request, String parName, int minInt, int maxInt, boolean canBeNull) throws InputValidationException {
+        String val = request.getParameter(parName);
+        String msg = "Integer parameter %s[%s, %s] is not valid.";
+        
+        if ((val == null) && canBeNull) {
+            return 0;
+        }
+        
+        if (!Validator.validateInteger(val, minInt, maxInt)) {
+            throw new InputValidationException(String.format(msg, parName, String.valueOf(minInt), String.valueOf(maxInt)));
+        }
+        
+        return Integer.valueOf(val);
+    }
+    
+    
+    public static boolean getBoolean(HttpServletRequest request, String parName) {
+        return (request.getParameter(parName) == null) ? false : true;
+    }
+    
+    
+    protected static boolean validateInteger(String s, int minInt, int maxInt) {
         int i;
         
         try {
@@ -34,7 +74,7 @@ public class Validator {
         return true;
     }
     
-    public static boolean validateString(String s, int minLen, int maxLen) {
+    protected static boolean validateString(String s, int minLen, int maxLen) {
         if (s == null) {
             return false;
         }
@@ -67,7 +107,7 @@ public class Validator {
         return true;
     }
     
-    public static String fixTextInput(String input, boolean enableHtml) {
+    protected static String fixTextInput(String input, boolean enableHtml) {
         String result = input;
         
         if (result == null) {

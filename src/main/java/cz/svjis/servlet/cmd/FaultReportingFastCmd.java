@@ -24,17 +24,12 @@ public class FaultReportingFastCmd extends Command {
 
     @Override
     public void execute() throws Exception {
-        String parId = Validator.fixTextInput(getRequest().getParameter("id"), false);
         
-        if (!validateInput(parId)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
         
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
         
-        FaultReport f = faultDao.getFault(getCompany().getId(), Integer.valueOf(parId));
+        FaultReport f = faultDao.getFault(getCompany().getId(), parId);
         if (getUser().hasPermission("fault_reporting_resolver") && (f != null)) {
             
             if (getRequest().getParameter("takeTicket") != null) {
@@ -52,15 +47,5 @@ public class FaultReportingFastCmd extends Command {
         
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String parId) {
-        boolean result = true;
-        
-        if ((parId != null) && (!Validator.validateInteger(parId, 0, Validator.maxIntAllowed))) {
-            result = false;
-        }
-        
-        return result;
     }
 }

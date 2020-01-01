@@ -29,13 +29,7 @@ public class BuildingUnitEditCmd extends Command {
     @Override
     public void execute() throws Exception {
         
-        String parId = getRequest().getParameter("id");
-
-        if (!validateInput(parId)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
 
         CompanyDAO compDao = new CompanyDAO(getCnn());
         BuildingDAO buildingDao = new BuildingDAO(getCnn());
@@ -45,7 +39,7 @@ public class BuildingUnitEditCmd extends Command {
         ArrayList<BuildingUnitType> buildingUnitType = buildingDao.getBuildingUnitTypeList();
         getRequest().setAttribute("buildingUnitType", buildingUnitType);
         BuildingUnit buildingUnit = null;
-        int id = Integer.valueOf(parId);
+        int id = parId;
         if (id == 0) {
             buildingUnit = new BuildingUnit();
             buildingUnit.setBuildingId(buildingDao.getBuilding(getCompany().getId()).getId());
@@ -55,15 +49,5 @@ public class BuildingUnitEditCmd extends Command {
         getRequest().setAttribute("buildingUnit", buildingUnit);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_buildingUnitDetail.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String parId) {
-        boolean result = true;
-        
-        if (!Validator.validateInteger(parId, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-        
-        return result;
     }
 }
