@@ -44,7 +44,7 @@ public class Validator {
         if (!Validator.validateInteger(val, minInt, maxInt)) {
             throw new InputValidationException(String.format(msg, parName, String.valueOf(minInt), String.valueOf(maxInt), val));
         }
-        
+
         return Integer.valueOf(val);
     }
     
@@ -71,6 +71,10 @@ public class Validator {
             return false;
         }
         
+        if (!isInjectionFree(s)) {
+            return false;
+        }
+
         return true;
     }
     

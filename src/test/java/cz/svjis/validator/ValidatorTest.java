@@ -5,11 +5,16 @@
  */
 package cz.svjis.validator;
 
+import javax.servlet.http.HttpServletRequest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  *
@@ -48,5 +53,78 @@ public class ValidatorTest {
         assertEquals("<b>Ahoj</b>", Validator.fixTextInput("<b>Ahoj</b>", true), "HTML enabled");
         assertEquals("&lt;b&gt;Ahoj&lt;/b&gt;", Validator.fixTextInput("<b>Ahoj</b>", false), "HTML disabled");
         assertEquals(null, Validator.fixTextInput(null, false), "null pointer");
+    }
+
+    @Test
+    @DisplayName("getString")
+    public void testGetString() throws InputValidationException {
+        final HttpServletRequest request = mock(HttpServletRequest.class);
+        when(request.getParameter("testNull")).thenReturn(null);
+        when(request.getParameter("testValue")).thenReturn("value");
+        when(request.getParameter("testInject")).thenReturn("Commit;");
+        when(request.getParameter("testHtml")).thenReturn("<b>Hello</b>");
+
+        assertEquals(null, Validator.getString(request, "testNull", 0, 20, true, false));
+        assertThrows(InputValidationException.class, new Executable() {
+            public void execute() throws Exception {
+                Validator.getString(request, "testNull", 0, 10, false, false);
+            }
+        });
+
+        assertEquals("value", Validator.getString(request, "testValue", 0, 20, false, true), "Positive test");
+        assertThrows(InputValidationException.class, new Executable() {
+            public void execute() throws Exception {
+                Validator.getString(request, "testValue", 0, 4, false, false);
+            }
+        });
+
+        assertThrows(InputValidationException.class, new Executable() {
+            public void execute() throws Exception {
+                Validator.getString(request, "testInject", 0, 10, false, false);
+            }
+        });
+
+        assertEquals("<b>Hello</b>", Validator.getString(request, "testHtml", 0, 20, false, true), "HTML enabled");
+        assertEquals("&lt;b&gt;Hello&lt;/b&gt;", Validator.getString(request, "testHtml", 0, 20, false, false), "HTML disabled");
+    }
+
+    @Test
+    @DisplayName("getInt")
+    public void testGetInt() throws InputValidationException {
+        final HttpServletRequest request = mock(HttpServletRequest.class);
+        when(request.getParameter("testNull")).thenReturn(null);
+        when(request.getParameter("testValue")).thenReturn("10");
+        when(request.getParameter("testInject")).thenReturn("10Commit;");
+
+        assertEquals(0, Validator.getInt(request, "testNull", 0, 20, true));
+        assertThrows(InputValidationException.class, new Executable() {
+            public void execute() throws Exception {
+                Validator.getInt(request, "testNull", 0, 20, false);
+            }
+        });
+
+        assertEquals(10, Validator.getInt(request, "testValue", 0, 20, true), "Positive test");
+        assertThrows(InputValidationException.class, new Executable() {
+            public void execute() throws Exception {
+                Validator.getInt(request, "testValue", 0, 5, false);
+            }
+        });
+
+        assertThrows(InputValidationException.class, new Executable() {
+            public void execute() throws Exception {
+                Validator.getInt(request, "testInject", 0, 20, true);
+            }
+        });
+    }
+
+    @Test
+    @DisplayName("getBoolean")
+    public void testGetBoolean() {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        when(request.getParameter("testNull")).thenReturn(null);
+        when(request.getParameter("testValue")).thenReturn("10");
+
+        assertFalse(Validator.getBoolean(request, "testNull"));
+        assertTrue(Validator.getBoolean(request, "testValue"));
     }
 }
