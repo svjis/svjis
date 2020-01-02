@@ -127,7 +127,7 @@ public class UserSaveCmd extends Command {
                         getSetup().getProperty("mail.login"),
                         getSetup().getProperty("mail.password"),
                         getSetup().getProperty("mail.sender"));
-                mailDao.sendInstantMail(u.geteMail(), getCompany().getName(), body);
+                mailDao.queueMail(getCompany().getId(), u.geteMail(), getCompany().getName(), body);
                 message += getLanguage().getText("Credentials has been send by e-mail.") + "<br>";
             }
         }
