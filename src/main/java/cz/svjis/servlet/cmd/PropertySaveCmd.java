@@ -35,7 +35,7 @@ public class PropertySaveCmd extends Command {
         }
         setupDao.insertProperty(getCompany().getId(), parKey, parValue);
         getRequest().getSession().setAttribute("setup", null);
-        String url = "Dispatcher?page=propertyEdit&key=" + parKey;
+        String url = "Dispatcher?page=propertyList";
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());

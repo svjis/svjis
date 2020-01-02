@@ -47,7 +47,7 @@ public class BuildingUnitSaveCmd extends Command {
         } else {
             buildingDao.modifyBuildingUnit(u);
         }
-        String url = "Dispatcher?page=buildingUnitEdit&id=" + u.getId();
+        String url = "Dispatcher?page=buildingUnitList";
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
