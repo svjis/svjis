@@ -28,29 +28,23 @@ public class RedactionInquirySaveCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        String parId = getRequest().getParameter("id");
-        String parDescription = Validator.fixTextInput(getRequest().getParameter("description"), true);
-        String parStartDate = Validator.fixTextInput(getRequest().getParameter("startingDate"), false);
-        String parEndDate = Validator.fixTextInput(getRequest().getParameter("endingDate"), false);
-        
-        if (!validateInput(parId, parDescription, parStartDate, parEndDate)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
-        
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+        String parDescription = Validator.getString(getRequest(), "description", 0, 250, false, true);
+        String parStartDate = Validator.getString(getRequest(), "startingDate", 0, 30, false, false);
+        String parEndDate = Validator.getString(getRequest(), "endingDate", 0, 30, false, false);
+        boolean parEnabled = Validator.getBoolean(getRequest(), "publish");
+
         InquiryDAO inquiryDao = new InquiryDAO(getCnn());
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-        int id = Integer.parseInt(parId);
         Inquiry i = new Inquiry();
-        i.setId(id);
+        i.setId(parId);
         i.setCompanyId(getUser().getCompanyId());
         i.setUserId(getUser().getId());
         i.setDescription(parDescription);
         i.setStartingDate(sdf.parse(parStartDate));
         i.setEndingDate(sdf.parse(parEndDate));
-        i.setEnabled(getRequest().getParameter("publish") != null);
+        i.setEnabled(parEnabled);
         ArrayList<InquiryOption> ioList = new ArrayList<InquiryOption>();
         int n = 1;
         while (getRequest().getParameter("oid_" + n) != null) {
@@ -58,12 +52,7 @@ public class RedactionInquirySaveCmd extends Command {
             io.setId(Integer.valueOf(getRequest().getParameter("oid_" + n)));
             io.setInquiryId(i.getId());
             
-            String parOptDesc = Validator.fixTextInput(getRequest().getParameter("o_" + n), false);
-            if (!validateInput(parOptDesc)) {
-                RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-                rd.forward(getRequest(), getResponse());
-                return;
-            }
+            String parOptDesc = Validator.getString(getRequest(), "o_" + n, 0, 250, false, false);
             io.setDescription(parOptDesc);
             
             if (!io.getDescription().equals("")) {
@@ -83,38 +72,4 @@ public class RedactionInquirySaveCmd extends Command {
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
     }
-    
-    private boolean validateInput(String parId, String parDescription, String parStartDate, String parEndDate) {
-        boolean result = true;
-        
-        if (!Validator.validateInteger(parId, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parDescription, 0, Validator.maxStringLenAllowed)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parStartDate, 0, 30)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parEndDate, 0, 30)) {
-            result = false;
-        }
-
-        return result;
-    }
-    
-    private boolean validateInput(String parDescription) {
-        boolean result = true;
-        
-        if (!Validator.validateString(parDescription, 0, 250)) {
-            result = false;
-        }
-
-        return result;
-    }
 }
-
-

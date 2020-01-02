@@ -25,32 +25,16 @@ public class RedactionArticleMenuDeleteCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        String parMenuId = getRequest().getParameter("id");
-        
-        if (!validateInput(parMenuId)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
-        
+        int parMenuId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+
         MenuDAO menuDao = new MenuDAO(getCnn());
         MenuNode n = new MenuNode();
         
-        n.setId(Integer.parseInt(parMenuId));
+        n.setId(parMenuId);
         menuDao.deleteMenuNode(n, getUser().getCompanyId());
         String url = "Dispatcher?page=redactionArticleMenu";
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String parMenuId) {
-        boolean result = true;
-        
-        if (!Validator.validateInteger(parMenuId, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-        
-        return result;
     }
 }

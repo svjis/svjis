@@ -34,14 +34,8 @@ public class ArticleListCmd extends Command {
     @Override
     public void execute() throws Exception {
         
-        String parSection = getRequest().getParameter("section");
-        String parPageNo = getRequest().getParameter("pageNo");
-        
-        if (!validateInput(parSection, parPageNo)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
+        int parSection = Validator.getInt(getRequest(), "section", 0, Validator.maxIntAllowed, true);
+        int parPageNo = Validator.getInt(getRequest(), "pageNo", 0, Validator.maxIntAllowed, true);
         
         MenuDAO menuDao = new MenuDAO(getCnn());
         ArticleDAO articleDao = new ArticleDAO(getCnn());
@@ -49,20 +43,14 @@ public class ArticleListCmd extends Command {
         InquiryDAO inquiryDao = new InquiryDAO(getCnn());
 
         Menu menu = menuDao.getMenu(getCompany().getId());
-        int section = 0;
-        if (parSection != null) {
-            section = Integer.valueOf(parSection);
-        }
+        int section = parSection;
         if ((section == 0) && (getSetup().get("article.menu.default.item") != null)) {
             section = Integer.valueOf(getSetup().getProperty("article.menu.default.item"));
         }
         menu.setActiveSection(section);
         getRequest().setAttribute("menu", menu);
 
-        int pageNo = 1;
-        if (parPageNo != null) {
-            pageNo = Integer.valueOf(parPageNo);
-        }
+        int pageNo = (parPageNo == 0) ? 1 : parPageNo;
         SliderImpl sl = new SliderImpl();
         sl.setSliderWide(10);
         sl.setCurrentPage(pageNo);
@@ -93,21 +81,5 @@ public class ArticleListCmd extends Command {
         getRequest().setAttribute("inquiryList", inquiryList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/ArticleList.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String section, String pageNo) {
-        boolean result = true;
-        
-        //-- section can be null
-        if ((section != null) && !Validator.validateInteger(section, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-        
-        //-- pageNo can be null
-        if ((pageNo != null) && !Validator.validateInteger(pageNo, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-        
-        return result;
     }
 }

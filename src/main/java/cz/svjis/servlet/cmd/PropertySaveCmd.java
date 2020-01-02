@@ -24,16 +24,10 @@ public class PropertySaveCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        String parOrigKey = Validator.fixTextInput(getRequest().getParameter("origKey"), false);
-        String parKey = Validator.fixTextInput(getRequest().getParameter("key"), false);
-        String parValue = Validator.fixTextInput(getRequest().getParameter("value"), true);
-        
-        if (!validateInput(parOrigKey, parKey, parValue)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
-        
+        String parOrigKey = Validator.getString(getRequest(), "origKey", 0, 50, false, false);
+        String parKey = Validator.getString(getRequest(), "key", 0, 50, false, false);
+        String parValue = Validator.getString(getRequest(), "value", 0, 1000, false, true);
+
         ApplicationSetupDAO setupDao = new ApplicationSetupDAO(getCnn());
         
         if (getSetup().getProperty(parOrigKey) != null) {
@@ -45,23 +39,5 @@ public class PropertySaveCmd extends Command {
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String parOrigKey, String parKey, String parValue) {
-        boolean result = true;
-        
-        if (!Validator.validateString(parOrigKey, 0, 50)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parKey, 0, 50)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parValue, 0, 1000)) {
-            result = false;
-        }
-        
-        return result;
     }
 }

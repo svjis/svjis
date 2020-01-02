@@ -32,85 +32,50 @@ public class RedactionArticleListCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        String parSection = getRequest().getParameter("section");
-        String parPageNo = getRequest().getParameter("pageNo");
-        String parRoleId = getRequest().getParameter("roleId");
-        
-        if (!validateInput(parSection, parPageNo, parRoleId)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
-        
+        int parSection = Validator.getInt(getRequest(), "section", 0, Validator.maxIntAllowed, true);
+        int parPageNo = Validator.getInt(getRequest(), "pageNo", 0, Validator.maxIntAllowed, true);
+        int parRoleId = Validator.getInt(getRequest(), "roleId", 0, Validator.maxIntAllowed, true);
+
         MenuDAO menuDao = new MenuDAO(getCnn());
         ArticleDAO articleDao = new ArticleDAO(getCnn());
         RoleDAO roleDao = new RoleDAO(getCnn());
 
         Menu menu = menuDao.getMenu(getCompany().getId());
-        int section = 0;
-        if (parSection != null) {
-            section = Integer.valueOf(parSection);
-        }
-        menu.setActiveSection(section);
+        menu.setActiveSection(parSection);
         getRequest().setAttribute("menu", menu);
 
-        int pageNo = 1;
-        if (parPageNo != null) {
-            pageNo = Integer.valueOf(parPageNo);
-        }
-        int roleId = Integer.valueOf((parRoleId == null) ? "0" : parRoleId);
+        parPageNo = (parPageNo == 0) ? 1 : parPageNo;
         SliderImpl sl = new SliderImpl();
         sl.setSliderWide(10);
-        sl.setCurrentPage(pageNo);
+        sl.setCurrentPage(parPageNo);
         sl.setNumOfItemsAtPage(Integer.valueOf(getSetup().getProperty("article.page.size")));
-        sl.setTotalNumOfItems(articleDao.getNumOfArticles(getUser(), section, false, !getUser().hasPermission("redaction_articles_all"), roleId));
+        sl.setTotalNumOfItems(articleDao.getNumOfArticles(getUser(), parSection, false, !getUser().hasPermission("redaction_articles_all"), parRoleId));
         getRequest().setAttribute("slider", sl);
         ArrayList<Article> articleList = articleDao.getArticleList(
                 getUser(),
-                section,
-                pageNo,
+                parSection,
+                parPageNo,
                 Integer.valueOf(getSetup().getProperty("article.page.size")),
                 false,
                 !getUser().hasPermission("redaction_articles_all"),
-                roleId);
+                parRoleId);
         getRequest().setAttribute("articleList", articleList);
 
         ArticleListInfo articleListInfo = new ArticleListInfo();
         articleListInfo.setNumOfArticles(articleDao.getNumOfArticles(
                 getUser(),
-                section,
+                parSection,
                 false,
                 !getUser().hasPermission("redaction_articles_all"),
-                roleId));
+                parRoleId));
         articleListInfo.setPageSize(Integer.valueOf(getSetup().getProperty("article.page.size")));
-        articleListInfo.setActualPage(pageNo);
-        articleListInfo.setMenuNodeId(section);
+        articleListInfo.setActualPage(parPageNo);
+        articleListInfo.setMenuNodeId(parSection);
         getRequest().setAttribute("articleListInfo", articleListInfo);
         ArrayList<Role> roleList = roleDao.getRoleList(getCompany().getId());
         getRequest().setAttribute("roleList", roleList);
 
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Redaction_ArticleList.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String parSection, String parPageNo, String parRoleId) {
-        boolean result = true;
-        
-        //-- parArticleId can be null
-        if ((parSection != null) && !Validator.validateInteger(parSection, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-        
-        //-- parPageNo can be null
-        if ((parPageNo != null) && !Validator.validateInteger(parPageNo, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-        
-        //-- parRoleId can be null
-        if ((parRoleId != null) && !Validator.validateInteger(parRoleId, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-        
-        return result;
     }
 }

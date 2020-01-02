@@ -25,17 +25,11 @@ public class BuildingSaveCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        String parAddress = Validator.fixTextInput(getRequest().getParameter("address"), false);
-        String parCity = Validator.fixTextInput(getRequest().getParameter("city"), false);
-        String parPostCode = Validator.fixTextInput(getRequest().getParameter("postCode"), false);
-        String parRegNo = Validator.fixTextInput(getRequest().getParameter("registrationNo"), false);
-        
-        if (!validateInput(parAddress, parCity, parPostCode, parRegNo)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
-        
+        String parAddress = Validator.getString(getRequest(), "address", 0, 50, false, false);
+        String parCity = Validator.getString(getRequest(), "city", 0, 50, false, false);
+        String parPostCode = Validator.getString(getRequest(), "postCode", 0, 10, false, false);
+        String parRegNo = Validator.getString(getRequest(), "registrationNo", 0, 20, false, false);
+
         BuildingDAO buildingDao = new BuildingDAO(getCnn());
                 
         Building b = buildingDao.getBuilding(getCompany().getId());
@@ -48,27 +42,5 @@ public class BuildingSaveCmd extends Command {
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String parAddress, String parCity, String parPostCode, String parRegNo) {
-        boolean result = true;
-        
-        if (!Validator.validateString(parAddress, 0, 50)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parCity, 0, 50)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parPostCode, 0, 10)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parRegNo, 0, 20)) {
-            result = false;
-        }
-        
-        return result;
     }
 }

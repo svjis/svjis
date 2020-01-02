@@ -27,19 +27,12 @@ public class RedactionArticleAttachmentDeleteCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        String parId = getRequest().getParameter("id");
-        
-        if (!validateInput(parId)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
-        
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+
         ArticleDAO articleDao = new ArticleDAO(getCnn());
         LogDAO logDao = new LogDAO(getCnn());
 
-        int id = Integer.parseInt(parId);
-        ArticleAttachment aa = articleDao.getArticleAttachment(id);
+        ArticleAttachment aa = articleDao.getArticleAttachment(parId);
         if (aa == null) {
             RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
             rd.forward(getRequest(), getResponse());
@@ -47,22 +40,12 @@ public class RedactionArticleAttachmentDeleteCmd extends Command {
         }
         Article a = articleDao.getArticle(getUser(), aa.getArticleId());
         if (a != null) {
-            articleDao.deleteArticleAttachment(id);
+            articleDao.deleteArticleAttachment(parId);
         }
         String url = "Dispatcher?page=redactionArticleEdit&id=" + aa.getArticleId();
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
         logDao.log(getUser().getId(), LogDAO.operationTypeDeleteAttachment, aa.getArticleId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
-    }
-    
-    private boolean validateInput(String parId) {
-        boolean result = true;
-        
-        if (!Validator.validateInteger(parId, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-        
-        return result;
     }
 }

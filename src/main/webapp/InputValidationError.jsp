@@ -5,16 +5,22 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<jsp:useBean id="message" scope="request" class="java.lang.String" />
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta http-equiv="refresh" content="2;url=Dispatcher">
+        <meta http-equiv="refresh" content="5;url=Dispatcher">
         <title>Input validation error.</title>
     </head>
 
     <body>
         <h1>Input validation error.</h1>
-        You can continue <a href="Dispatcher">here</a>.
+        <p>
+            <b><%=message %></b>
+        </p>
+        <p>
+            You can continue <a href="Dispatcher">here</a>.
+        </p>
     </body>
 </html>

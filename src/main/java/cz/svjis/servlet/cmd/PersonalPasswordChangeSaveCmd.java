@@ -24,17 +24,12 @@ public class PersonalPasswordChangeSaveCmd extends Command {
     @Override
     public void execute() throws Exception {
 
+        String oldPass = Validator.getString(getRequest(), "oldPassword", 0, 30, false, true);
+        String newPass1 = Validator.getString(getRequest(), "newPassword", 0, 30, false, true);
+        String newPass2 = Validator.getString(getRequest(), "newPassword2", 0, 30, false, true);
+        
         String message = "";
         String errorMessage = "";
-        String oldPass = getRequest().getParameter("oldPassword");
-        String newPass1 = getRequest().getParameter("newPassword");
-        String newPass2 = getRequest().getParameter("newPassword2");
-        
-        if (!validateInput(oldPass, newPass1, newPass2)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
         
         UserDAO userDao = new UserDAO(getCnn());
         
@@ -59,23 +54,5 @@ public class PersonalPasswordChangeSaveCmd extends Command {
         getRequest().setAttribute("errorMessage", errorMessage);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/PersonalSettings_passwordChange.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String oldPass, String newPass1, String newPass2) {
-        boolean result = true;
-        
-        if (!Validator.validateString(oldPass, 0, 30)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(newPass1, 0, 30)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(newPass2, 0, 30)) {
-            result = false;
-        }
-        
-        return result;
     }
 }

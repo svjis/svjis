@@ -29,40 +29,22 @@ public class UserListCmd extends Command {
 
     @Override
     public void execute() throws Exception {
-        
-        String parRoleId = getRequest().getParameter("roleId");
-        
-        if (!validateInput(parRoleId)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
-        
+
+        int parRoleId = Validator.getInt(getRequest(), "roleId", 0, Validator.maxIntAllowed, true);
+        boolean parDisabledUsers = Validator.getBoolean(getRequest(), "disabledUsers");
+
         CompanyDAO compDao = new CompanyDAO(getCnn());
         RoleDAO roleDao = new RoleDAO(getCnn());
         UserDAO userDao = new UserDAO(getCnn());
 
-        boolean disabledUsers = (getRequest().getParameter("disabledUsers") == null) ? false : true;
-        getRequest().setAttribute("disabledUsers", new cz.svjis.bean.Boolean(disabledUsers));
+        getRequest().setAttribute("disabledUsers", new cz.svjis.bean.Boolean(parDisabledUsers));
         Company currCompany = compDao.getCompany(getCompany().getId());
         getRequest().setAttribute("currCompany", currCompany);
         ArrayList<Role> roleList = roleDao.getRoleList(getCompany().getId());
         getRequest().setAttribute("roleList", roleList);
-        int roleId = Integer.valueOf((parRoleId == null) ? "0" : parRoleId);
-        ArrayList<User> userList = userDao.getUserList(getCompany().getId(), false, roleId, !disabledUsers);
+        ArrayList<User> userList = userDao.getUserList(getCompany().getId(), false, parRoleId, !parDisabledUsers);
         getRequest().setAttribute("userList", userList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_userList.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String parRoleId) {
-        boolean result = true;
-        
-        //-- parRoleId can be null
-        if ((parRoleId != null) && !Validator.validateInteger(parRoleId, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-
-        return result;
     }
 }

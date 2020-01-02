@@ -28,16 +28,10 @@ public class LoginCmd extends Command {
 
     @Override
     public void execute() throws Exception {
-        
-        String parLogin = Validator.fixTextInput(getRequest().getParameter("login"), false);
-        String parPassword = getRequest().getParameter("password");
-        
-        if (!validateInput(parLogin, parPassword)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
-        
+
+        String parLogin = Validator.getString(getRequest(), "login", 0, 50, false, false);
+        String parPassword = Validator.getString(getRequest(), "password", 0, 50, false, true);
+
         UserDAO userDao = new UserDAO(getCnn());
         LanguageDAO languageDao = new LanguageDAO(getCnn());
         LogDAO logDao = new LogDAO(getCnn());
@@ -62,19 +56,4 @@ public class LoginCmd extends Command {
             rd.forward(getRequest(), getResponse());
         }
     }
-    
-    private boolean validateInput(String login, String password) {
-        boolean result = true;
-        
-        if (!Validator.validateString(login, 0, 50)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(password, 0, 50)) {
-            result = false;
-        }
-        
-        return result;
-    }
-
 }

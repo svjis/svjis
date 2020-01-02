@@ -23,40 +23,18 @@ public class UserBuildingUnitAddCmd extends Command {
 
     @Override
     public void execute() throws Exception {
-        
-        String parUnitId = getRequest().getParameter("unitId");
-        String parUserId = getRequest().getParameter("userId");
-        
-        if (!validateInput(parUnitId, parUserId)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
-        
+
+        int parUnitId = Validator.getInt(getRequest(), "unitId", 0, Validator.maxIntAllowed, false);
+        int parUserId = Validator.getInt(getRequest(), "userId", 0, Validator.maxIntAllowed, false);
+
         BuildingDAO buildingDao = new BuildingDAO(getCnn());
 
-        if (Integer.valueOf(parUnitId) != 0) {
-            buildingDao.addUserHasBuildingUnitConnection(
-                    Integer.valueOf(parUserId),
-                    Integer.valueOf(parUnitId));
+        if (parUnitId != 0) {
+            buildingDao.addUserHasBuildingUnitConnection(parUserId, parUnitId);
         }
         String url = "Dispatcher?page=userBuildingUnits&id=" + parUserId;
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String parUnitId, String parUserId) {
-        boolean result = true;
-        
-        if (!Validator.validateInteger(parUnitId, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-        
-        if (!Validator.validateInteger(parUserId, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-
-        return result;
     }
 }

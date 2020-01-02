@@ -32,31 +32,19 @@ public class RedactionArticleEditCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        String parArticleId = getRequest().getParameter("id");
-        
-        if (!validateInput(parArticleId)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
-        
+        int parArticleId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, true);
+
         MenuDAO menuDao = new MenuDAO(getCnn());
         ArticleDAO articleDao = new ArticleDAO(getCnn());
         RoleDAO roleDao = new RoleDAO(getCnn());
         LanguageDAO languageDao = new LanguageDAO(getCnn());
-        
-        int articleId = 0;
-        
-        if (parArticleId != null) {
-            articleId = Integer.valueOf(parArticleId);
-        }
-        
+
         Article article = null;
         
-        if (articleId == 0) {
+        if (parArticleId == 0) {
             article = new Article();
         } else {
-            article = articleDao.getArticle(getUser(), articleId);
+            article = articleDao.getArticle(getUser(), parArticleId);
         }
         
         getRequest().setAttribute("article", article);
@@ -70,16 +58,5 @@ public class RedactionArticleEditCmd extends Command {
 
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Redaction_ArticleEdit.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String parArticleId) {
-        boolean result = true;
-        
-        //-- parArticleId can be null
-        if ((parArticleId != null) && !Validator.validateInteger(parArticleId, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-        
-        return result;
     }
 }

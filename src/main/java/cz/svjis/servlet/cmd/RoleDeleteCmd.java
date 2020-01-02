@@ -24,18 +24,12 @@ public class RoleDeleteCmd extends Command {
 
     @Override
     public void execute() throws Exception {
-        
-        String parId = getRequest().getParameter("id");
-        
-        if (!validateInput(parId)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
-        
+
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+
         RoleDAO roleDao = new RoleDAO(getCnn());
 
-        Role role = roleDao.getRole(getCompany().getId(), Integer.valueOf(parId));
+        Role role = roleDao.getRole(getCompany().getId(), parId);
         if ((role != null)) {
             if (role.getNumOfUsers() != 0) {
                 String message = "Cannot delete role which is not empty.";
@@ -53,15 +47,5 @@ public class RoleDeleteCmd extends Command {
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String parId) {
-        boolean result = true;
-        
-        if (!Validator.validateInteger(parId, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-
-        return result;
     }
 }
