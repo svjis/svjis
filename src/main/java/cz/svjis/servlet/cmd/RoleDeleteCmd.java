@@ -39,7 +39,7 @@ public class RoleDeleteCmd extends Command {
                 rd.forward(getRequest(), getResponse());
                 return;
             } else {
-                roleDao.deleteRole(role.getCompanyId(), role.getId());
+                roleDao.deleteRole(role);
             }
         }
         

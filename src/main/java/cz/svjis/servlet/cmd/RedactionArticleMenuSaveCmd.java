@@ -45,7 +45,7 @@ public class RedactionArticleMenuSaveCmd extends Command {
         } else {
             menuDao.updateMenuNode(n, getUser().getCompanyId());
         }
-        String url = "Dispatcher?page=redactionArticleMenuEdit&id=" + n.getId();
+        String url = "Dispatcher?page=redactionArticleMenu";
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());

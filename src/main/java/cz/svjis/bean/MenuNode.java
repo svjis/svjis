@@ -5,6 +5,7 @@ public class MenuNode {
     private int id;
     private String description;
     private int parentId;
+    private int numOfChilds;
     
     
     
@@ -58,6 +59,20 @@ public class MenuNode {
      */
     public void setParentId(int parentId) {
         this.parentId = parentId;
+    }
+
+    /**
+     * @return the numOfChilds
+     */
+    public int getNumOfChilds() {
+        return numOfChilds;
+    }
+
+    /**
+     * @param numOfChilds the numOfChilds to set
+     */
+    public void setNumOfChilds(int numOfChilds) {
+        this.numOfChilds = numOfChilds;
     }
     
     

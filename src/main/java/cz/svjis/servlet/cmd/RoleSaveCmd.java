@@ -53,7 +53,7 @@ public class RoleSaveCmd extends Command {
         } else {
             roleDao.modifyRole(role);
         }
-        String url = "Dispatcher?page=roleEdit&id=" + role.getId();
+        String url = "Dispatcher?page=roleList";
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());

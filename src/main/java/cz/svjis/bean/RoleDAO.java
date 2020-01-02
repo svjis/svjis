@@ -161,12 +161,19 @@ public class RoleDAO {
         ps.close();
     }
     
-    public void deleteRole(int companyId, int roleId) throws SQLException {
-        String delete = "DELETE FROM \"ROLE\" WHERE (ID = ?) and (COMPANY_ID = ?)";
-        PreparedStatement ps = cnn.prepareStatement(delete);
-        ps.setInt(1, roleId);
-        ps.setInt(2, companyId);
-        ps.execute();
-        ps.close();
+    public void deleteRole(Role r) throws SQLException {
+        String delete1 = "DELETE FROM ROLE_HAS_PERMISSION WHERE (ROLE_ID = ?)";
+        String delete2 = "DELETE FROM \"ROLE\" WHERE (ID = ?) and (COMPANY_ID = ?)";
+
+        PreparedStatement ps1 = cnn.prepareStatement(delete1);
+        ps1.setInt(1, r.getId());
+        ps1.execute();
+        ps1.close();
+
+        PreparedStatement ps2 = cnn.prepareStatement(delete2);
+        ps2.setInt(1, r.getId());
+        ps2.setInt(2, r.getCompanyId());
+        ps2.execute();
+        ps2.close();
     }
 }
