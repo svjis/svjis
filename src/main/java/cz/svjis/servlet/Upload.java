@@ -81,17 +81,19 @@ public class Upload extends HttpServlet {
             }
 
         } catch (InputValidationException ex) {
+            //-- send e-mail
+            HandleErrorCmd errCmd = new HandleErrorCmd(ctx, ex);
+            errCmd.execute();
+
             request.setAttribute("message", ex.getMessage());
             RequestDispatcher rd = request.getRequestDispatcher("/InputValidationError.jsp");
             rd.forward(request, response);
         } catch (Exception ex) {
             ex.printStackTrace();
+
+            //-- send e-mail
             HandleErrorCmd errCmd = new HandleErrorCmd(ctx, ex);
-            try {
-                errCmd.execute();
-            } catch (Exception exx) {
-                exx.printStackTrace();
-            }
+            errCmd.execute();
         } finally {
             closeConnection(cnn);
         }
