@@ -41,7 +41,7 @@
             </ul>
             
             <div class="padding">
-            <jsp:include page="_menu_search.jsp" />
+            <jsp:include page="_menu_search_redaction.jsp" />
             <jsp:include page="_menu_login.jsp" />
             </div> <!-- /padding -->
             
