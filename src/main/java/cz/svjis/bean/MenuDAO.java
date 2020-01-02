@@ -59,7 +59,8 @@ public class MenuDAO {
                 + "a.ID, "
                 + "a.COMPANY_ID, "
                 + "a.PARENT_ID, "
-                + "a.DESCRIPTION "
+                + "a.DESCRIPTION, "
+                + "(SELECT count(*) FROM MENU_TREE m WHERE m.PARENT_ID = a.ID)  AS CNT "
                 + "FROM MENU_TREE a "
                 + "WHERE (a.ID = ?) and (a.COMPANY_ID = ?)";
         
@@ -71,6 +72,7 @@ public class MenuDAO {
             result.setId(rs.getInt("ID"));
             result.setDescription(rs.getString("DESCRIPTION"));
             result.setParentId(rs.getInt("PARENT_ID"));
+            result.setNumOfChilds(rs.getInt("CNT"));
         }
         rs.close();
         ps.close();

@@ -28,10 +28,19 @@ public class RedactionArticleMenuDeleteCmd extends Command {
         int parMenuId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
 
         MenuDAO menuDao = new MenuDAO(getCnn());
-        MenuNode n = new MenuNode();
         
-        n.setId(parMenuId);
-        menuDao.deleteMenuNode(n, getUser().getCompanyId());
+        MenuNode n = menuDao.getMenuNode(parMenuId, getCompany().getId());
+        if (n != null) {
+            if (n.getNumOfChilds() != 0) {
+                String message = "Cannot delete menu which has child nodes.";
+                getRequest().setAttribute("messageHeader", "Error");
+                getRequest().setAttribute("message", message);
+                RequestDispatcher rd = getRequest().getRequestDispatcher("/_message.jsp");
+                rd.forward(getRequest(), getResponse());
+                return;
+            }
+            menuDao.deleteMenuNode(n, getUser().getCompanyId());
+        }
         String url = "Dispatcher?page=redactionArticleMenu";
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
