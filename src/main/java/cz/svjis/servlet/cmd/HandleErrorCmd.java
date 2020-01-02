@@ -8,6 +8,7 @@ import cz.svjis.bean.MailDAO;
 import cz.svjis.bean.User;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
+import cz.svjis.validator.InputValidationException;
 import java.util.Properties;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpSession;
@@ -52,7 +53,15 @@ public class HandleErrorCmd extends Command {
                         userAgent,
                         throwable);
             }
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/Error.jsp");
+
+            RequestDispatcher rd;
+            if (this.throwable instanceof InputValidationException) {
+                getRequest().setAttribute("message", this.throwable.getMessage());
+                rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
+            } else {
+                rd = getRequest().getRequestDispatcher("/Error.jsp");
+            }
+
             rd.forward(getRequest(), getResponse());
         } catch (Exception ex) {
             ex.printStackTrace();

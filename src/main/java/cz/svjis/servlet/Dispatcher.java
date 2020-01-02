@@ -160,14 +160,6 @@ public class Dispatcher extends HttpServlet {
             Command cmd = CmdFactory.create(page, ctx);
             cmd.execute();
             
-        } catch (InputValidationException ex) {
-            //-- send e-mail
-            HandleErrorCmd errCmd = new HandleErrorCmd(ctx, ex);
-            errCmd.execute();
-
-            request.setAttribute("message", ex.getMessage());
-            RequestDispatcher rd = request.getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(request, response);
         } catch (Exception ex) {
             ex.printStackTrace();
 
