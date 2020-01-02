@@ -44,6 +44,7 @@ public class RedactionArticleListCmd extends Command {
         menu.setActiveSection(parSection);
         getRequest().setAttribute("menu", menu);
 
+        parPageNo = (parPageNo == 0) ? 1 : parPageNo;
         SliderImpl sl = new SliderImpl();
         sl.setSliderWide(10);
         sl.setCurrentPage(parPageNo);

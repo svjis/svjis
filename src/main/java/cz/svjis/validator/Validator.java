@@ -19,14 +19,14 @@ public class Validator {
     
     public static String getString(HttpServletRequest request, String parName, int minLen, int maxLen, boolean canBeNull, boolean canContainHtmlTags) throws InputValidationException {
         String val = request.getParameter(parName);
-        String msg = "String parameter %s[%s, %s] is not valid.";
+        String msg = "String parameter %s[%s, %s] is not valid. (%s)";
         
         if ((val == null) && canBeNull) {
             return val;
         }
         
         if (!Validator.validateString(val, minLen, maxLen)) {
-            throw new InputValidationException(String.format(msg, parName, String.valueOf(minLen), String.valueOf(maxLen)));
+            throw new InputValidationException(String.format(msg, parName, String.valueOf(minLen), String.valueOf(maxLen), val));
         }
         
         return Validator.fixTextInput(val, canContainHtmlTags);
@@ -35,14 +35,14 @@ public class Validator {
     
     public static int getInt(HttpServletRequest request, String parName, int minInt, int maxInt, boolean canBeNull) throws InputValidationException {
         String val = request.getParameter(parName);
-        String msg = "Integer parameter %s[%s, %s] is not valid.";
+        String msg = "Integer parameter %s[%s, %s] is not valid. (%s)";
         
         if ((val == null) && canBeNull) {
             return 0;
         }
         
         if (!Validator.validateInteger(val, minInt, maxInt)) {
-            throw new InputValidationException(String.format(msg, parName, String.valueOf(minInt), String.valueOf(maxInt)));
+            throw new InputValidationException(String.format(msg, parName, String.valueOf(minInt), String.valueOf(maxInt), val));
         }
         
         return Integer.valueOf(val);
