@@ -4,17 +4,19 @@
     Author     : berk
 --%>
 
+<%@page import="cz.svjis.bean.Article"%>
+<%@page import="cz.svjis.bean.SliderItem"%>
+<%@page import="cz.svjis.common.HttpUtils"%>
 <%@page import="java.net.URLEncoder"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Iterator"%>
-<%@page import="cz.svjis.bean.Article"%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
 <jsp:useBean id="menu" scope="request" class="cz.svjis.bean.Menu" />
 <jsp:useBean id="slider" scope="request" class="cz.svjis.bean.SliderImpl" />
 <jsp:useBean id="articleList" scope="request" class="java.util.ArrayList" />
-<jsp:useBean id="articleListInfo" scope="request" class="cz.svjis.bean.ArticleListInfo" />
 <jsp:useBean id="roleList" scope="request" class="java.util.ArrayList" />
 
 <jsp:include page="_header.jsp" />
@@ -84,7 +86,7 @@
                             <td class="list"><a href="Dispatcher?page=articleDetail&id=<%=a.getId() %>"><img src="gfx/find.png" border="0" title="View"></a></td>
                             <td class="list"><a href="Dispatcher?page=redactionArticleEdit&id=<%=a.getId() %>"><img src="gfx/pencil.png" border="0" title="<%=language.getText("Edit") %>"></a></td>
                             <td class="list"><a href="Dispatcher?page=redactionArticleSendNotifications&id=<%=a.getId() %>"><img src="gfx/email_open_image.png" border="0" title="<%=language.getText("Send notifications") %>"></td>
-                            <td class="list"><%=a.getHeader() %></td>
+                            <td class="list"><%=HttpUtils.highlight(a.getHeader(), request.getParameter("search")) %></td>
                             <td class="list"><%=a.getMenuNodeDescription() %></td>
                             <td class="list"><%=a.getAuthor().getFirstName() %>&nbsp;<%=a.getAuthor().getLastName() %></td>
                             <td class="list"><%=sdf.format(a.getCreationDate()) %></td>
@@ -103,13 +105,16 @@
                         if (request.getParameter("roleId") != null) {
                             roleFilter = "&roleId=" + request.getParameter("roleId");
                         }
-                        Iterator<cz.svjis.bean.SliderItem> slIt = slider.getItemList().iterator();
-                        while (slIt.hasNext()) {
-                            cz.svjis.bean.SliderItem item = slIt.next();
+                        String search = "";
+                        if (request.getParameter("search") != null) {
+                            search = "&search=" + request.getParameter("search");
+                        }
+
+                        for (SliderItem item: slider.getItemList()) {
                             if (item.isCurrent()) {
                                 out.println("<b>" + item.getLabel() + "</b>&nbsp;");
                             } else {
-                                out.println("<a href=\"Dispatcher?page=redactionArticleList&section=0&pageNo=" + item.getPage() + roleFilter +"\">" + item.getLabel() + "</a>&nbsp;");
+                                out.println("<a href=\"Dispatcher?page=" + request.getParameter("page") + "&section=0&pageNo=" + item.getPage() + roleFilter + search +"\">" + item.getLabel() + "</a>&nbsp;");
                             }
                         }
                     %>

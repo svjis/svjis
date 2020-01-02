@@ -7,7 +7,6 @@ package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.Article;
 import cz.svjis.bean.ArticleDAO;
-import cz.svjis.bean.ArticleListInfo;
 import cz.svjis.bean.Menu;
 import cz.svjis.bean.MenuDAO;
 import cz.svjis.bean.Role;
@@ -32,9 +31,11 @@ public class RedactionArticleListCmd extends Command {
     @Override
     public void execute() throws Exception {
 
+        String parPage = Validator.getString(getRequest(), "page", 0, 100, false, false);
         int parSection = Validator.getInt(getRequest(), "section", 0, Validator.maxIntAllowed, true);
         int parPageNo = Validator.getInt(getRequest(), "pageNo", 0, Validator.maxIntAllowed, true);
         int parRoleId = Validator.getInt(getRequest(), "roleId", 0, Validator.maxIntAllowed, true);
+        String parSearch = Validator.getString(getRequest(), "search", 0, Validator.maxStringLenAllowed, true, false);
 
         MenuDAO menuDao = new MenuDAO(getCnn());
         ArticleDAO articleDao = new ArticleDAO(getCnn());
@@ -49,9 +50,11 @@ public class RedactionArticleListCmd extends Command {
         sl.setSliderWide(10);
         sl.setCurrentPage(parPageNo);
         sl.setNumOfItemsAtPage(Integer.valueOf(getSetup().getProperty("article.page.size")));
-        sl.setTotalNumOfItems(articleDao.getNumOfArticles(getUser(), parSection, false, !getUser().hasPermission("redaction_articles_all"), parRoleId));
-        getRequest().setAttribute("slider", sl);
-        ArrayList<Article> articleList = articleDao.getArticleList(
+
+        ArrayList<Article> articleList = new ArrayList<Article>();
+        if (parPage.equals("redactionArticleList")) {
+            sl.setTotalNumOfItems(articleDao.getNumOfArticles(getUser(), parSection, false, !getUser().hasPermission("redaction_articles_all"), parRoleId));
+            articleList = articleDao.getArticleList(
                 getUser(),
                 parSection,
                 parPageNo,
@@ -59,19 +62,21 @@ public class RedactionArticleListCmd extends Command {
                 false,
                 !getUser().hasPermission("redaction_articles_all"),
                 parRoleId);
+        }
+
+        if (parPage.equals("redactionArticleSearch")) {
+            sl.setTotalNumOfItems(articleDao.getNumOfArticlesFromSearch(parSearch, getUser(), parSection, false, !getUser().hasPermission("redaction_articles_all")));
+            articleList = articleDao.getArticleListFromSearch(parSearch, getUser(),
+                parSection,
+                parPageNo,
+                Integer.valueOf(getSetup().getProperty("article.page.size")),
+                false,
+                !getUser().hasPermission("redaction_articles_all"));
+        }
+
+        getRequest().setAttribute("slider", sl);
         getRequest().setAttribute("articleList", articleList);
 
-        ArticleListInfo articleListInfo = new ArticleListInfo();
-        articleListInfo.setNumOfArticles(articleDao.getNumOfArticles(
-                getUser(),
-                parSection,
-                false,
-                !getUser().hasPermission("redaction_articles_all"),
-                parRoleId));
-        articleListInfo.setPageSize(Integer.valueOf(getSetup().getProperty("article.page.size")));
-        articleListInfo.setActualPage(parPageNo);
-        articleListInfo.setMenuNodeId(parSection);
-        getRequest().setAttribute("articleListInfo", articleListInfo);
         ArrayList<Role> roleList = roleDao.getRoleList(getCompany().getId());
         getRequest().setAttribute("roleList", roleList);
 
