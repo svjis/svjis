@@ -28,20 +28,14 @@ public class RoleSaveCmd extends Command {
 
     @Override
     public void execute() throws Exception {
-        
-        String parId = getRequest().getParameter("id");
-        String parDescription = Validator.fixTextInput(getRequest().getParameter("description"), false);
-        
-        if (!validateInput(parId, parDescription)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
-        
+
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+        String parDescription = Validator.getString(getRequest(), "description", 0, 50, false, false);
+
         RoleDAO roleDao = new RoleDAO(getCnn());
 
         Role role = new Role();
-        role.setId(Integer.valueOf(parId));
+        role.setId(parId);
         role.setCompanyId(getCompany().getId());
         role.setDescription(parDescription);
         HashMap props = new HashMap();
@@ -49,7 +43,7 @@ public class RoleSaveCmd extends Command {
         Iterator<Permission> permsI = perms.iterator();
         while (permsI.hasNext()) {
             Permission p = permsI.next();
-            if (getRequest().getParameter("p_" + p.getId()) != null) {
+            if (Validator.getBoolean(getRequest(), "p_" + p.getId())) {
                 props.put(new Integer(p.getId()), p.getDescription());
             }
         }
@@ -59,23 +53,9 @@ public class RoleSaveCmd extends Command {
         } else {
             roleDao.modifyRole(role);
         }
-        String url = "Dispatcher?page=roleEdit&id=" + role.getId();
+        String url = "Dispatcher?page=roleList";
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String parId, String parDescription) {
-        boolean result = true;
-        
-        if (!Validator.validateInteger(parId, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parDescription, 0, 50)) {
-            result = false;
-        }
-
-        return result;
     }
 }

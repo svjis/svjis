@@ -31,15 +31,9 @@ public class UserEditCmd extends Command {
 
     @Override
     public void execute() throws Exception {
-        
-        String parId = getRequest().getParameter("id");
-        
-        if (!validateInput(parId)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
-        
+
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+
         CompanyDAO compDao = new CompanyDAO(getCnn());
         RoleDAO roleDao = new RoleDAO(getCnn());
         UserDAO userDao = new UserDAO(getCnn());
@@ -48,12 +42,11 @@ public class UserEditCmd extends Command {
         Company currCompany = compDao.getCompany(getCompany().getId());
         getRequest().setAttribute("currCompany", currCompany);
         User cUser = null;
-        int id = Integer.valueOf(parId);
-        if (id == 0) {
+        if (parId == 0) {
             cUser = new User();
             cUser.setCompanyId(getCompany().getId());
         } else {
-            cUser = userDao.getUser(getCompany().getId(), id);
+            cUser = userDao.getUser(getCompany().getId(), parId);
         }
         getRequest().setAttribute("cUser", cUser);
         ArrayList<Language> languageList = languageDao.getLanguageList();
@@ -65,15 +58,5 @@ public class UserEditCmd extends Command {
         getRequest().setAttribute("errorMessage", "");
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_userDetail.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String parId) {
-        boolean result = true;
-        
-        if (!Validator.validateInteger(parId, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-
-        return result;
     }
 }

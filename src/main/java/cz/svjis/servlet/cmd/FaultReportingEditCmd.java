@@ -29,19 +29,13 @@ public class FaultReportingEditCmd extends Command {
     @Override
     public void execute() throws Exception {
         
-        String parId = Validator.fixTextInput(getRequest().getParameter("id"), false);
-        
-        if (!validateInput(parId)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
         
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
         UserDAO userDao = new UserDAO(getCnn());
         
         FaultReport report = new FaultReport();
-        int id = Integer.valueOf(parId);
+        int id = parId;
         if ((id != 0) && getUser().hasPermission("fault_reporting_resolver")) {
             report = faultDao.getFault(getCompany().getId(), id);
         }
@@ -55,15 +49,5 @@ public class FaultReportingEditCmd extends Command {
                 
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Faults_reportEdit.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String parId) {
-        boolean result = true;
-        
-        if ((parId != null) && (!Validator.validateInteger(parId, 0, Validator.maxIntAllowed))) {
-            result = false;
-        }
-        
-        return result;
     }
 }

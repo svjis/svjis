@@ -16,9 +16,8 @@
     private String writeSubMenu(ArrayList<MenuItem> menu, int level, Language language) {
         String ident = "&nbsp;&nbsp;&nbsp;";
         String output = "";
-        Iterator i = menu.iterator();
-        while (i.hasNext()) {
-            MenuItem ami = (MenuItem) i.next();
+
+        for (MenuItem ami: menu) {
             output += "<tr>";
             output += "<td class=\"list\">";
             for (int n = 0; n < level; n++) {
@@ -27,7 +26,11 @@
             output += ami.getSection().getDescription();
             output += "</td>";
             output += "<td class=\"list\"><a href=\"Dispatcher?page=redactionArticleMenuEdit&id=" + ami.getSection().getId() + "\"><img src=\"gfx/pencil.png\" border=\"0\" title=\"" + language.getText("Edit") + "\"></a></td>";
-            output += "<td class=\"list\"><a onclick=\"if (!confirm('" + language.getText("Really do you want to remove menu node") + " " + ami.getSection().getDescription() + " ?')) return false;\" href=\"Dispatcher?page=redactionArticleMenuDelete&id=" + ami.getSection().getId() + "\"><img src=\"gfx/delete.png\" border=\"0\" title=\"" + language.getText("Delete") + "\"></a></td>";
+            if (ami.getSubSections().size() == 0) {
+                output += "<td class=\"list\"><a onclick=\"if (!confirm('" + language.getText("Really do you want to remove menu node") + " " + ami.getSection().getDescription() + " ?')) return false;\" href=\"Dispatcher?page=redactionArticleMenuDelete&id=" + ami.getSection().getId() + "\"><img src=\"gfx/delete.png\" border=\"0\" title=\"" + language.getText("Delete") + "\"></a></td>";
+            } else {
+                output += "<td class=\"list\">&nbsp;</td>";
+            }
 
             output += "</tr>\n";
             if ((ami.getSubSections() != null) && (!ami.getSubSections().isEmpty()))

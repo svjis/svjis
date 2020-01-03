@@ -32,38 +32,34 @@ public class RedactionArticleSaveCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        String parId = getRequest().getParameter("id");
-        String parHeader = Validator.fixTextInput(getRequest().getParameter("header"), false);
-        String parDescription = Validator.fixTextInput(getRequest().getParameter("description"), true);
-        String parBody = Validator.fixTextInput(getRequest().getParameter("body"), true);
-        String parLangId = getRequest().getParameter("language");
-        String parAuthorId = getRequest().getParameter("authorId");
-        String parCreationDate = Validator.fixTextInput(getRequest().getParameter("creationDate"), false);
-        String parMenuId = getRequest().getParameter("menuId");
-        
-        if (!validateInput(parId, parHeader, parDescription, parBody, parLangId, parAuthorId, parCreationDate, parMenuId)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
-        
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+        String parHeader = Validator.getString(getRequest(), "header", 0, 50, false, false);
+        String parDescription = Validator.getString(getRequest(), "description", 0, Validator.maxStringLenAllowed, false, true);
+        String parBody = Validator.getString(getRequest(), "body", 0, Validator.maxStringLenAllowed, false, true);
+        int parLangId = Validator.getInt(getRequest(), "language", 0, Validator.maxIntAllowed, false);
+        int parAuthorId = Validator.getInt(getRequest(), "authorId", 0, Validator.maxIntAllowed, false);
+        String parCreationDate = Validator.getString(getRequest(), "creationDate", 0, 30, false, false);
+        int parMenuId = Validator.getInt(getRequest(), "menuId", 0, Validator.maxIntAllowed, false);
+        boolean parCommentsAllowed = Validator.getBoolean(getRequest(), "commentsAllowed");
+        boolean parPublish = Validator.getBoolean(getRequest(), "publish");
+
         RoleDAO roleDao = new RoleDAO(getCnn());
         ArticleDAO articleDao = new ArticleDAO(getCnn());
         LogDAO logDao = new LogDAO(getCnn());
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         Article a = new Article();
-        a.setId(Integer.valueOf(parId));
+        a.setId(parId);
         a.setCompanyId(getCompany().getId());
         a.setHeader(parHeader);
         a.setDescription(parDescription);
         a.setBody(parBody);
-        a.setLanguageId(Integer.valueOf(parLangId));
-        a.setCommentsAllowed(getRequest().getParameter("commentsAllowed") != null);
-        a.setPublished(getRequest().getParameter("publish") != null);
-        a.setAuthorId((Integer.valueOf(parAuthorId) == 0) ? getUser().getId() : Integer.valueOf(parAuthorId));
+        a.setLanguageId(parLangId);
+        a.setCommentsAllowed(parCommentsAllowed);
+        a.setPublished(parPublish);
+        a.setAuthorId((parAuthorId == 0) ? getUser().getId() : parAuthorId);
         a.setCreationDate(sdf.parse(parCreationDate));
-        a.setMenuNodeId(Integer.valueOf(parMenuId));
+        a.setMenuNodeId(parMenuId);
 
         HashMap uRoles = new HashMap();
         ArrayList<Role> roles = roleDao.getRoleList(getCompany().getId());
@@ -86,43 +82,5 @@ public class RedactionArticleSaveCmd extends Command {
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String parId, String parHeader, String parDescription, String parBody, String parLangId, String parAuthorId, String parCreationDate, String parMenuId) {
-        boolean result = true;
-        
-        if (!Validator.validateInteger(parId, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parHeader, 0, 50)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parDescription, 0, Validator.maxStringLenAllowed)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parBody, 0, Validator.maxStringLenAllowed)) {
-            result = false;
-        }
-        
-        if (!Validator.validateInteger(parLangId, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-        
-        if (!Validator.validateInteger(parAuthorId, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parCreationDate, 0, 30)) {
-            result = false;
-        }
-        
-        if (!Validator.validateInteger(parMenuId, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-                
-        return result;
     }
 }

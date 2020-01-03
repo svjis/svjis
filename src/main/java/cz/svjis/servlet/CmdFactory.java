@@ -180,7 +180,7 @@ public class CmdFactory {
         // * Redaction     *
         // *****************
         if (ctx.getUser().hasPermission("menu_redaction")) {
-            if (page.equals("redactionArticleList")) {
+            if (page.equals("redactionArticleList") || page.equals("redactionArticleSearch")) {
                 return new RedactionArticleListCmd(ctx);
             }
 

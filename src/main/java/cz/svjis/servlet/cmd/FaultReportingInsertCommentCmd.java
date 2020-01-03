@@ -30,18 +30,12 @@ public class FaultReportingInsertCommentCmd extends Command {
     @Override
     public void execute() throws Exception {
         
-        String parId = Validator.fixTextInput(getRequest().getParameter("id"), false);
-        String parBody = Validator.fixTextInput(getRequest().getParameter("body"), false);
-        
-        if (!validateInput(parId, parBody)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+        String parBody = Validator.getString(getRequest(), "body", 0, Validator.maxStringLenAllowed, false, false);
         
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
         
-        FaultReport report = faultDao.getFault(getCompany().getId(), Integer.valueOf(parId));
+        FaultReport report = faultDao.getFault(getCompany().getId(), parId);
         
         if ((report.getId() != 0) 
                 && (!report.isClosed()) 
@@ -83,19 +77,5 @@ public class FaultReportingInsertCommentCmd extends Command {
         
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String parId, String parBody) {
-        boolean result = true;
-        
-        if (!Validator.validateInteger(parId, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-        
-        if (!Validator.validateString(parBody, 0, Validator.maxStringLenAllowed)) {
-            result = false;
-        }
-        
-        return result;
     }
 }

@@ -10,8 +10,8 @@ import cz.svjis.bean.FaultReportDAO;
 import cz.svjis.common.HttpUtils;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
+import cz.svjis.validator.InputValidationException;
 import cz.svjis.validator.Validator;
-import javax.servlet.RequestDispatcher;
 
 /**
  *
@@ -26,31 +26,13 @@ public class FaultReportingDownloadCmd extends Command {
     @Override
     public void execute() throws Exception {
         
-        String parId = getRequest().getParameter("id");
-        
-        if (!validateInput(parId)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
-        
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
-        FaultReportAttachment fa = faultDao.getFaultReportAttachment(Integer.parseInt(parId));
+        FaultReportAttachment fa = faultDao.getFaultReportAttachment(parId);
         if ((fa == null) || (faultDao.getFault(getCompany().getId(), fa.getFaultReportId()) == null)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
+            throw new InputValidationException("Bad attachment id");
         }
         HttpUtils.writeBinaryData(fa.getContentType(), fa.getFileName(), fa.getData(), getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String id) {
-        boolean result = true;
-        
-        if (!Validator.validateInteger(id, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-        
-        return result;
     }
 }

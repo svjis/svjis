@@ -30,18 +30,12 @@ public class ArticleInsertCommentCmd extends Command {
     @Override
     public void execute() throws Exception {
         
-        String parId = getRequest().getParameter("id");
-        String parBody = Validator.fixTextInput(getRequest().getParameter("body"), false);
-        
-        if (!validateInput(parId, parBody)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+        String parBody = Validator.getString(getRequest(), "body", 0, 10000, true, false);
 
         ArticleDAO articleDao = new ArticleDAO(getCnn());
 
-        int articleId = Integer.valueOf(parId);
+        int articleId = parId;
         Article article = articleDao.getArticle(getUser(),
                 articleId);
         getRequest().setAttribute("article", article);
@@ -87,20 +81,5 @@ public class ArticleInsertCommentCmd extends Command {
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-    
-    
-    private boolean validateInput(String id, String body) {
-        boolean result = true;
-        
-        if (!Validator.validateInteger(id, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-        
-        if ((body != null) && !Validator.validateString(body, 0, 10000)) {
-            result = false;
-        }
-        
-        return result;
     }
 }

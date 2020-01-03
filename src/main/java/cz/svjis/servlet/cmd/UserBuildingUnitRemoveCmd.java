@@ -5,7 +5,11 @@
  */
 package cz.svjis.servlet.cmd;
 
+import cz.svjis.bean.Building;
 import cz.svjis.bean.BuildingDAO;
+import cz.svjis.bean.BuildingUnit;
+import cz.svjis.bean.User;
+import cz.svjis.bean.UserDAO;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -23,38 +27,24 @@ public class UserBuildingUnitRemoveCmd extends Command {
 
     @Override
     public void execute() throws Exception {
-        
-        String parUnitId = getRequest().getParameter("unitId");
-        String parUserId = getRequest().getParameter("userId");
-        
-        if (!validateInput(parUnitId, parUserId)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
-        
-        BuildingDAO buildingDao = new BuildingDAO(getCnn());
 
-        buildingDao.deleteUserHasBuildingUnitConnection(
-                Integer.valueOf(parUserId),
-                Integer.valueOf(parUnitId));
+        int parUnitId = Validator.getInt(getRequest(), "unitId", 0, Validator.maxIntAllowed, false);
+        int parUserId = Validator.getInt(getRequest(), "userId", 0, Validator.maxIntAllowed, false);
+
+        BuildingDAO buildingDao = new BuildingDAO(getCnn());
+        UserDAO userDao = new UserDAO(getCnn());
+
+        Building b = buildingDao.getBuilding(getCompany().getId());
+        BuildingUnit unit = buildingDao.getBuildingUnit(parUnitId);
+        User u = userDao.getUser(getCompany().getId(), parUserId);
+
+        if ((unit != null) && (unit.getBuildingId() == b.getId()) && u != null) {
+            buildingDao.deleteUserHasBuildingUnitConnection(parUserId, parUnitId);
+        }
+
         String url = "Dispatcher?page=userBuildingUnits&id=" + parUserId;
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String parUnitId, String parUserId) {
-        boolean result = true;
-        
-        if (!Validator.validateInteger(parUnitId, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-        
-        if (!Validator.validateInteger(parUserId, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-
-        return result;
     }
 }

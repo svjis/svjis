@@ -25,33 +25,16 @@ public class RedactionInquiryEditCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        String parId = getRequest().getParameter("id");
-        
-        if (!validateInput(parId)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
-        
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+
         InquiryDAO inquiryDao = new InquiryDAO(getCnn());
 
-        int id = Integer.parseInt(parId);
         Inquiry inquiry = new Inquiry();
-        if (id != 0) {
-            inquiry = inquiryDao.getInquiry(getUser(), id);
+        if (parId != 0) {
+            inquiry = inquiryDao.getInquiry(getUser(), parId);
         }
         getRequest().setAttribute("inquiry", inquiry);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Redaction_InquiryEdit.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String parId) {
-        boolean result = true;
-        
-        if (!Validator.validateInteger(parId, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-
-        return result;
     }
 }

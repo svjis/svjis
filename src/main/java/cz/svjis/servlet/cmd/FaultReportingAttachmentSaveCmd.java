@@ -33,17 +33,11 @@ public class FaultReportingAttachmentSaveCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        String parReportId = getRequest().getParameter("reportId");
-        
-        if (!validateInput(parReportId)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
+        int parReportId = Validator.getInt(getRequest(), "reportId", 0, Validator.maxIntAllowed, false);
         
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
         
-        int reportId = Integer.parseInt(parReportId);
+        int reportId = parReportId;
         FileItemFactory factory = new DiskFileItemFactory();
         ServletFileUpload upload = new ServletFileUpload(factory);
         //upload.setSizeMax(yourMaxRequestSize);
@@ -73,15 +67,5 @@ public class FaultReportingAttachmentSaveCmd extends Command {
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String parReportId) {
-        boolean result = true;
-        
-        if (!Validator.validateInteger(parReportId, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-        
-        return result;
     }
 }

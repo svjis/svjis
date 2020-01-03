@@ -26,16 +26,11 @@ public class FaultReportingDetailCmd extends Command {
     @Override
     public void execute() throws Exception {
         
-        String parId = getRequest().getParameter("id");
-        
-        if (!validateInput(parId)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+        Validator.getString(getRequest(), "search", 0, 50, true, false);
         
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
-        FaultReport report = faultDao.getFault(getCompany().getId(), Integer.valueOf(parId));
+        FaultReport report = faultDao.getFault(getCompany().getId(), parId);
         getRequest().setAttribute("report", report);
         
         FaultReportMenuCounters counters = faultDao.getMenuCounters(getCompany().getId(), getUser().getId());
@@ -44,15 +39,4 @@ public class FaultReportingDetailCmd extends Command {
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Faults_reportDetail.jsp");
         rd.forward(getRequest(), getResponse());
     }
-    
-    private boolean validateInput(String id) {
-        boolean result = true;
-        
-        if (!Validator.validateInteger(id, 0, Validator.maxIntAllowed)) {
-            result = false;
-        }
-        
-        return result;
-    }
-    
 }

@@ -24,15 +24,9 @@ public class PropertyEditCmd extends Command {
 
     @Override
     public void execute() throws Exception {
-        
-        String parKey = getRequest().getParameter("key");
-        
-        if (!validateInput(parKey)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
-        
+
+        String parKey = Validator.getString(getRequest(), "key", 0, 50, false, false);
+
         CompanyDAO compDao = new CompanyDAO(getCnn());
 
         Company currCompany = compDao.getCompany(getCompany().getId());
@@ -40,15 +34,5 @@ public class PropertyEditCmd extends Command {
         getRequest().setAttribute("key", parKey);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_propertyDetail.jsp");
         rd.forward(getRequest(), getResponse());
-    }
-    
-    private boolean validateInput(String parKey) {
-        boolean result = true;
-        
-        if (!Validator.validateString(parKey, 0, 50)) {
-            result = false;
-        }
-        
-        return result;
     }
 }
