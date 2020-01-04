@@ -131,7 +131,7 @@
                             %>        
                         </fieldset>
                         <p>
-                            <input type="submit" value="<%=language.getText("Save") %>" />
+                            <input class="my-button" type="submit" value="<%=language.getText("Save") %>" />
                         </p>
                     </form>
                 </div> <!-- /content-main-in -->

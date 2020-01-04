@@ -67,7 +67,7 @@
 
                         <p>
                             <%=language.getText("Header") %><br>
-                            <input id="common-input" type="text" name="header" maxlength="50" size="100" value="<%=article.getHeader() %>">
+                            <input id="common-input" type="text" name="header" maxlength="50" size="80" value="<%=article.getHeader() %>">
                         </p>
                         
                         <p>
@@ -143,7 +143,7 @@
                             %>        
                         </fieldset>
                         <p>
-                            <input type="submit" value="<%=language.getText("Save") %>" />
+                            <input class="my-button" type="submit" value="<%=language.getText("Save") %>" />
                         </p>
                     </form>
                         
