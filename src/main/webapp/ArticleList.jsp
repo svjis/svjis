@@ -21,7 +21,7 @@
 <jsp:useBean id="slider" scope="request" class="cz.svjis.bean.SliderImpl" />
 <jsp:useBean id="articleList" scope="request" class="java.util.ArrayList" />
 <jsp:useBean id="articleTopList" scope="request" class="java.util.ArrayList" />
-<jsp:useBean id="articleListInfo" scope="request" class="cz.svjis.bean.ArticleListInfo" />
+<jsp:useBean id="sectionId" scope="request" class="java.lang.String" />
 <jsp:useBean id="miniNewsList" scope="request" class="java.util.ArrayList" />
 <jsp:useBean id="inquiryList" scope="request" class="java.util.ArrayList" />
 
@@ -74,7 +74,7 @@
                             if (item.isCurrent()) {
                                 out.println("<b>" + item.getLabel() + "</b>&nbsp;");
                             } else {
-                                out.println("<a href=\"Dispatcher?" + pageId + "section=" + articleListInfo.getMenuNodeId() + "&" + search + "pageNo=" + item.getPage() + "\">" + item.getLabel() + "</a>&nbsp;");
+                                out.println("<a href=\"Dispatcher?" + pageId + "section=" + sectionId + "&" + search + "pageNo=" + item.getPage() + "\">" + item.getLabel() + "</a>&nbsp;");
                             }
                         }
                         %>
