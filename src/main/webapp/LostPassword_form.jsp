@@ -24,7 +24,7 @@
                                 <input id="common-input" type="text" name="email" maxlength="50" value="" />
                             </p>
                             <p id="common-submit">
-                                <input type="submit" value="<%=language.getText("Send") %>" />
+                                <input class="my-button" type="submit" value="<%=language.getText("Send") %>" />
                             </p>
                         </fieldset>
                     </form>

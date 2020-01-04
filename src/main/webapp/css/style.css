@@ -95,3 +95,15 @@ h2.article-title {color:#739D13;}
 .rss {color:#000;}
 .message {color:#339900;}
 .error-message {color:#FF0000;}
+
+.my-button {
+  color: #ffffff; /* barva textu */
+  text-decoration: none; /* odebrat podtržení u odkazů */
+  user-select: none; /* zakázat označování textu */
+  background: #000000; /* pozadí tlačítka */
+  padding: .7em 1.5em; /* odsazení od textu */
+  outline: none; /* odstraňovat vnější rámeček v Mozilla */
+  border: none;
+} 
+.my-button:hover { background: #404040; } /* při najetí myší */
+.my-button:active { background: #606060; } /* při stisknutí */

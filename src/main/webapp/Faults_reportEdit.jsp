@@ -31,7 +31,7 @@
                         
                         <p>
                             <%=language.getText("Subject") %><br>
-                            <input id="common-input" type="text" name="subject" maxlength="50" size="100" value="<%=report.getSubject() %>">
+                            <input id="common-input" type="text" name="subject" maxlength="50" size="80" value="<%=report.getSubject() %>">
                         </p>
                         
                         <p>
@@ -68,7 +68,7 @@
                         <% } %>
 
                         <p>
-                            <input type="submit" value="<%=language.getText("Save") %>" />
+                            <input class="my-button" type="submit" value="<%=language.getText("Save") %>" />
                         </p>
                     </form>
                 </div> <!-- /content-main-in -->
