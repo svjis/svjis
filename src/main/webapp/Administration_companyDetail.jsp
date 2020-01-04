@@ -72,10 +72,10 @@
                                 <label id="common-label" for="common-input"><%=language.getText("Database creation date") %></label>
                                 <input id="common-input" type="text" name="cretionDate" maxlength="50" size="50" value="<%=sdf.format(company.getDatabaseCreationDate()) %>" readonly="readonly">
                             </p>
-                            <p id="common-submit">
-                                <input type="submit" value="<%=language.getText("Save") %>" />
-                            </p>
                         </fieldset>
+                        <p>
+                            <input type="submit" value="<%=language.getText("Save") %>" />
+                        </p>
                     </form>
                 </div> <!-- /content-main-in -->
             </div> <!-- /content-main -->

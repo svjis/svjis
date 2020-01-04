@@ -50,10 +50,10 @@
                                     %>
                                 </select>
                             </p>
-                            <p id="common-submit">
-                                <input type="submit" value="<%=language.getText("Save") %>" />
-                            </p>
                         </fieldset>
+                        <p>
+                            <input type="submit" value="<%=language.getText("Save") %>" />
+                        </p>
                     </form>
                 </div> <!-- /content-main-in -->
             </div> <!-- /content-main -->

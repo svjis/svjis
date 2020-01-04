@@ -39,10 +39,10 @@
                                 <label id="common-label" for="common-input"><%=language.getText("New password again") %></label>
                                 <input id="common-input" type="password" name="newPassword2" maxlength="30" size="50" value="" />
                             </p>
-                            <p id="common-submit">
+                            </fieldset>
+                            <p>
                                 <input type="submit" value="<%=language.getText("Save") %>" />
                             </p>
-                        </fieldset>
                     </form>
                 </div> <!-- /content-main-in -->
             </div> <!-- /content-main -->
