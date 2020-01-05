@@ -148,9 +148,11 @@
                     </form>
                         
                     <% if (article.getId() != 0) { %>
+                    <h1 class="page-title"><%=language.getText("Attachments") %></h1>
+
                     <form action="Dispatcher?page=redactionArticleAttachmentSave&articleId=<%=article.getId() %>" enctype="multipart/form-data" method="post">
                         <fieldset>
-                            <legend><%=language.getText("Attachments") %></legend>
+                            <!-- <legend><%=language.getText("Attachments") %></legend> -->
                             <%
                                 if ((article.getAttachmentList() != null) && (article.getAttachmentList().size() != 0)) {
                             %>
@@ -183,9 +185,9 @@
                             %>
                             <p>
                                 <input type="file" name="attachment" size="40">
-                                <input type="submit" value="<%=language.getText("Insert attachment") %>">
                             </p>
                         </fieldset>
+                        <input class="my-button" type="submit" value="<%=language.getText("Insert attachment") %>">
                     </form>
                     <% } %>
                         
