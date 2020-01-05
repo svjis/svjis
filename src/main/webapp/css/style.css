@@ -100,7 +100,7 @@ h2.article-title {color:#739D13;}
   color: #ffffff; /* barva textu */
   text-decoration: none; /* odebrat podtržení u odkazů */
   user-select: none; /* zakázat označování textu */
-  background: #000000; /* pozadí tlačítka */
+  background: #2F2F2F; /* pozadí tlačítka */
   padding: .7em 1.5em; /* odsazení od textu */
   outline: none; /* odstraňovat vnější rámeček v Mozilla */
   border: none;
