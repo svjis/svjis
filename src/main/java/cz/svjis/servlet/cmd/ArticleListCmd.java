@@ -7,7 +7,6 @@ package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.Article;
 import cz.svjis.bean.ArticleDAO;
-import cz.svjis.bean.ArticleListInfo;
 import cz.svjis.bean.Inquiry;
 import cz.svjis.bean.InquiryDAO;
 import cz.svjis.bean.Menu;
@@ -67,14 +66,7 @@ public class ArticleListCmd extends Command {
                 Integer.valueOf(getSetup().getProperty("article.top.size")),
                 (getSetup().getProperty("article.top.months") != null) ? Integer.valueOf(getSetup().getProperty("article.top.months")) : 12);
         getRequest().setAttribute("articleTopList", articleTopList);
-        ArticleListInfo articleListInfo = new ArticleListInfo();
-        articleListInfo.setNumOfArticles(articleDao.getNumOfArticles(getUser(),
-                section,
-                true, false, 0));
-        articleListInfo.setPageSize(Integer.valueOf(getSetup().getProperty("article.page.size")));
-        articleListInfo.setActualPage(pageNo);
-        articleListInfo.setMenuNodeId(section);
-        getRequest().setAttribute("articleListInfo", articleListInfo);
+        getRequest().setAttribute("sectionId", String.valueOf(parSection));
         ArrayList<MiniNews> miniNewsList = newsDao.getMiniNews(getUser(), true);
         getRequest().setAttribute("miniNewsList", miniNewsList);
         ArrayList<Inquiry> inquiryList = inquiryDao.getInquiryList(getUser(), true);

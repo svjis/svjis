@@ -156,7 +156,7 @@
                                  ></textarea>
                              </p>
                              <p>
-                                 <input id="comment-submit" type="submit" value="<%=language.getText("Insert comment") %>" name="submit">
+                                 <input class="my-button" type="submit" value="<%=language.getText("Insert comment") %>" name="submit">
                              </p>
                          </form>
                     <%

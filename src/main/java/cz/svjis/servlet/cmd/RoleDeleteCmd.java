@@ -32,7 +32,7 @@ public class RoleDeleteCmd extends Command {
         Role role = roleDao.getRole(getCompany().getId(), parId);
         if ((role != null)) {
             if (role.getNumOfUsers() != 0) {
-                String message = "Cannot delete role which is not empty.";
+                String message = "Cannot delete role which is assigned to users.";
                 getRequest().setAttribute("messageHeader", "Error");
                 getRequest().setAttribute("message", message);
                 RequestDispatcher rd = getRequest().getRequestDispatcher("/_message.jsp");

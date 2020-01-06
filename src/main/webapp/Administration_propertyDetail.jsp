@@ -32,10 +32,10 @@
                                 <label id="common-label" for="common-input"><%=language.getText("Value") %></label>
                                 <input id="common-input" type="text" name="value" maxlength="1000" value="<%=(setup.getProperty(key) != null) ? setup.getProperty(key) : ""  %>" />
                             </p>
-                            <p id="common-submit">
-                                <input type="submit" value="<%=language.getText("Save") %>" />
-                            </p>
                         </fieldset>
+                        <p>
+                            <input class="my-button" type="submit" value="<%=language.getText("Save") %>" />
+                        </p>
                     </form>
                 </div> <!-- /content-main-in -->
             </div> <!-- /content-main -->

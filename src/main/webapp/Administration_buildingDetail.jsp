@@ -39,10 +39,10 @@
                                 <label id="common-label" for="common-input"><%=language.getText("Registration Id.") %></label>
                                 <input id="common-input" type="text" name="registrationNo" maxlength="20" size="50" value="<%=building.getRegistrationNo() %>">
                             </p>
-                            <p id="common-submit">
-                                <input type="submit" value="<%=language.getText("Save") %>" />
-                            </p>
                         </fieldset>
+                        <p>
+                            <input class="my-button" type="submit" value="<%=language.getText("Save") %>" />
+                        </p>
                     </form>
                             
                     <form action="Dispatcher?page=buildingPictureSave" enctype="multipart/form-data" method="post">
