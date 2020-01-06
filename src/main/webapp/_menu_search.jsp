@@ -12,6 +12,6 @@
                 <form action="Dispatcher" method="get">
                     <input type="hidden" name="page" value="search" />
                     <div id="search" class="box">
-                        <input type="text" size="20" id="search-input" name="search" value="<%=(request.getParameter("search") != null) ? request.getParameter("search") : "" %>" /><input type="submit" id="search-submit" value="<%=language.getText("Search") %>" />
+                        <input type="text" size="20" id="search-input" name="search" value="<%=(request.getParameter("search") != null) ? request.getParameter("search") : "" %>" /><input class="my-button" type="submit" id="search-submit" value="<%=language.getText("Search") %>" />
                     </div> <!-- /search -->
                 </form>
