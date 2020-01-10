@@ -7,6 +7,7 @@ package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.Article;
 import cz.svjis.bean.ArticleDAO;
+import cz.svjis.bean.Language;
 import cz.svjis.bean.Menu;
 import cz.svjis.bean.MenuDAO;
 import cz.svjis.bean.Role;
@@ -65,7 +66,26 @@ public class RedactionArticleListCmd extends Command {
         }
 
         if (parPage.equals("redactionArticleSearch")) {
+            if (parSearch.length() < 3) {
+                Language lang = (Language) this.getRequest().getSession().getAttribute("language");
+                getRequest().setAttribute("messageHeader", lang.getText("Search"));
+                getRequest().setAttribute("message", lang.getText("Text to be searched should has 3 chars at least."));
+                RequestDispatcher rd = getRequest().getRequestDispatcher("/_message.jsp");
+                rd.forward(getRequest(), getResponse());
+                return;
+            }
+
             sl.setTotalNumOfItems(articleDao.getNumOfArticlesFromSearch(parSearch, getUser(), parSection, false, !getUser().hasPermission("redaction_articles_all")));
+
+            if (sl.getTotalNumOfItems() == 0) {
+                Language lang = (Language) this.getRequest().getSession().getAttribute("language");
+                getRequest().setAttribute("messageHeader", lang.getText("Search"));
+                getRequest().setAttribute("message", lang.getText("Nothing found."));
+                RequestDispatcher rd = getRequest().getRequestDispatcher("/_message.jsp");
+                rd.forward(getRequest(), getResponse());
+                return;
+            }
+
             articleList = articleDao.getArticleListFromSearch(parSearch, getUser(),
                 parSection,
                 parPageNo,
