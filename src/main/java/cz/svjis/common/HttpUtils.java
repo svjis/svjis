@@ -53,8 +53,24 @@ public class HttpUtils {
     
     protected static String envelStrInHtml(String html, String textToFind, String atBegin, String atEnd) {
         String result = html;
+        String subp1 = "(?![^<]*>)";
+        String subp2 = "(?:<[^>]+>)*";
+
         if ((textToFind != null) && !textToFind.equals("")) {
-            java.util.regex.Pattern p = java.util.regex.Pattern.compile(textToFind, java.util.regex.Pattern.CASE_INSENSITIVE);
+
+            char[] arr = textToFind.toCharArray();
+            String regexp = "";
+            for (int i = 0; i < arr.length; i++) {
+                if (i > 0) {
+                    regexp += subp2;
+                } else {
+                    regexp += subp1;
+                }
+
+                regexp += String.valueOf(arr[i]);
+            }
+
+            java.util.regex.Pattern p = java.util.regex.Pattern.compile(regexp, java.util.regex.Pattern.CASE_INSENSITIVE);
             java.util.regex.Matcher m = p.matcher(html);
             StringBuffer sb = new StringBuffer();
             while (m.find()) {
