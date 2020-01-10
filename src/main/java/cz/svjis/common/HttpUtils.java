@@ -47,17 +47,21 @@ public class HttpUtils {
         }
     }
     
-    public static String highlight(String string, String regex) {
-        String result = string;
-        if (regex != null) {
-            java.util.regex.Pattern p = java.util.regex.Pattern.compile(regex, java.util.regex.Pattern.CASE_INSENSITIVE);
-            java.util.regex.Matcher m = p.matcher(string);
+    public static String highlight(String html, String textToFind) {
+        return envelStrInHtml(html, textToFind, "<b style=\"color:black;background-color:#ffff66\">", "</b>");
+    }
+    
+    protected static String envelStrInHtml(String html, String textToFind, String atBegin, String atEnd) {
+        String result = html;
+        if ((textToFind != null) && !textToFind.equals("")) {
+            java.util.regex.Pattern p = java.util.regex.Pattern.compile(textToFind, java.util.regex.Pattern.CASE_INSENSITIVE);
+            java.util.regex.Matcher m = p.matcher(html);
             StringBuffer sb = new StringBuffer();
             while (m.find()) {
                 String replacement = "";
-                replacement += "<b style=\"color:black;background-color:#ffff66\">";
+                replacement += atBegin;
                 replacement += m.group();
-                replacement += "</b>";
+                replacement += atEnd;
                 m.appendReplacement(sb, replacement);
             }
             m.appendTail(sb);
