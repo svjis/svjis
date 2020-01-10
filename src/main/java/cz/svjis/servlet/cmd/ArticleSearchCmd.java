@@ -9,6 +9,7 @@ import cz.svjis.bean.Article;
 import cz.svjis.bean.ArticleDAO;
 import cz.svjis.bean.Inquiry;
 import cz.svjis.bean.InquiryDAO;
+import cz.svjis.bean.Language;
 import cz.svjis.bean.Menu;
 import cz.svjis.bean.MenuDAO;
 import cz.svjis.bean.MiniNews;
@@ -42,6 +43,15 @@ public class ArticleSearchCmd extends Command {
         MiniNewsDAO newsDao = new MiniNewsDAO(getCnn());
         InquiryDAO inquiryDao = new InquiryDAO(getCnn());
 
+        if (parSearch.length() < 3) {
+            Language lang = (Language) this.getRequest().getSession().getAttribute("language");
+            getRequest().setAttribute("messageHeader", lang.getText("Search"));
+            getRequest().setAttribute("message", lang.getText("Text to be searched should has 3 chars at least."));
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/_message.jsp");
+            rd.forward(getRequest(), getResponse());
+            return;
+        }
+
         Menu menu = menuDao.getMenu(getCompany().getId());
         int section = parSection;
         menu.setActiveSection(section);
@@ -53,6 +63,16 @@ public class ArticleSearchCmd extends Command {
         sl.setCurrentPage(pageNo);
         sl.setNumOfItemsAtPage(Integer.valueOf(getSetup().getProperty("article.page.size")));
         sl.setTotalNumOfItems(articleDao.getNumOfArticlesFromSearch(parSearch, getUser(), section, true, false));
+
+        if (sl.getTotalNumOfItems() == 0) {
+            Language lang = (Language) this.getRequest().getSession().getAttribute("language");
+            getRequest().setAttribute("messageHeader", lang.getText("Search"));
+            getRequest().setAttribute("message", lang.getText("Nothing found."));
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/_message.jsp");
+            rd.forward(getRequest(), getResponse());
+            return;
+        }
+
         getRequest().setAttribute("slider", sl);
         ArrayList<Article> articleList = articleDao.getArticleListFromSearch(parSearch, getUser(),
                 section,
