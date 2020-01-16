@@ -26,6 +26,7 @@ public class FaultReportingFastCmd extends Command {
     public void execute() throws Exception {
         
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+        boolean parWatch = Validator.getBoolean(getRequest(), "watch");
         
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
         
@@ -42,6 +43,14 @@ public class FaultReportingFastCmd extends Command {
             }
         }
         
+        if ((getRequest().getParameter("watch") != null) && (f != null)) {
+            if (parWatch) {
+                faultDao.setUserWatchingFaultReport(f.getId(), getUser().getId());
+            } else {
+                faultDao.unsetUserWatchingFaultReport(f.getId(), getUser().getId());
+            }
+        }
+
         String url = "Dispatcher?page=faultDetail&id=" + parId;
         getRequest().setAttribute("url", url);
         

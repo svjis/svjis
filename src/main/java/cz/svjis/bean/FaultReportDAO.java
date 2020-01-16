@@ -299,6 +299,7 @@ public class FaultReportDAO {
             a.setFileName(rs.getString("FILENAME"));
             result.add(a);
         }
+        rs.close();
         ps.close();
         return result;
     }
@@ -353,6 +354,7 @@ public class FaultReportDAO {
             blob = rs.getBlob("DATA");
             result.setData(blob.getBytes(1, (int) blob.length()));
         }
+        rs.close();
         ps.close();
         return result;
     }
@@ -478,6 +480,7 @@ public class FaultReportDAO {
             a.setBody(rs.getString("BODY"));
             result.add(a);
         }
+        rs.close();
         ps.close();
         return result;
     }
@@ -530,7 +533,45 @@ public class FaultReportDAO {
             u.seteMail(rs.getString("E_MAIL"));
             result.add(u);
         }
+        rs.close();
         ps.close();
         return result;
+    }
+
+    public boolean isUserWatchingFaultReport(int faultReportId, int userId) throws SQLException {
+        String select = "SELECT count(*) as CNT FROM FAULT_REPORT_WATCHING a WHERE a.FAULT_REPORT_ID = ? AND a.USER_ID = ?";
+
+        PreparedStatement ps = cnn.prepareStatement(select);
+        ps.setInt(1, faultReportId);
+        ps.setInt(2, userId);
+        ResultSet rs = ps.executeQuery();
+        int cnt = 0;
+        if (rs.next()) {
+            cnt = rs.getInt("CNT");
+        }
+        rs.close();
+        ps.close();
+        return (cnt != 0);
+    }
+
+    public void setUserWatchingFaultReport(int faultReportId, int userId) throws SQLException {
+        String insert = "INSERT INTO FAULT_REPORT_WATCHING (FAULT_REPORT_ID, USER_ID) VALUES (?, ?)";
+
+        if (!isUserWatchingFaultReport(faultReportId, userId)) {
+            PreparedStatement ps = cnn.prepareStatement(insert);
+            ps.setInt(1, faultReportId);
+            ps.setInt(2, userId);
+            ps.execute();
+            ps.close();
+        }
+    }
+
+    public void unsetUserWatchingFaultReport(int faultReportId, int userId) throws SQLException {
+        String delete = "DELETE FROM FAULT_REPORT_WATCHING a WHERE a.FAULT_REPORT_ID = ? AND a.USER_ID = ?";
+        PreparedStatement ps = cnn.prepareStatement(delete);
+        ps.setInt(1, faultReportId);
+        ps.setInt(2, userId);
+        ps.execute();
+        ps.close();
     }
 }
