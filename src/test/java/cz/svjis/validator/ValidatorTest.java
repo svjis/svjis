@@ -123,8 +123,10 @@ public class ValidatorTest {
         HttpServletRequest request = mock(HttpServletRequest.class);
         when(request.getParameter("testNull")).thenReturn(null);
         when(request.getParameter("testValue")).thenReturn("10");
+        when(request.getParameter("testZero")).thenReturn("0");
 
         assertFalse(Validator.getBoolean(request, "testNull"));
         assertTrue(Validator.getBoolean(request, "testValue"));
+        assertFalse(Validator.getBoolean(request, "testZero"));
     }
 }

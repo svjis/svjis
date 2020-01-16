@@ -69,6 +69,10 @@ public class FaultReportingSaveCmd extends Command {
             if (getUser().hasPermission("fault_reporting_reporter")) {
                 int newId = faultDao.insertFault(f);
                 f.setId(newId);
+                faultDao.setUserWatchingFaultReport(f.getId(), getUser().getId());
+                if (f.getAssignedToUser() != null) {
+                    faultDao.setUserWatchingFaultReport(f.getId(), f.getAssignedToUser().getId());
+                }
             }
         } else {
             isNew = false;
@@ -80,6 +84,9 @@ public class FaultReportingSaveCmd extends Command {
             
             if (getUser().hasPermission("fault_reporting_resolver")) {
                 faultDao.modifyFault(f);
+                if (f.getAssignedToUser() != null) {
+                    faultDao.setUserWatchingFaultReport(f.getId(), f.getAssignedToUser().getId());
+                }
             }
         }
         

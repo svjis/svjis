@@ -35,7 +35,10 @@ public class FaultReportingDetailCmd extends Command {
         
         FaultReportMenuCounters counters = faultDao.getMenuCounters(getCompany().getId(), getUser().getId());
         getRequest().setAttribute("counters", counters);
-        
+
+        String watching = (faultDao.isUserWatchingFaultReport(report.getId(), getUser().getId())) ? "1" : "0";
+        getRequest().setAttribute("watching", watching);
+
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Faults_reportDetail.jsp");
         rd.forward(getRequest(), getResponse());
     }

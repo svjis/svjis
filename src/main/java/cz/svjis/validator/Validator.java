@@ -50,7 +50,13 @@ public class Validator {
     
     
     public static boolean getBoolean(HttpServletRequest request, String parName) {
-        return (request.getParameter(parName) == null) ? false : true;
+        boolean result;
+        if ((request.getParameter(parName) == null) || (request.getParameter(parName).equals("0"))) {
+            result = false;
+        } else {
+            result = true;
+        }
+        return result;
     }
     
     
