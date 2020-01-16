@@ -48,7 +48,9 @@ public class FaultReportingInsertCommentCmd extends Command {
             c.setUser(getUser());
             c.setBody(parBody);
             faultDao.insertFaultReportComment(c);
-            
+
+            faultDao.setUserWatchingFaultReport(report.getId(), getUser().getId());
+
             // send notification
             String subject = getCompany().getInternetDomain() + ": #" + report.getId() + " - " + report.getSubject() + " (New comment)";
             String tBody = getSetup().getProperty("mail.template.fault.comment.notification");

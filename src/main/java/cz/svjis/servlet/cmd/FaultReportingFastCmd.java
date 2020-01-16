@@ -36,6 +36,7 @@ public class FaultReportingFastCmd extends Command {
             if (getRequest().getParameter("takeTicket") != null) {
                 f.setAssignedToUser(getUser());
                 faultDao.modifyFault(f);
+                faultDao.setUserWatchingFaultReport(f.getId(), f.getAssignedToUser().getId());
             }
             if (getRequest().getParameter("closeTicket") != null) {
                 f.setClosed(true);

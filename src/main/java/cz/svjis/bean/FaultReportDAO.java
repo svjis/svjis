@@ -504,26 +504,11 @@ public class FaultReportDAO {
                         "    a.FIRST_NAME, \n" +
                         "    a.E_MAIL \n" +
                         "FROM \"USER\" a \n" +
-                        "WHERE (a.ENABLED = 1) AND (a.E_MAIL <> '') AND  \n" +
-                        "    a.ID in ( \n" +
-                        "        SELECT a.USER_ID \n" +
-                        "        FROM FAULT_REPORT_COMMENT a \n" +
-                        "        WHERE a.FAULT_REPORT_ID = ? \n" +
-                        "    UNION \n" +
-                        "        SELECT a.CREATED_BY_USER_ID AS USER_ID \n" +
-                        "        FROM FAULT_REPORT a \n" +
-                        "        WHERE a.ID = ? \n" +
-                        "    UNION\n" +
-                        "        SELECT a.ASSIGNED_TO_USER_ID AS USER_ID \n" +
-                        "        FROM FAULT_REPORT a \n" +
-                        "        WHERE a.ID = ? \n" +
-                        "    GROUP BY USER_ID \n" +
-                        "    )";
+                        "LEFT JOIN FAULT_REPORT_WATCHING b ON b.USER_ID = a.ID \n" +
+                        "WHERE (a.ENABLED = 1) AND (a.E_MAIL <> '') AND (b.FAULT_REPORT_ID = ?)";
         
         PreparedStatement ps = cnn.prepareStatement(select);
         ps.setInt(1, faultReportId);
-        ps.setInt(2, faultReportId);
-        ps.setInt(3, faultReportId);
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
             User u = new User();

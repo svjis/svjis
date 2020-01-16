@@ -1811,3 +1811,7 @@ INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Nothing found.'
 INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Nothing found.', '2', 'Nothing found.');
 INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Text to be searched should has 3 chars at least.', '1', 'Hledaný text by měl být alespoň 3 znaky dlouhý.');
 INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Text to be searched should has 3 chars at least.', '2', 'Text to be searched should has 3 chars at least.');
+INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Start watching', '1', 'Sledovat tiket');
+INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Start watching', '2', 'Start watching');
+INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Stop watching', '1', 'Přestat sledovat tiket');
+INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Stop watching', '2', 'Stop watching');
