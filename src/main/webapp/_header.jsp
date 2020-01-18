@@ -15,8 +15,8 @@
     <meta http-equiv="content-language" content="cs" />
     <meta name="robots" content="all,follow" />
 
-    <meta name="author" lang="cs" content="e-mail: svjis@seznam.cz" />
-    <meta name="copyright" lang="cs" content="e-mail: svjis@seznam.cz" />
+    <meta name="author" lang="cs" content="All: SVJIS [https://github.com/svjis]; e-mail: svjis@seznam.cz" />
+    <meta name="copyright" lang="cs" content="All: SVJIS [https://github.com/svjis]; e-mail: svjis@seznam.cz" />
 
     <% if (setup.get("http.meta.description") != null) { %>
     <meta name="description" content="<%=setup.get("http.meta.description") %>" />
