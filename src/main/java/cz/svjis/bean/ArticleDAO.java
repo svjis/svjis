@@ -470,7 +470,7 @@ public class ArticleDAO {
         if (publishedOnly) {
             result = company + " AND " + published + " AND (" + roles + " OR " + creator + ")";
         } else {
-            result = company + " AND ((" + published + " AND " + roles + ") OR " + creator + ")";
+            result = company + " AND (" + roles + " OR " + creator + ")";
         }
         
         if (ownedOnly) {
