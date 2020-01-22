@@ -29,7 +29,7 @@ public class RedactionInquirySaveCmd extends Command {
     public void execute() throws Exception {
 
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
-        String parDescription = Validator.getString(getRequest(), "description", 0, 250, false, true);
+        String parDescription = Validator.getString(getRequest(), "description", 0, 250, false, getUser().hasPermission("can_write_html"));
         String parStartDate = Validator.getString(getRequest(), "startingDate", 0, 30, false, false);
         String parEndDate = Validator.getString(getRequest(), "endingDate", 0, 30, false, false);
         boolean parEnabled = Validator.getBoolean(getRequest(), "publish");
