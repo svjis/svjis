@@ -7,6 +7,7 @@ package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.FaultReport;
 import cz.svjis.bean.FaultReportDAO;
+import cz.svjis.bean.LogDAO;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -27,9 +28,10 @@ public class FaultReportingFastCmd extends Command {
         
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
         boolean parWatch = Validator.getBoolean(getRequest(), "watch");
-        
+
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
-        
+        LogDAO logDao = new LogDAO(getCnn());
+
         FaultReport f = faultDao.getFault(getCompany().getId(), parId);
         if (getUser().hasPermission("fault_reporting_resolver") && (f != null)) {
             
@@ -37,10 +39,12 @@ public class FaultReportingFastCmd extends Command {
                 f.setAssignedToUser(getUser());
                 faultDao.modifyFault(f);
                 faultDao.setUserWatchingFaultReport(f.getId(), f.getAssignedToUser().getId());
+                logDao.log(getUser().getId(), LogDAO.operationTypeModifyFault, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
             }
             if (getRequest().getParameter("closeTicket") != null) {
                 f.setClosed(true);
                 faultDao.modifyFault(f);
+                logDao.log(getUser().getId(), LogDAO.operationTypeCloseFault, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
             }
         }
         
