@@ -31,7 +31,7 @@ public class FaultReportingInsertCommentCmd extends Command {
     public void execute() throws Exception {
         
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
-        String parBody = Validator.getString(getRequest(), "body", 0, Validator.maxStringLenAllowed, false, false);
+        String parBody = Validator.getString(getRequest(), "body", 0, Validator.maxStringLenAllowed, false, getUser().hasPermission("can_write_html"));
         
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
         

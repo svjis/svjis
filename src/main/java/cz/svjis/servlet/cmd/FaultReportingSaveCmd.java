@@ -33,7 +33,7 @@ public class FaultReportingSaveCmd extends Command {
         
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
         String parSubject = Validator.getString(getRequest(), "subject", 0, 50, false, false);
-        String parBody = Validator.getString(getRequest(), "body", 0, Validator.maxStringLenAllowed, false, false);
+        String parBody = Validator.getString(getRequest(), "body", 0, Validator.maxStringLenAllowed, false, getUser().hasPermission("can_write_html"));
         int parResolver = Validator.getInt(getRequest(), "resolverId", 0, Validator.maxIntAllowed, true);
         boolean parClosed = Validator.getBoolean(getRequest(), "closed");
 

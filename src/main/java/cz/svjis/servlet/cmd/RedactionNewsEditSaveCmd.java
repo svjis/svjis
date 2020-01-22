@@ -29,7 +29,7 @@ public class RedactionNewsEditSaveCmd extends Command {
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
         String parTime = Validator.getString(getRequest(), "time", 0, 30, false, false);
         int parLangId = Validator.getInt(getRequest(), "language", 0, Validator.maxIntAllowed, false);
-        String parBody = Validator.getString(getRequest(), "body", 0, Validator.maxStringLenAllowed, false, true);
+        String parBody = Validator.getString(getRequest(), "body", 0, Validator.maxStringLenAllowed, false, getUser().hasPermission("can_write_html"));
         boolean parPublished = Validator.getBoolean(getRequest(), "publish");
 
         MiniNewsDAO newsDao = new MiniNewsDAO(getCnn());
