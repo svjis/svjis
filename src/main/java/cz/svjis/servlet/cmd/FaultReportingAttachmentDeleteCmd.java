@@ -8,6 +8,7 @@ package cz.svjis.servlet.cmd;
 import cz.svjis.bean.FaultReport;
 import cz.svjis.bean.FaultReportAttachment;
 import cz.svjis.bean.FaultReportDAO;
+import cz.svjis.bean.LogDAO;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -29,6 +30,7 @@ public class FaultReportingAttachmentDeleteCmd extends Command {
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
 
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
+        LogDAO logDao = new LogDAO(getCnn());
 
         int id = parId;
         FaultReportAttachment fa = faultDao.getFaultReportAttachment(id);
@@ -40,6 +42,7 @@ public class FaultReportingAttachmentDeleteCmd extends Command {
         FaultReport f = faultDao.getFault(getCompany().getId(), fa.getFaultReportId());
         if ((f != null) && (!f.isClosed()) && (fa.getUser().getId() == getUser().getId())) {
             faultDao.deleteFaultAttachment(id);
+            logDao.log(getUser().getId(), LogDAO.operationTypeDeleteFaultAttachment, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
         }
         String url = "Dispatcher?page=faultDetail&id=" + fa.getFaultReportId();
         getRequest().setAttribute("url", url);

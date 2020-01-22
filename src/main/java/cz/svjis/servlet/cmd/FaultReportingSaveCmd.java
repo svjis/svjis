@@ -7,6 +7,7 @@ package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.FaultReport;
 import cz.svjis.bean.FaultReportDAO;
+import cz.svjis.bean.LogDAO;
 import cz.svjis.bean.MailDAO;
 import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
@@ -38,6 +39,7 @@ public class FaultReportingSaveCmd extends Command {
         boolean parClosed = Validator.getBoolean(getRequest(), "closed");
 
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
+        LogDAO logDao = new LogDAO(getCnn());
         UserDAO userDao = new UserDAO(getCnn());
                         MailDAO mailDao = new MailDAO(
                         getCnn(),
@@ -73,6 +75,10 @@ public class FaultReportingSaveCmd extends Command {
                 if (f.getAssignedToUser() != null) {
                     faultDao.setUserWatchingFaultReport(f.getId(), f.getAssignedToUser().getId());
                 }
+                logDao.log(getUser().getId(), LogDAO.operationTypeCreateFault, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
+                if (f.isClosed()) {
+                    logDao.log(getUser().getId(), LogDAO.operationTypeCloseFault, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
+                }
             }
         } else {
             isNew = false;
@@ -86,6 +92,13 @@ public class FaultReportingSaveCmd extends Command {
                 faultDao.modifyFault(f);
                 if (f.getAssignedToUser() != null) {
                     faultDao.setUserWatchingFaultReport(f.getId(), f.getAssignedToUser().getId());
+                }
+                logDao.log(getUser().getId(), LogDAO.operationTypeModifyFault, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
+                if (!origFault.isClosed() && f.isClosed()) {
+                    logDao.log(getUser().getId(), LogDAO.operationTypeCloseFault, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
+                }
+                if (origFault.isClosed() && !f.isClosed()) {
+                    logDao.log(getUser().getId(), LogDAO.operationTypeReopenFault, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
                 }
             }
         }
