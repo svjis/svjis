@@ -8,12 +8,8 @@ package cz.svjis.servlet.cmd;
 import cz.svjis.bean.FaultReport;
 import cz.svjis.bean.FaultReportComment;
 import cz.svjis.bean.FaultReportDAO;
-import cz.svjis.bean.MailDAO;
-import cz.svjis.bean.User;
 import cz.svjis.servlet.CmdContext;
-import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
-import java.util.ArrayList;
 import java.util.Date;
 import javax.servlet.RequestDispatcher;
 
@@ -21,7 +17,7 @@ import javax.servlet.RequestDispatcher;
  *
  * @author jarberan
  */
-public class FaultReportingInsertCommentCmd extends Command {
+public class FaultReportingInsertCommentCmd extends FaultAbstractCmd {
     
     public FaultReportingInsertCommentCmd(CmdContext ctx) {
         super(ctx);
@@ -34,7 +30,7 @@ public class FaultReportingInsertCommentCmd extends Command {
         String parBody = Validator.getString(getRequest(), "body", 0, Validator.maxStringLenAllowed, false, getUser().hasPermission("can_write_html"));
         
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
-        
+
         FaultReport report = faultDao.getFault(getCompany().getId(), parId);
         
         if ((report.getId() != 0) 
@@ -51,27 +47,7 @@ public class FaultReportingInsertCommentCmd extends Command {
 
             faultDao.setUserWatchingFaultReport(report.getId(), getUser().getId());
 
-            // send notification
-            String subject = getCompany().getInternetDomain() + ": #" + report.getId() + " - " + report.getSubject() + " (New comment)";
-            String tBody = getSetup().getProperty("mail.template.fault.comment.notification");
-            MailDAO mailDao = new MailDAO(
-                    getCnn(),
-                    getSetup().getProperty("mail.smtp"),
-                    getSetup().getProperty("mail.login"),
-                    getSetup().getProperty("mail.password"),
-                    getSetup().getProperty("mail.sender"));
-
-            ArrayList<User> userList = faultDao.getUserListForNotificationAboutNewComment(report.getId());
-            for (User u : userList) {
-                if (u.getId() == getUser().getId()) {
-                    continue;
-                }
-                String body = String.format(tBody,
-                        getUser().getFirstName() + " " + getUser().getLastName(),
-                        "<a href=\"http://" + getCompany().getInternetDomain() + "/Dispatcher?page=faultDetail&id=" + report.getId() + "\">#" + report.getId() + " - " + report.getSubject() + "</a>",
-                        c.getBody().replace("\n", "<br>"));
-                mailDao.queueMail(getCompany().getId(), u.geteMail(), subject, body);
-            }
+            sendNotification(report, "mail.template.fault.comment.notification", faultDao.getUserListForNotificationAboutNewComment(report.getId()));
         }
         
         String url = "Dispatcher?page=faultDetail&id=" + parId;
@@ -80,4 +56,5 @@ public class FaultReportingInsertCommentCmd extends Command {
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
     }
+    
 }
