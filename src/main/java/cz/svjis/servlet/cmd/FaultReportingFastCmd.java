@@ -9,7 +9,6 @@ import cz.svjis.bean.FaultReport;
 import cz.svjis.bean.FaultReportDAO;
 import cz.svjis.bean.LogDAO;
 import cz.svjis.servlet.CmdContext;
-import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
 import javax.servlet.RequestDispatcher;
 
@@ -17,7 +16,7 @@ import javax.servlet.RequestDispatcher;
  *
  * @author jarberan
  */
-public class FaultReportingFastCmd extends Command {
+public class FaultReportingFastCmd extends FaultAbstractCmd {
     
     public FaultReportingFastCmd(CmdContext ctx) {
         super(ctx);
@@ -44,6 +43,7 @@ public class FaultReportingFastCmd extends Command {
             if (getRequest().getParameter("closeTicket") != null) {
                 f.setClosed(true);
                 faultDao.modifyFault(f);
+                sendNotification(f, "mail.template.fault.closed", faultDao.getUserListForNotificationAboutNewComment(f.getId()));
                 logDao.log(getUser().getId(), LogDAO.operationTypeCloseFault, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
             }
         }

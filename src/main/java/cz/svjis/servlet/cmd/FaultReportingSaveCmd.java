@@ -8,11 +8,9 @@ package cz.svjis.servlet.cmd;
 import cz.svjis.bean.FaultReport;
 import cz.svjis.bean.FaultReportDAO;
 import cz.svjis.bean.LogDAO;
-import cz.svjis.bean.MailDAO;
 import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
 import cz.svjis.servlet.CmdContext;
-import cz.svjis.servlet.Command;
 import cz.svjis.validator.InputValidationException;
 import cz.svjis.validator.Validator;
 import java.util.ArrayList;
@@ -23,7 +21,7 @@ import javax.servlet.RequestDispatcher;
  *
  * @author jarberan
  */
-public class FaultReportingSaveCmd extends Command {
+public class FaultReportingSaveCmd extends FaultAbstractCmd {
     
     public FaultReportingSaveCmd(CmdContext ctx) {
         super(ctx);
@@ -41,13 +39,7 @@ public class FaultReportingSaveCmd extends Command {
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
         LogDAO logDao = new LogDAO(getCnn());
         UserDAO userDao = new UserDAO(getCnn());
-                        MailDAO mailDao = new MailDAO(
-                        getCnn(),
-                        getSetup().getProperty("mail.smtp"),
-                        getSetup().getProperty("mail.login"),
-                        getSetup().getProperty("mail.password"),
-                        getSetup().getProperty("mail.sender"));
-        
+
         FaultReport f = new FaultReport();
         f.setId(parId);
         f.setCompanyId(getCompany().getId());
@@ -77,6 +69,7 @@ public class FaultReportingSaveCmd extends Command {
                 }
                 logDao.log(getUser().getId(), LogDAO.operationTypeCreateFault, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
                 if (f.isClosed()) {
+                    sendNotification(f, "mail.template.fault.closed", faultDao.getUserListForNotificationAboutNewComment(f.getId()));
                     logDao.log(getUser().getId(), LogDAO.operationTypeCloseFault, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
                 }
             }
@@ -95,32 +88,19 @@ public class FaultReportingSaveCmd extends Command {
                 }
                 logDao.log(getUser().getId(), LogDAO.operationTypeModifyFault, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
                 if (!origFault.isClosed() && f.isClosed()) {
+                    sendNotification(f, "mail.template.fault.closed", faultDao.getUserListForNotificationAboutNewComment(f.getId()));
                     logDao.log(getUser().getId(), LogDAO.operationTypeCloseFault, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
                 }
                 if (origFault.isClosed() && !f.isClosed()) {
+                    sendNotification(f, "mail.template.fault.reopened", faultDao.getUserListForNotificationAboutNewComment(f.getId()));
                     logDao.log(getUser().getId(), LogDAO.operationTypeReopenFault, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
                 }
             }
         }
-        
-        // notifications
-        String subject = getCompany().getInternetDomain() + ": #" + f.getId() + " - " + f.getSubject();
-        String link = "<a href=\"http://" + getCompany().getInternetDomain() + "/Dispatcher?page=faultDetail&id=" + f.getId() + "\">#" + f.getId() + " - " + f.getSubject() + "</a>";
 
         // send new fault notification
-        if (isNew && (f.getAssignedToUser() == null) && (getSetup().getProperty("mail.template.fault.notification") != null)) {
-            String tBody = getSetup().getProperty("mail.template.fault.notification");
-            ArrayList<User> userList = userDao.getUserListWithPermission(getCompany().getId(), "fault_reporting_resolver");
-            for (User u : userList) {
-                if ((u.getId() == getUser().getId()) || (u.geteMail().equals(""))) {
-                    continue;
-                }
-                String body = String.format(tBody,
-                        getUser().getFirstName() + " " + getUser().getLastName(),
-                        link,
-                        f.getDescription().replace("\n", "<br>"));
-                mailDao.queueMail(getCompany().getId(), u.geteMail(), subject, body);
-            }
+        if (isNew && (f.getAssignedToUser() == null)) {
+            sendNotification(f, "mail.template.fault.notification", userDao.getUserListWithPermission(getCompany().getId(), "fault_reporting_resolver"));
         }
         
         // send fault assignment notification
@@ -133,12 +113,9 @@ public class FaultReportingSaveCmd extends Command {
                 (!f.getAssignedToUser().geteMail().equals("")) && 
                 (getSetup().getProperty("mail.template.fault.assigned") != null)) {
                 
-                String tBody = getSetup().getProperty("mail.template.fault.assigned");
-                String body = String.format(tBody,
-                        getUser().getFirstName() + " " + getUser().getLastName(),
-                        link,
-                        f.getDescription().replace("\n", "<br>"));
-                mailDao.queueMail(getCompany().getId(), f.getAssignedToUser().geteMail(), subject, body);
+                ArrayList<User> recipient = new ArrayList<User>();
+                recipient.add(f.getAssignedToUser());
+                sendNotification(f, "mail.template.fault.assigned", recipient);
             }
         }
         
