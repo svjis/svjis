@@ -17,15 +17,10 @@ import java.util.ArrayList;
  *
  * @author jarberan
  */
-public class FaultAbstractCmd  extends Command {
+public abstract class FaultAbstractCmd  extends Command {
 
     public FaultAbstractCmd(CmdContext cmdCtx) {
         super(cmdCtx);
-    }
-    
-    @Override
-    public void execute() throws Exception {
-        throw new UnsupportedOperationException("Not supported.");
     }
     
     protected void sendNotification(FaultReport f, String templatePropertyName, ArrayList<User> userList) throws SQLException {
