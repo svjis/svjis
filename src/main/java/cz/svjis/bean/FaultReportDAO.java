@@ -496,7 +496,7 @@ public class FaultReportDAO {
         ps.close();
     }
     
-    public ArrayList<User> getUserListForNotificationAboutNewComment(int faultReportId) throws SQLException {
+    public ArrayList<User> getUserListWatchingFaultReport(int faultReportId) throws SQLException {
         ArrayList<User> result = new ArrayList<User>();
         String select = "SELECT \n" +
                         "    a.ID, \n" +
