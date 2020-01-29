@@ -60,7 +60,7 @@ public class FaultReportingInsertCommentCmd extends Command {
                     getSetup().getProperty("mail.login"),
                     getSetup().getProperty("mail.password"),
                     getSetup().getProperty("mail.sender"));
-            ArrayList<User> userList = faultDao.getUserListForNotificationAboutNewComment(report.getId());
+            ArrayList<User> userList = faultDao.getUserListWatchingFaultReport(report.getId());
             for (User u : userList) {
                 if (u.getId() == getUser().getId()) {
                     continue;
