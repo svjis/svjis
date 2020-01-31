@@ -40,6 +40,14 @@ public class FaultReportingSaveCmd extends FaultAbstractCmd {
         LogDAO logDao = new LogDAO(getCnn());
         UserDAO userDao = new UserDAO(getCnn());
 
+        if ((parSubject == null || parSubject.equals("")) && (parBody == null || parBody.equals(""))) {
+            String url = "Dispatcher?page=faultReportingList";
+            getRequest().setAttribute("url", url);
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
+            rd.forward(getRequest(), getResponse());
+            return;
+        }
+
         FaultReport f = new FaultReport();
         f.setId(parId);
         f.setCompanyId(getCompany().getId());

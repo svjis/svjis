@@ -34,12 +34,6 @@
                 <div id="content-main-in">
                     <h1 class="page-title" style="<%=stl %>">#<%=report.getId() %>&nbsp;-&nbsp;<%=HttpUtils.highlight(report.getSubject(), request.getParameter("search")) %></h1>
 
-                    <% if (watching.equals("0")) { %>
-                        [<a href="Dispatcher?page=faultReportingFast&id=<%=report.getId() %>&watch=1"><%=language.getText("Start watching") %></a>]&nbsp;
-                    <% } else { %>
-                        [<a href="Dispatcher?page=faultReportingFast&id=<%=report.getId() %>&watch=0"><%=language.getText("Stop watching") %></a>]&nbsp;
-                    <% } %>
-
                     <% if (user.hasPermission("fault_reporting_resolver")) { %>
                     [<a href="Dispatcher?page=faultReportingEdit&id=<%=report.getId() %>"><%=language.getText("Edit") %></a>]&nbsp;
                         <% if (report.getAssignedToUser() == null) { %>
@@ -48,8 +42,14 @@
                         <% if ((report.getAssignedToUser() != null) && (report.getAssignedToUser().getId() == user.getId()) && !report.isClosed()) { %>
                         [<a href="Dispatcher?page=faultReportingFast&id=<%=report.getId() %>&closeTicket=1"><%=language.getText("Close this ticket") %></a>]&nbsp;
                         <% } %>
-                        <br>
                     <% } %>
+
+                    <% if (watching.equals("0")) { %>
+                        [<a href="Dispatcher?page=faultReportingFast&id=<%=report.getId() %>&watch=1"><%=language.getText("Start watching") %></a>]&nbsp;
+                    <% } else { %>
+                        [<a href="Dispatcher?page=faultReportingFast&id=<%=report.getId() %>&watch=0"><%=language.getText("Stop watching") %></a>]&nbsp;
+                    <% } %>
+
                     <table class="list" width="95%">
                         <tr>
                             <th class="list" width="25%"><%=language.getText("Date") %></th>
