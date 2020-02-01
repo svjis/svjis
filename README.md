@@ -14,4 +14,4 @@ SVJIS je CMS (content management system) pro Společenství Vlastníku Jednotek.
 
 ## Contributing
 
-Pokud se chcete podílet na vývoji systému, tak jste vítáni :blue_heart:. Prostudujte si [CONTRIBUTING.md](CONTRIBUTING.md), kde jsou popsány pravidla :octocat:.
+Pokud se chcete podílet na vývoji systému, tak jste vítáni :blue_heart:. Prostudujte si [CONTRIBUTING.md](.github/CONTRIBUTING.md), kde jsou popsány pravidla :octocat:.
