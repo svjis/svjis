@@ -8,6 +8,7 @@ package cz.svjis.servlet.cmd;
 import cz.svjis.bean.FaultReport;
 import cz.svjis.bean.FaultReportAttachment;
 import cz.svjis.bean.FaultReportDAO;
+import cz.svjis.bean.LogDAO;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -34,9 +35,10 @@ public class FaultReportingAttachmentSaveCmd extends Command {
     public void execute() throws Exception {
 
         int parReportId = Validator.getInt(getRequest(), "reportId", 0, Validator.maxIntAllowed, false);
-        
+
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
-        
+        LogDAO logDao = new LogDAO(getCnn());
+
         int reportId = parReportId;
         FileItemFactory factory = new DiskFileItemFactory();
         ServletFileUpload upload = new ServletFileUpload(factory);
@@ -60,6 +62,7 @@ public class FaultReportingAttachmentSaveCmd extends Command {
                 FaultReport fr = faultDao.getFault(getCompany().getId(), fa.getFaultReportId());
                 if ((fr != null) && (!fr.isClosed()) && !fa.getFileName().equals("")) {
                     faultDao.insertFaultReportAttachment(fa);
+                    logDao.log(getUser().getId(), LogDAO.operationTypeInsertFaultAttachment, fr.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
                 }
             }
         }

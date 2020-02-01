@@ -31,10 +31,10 @@ public class FaultReportingInsertCommentCmd extends Command {
     public void execute() throws Exception {
         
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
-        String parBody = Validator.getString(getRequest(), "body", 0, Validator.maxStringLenAllowed, false, false);
+        String parBody = Validator.getString(getRequest(), "body", 0, Validator.maxStringLenAllowed, false, getUser().hasPermission("can_write_html"));
         
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
-        
+
         FaultReport report = faultDao.getFault(getCompany().getId(), parId);
         
         if ((report.getId() != 0) 
@@ -48,7 +48,9 @@ public class FaultReportingInsertCommentCmd extends Command {
             c.setUser(getUser());
             c.setBody(parBody);
             faultDao.insertFaultReportComment(c);
-            
+
+            faultDao.setUserWatchingFaultReport(report.getId(), getUser().getId());
+
             // send notification
             String subject = getCompany().getInternetDomain() + ": #" + report.getId() + " - " + report.getSubject() + " (New comment)";
             String tBody = getSetup().getProperty("mail.template.fault.comment.notification");
@@ -58,8 +60,7 @@ public class FaultReportingInsertCommentCmd extends Command {
                     getSetup().getProperty("mail.login"),
                     getSetup().getProperty("mail.password"),
                     getSetup().getProperty("mail.sender"));
-
-            ArrayList<User> userList = faultDao.getUserListForNotificationAboutNewComment(report.getId());
+            ArrayList<User> userList = faultDao.getUserListWatchingFaultReport(report.getId());
             for (User u : userList) {
                 if (u.getId() == getUser().getId()) {
                     continue;
@@ -78,4 +79,5 @@ public class FaultReportingInsertCommentCmd extends Command {
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
     }
+    
 }

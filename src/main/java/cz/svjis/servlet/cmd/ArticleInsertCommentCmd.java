@@ -31,7 +31,7 @@ public class ArticleInsertCommentCmd extends Command {
     public void execute() throws Exception {
         
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
-        String parBody = Validator.getString(getRequest(), "body", 0, 10000, true, false);
+        String parBody = Validator.getString(getRequest(), "body", 0, 10000, true, getUser().hasPermission("can_write_html"));
 
         ArticleDAO articleDao = new ArticleDAO(getCnn());
 
