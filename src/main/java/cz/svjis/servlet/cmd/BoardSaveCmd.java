@@ -29,7 +29,9 @@ public class BoardSaveCmd extends Command {
 
         BoardMemberDAO boardDao = new BoardMemberDAO(getCnn());
 
-        boardDao.addBoardMember(getCompany().getId(), parUserId, parTypeId);
+        if ((parUserId != 0) && (parTypeId != 0)) {
+            boardDao.addBoardMember(getCompany().getId(), parUserId, parTypeId);
+        }
 
         String url = "Dispatcher?page=boardMemberList";
         getRequest().setAttribute("url", url);
