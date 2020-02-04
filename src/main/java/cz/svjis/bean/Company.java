@@ -31,6 +31,7 @@ public class Company {
     private String pictureFilename;
     private byte[] pictureData;
     private int unitCnt;
+    private int boardCnt;
     private int userCnt;
     private int roleCnt;
     private int messageCnt;
@@ -325,5 +326,19 @@ public class Company {
      */
     public void setMessageCnt(int messageCnt) {
         this.messageCnt = messageCnt;
+    }
+
+    /**
+     * @return the boardCnt
+     */
+    public int getBoardCnt() {
+        return boardCnt;
+    }
+
+    /**
+     * @param boardCnt the boardCnt to set
+     */
+    public void setBoardCnt(int boardCnt) {
+        this.boardCnt = boardCnt;
     }
 }

@@ -4,9 +4,12 @@
     Author     : berk
 --%>
 
+<%@page import="cz.svjis.bean.BoardMember"%>
+<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="company" scope="session" class="cz.svjis.bean.Company" />
+<jsp:useBean id="boardList" scope="request" class="java.util.ArrayList" />
 
 <jsp:include page="_header.jsp" />
 <jsp:include page="_tray.jsp" />
@@ -62,6 +65,23 @@
                             <td><strong><%=language.getText("Registration No.") %>:&nbsp;</strong></td>
                             <td><%=company.getRegistrationNo() %></td>
                         </tr>
+                        <% } %>
+                        
+                        <% if (!boardList.isEmpty()) { %>
+                        <table border="0">
+                            <th colspan="3" style="text-align: left"><%=language.getText("Board") %></th>
+                        <%
+                            for (BoardMember bm: (ArrayList<BoardMember>) boardList) {
+                        %>
+                            <tr>
+                                <td><%=bm.getUser().getSalutation() %>&nbsp;<%=bm.getUser().getFirstName() %>&nbsp;<%=bm.getUser().getLastName() %></td>
+                                <td>&nbsp;-&nbsp;</td>
+                                <td><%=bm.getBoardMemberType().getDescription() %></td>
+                            </tr>
+                        <% 
+                            } 
+                        %>
+                        </table>
                         <% } %>
                     </table>
                 </div> <!-- /content-main-in -->
