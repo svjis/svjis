@@ -85,14 +85,15 @@ public class BoardMemberDAO {
     
     
     public void addBoardMember(int companyId, int userId, int typeId) throws SQLException {
-        String selectUser = "SELECT a.ID FROM \"USER\" a WHERE a.COMPANY_ID = 1 AND a.ID = ? AND a.ENABLED = 1";
+        String selectUser = "SELECT a.ID FROM \"USER\" a WHERE a.COMPANY_ID = ? AND a.ID = ? AND a.ENABLED = 1";
         String selectType = "SELECT a.ID FROM BOARD_MEMBER_TYPE a WHERE a.ID = ?";
         String selectBoard = "SELECT a.USER_ID FROM BOARD_MEMBER a WHERE a.USER_ID = ? AND a.BOARD_MEMBER_TYPE_ID = ?";
         String insert = "INSERT INTO BOARD_MEMBER (USER_ID, BOARD_MEMBER_TYPE_ID) VALUES (?,?)";
         
         //-- Does user exist?
         try (PreparedStatement ps = cnn.prepareStatement(selectUser)) {
-            ps.setInt(1, userId);
+            ps.setInt(1, companyId);
+            ps.setInt(2, userId);
             try (ResultSet rs = ps.executeQuery()) {
                 if (!rs.next()) {
                     return;
@@ -131,12 +132,13 @@ public class BoardMemberDAO {
     
     
     public void deleteBoardMember(int companyId, int userId, int typeId) throws SQLException {
-        String selectUser = "SELECT a.ID FROM \"USER\" a WHERE a.COMPANY_ID = 1 AND a.ID = ? AND a.ENABLED = 1";
+        String selectUser = "SELECT a.ID FROM \"USER\" a WHERE a.COMPANY_ID = ? AND a.ID = ? AND a.ENABLED = 1";
         String delete = "DELETE FROM BOARD_MEMBER WHERE USER_ID = ? AND BOARD_MEMBER_TYPE_ID = ?";
     
         //-- Does user exist?
         try (PreparedStatement ps = cnn.prepareStatement(selectUser)) {
-            ps.setInt(1, userId);
+            ps.setInt(1, companyId);
+            ps.setInt(2, userId);
             try (ResultSet rs = ps.executeQuery()) {
                 if (!rs.next()) {
                     return;
