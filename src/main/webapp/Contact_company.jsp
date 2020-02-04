@@ -4,9 +4,12 @@
     Author     : berk
 --%>
 
+<%@page import="cz.svjis.bean.BoardMember"%>
+<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="company" scope="session" class="cz.svjis.bean.Company" />
+<jsp:useBean id="boardList" scope="request" class="java.util.ArrayList" />
 
 <jsp:include page="_header.jsp" />
 <jsp:include page="_tray.jsp" />
@@ -64,6 +67,26 @@
                         </tr>
                         <% } %>
                     </table>
+
+                    <% if (!boardList.isEmpty()) { %>
+                    <table border="0">
+                        <tr>
+                            <td colspan="3"><strong><%=language.getText("Board") %>:&nbsp;</strong></td>
+                        </tr>
+                    <%
+                        for (BoardMember bm: (ArrayList<BoardMember>) boardList) {
+                    %>
+                        <tr>
+                            <td><%=bm.getUser().getSalutation() %>&nbsp;</td>
+                            <td><%=bm.getUser().getFirstName() %>&nbsp;<%=bm.getUser().getLastName() %>&nbsp;&nbsp;</td>
+                            <td><%=bm.getBoardMemberType().getDescription() %>&nbsp;</td>
+                        </tr>
+                    <% 
+                        } 
+                    %>
+                    </table>
+                    <% } %>
+
                 </div> <!-- /content-main-in -->
             </div> <!-- /content-main -->
             <hr class="noscreen" />

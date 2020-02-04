@@ -11,6 +11,10 @@ import cz.svjis.servlet.cmd.ArticleInquiryVoteCmd;
 import cz.svjis.servlet.cmd.ArticleInsertCommentCmd;
 import cz.svjis.servlet.cmd.ArticleListCmd;
 import cz.svjis.servlet.cmd.ArticleSearchCmd;
+import cz.svjis.servlet.cmd.BoardDeleteCmd;
+import cz.svjis.servlet.cmd.BoardEditCmd;
+import cz.svjis.servlet.cmd.BoardListCmd;
+import cz.svjis.servlet.cmd.BoardSaveCmd;
 import cz.svjis.servlet.cmd.BuildingDetailCmd;
 import cz.svjis.servlet.cmd.BuildingPictureSaveCmd;
 import cz.svjis.servlet.cmd.BuildingSaveCmd;
@@ -329,6 +333,22 @@ public class CmdFactory {
 
             if (page.equals("buildingUnitOwner")) {
                 return new BuildingUnitOwnerCmd(ctx);
+            }
+            
+            if (page.equals("boardMemberList")) {
+                return new BoardListCmd(ctx);
+            }
+            
+            if (page.equals("boardMemberEdit")) {
+                return new BoardEditCmd(ctx);
+            }
+            
+            if (page.equals("boardMemberSave")) {
+                return new BoardSaveCmd(ctx);
+            }
+            
+            if (page.equals("boardMemberDelete")) {
+                return new BoardDeleteCmd(ctx);
             }
 
             if (page.equals("userList")) {
