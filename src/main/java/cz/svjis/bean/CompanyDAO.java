@@ -85,6 +85,7 @@ public class CompanyDAO {
                 + "a.PICTURE_FILENAME, "
                 + "a.PICTURE_DATA, "
                 + "(SELECT count(*) FROM BUILDING b left join BUILDING_UNIT u on (u.BUILDING_ID = b.ID) where (b.COMPANY_ID = a.ID) AND (u.ID IS NOT null)) AS UNIT_CNT, "
+                + "(SELECT count(*) FROM BOARD_MEMBER m LEFT JOIN \"USER\" u ON u.ID = m.USER_ID WHERE u.COMPANY_ID = a.ID) AS BOARD_CNT, "
                 + "(SELECT count(*) FROM \"USER\" u where (u.COMPANY_ID = a.ID) AND (u.ENABLED = 1)) AS USER_CNT, "
                 + "(SELECT count(*) FROM \"ROLE\" r where (r.COMPANY_ID = a.ID)) AS ROLE_CNT, "
                 + "(SELECT count(*) FROM MESSAGE_QUEUE m WHERE (m.COMPANY_ID = a.ID) AND (m.STATUS = 0)) AS MESSAGE_CNT "
@@ -112,6 +113,7 @@ public class CompanyDAO {
             result.setPictureFilename(rs.getString("PICTURE_FILENAME"));
             result.setPictureData(rs.getBytes("PICTURE_DATA"));
             result.setUnitCnt(rs.getInt("UNIT_CNT"));
+            result.setBoardCnt(rs.getInt("BOARD_CNT"));
             result.setUserCnt(rs.getInt("USER_CNT"));
             result.setRoleCnt(rs.getInt("ROLE_CNT"));
             result.setMessageCnt(rs.getInt("MESSAGE_CNT"));
@@ -142,7 +144,8 @@ public class CompanyDAO {
                 + "a.PICTURE_DATA, "
                 + "(SELECT count(*) FROM BUILDING b left join BUILDING_UNIT u on (u.BUILDING_ID = b.ID) where (b.COMPANY_ID = a.ID) AND (u.ID IS NOT null)) AS UNIT_CNT, "
                 + "(SELECT count(*) FROM \"USER\" u where (u.COMPANY_ID = a.ID)) AS USER_CNT, "
-                + "(SELECT (count(*)) FROM \"ROLE\" r where (r.COMPANY_ID = a.ID)) AS ROLE_CNT "
+                + "(SELECT (count(*)) FROM \"ROLE\" r where (r.COMPANY_ID = a.ID)) AS ROLE_CNT, "
+                + "(SELECT count(*) FROM BOARD_MEMBER m LEFT JOIN \"USER\" u ON u.ID = m.USER_ID WHERE u.COMPANY_ID = a.ID) AS BOARD_CNT "
                 + "FROM COMPANY a "
                 + "WHERE a.INTERNET_DOMAIN collate UNICODE_CI_AI = ?";
         
@@ -169,6 +172,7 @@ public class CompanyDAO {
             result.setUnitCnt(rs.getInt("UNIT_CNT"));
             result.setUserCnt(rs.getInt("USER_CNT"));
             result.setRoleCnt(rs.getInt("ROLE_CNT"));
+            result.setBoardCnt(rs.getInt("BOARD_CNT"));
         }
         rs.close();
         ps.close();
