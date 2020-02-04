@@ -27,24 +27,26 @@
                         <input type="hidden" name="page" value="boardMemberSave" />
                         <fieldset>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Position") %></label>
-                                <select id="common-input" name="typeId">
+                                <label id="common-label" for="common-input"><%=language.getText("User") %></label>
+                                <select id="common-input" name="userId">
+                                    <option value="0">&nbsp;</option>
                                     <%
-                                        for (BoardMemberType t: (ArrayList<BoardMemberType>) boardTypes) {
+                                        for (User u: (ArrayList<User>) userList) {
                                     %>
-                                        <option value="<%=t.getId() %>"><%=t.getDescription() %></option>
+                                    <option value="<%=u.getId() %>"><%=u.getLastName() %>&nbsp;<%=u.getFirstName() %></option>
                                     <%
                                         }
                                     %>
                                 </select>
                             </p>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("User") %></label>
-                                <select id="common-input" name="userId">
+                                <label id="common-label" for="common-input"><%=language.getText("Position") %></label>
+                                <select id="common-input" name="typeId">
+                                    <option value="0">&nbsp;</option>
                                     <%
-                                        for (User u: (ArrayList<User>) userList) {
+                                        for (BoardMemberType t: (ArrayList<BoardMemberType>) boardTypes) {
                                     %>
-                                    <option value="<%=u.getId() %>"><%=u.getLastName() %>&nbsp;<%=u.getFirstName() %></option>
+                                        <option value="<%=t.getId() %>"><%=t.getDescription() %></option>
                                     <%
                                         }
                                     %>

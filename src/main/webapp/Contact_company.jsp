@@ -66,24 +66,27 @@
                             <td><%=company.getRegistrationNo() %></td>
                         </tr>
                         <% } %>
-                        
-                        <% if (!boardList.isEmpty()) { %>
-                        <table border="0">
-                            <th colspan="3" style="text-align: left"><%=language.getText("Board") %></th>
-                        <%
-                            for (BoardMember bm: (ArrayList<BoardMember>) boardList) {
-                        %>
-                            <tr>
-                                <td><%=bm.getUser().getSalutation() %>&nbsp;<%=bm.getUser().getFirstName() %>&nbsp;<%=bm.getUser().getLastName() %></td>
-                                <td>&nbsp;-&nbsp;</td>
-                                <td><%=bm.getBoardMemberType().getDescription() %></td>
-                            </tr>
-                        <% 
-                            } 
-                        %>
-                        </table>
-                        <% } %>
                     </table>
+
+                    <% if (!boardList.isEmpty()) { %>
+                    <table border="0">
+                        <tr>
+                            <td colspan="3"><strong><%=language.getText("Board") %>:&nbsp;</strong></td>
+                        </tr>
+                    <%
+                        for (BoardMember bm: (ArrayList<BoardMember>) boardList) {
+                    %>
+                        <tr>
+                            <td><%=bm.getUser().getSalutation() %>&nbsp;</td>
+                            <td><%=bm.getUser().getFirstName() %>&nbsp;<%=bm.getUser().getLastName() %>&nbsp;&nbsp;</td>
+                            <td><%=bm.getBoardMemberType().getDescription() %>&nbsp;</td>
+                        </tr>
+                    <% 
+                        } 
+                    %>
+                    </table>
+                    <% } %>
+
                 </div> <!-- /content-main-in -->
             </div> <!-- /content-main -->
             <hr class="noscreen" />
