@@ -50,6 +50,10 @@ public class ArticleDetailCmd extends Command {
         Menu menu = menuDao.getMenu(getCompany().getId());
         menu.setActiveSection(article.getMenuNodeId());
         getRequest().setAttribute("menu", menu);
+        
+        String watching = (articleDao.isUserWatchingArticle(article.getId(), getUser().getId())) ? "1" : "0";
+        getRequest().setAttribute("watching", watching);
+        
         RequestDispatcher rd = getRequest().getRequestDispatcher("/ArticleDetail.jsp");
         rd.forward(getRequest(), getResponse());
         logDao.log(getUser().getId(), LogDAO.operationTypeRead, article.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));

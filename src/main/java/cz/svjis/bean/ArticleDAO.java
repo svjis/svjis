@@ -684,39 +684,69 @@ public class ArticleDAO {
         return result;
     }
     
-    public ArrayList<User> getUserListForNotificationAboutNewComment(int articleId) throws SQLException {
+    
+    public ArrayList<User> getUserListWatchingArticle(int articleId) throws SQLException {
         ArrayList<User> result = new ArrayList<User>();
-        String select = "SELECT "
-                + "a.ID, "
-                + "a.LAST_NAME, "
-                + "a.FIRST_NAME, "
-                + "a.E_MAIL "
-                + "FROM \"USER\" a "
-                + "WHERE (a.ENABLED = 1) AND (a.E_MAIL <> '') AND  "
-                + "a.ID in ( "
-                + "SELECT a.USER_ID "
-                + "FROM ARTICLE_COMMENT a "
-                + "WHERE a.ARTICLE_ID = ? "
-                + "UNION "
-                + "SELECT a.CREATED_BY_USER_ID AS USER_ID "
-                + "FROM ARTICLE a "
-                + "WHERE a.ID = ? "
-                + "GROUP BY USER_ID "
-                + ")";
+        String select = "SELECT \n" +
+                        "    a.ID, \n" +
+                        "    a.LAST_NAME, \n" +
+                        "    a.FIRST_NAME, \n" +
+                        "    a.E_MAIL \n" +
+                        "FROM \"USER\" a \n" +
+                        "LEFT JOIN ARTICLE_WATCHING b ON b.USER_ID = a.ID \n" +
+                        "WHERE (a.ENABLED = 1) AND (a.E_MAIL <> '') AND (b.ARTICLE_ID = ?)";
         
-        PreparedStatement ps = cnn.prepareStatement(select);
-        ps.setInt(1, articleId);
-        ps.setInt(2, articleId);
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            User u = new User();
-            u.setId(rs.getInt("ID"));
-            u.setFirstName(rs.getString("FIRST_NAME"));
-            u.setLastName(rs.getString("LAST_NAME"));
-            u.seteMail(rs.getString("E_MAIL"));
-            result.add(u);
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setInt(1, articleId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    User u = new User();
+                    u.setId(rs.getInt("ID"));
+                    u.setFirstName(rs.getString("FIRST_NAME"));
+                    u.setLastName(rs.getString("LAST_NAME"));
+                    u.seteMail(rs.getString("E_MAIL"));
+                    result.add(u);
+                }
+            }
         }
-        ps.close();
         return result;
+    }
+
+    public boolean isUserWatchingArticle(int articleId, int userId) throws SQLException {
+        String select = "SELECT count(*) as CNT FROM ARTICLE_WATCHING a WHERE a.ARTICLE_ID = ? AND a.USER_ID = ?";
+
+        int cnt;
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setInt(1, articleId);
+            ps.setInt(2, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                cnt = 0;
+                if (rs.next()) {
+                    cnt = rs.getInt("CNT");
+                }
+            }
+        }
+        return (cnt != 0);
+    }
+
+    public void setUserWatchingArticle(int articleId, int userId) throws SQLException {
+        String insert = "INSERT INTO ARTICLE_WATCHING (ARTICLE_ID, USER_ID) VALUES (?, ?)";
+
+        if (!isUserWatchingArticle(articleId, userId)) {
+            try (PreparedStatement ps = cnn.prepareStatement(insert)) {
+                ps.setInt(1, articleId);
+                ps.setInt(2, userId);
+                ps.execute();
+            }
+        }
+    }
+
+    public void unsetUserWatchingArticle(int articleId, int userId) throws SQLException {
+        String delete = "DELETE FROM ARTICLE_WATCHING a WHERE a.ARTICLE_ID = ? AND a.USER_ID = ?";
+        try (PreparedStatement ps = cnn.prepareStatement(delete)) {
+            ps.setInt(1, articleId);
+            ps.setInt(2, userId);
+            ps.execute();
+        }
     }
 }

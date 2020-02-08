@@ -7,6 +7,7 @@ package cz.svjis.servlet;
 
 import cz.svjis.bean.BadPageCmd;
 import cz.svjis.servlet.cmd.ArticleDetailCmd;
+import cz.svjis.servlet.cmd.ArticleFastCmd;
 import cz.svjis.servlet.cmd.ArticleInquiryVoteCmd;
 import cz.svjis.servlet.cmd.ArticleInsertCommentCmd;
 import cz.svjis.servlet.cmd.ArticleListCmd;
@@ -134,6 +135,10 @@ public class CmdFactory {
 
             if (page.equals("insertArticleComment")) {
                 return new ArticleInsertCommentCmd(ctx);
+            }
+            
+            if (page.equals("articleFast")) {
+                return new ArticleFastCmd(ctx);
             }
         }
 
