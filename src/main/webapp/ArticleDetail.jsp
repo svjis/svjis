@@ -14,6 +14,7 @@
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="article" scope="request" class="cz.svjis.bean.Article" />
+<jsp:useBean id="watching" scope="request" class="java.lang.String" />
 
 
 <%
@@ -87,16 +88,28 @@
                     %>
                     
                     <%
-                        if ((article.getCommentList() != null) && (article.getCommentList().size() != 0)) {
+                        if (((article.getCommentList() != null) && (article.getCommentList().size() != 0)) || (article.isCommentsAllowed())) {
                     %>
+                        <p>
+                        <% if (watching.equals("0")) { %>
+                            [<a href="Dispatcher?page=articleFast&id=<%=article.getId() %>&watch=1"><%=language.getText("Start watching discussion") %></a>]&nbsp;
+                        <% } else { %>
+                            [<a href="Dispatcher?page=articleFast&id=<%=article.getId() %>&watch=0"><%=language.getText("Stop watching discussion") %></a>]&nbsp;
+                        <% } %>
+                        </p>
+                        
                         <h2 class="article-title"><%=language.getText("Comments:") %></h2>
-
-                        <%
+                    <%
+                       }
+                    %>
+                    
+                    <%
+                        if ((article.getCommentList() != null) && (article.getCommentList().size() != 0)) {
                             SimpleDateFormat sdft = new SimpleDateFormat("dd.MM.yyyy HH:mm");
                             Iterator<ArticleComment> commI = article.getCommentList().iterator();
                             while (commI.hasNext()) {
                                 ArticleComment c = commI.next();
-                        %>
+                    %>
                             <div class="article box">
                             <strong><%=c.getUser().getFirstName() %>&nbsp;<%=c.getUser().getLastName() %> <%=sdft.format(c.getInsertionTime()) %></strong><br>
                             <%=c.getBody().replace("\n", "<br>") %>
