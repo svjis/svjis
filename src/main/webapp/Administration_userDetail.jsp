@@ -63,6 +63,7 @@
                             <p>
                                 <label id="common-label" for="common-input"><%=language.getText("Internal note") %></label>
                                 <textarea
+                                 id="common-textarea"
                                  name="internalNote"
                                  rows=5 cols=40
                                  wrap maxlength="250"

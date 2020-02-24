@@ -61,6 +61,7 @@ public final class User {
         lastLogin = null;
         roles = new HashMap();
         permissions = new HashMap();
+        internalNote = "";
     }
     
     /**
