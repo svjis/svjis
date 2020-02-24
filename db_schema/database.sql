@@ -330,6 +330,7 @@ CREATE TABLE "USER"
   LANGUAGE_ID Integer,
   PASSWORD_HASH Varchar(100),
   PASSWORD_SALT Varchar(100),
+  INTERNAL_NOTE Varchar(250),
   CONSTRAINT USER_PK PRIMARY KEY (ID)
 );
 CREATE TABLE USER_HAS_BUILDING_UNIT
@@ -1892,3 +1893,5 @@ INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Start watching 
 INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Start watching discussion', '2', 'Start watching discussion');
 INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Stop watching discussion', '1', 'Přestat sledovat diskuzi');
 INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Stop watching discussion', '2', 'Stop watching discussion');
+INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Internal note', '1', 'Interní poznámka');
+INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Internal note', '2', 'Internal note');

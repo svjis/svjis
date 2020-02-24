@@ -60,6 +60,14 @@
                                 %>
                                 </select>
                             </p>
+                            <p>
+                                <label id="common-label" for="common-input"><%=language.getText("Internal note") %></label>
+                                <textarea
+                                 name="internalNote"
+                                 rows=5 cols=40
+                                 wrap maxlength="250"
+                                 ><%=cUser.getInternalNote() %></textarea>
+                            </p>
                         </fieldset>
                         <fieldset>
                             <legend><%=language.getText("Contact information") %></legend>

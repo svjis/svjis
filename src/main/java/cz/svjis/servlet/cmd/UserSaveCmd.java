@@ -53,6 +53,7 @@ public class UserSaveCmd extends Command {
         boolean parShowInPhoneList = Validator.getBoolean(getRequest(), "phoneList");
         boolean parEnabled = Validator.getBoolean(getRequest(), "enabled");
         boolean parSendCredentials = Validator.getBoolean(getRequest(), "sendCredentials");
+        String parInternalNote = Validator.getString(getRequest(), "internalNote", 0, 250, false, false);
 
         CompanyDAO compDao = new CompanyDAO(getCnn());
         RoleDAO roleDao = new RoleDAO(getCnn());
@@ -77,6 +78,7 @@ public class UserSaveCmd extends Command {
         u.setLogin(parLogin);
         u.setPassword(parPassword);
         u.setEnabled(parEnabled);
+        u.setInternalNote(parInternalNote);
         HashMap uRoles = new HashMap();
         ArrayList<Role> roles = roleDao.getRoleList(getCompany().getId());
         Iterator<Role> roleI = roles.iterator();
