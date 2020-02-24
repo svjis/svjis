@@ -90,14 +90,6 @@
                     <%
                         if (((article.getCommentList() != null) && (article.getCommentList().size() != 0)) || (article.isCommentsAllowed())) {
                     %>
-                        <p>
-                        <% if (watching.equals("0")) { %>
-                            [<a href="Dispatcher?page=articleFast&id=<%=article.getId() %>&watch=1"><%=language.getText("Start watching discussion") %></a>]&nbsp;
-                        <% } else { %>
-                            [<a href="Dispatcher?page=articleFast&id=<%=article.getId() %>&watch=0"><%=language.getText("Stop watching discussion") %></a>]&nbsp;
-                        <% } %>
-                        </p>
-                        
                         <h2 class="article-title"><%=language.getText("Comments:") %></h2>
                     <%
                        }
@@ -125,6 +117,14 @@
                     <%
                         if ((article.isCommentsAllowed()) && (user.hasPermission("can_insert_article_comment"))) {
                     %>
+                        <p>
+                            <% if (watching.equals("0")) { %>
+                                [<a href="Dispatcher?page=articleFast&id=<%=article.getId() %>&watch=1"><%=language.getText("Start watching discussion") %></a>]&nbsp;
+                            <% } else { %>
+                                [<a href="Dispatcher?page=articleFast&id=<%=article.getId() %>&watch=0"><%=language.getText("Stop watching discussion") %></a>]&nbsp;
+                            <% } %>
+                        </p>
+
                         <form action="Dispatcher" method="post">
                              <input type="hidden" name="page" value="insertArticleComment">
                              <input type="hidden" name="id" value="<%=article.getId() %>">
