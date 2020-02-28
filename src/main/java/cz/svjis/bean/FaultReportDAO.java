@@ -113,18 +113,20 @@ public class FaultReportDAO {
                         "LEFT JOIN \"USER\" cr on cr.ID = a.CREATED_BY_USER_ID \n" +
                         "LEFT JOIN \"USER\" ass on ass.ID = a.ASSIGNED_TO_USER_ID \n" +
                         "WHERE a.COMPANY_ID = ? AND (\n" +
-                            "(UPPER(a.SUBJECT) like UPPER('%" + search + "%')) OR \n" +
-                            "(UPPER(a.DESCRIPTION) like UPPER('%" + search + "%')) \n" +
+                            "(UPPER(a.SUBJECT) like UPPER(?)) OR \n" +
+                            "(UPPER(a.DESCRIPTION) like UPPER(?)) \n" +
                         ");";
         
-        PreparedStatement ps = cnn.prepareStatement(select);
-        ps.setInt(1, companyId);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            result = rs.getInt("CNT");
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setInt(1, companyId);
+            ps.setString(2, "%" + search + "%");
+            ps.setString(3, "%" + search + "%");
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    result = rs.getInt("CNT");
+                }
+            }
         }
-        rs.close();
-        ps.close();
         
         return result;        
     }
@@ -148,13 +150,15 @@ public class FaultReportDAO {
                         "LEFT JOIN \"USER\" cr on cr.ID = a.CREATED_BY_USER_ID \n" +
                         "LEFT JOIN \"USER\" ass on ass.ID = a.ASSIGNED_TO_USER_ID \n" +
                         "WHERE a.COMPANY_ID = ? AND (\n" +
-                            "(UPPER(a.SUBJECT) like UPPER('%" + search + "%')) OR \n" +
-                            "(UPPER(a.DESCRIPTION) like UPPER('%" + search + "%')) \n" +
+                            "(UPPER(a.SUBJECT) like UPPER(?)) OR \n" +
+                            "(UPPER(a.DESCRIPTION) like UPPER(?)) \n" +
                         ") \n" +
                         "ORDER BY a.CREATION_DATE desc;";
         
         PreparedStatement ps = cnn.prepareStatement(select);
         ps.setInt(1, companyId);
+        ps.setString(2, "%" + search + "%");
+        ps.setString(3, "%" + search + "%");
         ResultSet rs = ps.executeQuery();
         ArrayList<FaultReport> result = getFaultReportListFromResultSet(rs, pageNo, pageSize);
         rs.close();

@@ -223,17 +223,20 @@ public class ArticleDAO {
                 + createFilter(u ,publishedOnly, ownedOnly)
                 + menuNodeFilter
                 + " AND "
-                + "((UPPER(a.HEADER) like UPPER('%" + search + "%')) OR "
-                + "(UPPER(a.DESCRIPTION) like UPPER('%" + search + "%')) OR "
-                + "(UPPER(a.BODY) like UPPER('%" + search + "%'))) ";
-        //System.err.println(select);
-        Statement st = cnn.createStatement();
-        ResultSet rs = st.executeQuery(select);
-        if (rs.next()) {
-            result = rs.getInt("CNT");
+                + "((UPPER(a.HEADER) like UPPER(?)) OR "
+                + "(UPPER(a.DESCRIPTION) like UPPER(?)) OR "
+                + "(UPPER(a.BODY) like UPPER(?))) ";
+
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setString(1, "%" + search + "%");
+            ps.setString(2, "%" + search + "%");
+            ps.setString(3, "%" + search + "%");
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    result = rs.getInt("CNT");
+                }
+            }
         }
-        rs.close();
-        st.close();
         return result;
     }
     
@@ -268,47 +271,49 @@ public class ArticleDAO {
                 + createFilter(u ,publishedOnly, ownedOnly)
                 + menuNodeFilter
                 + " AND "
-                + "((UPPER(a.HEADER) like UPPER('%" + search + "%')) OR "
-                + "(UPPER(a.DESCRIPTION) like UPPER('%" + search + "%')) OR "
-                + "(UPPER(a.BODY) like UPPER('%" + search + "%'))) "
+                + "((UPPER(a.HEADER) like UPPER(?)) OR "
+                + "(UPPER(a.DESCRIPTION) like UPPER(?)) OR "
+                + "(UPPER(a.BODY) like UPPER(?))) "
                 + "ORDER BY a.CREATION_DATE desc, a.ID desc ";
         
-        Statement st = cnn.createStatement();
-        ResultSet rs = st.executeQuery(select);
-        
-        int cPageNo = 1;
-        int cArtNo = 0;
-        
-        while (rs.next()) {
-            if (cPageNo == pageNo) {
-                Article a = new Article();
-                a.setId(rs.getInt("ID"));
-                a.setCompanyId(rs.getInt("COMPANY_ID"));
-                a.setMenuNodeId(rs.getInt("MENU_NODE_ID"));
-                a.setMenuNodeDescription(rs.getString("MENU_NODE"));
-                a.setLanguageId(rs.getInt("LANGUAGE_ID"));
-                a.setHeader(rs.getString("HEADER"));
-                a.setDescription(rs.getString("DESCRIPTION"));
-                //a.setBody(rs.getString("BODY"));
-                a.setAuthorId(rs.getInt("CREATED_BY_USER_ID"));
-                a.setCreationDate(rs.getTimestamp("CREATION_DATE"));
-                a.setPublished(rs.getBoolean("PUBLISHED"));
-                a.setCommentsAllowed(rs.getBoolean("COMMENTS_ALLOWED"));
-                a.setAuthor(new User());
-                a.getAuthor().setFirstName(rs.getString("FIRST_NAME"));
-                a.getAuthor().setLastName(rs.getString("LAST_NAME"));
-                a.setNumOfComments(rs.getInt("COMMENT_CNT"));
-                result.add(a);
-            }
-            
-            cArtNo++;
-            if (cArtNo == pageSize) {
-                cPageNo++;
-                cArtNo = 0;
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setString(1, "%" + search + "%");
+            ps.setString(2, "%" + search + "%");
+            ps.setString(3, "%" + search + "%");
+            try (ResultSet rs = ps.executeQuery()) {
+                int cPageNo = 1;
+                int cArtNo = 0;
+                
+                while (rs.next()) {
+                    if (cPageNo == pageNo) {
+                        Article a = new Article();
+                        a.setId(rs.getInt("ID"));
+                        a.setCompanyId(rs.getInt("COMPANY_ID"));
+                        a.setMenuNodeId(rs.getInt("MENU_NODE_ID"));
+                        a.setMenuNodeDescription(rs.getString("MENU_NODE"));
+                        a.setLanguageId(rs.getInt("LANGUAGE_ID"));
+                        a.setHeader(rs.getString("HEADER"));
+                        a.setDescription(rs.getString("DESCRIPTION"));
+                        //a.setBody(rs.getString("BODY"));
+                        a.setAuthorId(rs.getInt("CREATED_BY_USER_ID"));
+                        a.setCreationDate(rs.getTimestamp("CREATION_DATE"));
+                        a.setPublished(rs.getBoolean("PUBLISHED"));
+                        a.setCommentsAllowed(rs.getBoolean("COMMENTS_ALLOWED"));
+                        a.setAuthor(new User());
+                        a.getAuthor().setFirstName(rs.getString("FIRST_NAME"));
+                        a.getAuthor().setLastName(rs.getString("LAST_NAME"));
+                        a.setNumOfComments(rs.getInt("COMMENT_CNT"));
+                        result.add(a);
+                    }
+                    
+                    cArtNo++;
+                    if (cArtNo == pageSize) {
+                        cPageNo++;
+                        cArtNo = 0;
+                    }
+                }
             }
         }
-        rs.close();
-        st.close();
         
         return result;
     }

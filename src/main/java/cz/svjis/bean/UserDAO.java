@@ -579,14 +579,17 @@ public class UserDAO {
     
     public boolean testLoginDuplicity(String login, int userId, int companyId) throws SQLException {
         boolean result = true;
-        String select = "SELECT a.ID FROM \"USER\" a WHERE (upper(a.LOGIN) = upper('" + login + "')) and (a.ID <> " + userId + ") and (a.COMPANY_ID = " + companyId + ")";
-        Statement st = cnn.createStatement();
-        ResultSet rs = st.executeQuery(select);
-        if (rs.next()) {
-            result = false;
+        String select = "SELECT a.ID FROM \"USER\" a WHERE (upper(a.LOGIN) = upper(?)) and (a.ID <> ?) and (a.COMPANY_ID = ?)";
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setString(1, login);
+            ps.setInt(2, userId);
+            ps.setInt(3, companyId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    result = false;
+                }
+            }
         }
-        rs.close();
-        st.close();
         return result;
     }
     
