@@ -11,7 +11,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -69,6 +68,7 @@ public class UserDAO {
                 + "a.ENABLED, "
                 + "a.SHOW_IN_PHONELIST,"
                 + "a.LANGUAGE_ID, "
+                + "a.INTERNAL_NOTE, "
                 + "(SELECT FIRST 1 l.\"TIME\" FROM LOG l WHERE (l.USER_ID = a.ID) AND (l.OPERATION_ID = 1) ORDER BY l.ID DESC) AS LAST_LOGIN, "
                 + "b.ROLE_ID "
                 + "FROM \"USER\" a "
@@ -100,6 +100,7 @@ public class UserDAO {
             u.setShowInPhoneList(rs.getBoolean("SHOW_IN_PHONELIST"));
             u.setLanguageId(rs.getInt("LANGUAGE_ID"));
             u.setLastLogin(rs.getTimestamp("LAST_LOGIN"));
+            u.setInternalNote(rs.getString("INTERNAL_NOTE"));
             result.add(u);
         }
         rs.close();
@@ -156,7 +157,8 @@ public class UserDAO {
                 + "a.LOGIN, "
                 + "a.ENABLED, "
                 + "a.SHOW_IN_PHONELIST, "
-                + "a.LANGUAGE_ID "
+                + "a.LANGUAGE_ID, "
+                + "a.INTERNAL_NOTE "
                 + "FROM \"USER\" a "
                 + "WHERE (a.COMPANY_ID = ?) AND (a.ID = ?) ";
         
@@ -182,6 +184,7 @@ public class UserDAO {
             result.setEnabled(rs.getBoolean("ENABLED"));
             result.setShowInPhoneList(rs.getBoolean("SHOW_IN_PHONELIST"));
             result.setLanguageId(rs.getInt("LANGUAGE_ID"));
+            result.setInternalNote(rs.getString("INTERNAL_NOTE"));
         }
         rs.close();
         ps.close();
@@ -209,7 +212,8 @@ public class UserDAO {
                 + "a.LOGIN, "
                 + "a.ENABLED, "
                 + "a.SHOW_IN_PHONELIST,"
-                + "a.LANGUAGE_ID "
+                + "a.LANGUAGE_ID, "
+                + "a.INTERNAL_NOTE "
                 + "FROM \"USER\" a "
                 + "WHERE (a.COMPANY_ID = ?) AND (a.LOGIN  collate UNICODE_CI_AI = ?) ";
         
@@ -235,6 +239,7 @@ public class UserDAO {
             result.setEnabled(rs.getBoolean("ENABLED"));
             result.setShowInPhoneList(rs.getBoolean("SHOW_IN_PHONELIST"));
             result.setLanguageId(rs.getInt("LANGUAGE_ID"));
+            result.setInternalNote(rs.getString("INTERNAL_NOTE"));
         }
         rs.close();
         ps.close();
@@ -440,7 +445,8 @@ public class UserDAO {
                 + "LOGIN = ?, "
                 + "ENABLED = ?, "
                 + "SHOW_IN_PHONELIST = ?, "
-                + "LANGUAGE_ID = ? "
+                + "LANGUAGE_ID = ?, "
+                + "INTERNAL_NOTE = ? "
                 + "WHERE (ID = ?) AND (COMPANY_ID = ?)";
         PreparedStatement ps = cnn.prepareStatement(update);
         ps.setString(1, user.getFirstName());
@@ -457,8 +463,9 @@ public class UserDAO {
         ps.setBoolean(12, user.isEnabled());
         ps.setBoolean(13, user.isShowInPhoneList());
         ps.setInt(14, user.getLanguageId());
-        ps.setInt(15, user.getId());
-        ps.setInt(16, user.getCompanyId());
+        ps.setString(15, user.getInternalNote());
+        ps.setInt(16, user.getId());
+        ps.setInt(17, user.getCompanyId());
         updated = ps.executeUpdate();
         ps.close();
         
@@ -492,8 +499,9 @@ public class UserDAO {
                 + "LOGIN, "
                 + "ENABLED, "
                 + "SHOW_IN_PHONELIST, "
-                + "LANGUAGE_ID"
-                + ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) returning ID";
+                + "LANGUAGE_ID, "
+                + "INTERNAL_NOTE "
+                + ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) returning ID";
         
         PreparedStatement ps = cnn.prepareStatement(update);
         ps.setInt(1, user.getCompanyId());
@@ -511,6 +519,7 @@ public class UserDAO {
         ps.setBoolean(13, user.isEnabled());
         ps.setBoolean(14, user.isShowInPhoneList());
         ps.setInt(15, user.getLanguageId());
+        ps.setString(16, user.getInternalNote());
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
             result = rs.getInt("ID");
@@ -569,14 +578,17 @@ public class UserDAO {
     
     public boolean testLoginDuplicity(String login, int userId, int companyId) throws SQLException {
         boolean result = true;
-        String select = "SELECT a.ID FROM \"USER\" a WHERE (upper(a.LOGIN) = upper('" + login + "')) and (a.ID <> " + userId + ") and (a.COMPANY_ID = " + companyId + ")";
-        Statement st = cnn.createStatement();
-        ResultSet rs = st.executeQuery(select);
-        if (rs.next()) {
-            result = false;
+        String select = "SELECT a.ID FROM \"USER\" a WHERE (upper(a.LOGIN) = upper(?)) and (a.ID <> ?) and (a.COMPANY_ID = ?)";
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setString(1, login);
+            ps.setInt(2, userId);
+            ps.setInt(3, companyId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    result = false;
+                }
+            }
         }
-        rs.close();
-        st.close();
         return result;
     }
     

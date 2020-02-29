@@ -53,6 +53,7 @@ public class ArticleInsertCommentCmd extends Command {
             ac.setInsertionTime(new Date());
             ac.setBody(parBody);
             articleDao.insertArticleComment(ac);
+            articleDao.setUserWatchingArticle(article.getId(), getUser().getId());
 
             // send notification
             String subject = getCompany().getInternetDomain() + ": " + article.getHeader() + " (New comment)";
@@ -64,7 +65,7 @@ public class ArticleInsertCommentCmd extends Command {
                     getSetup().getProperty("mail.password"),
                     getSetup().getProperty("mail.sender"));
 
-            ArrayList<User> userList = articleDao.getUserListForNotificationAboutNewComment(article.getId());
+            ArrayList<User> userList = articleDao.getUserListWatchingArticle(article.getId());
             for (User u : userList) {
                 if (u.getId() == getUser().getId()) {
                     continue;

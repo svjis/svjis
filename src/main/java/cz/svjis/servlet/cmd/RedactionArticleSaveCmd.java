@@ -73,6 +73,7 @@ public class RedactionArticleSaveCmd extends Command {
         a.setRoles(uRoles);
         if (a.getId() == 0) {
             a.setId(articleDao.insertArticle(a));
+            articleDao.setUserWatchingArticle(a.getId(), getUser().getId());
             logDao.log(getUser().getId(), LogDAO.operationTypeCreateArticle, a.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
         } else {
             articleDao.modifyArticle(a);

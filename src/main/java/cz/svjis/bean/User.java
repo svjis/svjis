@@ -33,6 +33,7 @@ public final class User {
     private Date lastLogin;
     private HashMap roles;
     private HashMap permissions;
+    private String internalNote;
 
     public User() {
         clear();
@@ -60,6 +61,7 @@ public final class User {
         lastLogin = null;
         roles = new HashMap();
         permissions = new HashMap();
+        internalNote = "";
     }
     
     /**
@@ -362,6 +364,20 @@ public final class User {
      */
     public void setLastLogin(Date lastLogin) {
         this.lastLogin = lastLogin;
+    }
+
+    /**
+     * @return the internalNote
+     */
+    public String getInternalNote() {
+        return internalNote;
+    }
+
+    /**
+     * @param internalNote the internalNote to set
+     */
+    public void setInternalNote(String internalNote) {
+        this.internalNote = internalNote;
     }
     
 }
