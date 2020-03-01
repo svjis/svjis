@@ -518,9 +518,10 @@ public class UserDAO extends DAO {
             ps.setBoolean(14, user.isShowInPhoneList());
             ps.setInt(15, user.getLanguageId());
             ps.setString(16, user.getInternalNote());
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                result = rs.getInt("ID");
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    result = rs.getInt("ID");
+                }
             }
         }
         
