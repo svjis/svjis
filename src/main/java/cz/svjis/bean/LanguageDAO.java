@@ -15,11 +15,10 @@ import java.util.ArrayList;
  *
  * @author berk
  */
-public class LanguageDAO {
-    private Connection cnn;
+public class LanguageDAO extends DAO {
     
     public LanguageDAO (Connection cnn) {
-        this.cnn = cnn;
+        super(cnn);
     }
     
     public ArrayList<Language> getLanguageList() throws SQLException {

@@ -16,12 +16,10 @@ import java.util.Date;
  *
  * @author jarberan
  */
-public class FaultReportDAO {
-    
-    private Connection cnn;
+public class FaultReportDAO extends DAO {
     
     public FaultReportDAO (Connection cnn) {
-        this.cnn = cnn;
+        super(cnn);
     }
     
     public int getNumOfFaults(int companyId, int closed) throws SQLException {

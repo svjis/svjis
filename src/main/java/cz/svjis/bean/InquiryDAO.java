@@ -18,11 +18,10 @@ import java.util.Iterator;
  *
  * @author berk
  */
-public class InquiryDAO {
-    private Connection cnn;
-    
+public class InquiryDAO extends DAO {
+
     public InquiryDAO (Connection cnn) {
-        this.cnn = cnn;
+        super(cnn);
     }
     
     public boolean canUserVoteInquiry(User user, int inquiryId) throws SQLException {

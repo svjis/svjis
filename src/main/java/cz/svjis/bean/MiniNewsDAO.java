@@ -15,12 +15,10 @@ import java.util.ArrayList;
  *
  * @author berk
  */
-public class MiniNewsDAO {
-    
-    private Connection cnn;
-    
+public class MiniNewsDAO extends DAO {
+
     public MiniNewsDAO (Connection cnn) {
-        this.cnn = cnn;
+        super(cnn);
     }
     
     public ArrayList<MiniNews> getMiniNews(User u, boolean publishedOnly) throws SQLException {

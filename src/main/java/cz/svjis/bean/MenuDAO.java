@@ -14,12 +14,10 @@ import java.util.ArrayList;
  *
  * @author berk
  */
-public class MenuDAO {
-    
-    private Connection cnn;
+public class MenuDAO extends DAO {
     
     public MenuDAO (Connection cnn) {
-        this.cnn = cnn;
+        super(cnn);
     }
     
     public Menu getMenu(int companyId) throws SQLException {

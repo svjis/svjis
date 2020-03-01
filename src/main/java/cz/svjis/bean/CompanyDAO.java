@@ -15,12 +15,10 @@ import java.util.ArrayList;
  *
  * @author berk
  */
-public class CompanyDAO {
-    
-    private Connection cnn;
-    
+public class CompanyDAO extends DAO {
+
     public CompanyDAO (Connection cnn) {
-        this.cnn = cnn;
+        super(cnn);
     }
     
     public ArrayList<Company> getCompanyList() throws SQLException {

@@ -21,11 +21,10 @@ import javax.xml.bind.DatatypeConverter;
  *
  * @author berk
  */
-public class UserDAO {
-    private Connection cnn;
-    
+public class UserDAO extends DAO {
+
     public UserDAO (Connection cnn) {
-        this.cnn = cnn;
+        super(cnn);
     }
     
     /**

@@ -20,11 +20,10 @@ import java.util.Iterator;
  *
  * @author berk
  */
-public class ArticleDAO {
-    private Connection cnn;
+public class ArticleDAO extends DAO {
     
     public ArticleDAO (Connection cnn) {
-        this.cnn = cnn;
+        super(cnn);
     }
     
     public ArrayList<Article> getArticleTopList(User u, int top, int cnt_last_months) throws SQLException {

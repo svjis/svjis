@@ -14,11 +14,10 @@ import java.util.Properties;
  *
  * @author berk
  */
-public class ApplicationSetupDAO {
-    private Connection cnn;
+public class ApplicationSetupDAO extends DAO {
     
     public ApplicationSetupDAO (Connection cnn) {
-        this.cnn = cnn;
+        super(cnn);
     }
     
     public Properties getApplicationSetup(int companyId) throws SQLException {

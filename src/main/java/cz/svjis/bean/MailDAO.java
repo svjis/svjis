@@ -21,19 +21,18 @@ import org.apache.commons.mail.HtmlEmail;
  *
  * @author berk
  */
-public class MailDAO {
+public class MailDAO extends DAO {
     
     public static final int messageTypeMail = 1;
     public static final int messageTypeSMS = 2;
     
-    private Connection cnn;
     private String smtp;
     private String login;
     private String password;
     private String sender;
 
     public MailDAO(Connection cnn, String smtp, String login, String password, String sender) {
-        this.cnn = cnn;
+        super(cnn);
         this.smtp = smtp;
         this.login = login;
         this.password = password;

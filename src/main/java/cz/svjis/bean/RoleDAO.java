@@ -17,11 +17,10 @@ import java.util.Iterator;
  *
  * @author berk
  */
-public class RoleDAO {
-    private Connection cnn;
+public class RoleDAO extends DAO {
     
     public RoleDAO (Connection cnn) {
-        this.cnn = cnn;
+        super(cnn);
     }
     
     public Role getRole(int companyId, int roleId) throws SQLException  {

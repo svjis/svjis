@@ -13,8 +13,7 @@ import java.util.Date;
  *
  * @author berk
  */
-public class LogDAO {
-    private Connection cnn;
+public class LogDAO extends DAO {
 
     public static final int idNull = 0;
     public static final int operationTypeLogin = 1;
@@ -35,7 +34,7 @@ public class LogDAO {
     public static final int operationTypeDeleteFaultAttachment = 16;
 
     public LogDAO (Connection cnn) {
-        this.cnn = cnn;
+        super(cnn);
     }
     
     public void log(int userId, int operationId, int documentId, String remoteIp, String userAgent) throws SQLException {

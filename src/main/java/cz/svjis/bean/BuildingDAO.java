@@ -15,12 +15,10 @@ import java.util.ArrayList;
  *
  * @author berk
  */
-public class BuildingDAO {
-    
-    private Connection cnn;
-    
+public class BuildingDAO extends DAO {
+
     public BuildingDAO (Connection cnn) {
-        this.cnn = cnn;
+        super(cnn);
     }
     
     
