@@ -27,7 +27,7 @@ public class ArticleDAO extends DAO {
     }
     
     public ArrayList<Article> getArticleTopList(User u, int top, int cnt_last_months) throws SQLException {
-        ArrayList<Article> result = new ArrayList<Article>();
+        ArrayList<Article> result = new ArrayList<>();
         
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date d = new Date();
@@ -58,17 +58,15 @@ public class ArticleDAO extends DAO {
                         "    l.CNT " +
                         "ORDER BY " +
                         "    l.CNT DESC ";
-        Statement st = cnn.createStatement();
-        ResultSet rs = st.executeQuery(select);
-        while (rs.next()) {
-            Article a = new Article();
-            a.setId(rs.getInt("ID"));
-            a.setHeader(rs.getString("HEADER"));
-            a.setNumOfReads(rs.getInt("CNT"));
-            result.add(a);
+        try (Statement st = cnn.createStatement(); ResultSet rs = st.executeQuery(select)) {
+            while (rs.next()) {
+                Article a = new Article();
+                a.setId(rs.getInt("ID"));
+                a.setHeader(rs.getString("HEADER"));
+                a.setNumOfReads(rs.getInt("CNT"));
+                result.add(a);
+            }
         }
-        rs.close();
-        st.close();
         
         return result;        
     }
@@ -105,14 +103,11 @@ public class ArticleDAO extends DAO {
                 + createFilter(u ,publishedOnly, ownedOnly)
                 + menuNodeFilter
                 + roleFilter;
-        //System.err.println(select);
-        Statement st = cnn.createStatement();
-        ResultSet rs = st.executeQuery(select);
-        if (rs.next()) {
-            result = rs.getInt("CNT");
+        try (Statement st = cnn.createStatement(); ResultSet rs = st.executeQuery(select)) {
+            if (rs.next()) {
+                result = rs.getInt("CNT");
+            }
         }
-        rs.close();
-        st.close();
         return result;
     }
     
@@ -132,7 +127,7 @@ public class ArticleDAO extends DAO {
      */
     
     public ArrayList<Article> getArticleList(User u, int menuNodeId, int pageNo, int pageSize, boolean publishedOnly, boolean ownedOnly, int role) throws SQLException {
-        ArrayList<Article> result = new ArrayList<Article>();
+        ArrayList<Article> result = new ArrayList<>();
         
         String menuNodeFilter = "";
         if (menuNodeId != 0) {
@@ -170,42 +165,40 @@ public class ArticleDAO extends DAO {
                 + roleFilter
                 + "ORDER BY a.CREATION_DATE desc, a.ID desc ";
         
-        Statement st = cnn.createStatement();
-        ResultSet rs = st.executeQuery(select);
-        
-        int cPageNo = 1;
-        int cArtNo = 0;
-        
-        while (rs.next()) {
-            if (cPageNo == pageNo) {
-                Article a = new Article();
-                a.setId(rs.getInt("ID"));
-                a.setCompanyId(rs.getInt("COMPANY_ID"));
-                a.setMenuNodeId(rs.getInt("MENU_NODE_ID"));
-                a.setMenuNodeDescription(rs.getString("MENU_NODE"));
-                a.setLanguageId(rs.getInt("LANGUAGE_ID"));
-                a.setHeader(rs.getString("HEADER"));
-                a.setDescription(rs.getString("DESCRIPTION"));
-                //a.setBody(rs.getString("BODY"));
-                a.setAuthorId(rs.getInt("CREATED_BY_USER_ID"));
-                a.setCreationDate(rs.getTimestamp("CREATION_DATE"));
-                a.setPublished(rs.getBoolean("PUBLISHED"));
-                a.setCommentsAllowed(rs.getBoolean("COMMENTS_ALLOWED"));
-                a.setAuthor(new User());
-                a.getAuthor().setFirstName(rs.getString("FIRST_NAME"));
-                a.getAuthor().setLastName(rs.getString("LAST_NAME"));
-                a.setNumOfComments(rs.getInt("COMMENT_CNT"));
-                result.add(a);
-            }
+        try (Statement st = cnn.createStatement(); ResultSet rs = st.executeQuery(select)) {
             
-            cArtNo++;
-            if (cArtNo == pageSize) {
-                cPageNo++;
-                cArtNo = 0;
+            int cPageNo = 1;
+            int cArtNo = 0;
+            
+            while (rs.next()) {
+                if (cPageNo == pageNo) {
+                    Article a = new Article();
+                    a.setId(rs.getInt("ID"));
+                    a.setCompanyId(rs.getInt("COMPANY_ID"));
+                    a.setMenuNodeId(rs.getInt("MENU_NODE_ID"));
+                    a.setMenuNodeDescription(rs.getString("MENU_NODE"));
+                    a.setLanguageId(rs.getInt("LANGUAGE_ID"));
+                    a.setHeader(rs.getString("HEADER"));
+                    a.setDescription(rs.getString("DESCRIPTION"));
+                    //a.setBody(rs.getString("BODY"));
+                    a.setAuthorId(rs.getInt("CREATED_BY_USER_ID"));
+                    a.setCreationDate(rs.getTimestamp("CREATION_DATE"));
+                    a.setPublished(rs.getBoolean("PUBLISHED"));
+                    a.setCommentsAllowed(rs.getBoolean("COMMENTS_ALLOWED"));
+                    a.setAuthor(new User());
+                    a.getAuthor().setFirstName(rs.getString("FIRST_NAME"));
+                    a.getAuthor().setLastName(rs.getString("LAST_NAME"));
+                    a.setNumOfComments(rs.getInt("COMMENT_CNT"));
+                    result.add(a);
+                }
+                
+                cArtNo++;
+                if (cArtNo == pageSize) {
+                    cPageNo++;
+                    cArtNo = 0;
+                }
             }
         }
-        rs.close();
-        st.close();
         
         return result;
     }
@@ -240,7 +233,7 @@ public class ArticleDAO extends DAO {
     }
     
     public ArrayList<Article> getArticleListFromSearch(String search, User u, int menuNodeId, int pageNo, int pageSize, boolean publishedOnly, boolean ownedOnly) throws SQLException {
-        ArrayList<Article> result = new ArrayList<Article>();
+        ArrayList<Article> result = new ArrayList<>();
         
         String menuNodeFilter = "";
         if (menuNodeId != 0) {
@@ -342,30 +335,29 @@ public class ArticleDAO extends DAO {
                 + createFilter(u, false, false)
                 + "AND (a.ID = ?) ";
         
-        PreparedStatement ps = cnn.prepareStatement(select);
-        ps.setInt(1, articleId);
-        ResultSet rs = ps.executeQuery();
-        
-        if (rs.next()) {
-            result = new Article();
-            result.setId(rs.getInt("ID"));
-            result.setCompanyId(rs.getInt("COMPANY_ID"));
-            result.setMenuNodeId(rs.getInt("MENU_NODE_ID"));
-            result.setMenuNodeDescription(rs.getString("MENU_NODE"));
-            result.setLanguageId(rs.getInt("LANGUAGE_ID"));
-            result.setHeader(rs.getString("HEADER"));
-            result.setDescription(rs.getString("DESCRIPTION"));
-            result.setBody(rs.getString("BODY"));
-            result.setAuthorId(rs.getInt("CREATED_BY_USER_ID"));
-            result.setCreationDate(rs.getTimestamp("CREATION_DATE"));
-            result.setPublished(rs.getBoolean("PUBLISHED"));
-            result.setCommentsAllowed(rs.getBoolean("COMMENTS_ALLOWED"));
-            result.setAuthor(new User());
-            result.getAuthor().setFirstName(rs.getString("FIRST_NAME"));
-            result.getAuthor().setLastName(rs.getString("LAST_NAME"));
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setInt(1, articleId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    result = new Article();
+                    result.setId(rs.getInt("ID"));
+                    result.setCompanyId(rs.getInt("COMPANY_ID"));
+                    result.setMenuNodeId(rs.getInt("MENU_NODE_ID"));
+                    result.setMenuNodeDescription(rs.getString("MENU_NODE"));
+                    result.setLanguageId(rs.getInt("LANGUAGE_ID"));
+                    result.setHeader(rs.getString("HEADER"));
+                    result.setDescription(rs.getString("DESCRIPTION"));
+                    result.setBody(rs.getString("BODY"));
+                    result.setAuthorId(rs.getInt("CREATED_BY_USER_ID"));
+                    result.setCreationDate(rs.getTimestamp("CREATION_DATE"));
+                    result.setPublished(rs.getBoolean("PUBLISHED"));
+                    result.setCommentsAllowed(rs.getBoolean("COMMENTS_ALLOWED"));
+                    result.setAuthor(new User());
+                    result.getAuthor().setFirstName(rs.getString("FIRST_NAME"));
+                    result.getAuthor().setLastName(rs.getString("LAST_NAME"));
+                }
+            }
         }
-        rs.close();
-        ps.close();
         
         if (result != null) {
             result.setAttachmentList(getArticleAttachmentList(result.getId()));
@@ -376,7 +368,8 @@ public class ArticleDAO extends DAO {
     }
     
     public void modifyArticle(Article a) throws SQLException {
-        int updated = 0;
+        int updated;
+        
         cnn.setAutoCommit(false);
         String update = "UPDATE ARTICLE SET "
                 + "MENU_NODE_ID = ?, "
@@ -389,20 +382,20 @@ public class ArticleDAO extends DAO {
                 + "PUBLISHED = ?, "
                 + "COMMENTS_ALLOWED = ? "
                 + "WHERE (ID = ?) AND (COMPANY_ID = ?)";
-        PreparedStatement ps = cnn.prepareStatement(update);
-        ps.setInt(1, a.getMenuNodeId());
-        ps.setInt(2, a.getLanguageId());
-        ps.setString(3, a.getHeader());
-        ps.setString(4, a.getDescription());
-        ps.setString(5, a.getBody());
-        ps.setInt(6, a.getAuthorId());
-        ps.setTimestamp(7, new java.sql.Timestamp(a.getCreationDate().getTime()));
-        ps.setBoolean(8, a.isPublished());
-        ps.setBoolean(9, a.isCommentsAllowed());
-        ps.setInt(10, a.getId());
-        ps.setInt(11, a.getCompanyId());
-        updated = ps.executeUpdate();
-        ps.close();
+        try (PreparedStatement ps = cnn.prepareStatement(update)) {
+            ps.setInt(1, a.getMenuNodeId());
+            ps.setInt(2, a.getLanguageId());
+            ps.setString(3, a.getHeader());
+            ps.setString(4, a.getDescription());
+            ps.setString(5, a.getBody());
+            ps.setInt(6, a.getAuthorId());
+            ps.setTimestamp(7, new java.sql.Timestamp(a.getCreationDate().getTime()));
+            ps.setBoolean(8, a.isPublished());
+            ps.setBoolean(9, a.isCommentsAllowed());
+            ps.setInt(10, a.getId());
+            ps.setInt(11, a.getCompanyId());
+            updated = ps.executeUpdate();
+        }
         if (updated == 1) {
             modifyArticleRoles(a);
         }
@@ -426,22 +419,23 @@ public class ArticleDAO extends DAO {
                 + "COMMENTS_ALLOWED"
                 + ") VALUES (?,?,?,?,?,?,?,?,?,?) returning ID";
         
-        PreparedStatement ps = cnn.prepareStatement(update);
-        ps.setInt(1, a.getCompanyId());
-        ps.setInt(2, a.getMenuNodeId());
-        ps.setInt(3, a.getLanguageId());
-        ps.setString(4, a.getHeader());
-        ps.setString(5, a.getDescription());
-        ps.setString(6, a.getBody());
-        ps.setInt(7, a.getAuthorId());
-        ps.setTimestamp(8, new java.sql.Timestamp(a.getCreationDate().getTime()));
-        ps.setBoolean(9, a.isPublished());
-        ps.setBoolean(10, a.isCommentsAllowed());
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            result = rs.getInt("ID");
+        try (PreparedStatement ps = cnn.prepareStatement(update)) {
+            ps.setInt(1, a.getCompanyId());
+            ps.setInt(2, a.getMenuNodeId());
+            ps.setInt(3, a.getLanguageId());
+            ps.setString(4, a.getHeader());
+            ps.setString(5, a.getDescription());
+            ps.setString(6, a.getBody());
+            ps.setInt(7, a.getAuthorId());
+            ps.setTimestamp(8, new java.sql.Timestamp(a.getCreationDate().getTime()));
+            ps.setBoolean(9, a.isPublished());
+            ps.setBoolean(10, a.isCommentsAllowed());
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    result = rs.getInt("ID");
+                }
+            }
         }
-        ps.close();
         
         a.setId(result);
         modifyArticleRoles(a);
@@ -453,7 +447,7 @@ public class ArticleDAO extends DAO {
     }
     
     private String createFilter(User u, boolean publishedOnly, boolean ownedOnly) {
-        String result = "";
+        String result;
         
         //-- Company filter
         String company = "(a.COMPANY_ID = " + u.getCompanyId() + ") ";
@@ -492,14 +486,14 @@ public class ArticleDAO extends DAO {
                 + "FROM ARTICLE_IS_VISIBLE_TO_ROLE a "
                 + "LEFT JOIN \"ROLE\" r ON (r.ID = a.ROLE_ID) "
                 + "WHERE (a.ARTICLE_ID = ?) ";
-        PreparedStatement ps = cnn.prepareStatement(select);
-        ps.setInt(1, articleId);
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            result.put(new Integer(rs.getInt("ROLE_ID")), rs.getString("DESCRIPTION"));
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setInt(1, articleId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    result.put(rs.getInt("ROLE_ID"), rs.getString("DESCRIPTION"));
+                }
+            }
         }
-        rs.close();
-        ps.close();
         return result;
     }
     
@@ -523,7 +517,7 @@ public class ArticleDAO extends DAO {
     }
     
     private ArrayList<ArticleAttachment> getArticleAttachmentList(int articleId) throws SQLException {
-        ArrayList<ArticleAttachment> result = new ArrayList<ArticleAttachment>();
+        ArrayList<ArticleAttachment> result = new ArrayList<>();
         String select = "SELECT "
                 + "a.ID, "
                 + "a.ARTICLE_ID, "
@@ -536,20 +530,21 @@ public class ArticleDAO extends DAO {
                 + "WHERE (a.ARTICLE_ID = ?) "
                 + "ORDER BY a.ID";
         
-        PreparedStatement ps = cnn.prepareStatement(select);
-        ps.setInt(1, articleId);
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            ArticleAttachment a = new ArticleAttachment();
-            a.setId(rs.getInt("ID"));
-            a.setArticleId(rs.getInt("ARTICLE_ID"));
-            a.setUserId(rs.getInt("USER_ID"));
-            a.setUploadTime(rs.getTimestamp("UPLOAD_TIME"));
-            a.setContentType(rs.getString("CONTENT_TYPE"));
-            a.setFileName(rs.getString("FILENAME"));
-            result.add(a);
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setInt(1, articleId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    ArticleAttachment a = new ArticleAttachment();
+                    a.setId(rs.getInt("ID"));
+                    a.setArticleId(rs.getInt("ARTICLE_ID"));
+                    a.setUserId(rs.getInt("USER_ID"));
+                    a.setUploadTime(rs.getTimestamp("UPLOAD_TIME"));
+                    a.setContentType(rs.getString("CONTENT_TYPE"));
+                    a.setFileName(rs.getString("FILENAME"));
+                    result.add(a);
+                }
+            }
         }
-        ps.close();
         return result;
     }
     
@@ -566,48 +561,49 @@ public class ArticleDAO extends DAO {
                 + "FROM ARTICLE_ATTACHMENT a "
                 + "WHERE (a.ID = ?) ";
         
-        PreparedStatement ps = cnn.prepareStatement(select);
-        ps.setInt(1, id);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            result = new ArticleAttachment();
-            result.setId(rs.getInt("ID"));
-            result.setArticleId(rs.getInt("ARTICLE_ID"));
-            result.setUserId(rs.getInt("USER_ID"));
-            result.setUploadTime(rs.getTimestamp("UPLOAD_TIME"));
-            result.setContentType(rs.getString("CONTENT_TYPE"));
-            result.setFileName(rs.getString("FILENAME"));
-            java.sql.Blob blob = null;
-            blob = rs.getBlob("DATA");
-            result.setData(blob.getBytes(1, (int) blob.length()));
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    result = new ArticleAttachment();
+                    result.setId(rs.getInt("ID"));
+                    result.setArticleId(rs.getInt("ARTICLE_ID"));
+                    result.setUserId(rs.getInt("USER_ID"));
+                    result.setUploadTime(rs.getTimestamp("UPLOAD_TIME"));
+                    result.setContentType(rs.getString("CONTENT_TYPE"));
+                    result.setFileName(rs.getString("FILENAME"));
+                    java.sql.Blob blob;
+                    blob = rs.getBlob("DATA");
+                    result.setData(blob.getBytes(1, (int) blob.length()));
+                }
+            }
         }
-        ps.close();
         return result;
     }
     
     public void insertArticleAttachment(ArticleAttachment aa) throws SQLException {
         String insert = "INSERT INTO ARTICLE_ATTACHMENT (ARTICLE_ID, USER_ID, UPLOAD_TIME, CONTENT_TYPE, FILENAME, DATA) VALUES (?,?,?,?,?,?)";
-        PreparedStatement ps = cnn.prepareStatement(insert);
-        ps.setInt(1, aa.getArticleId());
-        ps.setInt(2, aa.getUserId());
-        ps.setTimestamp(3, new java.sql.Timestamp(aa.getUploadTime().getTime()));
-        ps.setString(4, aa.getContentType());
-        ps.setString(5, aa.getFileName());
-        ps.setBytes(6, aa.getData());
-        ps.execute();
-        ps.close();
+        try (PreparedStatement ps = cnn.prepareStatement(insert)) {
+            ps.setInt(1, aa.getArticleId());
+            ps.setInt(2, aa.getUserId());
+            ps.setTimestamp(3, new java.sql.Timestamp(aa.getUploadTime().getTime()));
+            ps.setString(4, aa.getContentType());
+            ps.setString(5, aa.getFileName());
+            ps.setBytes(6, aa.getData());
+            ps.execute();
+        }
     }
     
     public void deleteArticleAttachment(int id) throws SQLException {
         String delete = "DELETE FROM ARTICLE_ATTACHMENT a WHERE (a.ID = ?)";
-        PreparedStatement ps = cnn.prepareStatement(delete);
-        ps.setInt(1, id);
-        ps.execute();
-        ps.close();
+        try (PreparedStatement ps = cnn.prepareStatement(delete)) {
+            ps.setInt(1, id);
+            ps.execute();
+        }
     }
     
     private ArrayList<ArticleComment> getArticleCommentList(int articleId) throws SQLException {
-        ArrayList<ArticleComment> result = new ArrayList<ArticleComment>();
+        ArrayList<ArticleComment> result = new ArrayList<>();
         String select = "SELECT "
                 + "a.ID, "
                 + "a.ARTICLE_ID, "
@@ -621,38 +617,39 @@ public class ArticleDAO extends DAO {
                 + "WHERE a.ARTICLE_ID = ? "
                 + "ORDER BY a.ID";
         
-        PreparedStatement ps = cnn.prepareStatement(select);
-        ps.setInt(1, articleId);
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            ArticleComment a = new ArticleComment();
-            a.setId(rs.getInt("ID"));
-            a.setArticleId(rs.getInt("ARTICLE_ID"));
-            a.setUser(new User());
-            a.getUser().setId(rs.getInt("USER_ID"));
-            a.getUser().setFirstName(rs.getString("FIRST_NAME"));
-            a.getUser().setLastName(rs.getString("LAST_NAME"));
-            a.setInsertionTime(rs.getTimestamp("INSERTION_TIME"));
-            a.setBody(rs.getString("BODY"));
-            result.add(a);
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setInt(1, articleId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    ArticleComment a = new ArticleComment();
+                    a.setId(rs.getInt("ID"));
+                    a.setArticleId(rs.getInt("ARTICLE_ID"));
+                    a.setUser(new User());
+                    a.getUser().setId(rs.getInt("USER_ID"));
+                    a.getUser().setFirstName(rs.getString("FIRST_NAME"));
+                    a.getUser().setLastName(rs.getString("LAST_NAME"));
+                    a.setInsertionTime(rs.getTimestamp("INSERTION_TIME"));
+                    a.setBody(rs.getString("BODY"));
+                    result.add(a);
+                }
+            }
         }
-        ps.close();
         return result;
     }
     
     public void insertArticleComment(ArticleComment c) throws SQLException {
         String insert = "INSERT INTO ARTICLE_COMMENT (ARTICLE_ID, USER_ID, INSERTION_TIME, BODY) VALUES (?,?,?,?)";
-        PreparedStatement ps = cnn.prepareStatement(insert);
-        ps.setInt(1, c.getArticleId());
-        ps.setInt(2, c.getUser().getId());
-        ps.setTimestamp(3, new java.sql.Timestamp(c.getInsertionTime().getTime()));
-        ps.setString(4, c.getBody());
-        ps.execute();
-        ps.close();
+        try (PreparedStatement ps = cnn.prepareStatement(insert)) {
+            ps.setInt(1, c.getArticleId());
+            ps.setInt(2, c.getUser().getId());
+            ps.setTimestamp(3, new java.sql.Timestamp(c.getInsertionTime().getTime()));
+            ps.setString(4, c.getBody());
+            ps.execute();
+        }
     }
     
     public ArrayList<User> getUserListForNotificationAboutNewArticle(int articleId) throws SQLException {
-        ArrayList<User> result = new ArrayList<User>();
+        ArrayList<User> result = new ArrayList<>();
         String select = "SELECT "
                 + "a.ARTICLE_ID, "
                 + "u.ID, "
@@ -673,24 +670,25 @@ public class ArticleDAO extends DAO {
                 + "ORDER BY "
                 + "u.LAST_NAME collate UNICODE_CI_AI";
         
-        PreparedStatement ps = cnn.prepareStatement(select);
-        ps.setInt(1, articleId);
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            User u = new User();
-            u.setId(rs.getInt("ID"));
-            u.setFirstName(rs.getString("FIRST_NAME"));
-            u.setLastName(rs.getString("LAST_NAME"));
-            u.seteMail(rs.getString("E_MAIL"));
-            result.add(u);
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setInt(1, articleId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    User u = new User();
+                    u.setId(rs.getInt("ID"));
+                    u.setFirstName(rs.getString("FIRST_NAME"));
+                    u.setLastName(rs.getString("LAST_NAME"));
+                    u.seteMail(rs.getString("E_MAIL"));
+                    result.add(u);
+                }
+            }
         }
-        ps.close();
         return result;
     }
     
     
     public ArrayList<User> getUserListWatchingArticle(int articleId) throws SQLException {
-        ArrayList<User> result = new ArrayList<User>();
+        ArrayList<User> result = new ArrayList<>();
         String select = "SELECT \n" +
                         "    a.ID, \n" +
                         "    a.LAST_NAME, \n" +
