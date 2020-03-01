@@ -499,21 +499,21 @@ public class ArticleDAO extends DAO {
     
     private void modifyArticleRoles(Article a) throws SQLException {
         String delete = "DELETE FROM ARTICLE_IS_VISIBLE_TO_ROLE WHERE (ARTICLE_ID = ?)";
-        PreparedStatement ps = cnn.prepareStatement(delete);
-        ps.setInt(1, a.getId());
-        ps.execute();
-        ps.close();
-
-        String insert = "INSERT INTO ARTICLE_IS_VISIBLE_TO_ROLE (ARTICLE_ID, ROLE_ID) VALUES (?, ?)";
-        ps = cnn.prepareStatement(insert);
-        Iterator<Integer> roleI = a.getRoles().keySet().iterator();
-        while (roleI.hasNext()) {
-            int roleId = roleI.next();
+        try (PreparedStatement ps = cnn.prepareStatement(delete)) {
             ps.setInt(1, a.getId());
-            ps.setInt(2, roleId);
             ps.execute();
         }
-        ps.close();
+
+        String insert = "INSERT INTO ARTICLE_IS_VISIBLE_TO_ROLE (ARTICLE_ID, ROLE_ID) VALUES (?, ?)";
+        try (PreparedStatement ps = cnn.prepareStatement(insert)) {
+            Iterator<Integer> roleI = a.getRoles().keySet().iterator();
+            while (roleI.hasNext()) {
+                int roleId = roleI.next();
+                ps.setInt(1, a.getId());
+                ps.setInt(2, roleId);
+                ps.execute();
+            }
+        }
     }
     
     private ArrayList<ArticleAttachment> getArticleAttachmentList(int articleId) throws SQLException {

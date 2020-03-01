@@ -41,9 +41,9 @@ public class TempFileProcessor {
     
     public void createFile(String fileName, byte[] data) throws FileNotFoundException, IOException {
         File f = new File(destinationPath.getAbsolutePath() + File.separator + fileName);
-        DataOutputStream os = new DataOutputStream(new FileOutputStream(f));
-        os.write(data);
-        os.close();
+        try (DataOutputStream os = new DataOutputStream(new FileOutputStream(f))) {
+            os.write(data);
+        }
     }
     
     public String getUrlPath(String fileName) {
