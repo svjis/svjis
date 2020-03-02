@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -23,30 +24,30 @@ public class FaultReportDAO extends DAO {
     }
     
     public int getNumOfFaults(int companyId, int closed) throws SQLException {
-        return getFaultListSize(companyId, closed, "WHERE a.COMPANY_ID = ? AND a.CLOSED = ? ");
+        return getFaultListSize(String.format("WHERE a.COMPANY_ID = %d AND a.CLOSED = %d ", companyId, closed));
     }
     
     public ArrayList<FaultReport> getFaultList(int companyId, int pageNo, int pageSize, int closed) throws SQLException {
-        return getFaultList(companyId, pageNo, pageSize, closed, "WHERE a.COMPANY_ID = ? AND a.CLOSED = ? ");
+        return getFaultList(pageNo, pageSize, String.format("WHERE a.COMPANY_ID = %d AND a.CLOSED = %d ", companyId, closed));
     }
     
     public int getNumOfFaultsByCreator(int companyId, int userId) throws SQLException {
-        return getFaultListSize(companyId, userId, "WHERE a.COMPANY_ID = ? AND a.CREATED_BY_USER_ID = ? ");
+        return getFaultListSize(String.format("WHERE a.COMPANY_ID = %d AND a.CREATED_BY_USER_ID = %d ", companyId, userId));
     }
     
     public ArrayList<FaultReport> getFaultListByCreator(int companyId, int pageNo, int pageSize, int userId) throws SQLException {
-        return getFaultList(companyId, pageNo, pageSize, userId, "WHERE a.COMPANY_ID = ? AND a.CREATED_BY_USER_ID = ? ");
+        return getFaultList(pageNo, pageSize, String.format("WHERE a.COMPANY_ID = %d AND a.CREATED_BY_USER_ID = %d ", companyId, userId));
     }
     
     public int getNumOfFaultsByResolver(int companyId, int userId) throws SQLException {
-        return getFaultListSize(companyId, userId, "WHERE a.COMPANY_ID = ? AND a.ASSIGNED_TO_USER_ID = ? ");
+        return getFaultListSize(String.format("WHERE a.COMPANY_ID = %d AND a.ASSIGNED_TO_USER_ID = %d ", companyId, userId));
     }
     
     public ArrayList<FaultReport> getFaultListByResolver(int companyId, int pageNo, int pageSize, int userId) throws SQLException {
-        return getFaultList(companyId, pageNo, pageSize, userId, "WHERE a.COMPANY_ID = ? AND a.ASSIGNED_TO_USER_ID = ? ");
+        return getFaultList(pageNo, pageSize, String.format("WHERE a.COMPANY_ID = %d AND a.ASSIGNED_TO_USER_ID = %d ", companyId, userId));
     }
     
-    private int getFaultListSize(int companyId, int value, String where) throws SQLException {
+    private int getFaultListSize(String where) throws SQLException {
         int result = 0;
         
         String select = "SELECT \n" +
@@ -57,10 +58,8 @@ public class FaultReportDAO extends DAO {
                         where +
                         ";";
         
-        try (PreparedStatement ps = cnn.prepareStatement(select)) {
-            ps.setInt(1, companyId);
-            ps.setInt(2, value);
-            try (ResultSet rs = ps.executeQuery()) {
+        try (Statement st = cnn.createStatement()) {
+            try (ResultSet rs = st.executeQuery(select)) {
                 if (rs.next()) {
                     result = rs.getInt("CNT");
                 }
@@ -70,7 +69,7 @@ public class FaultReportDAO extends DAO {
         return result;
     }
     
-    private ArrayList<FaultReport> getFaultList(int companyId, int pageNo, int pageSize, int value, String where) throws SQLException {
+    private ArrayList<FaultReport> getFaultList(int pageNo, int pageSize, String where) throws SQLException {
 
         String select = "SELECT FIRST " + (pageNo * pageSize) + "\n" +
                         "    a.ID, \n" +
@@ -92,10 +91,8 @@ public class FaultReportDAO extends DAO {
                         "ORDER BY a.CREATION_DATE desc;";
         
         ArrayList<FaultReport> result;
-        try (PreparedStatement ps = cnn.prepareStatement(select)) {
-            ps.setInt(1, companyId);
-            ps.setInt(2, value);
-            try (ResultSet rs = ps.executeQuery()) {
+        try (Statement st = cnn.createStatement()) {
+            try (ResultSet rs = st.executeQuery(select)) {
                 result = getFaultReportListFromResultSet(rs, pageNo, pageSize);
             }
         }
