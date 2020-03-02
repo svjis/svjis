@@ -188,9 +188,10 @@ public class UserDAO extends DAO {
                 }
             }
         }
-        
-        result.setRoles(getUserRoles(result.getId()));
-        result.setPermissions(this.getUserPermissions(result.getId()));
+        if (result != null) {
+            result.setRoles(getUserRoles(result.getId()));
+            result.setPermissions(this.getUserPermissions(result.getId()));
+        }
         return result;
     }
     
