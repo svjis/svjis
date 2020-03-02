@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cz.svjis.bean;
+package cz.svjis.servlet.cmd;
 
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
