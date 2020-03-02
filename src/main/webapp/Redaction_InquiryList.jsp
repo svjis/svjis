@@ -26,12 +26,12 @@
 
                     <table class="list" width="100%">
                         <tr>
-                            <th class="list">&nbsp;</th>
-                            <th class="list">&nbsp;</th>
-                            <th class="list"><%=language.getText("Description") %></th>
-                            <th class="list"><%=language.getText("Starting date") %></th>
-                            <th class="list"><%=language.getText("Ending date") %></th>
-                            <th class="list"><%=language.getText("Published") %></th>
+                            <th class="list" scope="col">&nbsp;</th>
+                            <th class="list" scope="col">&nbsp;</th>
+                            <th class="list" scope="col"><%=language.getText("Description") %></th>
+                            <th class="list" scope="col"><%=language.getText("Starting date") %></th>
+                            <th class="list" scope="col"><%=language.getText("Ending date") %></th>
+                            <th class="list" scope="col"><%=language.getText("Published") %></th>
                         </tr>
                     <%
                         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");

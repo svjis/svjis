@@ -69,14 +69,14 @@
                     
                     <table class="list" width="100%">
                         <tr>
-                            <th class="list">&nbsp;</th>
-                            <th class="list">&nbsp;</th>
-                            <th class="list">&nbsp;</th>
-                            <th class="list"><%=language.getText("Last name") %></th>
-                            <th class="list"><%=language.getText("First name") %></th>
-                            <th class="list"><%=language.getText("Enabled") %></th>
-                            <th class="list"><%=language.getText("E-Mail") %></th>
-                            <th class="list"><%=language.getText("Last login") %></th>
+                            <th class="list" scope="col">&nbsp;</th>
+                            <th class="list" scope="col">&nbsp;</th>
+                            <th class="list" scope="col">&nbsp;</th>
+                            <th class="list" scope="col"><%=language.getText("Last name") %></th>
+                            <th class="list" scope="col"><%=language.getText("First name") %></th>
+                            <th class="list" scope="col"><%=language.getText("Enabled") %></th>
+                            <th class="list" scope="col"><%=language.getText("E-Mail") %></th>
+                            <th class="list" scope="col"><%=language.getText("Last login") %></th>
                         </tr>
                     <%
                     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");

@@ -22,12 +22,12 @@
                     
                     <table class="list">
                         <tr>
-                            <th class="list">&nbsp;</th>
-                            <th class="list"><%=language.getText("Last name") %></th>
-                            <th class="list"><%=language.getText("First name") %></th>
-                            <th class="list"><%=language.getText("Fixed phone") %></th>
-                            <th class="list"><%=language.getText("Cell phone") %></th>
-                            <th class="list"><%=language.getText("E-Mail") %></th>
+                            <th class="list" scope="col">&nbsp;</th>
+                            <th class="list" scope="col"><%=language.getText("Last name") %></th>
+                            <th class="list" scope="col"><%=language.getText("First name") %></th>
+                            <th class="list" scope="col"><%=language.getText("Fixed phone") %></th>
+                            <th class="list" scope="col"><%=language.getText("Cell phone") %></th>
+                            <th class="list" scope="col"><%=language.getText("E-Mail") %></th>
                         </tr>
                     <%
                     int i = 0;

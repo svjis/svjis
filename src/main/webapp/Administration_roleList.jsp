@@ -22,12 +22,12 @@
                     [<a href="Dispatcher?page=roleEdit&id=0"><%=language.getText("Add new role") %></a>]<br>
                     <table class="list">
                         <tr>
-                            <th class="list">&nbsp;</th>
-                            <th class="list">&nbsp;</th>
-                            <th class="list">&nbsp;</th>
-                            <th class="list">&nbsp;</th>
-                            <th class="list"><%=language.getText("Description") %></th>
-                            <th class="list"><%=language.getText("Num. of users") %></th>
+                            <th class="list" scope="col">&nbsp;</th>
+                            <th class="list" scope="col">&nbsp;</th>
+                            <th class="list" scope="col">&nbsp;</th>
+                            <th class="list" scope="col">&nbsp;</th>
+                            <th class="list" scope="col"><%=language.getText("Description") %></th>
+                            <th class="list" scope="col"><%=language.getText("Num. of users") %></th>
                         </tr>
                     <%
                     int i = 0;

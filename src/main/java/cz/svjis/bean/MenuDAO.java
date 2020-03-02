@@ -14,12 +14,10 @@ import java.util.ArrayList;
  *
  * @author berk
  */
-public class MenuDAO {
-    
-    private Connection cnn;
+public class MenuDAO extends DAO {
     
     public MenuDAO (Connection cnn) {
-        this.cnn = cnn;
+        super(cnn);
     }
     
     public Menu getMenu(int companyId) throws SQLException {
@@ -28,7 +26,7 @@ public class MenuDAO {
     }
     
     public ArrayList<MenuNode> getMenuNodeList(int companyId) throws SQLException {
-        ArrayList<MenuNode> result = new ArrayList<MenuNode>();
+        ArrayList<MenuNode> result = new ArrayList<>();
         String select = "SELECT "
                 + "a.ID, "
                 + "a.COMPANY_ID, "
@@ -38,18 +36,18 @@ public class MenuDAO {
                 + "WHERE (a.COMPANY_ID = ?) "
                 + "order by a.DESCRIPTION collate UNICODE_CI_AI";
         
-        PreparedStatement ps = cnn.prepareStatement(select);
-        ps.setInt(1, companyId);
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            MenuNode n = new MenuNode();
-            n.setId(rs.getInt("ID"));
-            n.setDescription(rs.getString("DESCRIPTION"));
-            n.setParentId(rs.getInt("PARENT_ID"));
-            result.add(n);
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setInt(1, companyId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    MenuNode n = new MenuNode();
+                    n.setId(rs.getInt("ID"));
+                    n.setDescription(rs.getString("DESCRIPTION"));
+                    n.setParentId(rs.getInt("PARENT_ID"));
+                    result.add(n);
+                }
+            }
         }
-        rs.close();
-        ps.close();
         return result;
     }
     
@@ -64,38 +62,38 @@ public class MenuDAO {
                 + "FROM MENU_TREE a "
                 + "WHERE (a.ID = ?) and (a.COMPANY_ID = ?)";
         
-        PreparedStatement ps = cnn.prepareStatement(select);
-        ps.setInt(1, id);
-        ps.setInt(2, companyId);
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            result.setId(rs.getInt("ID"));
-            result.setDescription(rs.getString("DESCRIPTION"));
-            result.setParentId(rs.getInt("PARENT_ID"));
-            result.setNumOfChilds(rs.getInt("CNT"));
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setInt(1, id);
+            ps.setInt(2, companyId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    result.setId(rs.getInt("ID"));
+                    result.setDescription(rs.getString("DESCRIPTION"));
+                    result.setParentId(rs.getInt("PARENT_ID"));
+                    result.setNumOfChilds(rs.getInt("CNT"));
+                }
+            }
         }
-        rs.close();
-        ps.close();
         return result;
     }
     
     public int insertMenuNode(MenuNode node, int companyId) throws SQLException {
         int result = 0;
         String insert = "INSERT INTO MENU_TREE (COMPANY_ID, PARENT_ID, DESCRIPTION) VALUES (?,?,?) RETURNING ID";
-        PreparedStatement ps = cnn.prepareStatement(insert);
-        ps.setInt(1, companyId);
-        if (node.getParentId() == 0) {
-            ps.setNull(2, java.sql.Types.NULL);
-        } else {
-            ps.setInt(2, node.getParentId());
+        try (PreparedStatement ps = cnn.prepareStatement(insert)) {
+            ps.setInt(1, companyId);
+            if (node.getParentId() == 0) {
+                ps.setNull(2, java.sql.Types.NULL);
+            } else {
+                ps.setInt(2, node.getParentId());
+            }
+            ps.setString(3, node.getDescription());
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    result = rs.getInt("ID");
+                }
+            }
         }
-        ps.setString(3, node.getDescription());
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            result = rs.getInt("ID");
-        }
-        rs.close();
-        ps.close();
         return result;
     }
     
@@ -104,25 +102,25 @@ public class MenuDAO {
                 + "PARENT_ID = ?, "
                 + "DESCRIPTION = ? "
                 + "WHERE (ID = ?) AND (COMPANY_ID = ?)";
-        PreparedStatement ps = cnn.prepareStatement(update);
-        if (node.getParentId() == 0) {
-            ps.setNull(1, java.sql.Types.NULL);
-        } else {
-            ps.setInt(1, node.getParentId());
+        try (PreparedStatement ps = cnn.prepareStatement(update)) {
+            if (node.getParentId() == 0) {
+                ps.setNull(1, java.sql.Types.NULL);
+            } else {
+                ps.setInt(1, node.getParentId());
+            }
+            ps.setString(2, node.getDescription());
+            ps.setInt(3, node.getId());
+            ps.setInt(4, companyId);
+            ps.execute();
         }
-        ps.setString(2, node.getDescription());
-        ps.setInt(3, node.getId());
-        ps.setInt(4, companyId);
-        ps.execute();
-        ps.close();
     }
     
     public void deleteMenuNode(MenuNode node, int companyId) throws SQLException {
         String update = "DELETE FROM MENU_TREE WHERE (ID = ?) AND (COMPANY_ID = ?)";
-        PreparedStatement ps = cnn.prepareStatement(update);
-        ps.setInt(1, node.getId());
-        ps.setInt(2, companyId);
-        ps.execute();
-        ps.close();
+        try (PreparedStatement ps = cnn.prepareStatement(update)) {
+            ps.setInt(1, node.getId());
+            ps.setInt(2, companyId);
+            ps.execute();
+        }
     }
 }

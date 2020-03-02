@@ -11,7 +11,7 @@
 <jsp:useBean id="companyList" scope="request" class="java.util.ArrayList" />
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link type="text/css" rel="stylesheet" href="css/style-for-list.css" />

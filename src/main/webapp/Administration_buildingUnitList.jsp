@@ -48,16 +48,16 @@
                     [<a href="Upload?page=exportBuildingUnitListToXls"><%=language.getText("Export to Excel") %></a>]<br>
                     <table class="list">
                         <tr>
-                            <th class="list">&nbsp;</th>
-                            <th class="list">&nbsp;</th>
-                            <th class="list">&nbsp;</th>
-                            <th class="list">&nbsp;</th>
-                            <th class="list"><%=language.getText("Id") %></th>
-                            <th class="list"><%=language.getText("Type") %></th>
-                            <th class="list"><%=language.getText("Registration Id.") %></th>
-                            <th class="list"><%=language.getText("Description") %></th>
-                            <th class="list"><%=language.getText("Numerator") %></th>
-                            <th class="list"><%=language.getText("Denominator") %></th>
+                            <th class="list" scope="col">&nbsp;</th>
+                            <th class="list" scope="col">&nbsp;</th>
+                            <th class="list" scope="col">&nbsp;</th>
+                            <th class="list" scope="col">&nbsp;</th>
+                            <th class="list" scope="col"><%=language.getText("Id") %></th>
+                            <th class="list" scope="col"><%=language.getText("Type") %></th>
+                            <th class="list" scope="col"><%=language.getText("Registration Id.") %></th>
+                            <th class="list" scope="col"><%=language.getText("Description") %></th>
+                            <th class="list" scope="col"><%=language.getText("Numerator") %></th>
+                            <th class="list" scope="col"><%=language.getText("Denominator") %></th>
                         </tr>
                     <%
                     int i = 0;

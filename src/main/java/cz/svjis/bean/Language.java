@@ -4,13 +4,14 @@
  */
 package cz.svjis.bean;
 
+import java.io.Serializable;
 import java.util.Properties;
 
 /**
  *
  * @author berk
  */
-public class Language {
+public class Language implements Serializable {
     private int id;
     private String description;
     private Properties phrases = new Properties();

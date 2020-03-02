@@ -6,6 +6,7 @@ package cz.svjis.bean;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,7 +15,7 @@ import java.util.logging.Logger;
  *
  * @author berk
  */
-public class Company {
+public class Company implements Serializable {
     private int id;
     private String name;
     private String address;

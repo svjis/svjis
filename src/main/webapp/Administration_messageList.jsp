@@ -23,10 +23,10 @@
                     
                     <table class="list">
                         <tr>
-                            <th class="list">&nbsp;</th>
-                            <th class="list"><%=language.getText("Recipient") %></th>
-                            <th class="list"><%=language.getText("Subject") %></th>
-                            <th class="list"><%=language.getText("Time of creation") %></th>
+                            <th class="list" scope="col">&nbsp;</th>
+                            <th class="list" scope="col"><%=language.getText("Recipient") %></th>
+                            <th class="list" scope="col"><%=language.getText("Subject") %></th>
+                            <th class="list" scope="col"><%=language.getText("Time of creation") %></th>
                         </tr>
                     <%
                     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyy HH:mm");

@@ -16,12 +16,10 @@ import java.util.ArrayList;
  *
  * @author jarberan
  */
-public class BoardMemberDAO {
-    private Connection cnn;
-    
+public class BoardMemberDAO extends DAO {
     
     public BoardMemberDAO (Connection cnn) {
-        this.cnn = cnn;
+        super(cnn);
     }
     
     

@@ -36,8 +36,7 @@ public class ArticleInsertCommentCmd extends Command {
         ArticleDAO articleDao = new ArticleDAO(getCnn());
 
         int articleId = parId;
-        Article article = articleDao.getArticle(getUser(),
-                articleId);
+        Article article = articleDao.getArticle(getUser(), articleId);
         getRequest().setAttribute("article", article);
 
         if ((article != null)
@@ -78,7 +77,7 @@ public class ArticleInsertCommentCmd extends Command {
             }
         }
 
-        String url = "Dispatcher?page=articleDetail&id=" + article.getId();
+        String url = "Dispatcher?page=articleDetail&id=" + articleId;
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
