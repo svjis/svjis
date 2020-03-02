@@ -55,9 +55,9 @@
                     <p>
                         <table class="list">
                             <tr>
-                                <th class="list"><%=language.getText("Menu node name") %></th>
-                                <th class="list">&nbsp;</th>
-                                <th class="list">&nbsp;</th>
+                                <th class="list" scope="col"><%=language.getText("Menu node name") %></th>
+                                <th class="list" scope="col">&nbsp;</th>
+                                <th class="list" scope="col">&nbsp;</th>
                             </tr>
                             <%=writeSubMenu(menu.getMenu(), 0, language) %>
                         </table>

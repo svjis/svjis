@@ -60,8 +60,8 @@
                     <p>
                     <table class="list">
                         <tr>
-                            <th class="list">&nbsp;</th>
-                            <th class="list"><%=language.getText("Attachments:") %></th>
+                            <th class="list" scope="col">&nbsp;</th>
+                            <th class="list" scope="col"><%=language.getText("Attachments:") %></th>
                         </tr>
                         <%
                         Iterator<ArticleAttachment> attachI = article.getAttachmentList().iterator();

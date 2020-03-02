@@ -15,16 +15,14 @@ import java.util.ArrayList;
  *
  * @author berk
  */
-public class CompanyDAO {
-    
-    private Connection cnn;
-    
+public class CompanyDAO extends DAO {
+
     public CompanyDAO (Connection cnn) {
-        this.cnn = cnn;
+        super(cnn);
     }
     
     public ArrayList<Company> getCompanyList() throws SQLException {
-        ArrayList<Company> result = new ArrayList<Company>();
+        ArrayList<Company> result = new ArrayList<>();
         
         String select = "SELECT "
                 + "a.ID, "
@@ -42,26 +40,24 @@ public class CompanyDAO {
                 + "FROM COMPANY a "
                 + "ORDER BY a.NAME collate UNICODE_CI_AI";
         
-        Statement st = cnn.createStatement();
-        ResultSet rs = st.executeQuery(select);
-        while (rs.next()) {
-            Company c = new Company();
-            c.setId(rs.getInt("ID"));
-            c.setName(rs.getString("NAME"));
-            c.setAddress(rs.getString("ADDRESS"));
-            c.setCity(rs.getString("CITY"));
-            c.setPostCode(rs.getString("POST_CODE"));
-            c.setPhone(rs.getString("PHONE"));
-            c.setFax(rs.getString("FAX"));
-            c.seteMail(rs.getString("E_MAIL"));
-            c.setRegistrationNo(rs.getString("REGISTRATION_NO"));
-            c.setVatRegistrationNo(rs.getString("VAT_REGISTRATION_NO"));
-            c.setDatabaseCreationDate(rs.getDate("DATABASE_CREATION_DATE"));
-            c.setInternetDomain(rs.getString("INTERNET_DOMAIN"));
-            result.add(c);
+        try (Statement st = cnn.createStatement(); ResultSet rs = st.executeQuery(select)) {
+            while (rs.next()) {
+                Company c = new Company();
+                c.setId(rs.getInt("ID"));
+                c.setName(rs.getString("NAME"));
+                c.setAddress(rs.getString("ADDRESS"));
+                c.setCity(rs.getString("CITY"));
+                c.setPostCode(rs.getString("POST_CODE"));
+                c.setPhone(rs.getString("PHONE"));
+                c.setFax(rs.getString("FAX"));
+                c.seteMail(rs.getString("E_MAIL"));
+                c.setRegistrationNo(rs.getString("REGISTRATION_NO"));
+                c.setVatRegistrationNo(rs.getString("VAT_REGISTRATION_NO"));
+                c.setDatabaseCreationDate(rs.getDate("DATABASE_CREATION_DATE"));
+                c.setInternetDomain(rs.getString("INTERNET_DOMAIN"));
+                result.add(c);
+            }
         }
-        rs.close();
-        st.close();
         return result;
     }
     
@@ -92,34 +88,34 @@ public class CompanyDAO {
                 + "FROM COMPANY a "
                 + "WHERE a.ID = ?";
         
-        PreparedStatement ps = cnn.prepareStatement(select);
-        ps.setInt(1, id);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            result = new Company();
-            result.setId(rs.getInt("ID"));
-            result.setName(rs.getString("NAME"));
-            result.setAddress(rs.getString("ADDRESS"));
-            result.setCity(rs.getString("CITY"));
-            result.setPostCode(rs.getString("POST_CODE"));
-            result.setPhone(rs.getString("PHONE"));
-            result.setFax(rs.getString("FAX"));
-            result.seteMail(rs.getString("E_MAIL"));
-            result.setRegistrationNo(rs.getString("REGISTRATION_NO"));
-            result.setVatRegistrationNo(rs.getString("VAT_REGISTRATION_NO"));
-            result.setDatabaseCreationDate(rs.getDate("DATABASE_CREATION_DATE"));
-            result.setInternetDomain(rs.getString("INTERNET_DOMAIN"));
-            result.setPictureContentType(rs.getString("PICTURE_CONTENT_TYPE"));
-            result.setPictureFilename(rs.getString("PICTURE_FILENAME"));
-            result.setPictureData(rs.getBytes("PICTURE_DATA"));
-            result.setUnitCnt(rs.getInt("UNIT_CNT"));
-            result.setBoardCnt(rs.getInt("BOARD_CNT"));
-            result.setUserCnt(rs.getInt("USER_CNT"));
-            result.setRoleCnt(rs.getInt("ROLE_CNT"));
-            result.setMessageCnt(rs.getInt("MESSAGE_CNT"));
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    result = new Company();
+                    result.setId(rs.getInt("ID"));
+                    result.setName(rs.getString("NAME"));
+                    result.setAddress(rs.getString("ADDRESS"));
+                    result.setCity(rs.getString("CITY"));
+                    result.setPostCode(rs.getString("POST_CODE"));
+                    result.setPhone(rs.getString("PHONE"));
+                    result.setFax(rs.getString("FAX"));
+                    result.seteMail(rs.getString("E_MAIL"));
+                    result.setRegistrationNo(rs.getString("REGISTRATION_NO"));
+                    result.setVatRegistrationNo(rs.getString("VAT_REGISTRATION_NO"));
+                    result.setDatabaseCreationDate(rs.getDate("DATABASE_CREATION_DATE"));
+                    result.setInternetDomain(rs.getString("INTERNET_DOMAIN"));
+                    result.setPictureContentType(rs.getString("PICTURE_CONTENT_TYPE"));
+                    result.setPictureFilename(rs.getString("PICTURE_FILENAME"));
+                    result.setPictureData(rs.getBytes("PICTURE_DATA"));
+                    result.setUnitCnt(rs.getInt("UNIT_CNT"));
+                    result.setBoardCnt(rs.getInt("BOARD_CNT"));
+                    result.setUserCnt(rs.getInt("USER_CNT"));
+                    result.setRoleCnt(rs.getInt("ROLE_CNT"));
+                    result.setMessageCnt(rs.getInt("MESSAGE_CNT"));
+                }
+            }
         }
-        rs.close();
-        ps.close();
         return result;
     }
     
@@ -149,33 +145,33 @@ public class CompanyDAO {
                 + "FROM COMPANY a "
                 + "WHERE a.INTERNET_DOMAIN collate UNICODE_CI_AI = ?";
         
-        PreparedStatement ps = cnn.prepareStatement(select);
-        ps.setString(1, domain);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            result = new Company();
-            result.setId(rs.getInt("ID"));
-            result.setName(rs.getString("NAME"));
-            result.setAddress(rs.getString("ADDRESS"));
-            result.setCity(rs.getString("CITY"));
-            result.setPostCode(rs.getString("POST_CODE"));
-            result.setPhone(rs.getString("PHONE"));
-            result.setFax(rs.getString("FAX"));
-            result.seteMail(rs.getString("E_MAIL"));
-            result.setRegistrationNo(rs.getString("REGISTRATION_NO"));
-            result.setVatRegistrationNo(rs.getString("VAT_REGISTRATION_NO"));
-            result.setDatabaseCreationDate(rs.getDate("DATABASE_CREATION_DATE"));
-            result.setInternetDomain(rs.getString("INTERNET_DOMAIN"));
-            result.setPictureContentType(rs.getString("PICTURE_CONTENT_TYPE"));
-            result.setPictureFilename(rs.getString("PICTURE_FILENAME"));
-            result.setPictureData(rs.getBytes("PICTURE_DATA"));
-            result.setUnitCnt(rs.getInt("UNIT_CNT"));
-            result.setUserCnt(rs.getInt("USER_CNT"));
-            result.setRoleCnt(rs.getInt("ROLE_CNT"));
-            result.setBoardCnt(rs.getInt("BOARD_CNT"));
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setString(1, domain);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    result = new Company();
+                    result.setId(rs.getInt("ID"));
+                    result.setName(rs.getString("NAME"));
+                    result.setAddress(rs.getString("ADDRESS"));
+                    result.setCity(rs.getString("CITY"));
+                    result.setPostCode(rs.getString("POST_CODE"));
+                    result.setPhone(rs.getString("PHONE"));
+                    result.setFax(rs.getString("FAX"));
+                    result.seteMail(rs.getString("E_MAIL"));
+                    result.setRegistrationNo(rs.getString("REGISTRATION_NO"));
+                    result.setVatRegistrationNo(rs.getString("VAT_REGISTRATION_NO"));
+                    result.setDatabaseCreationDate(rs.getDate("DATABASE_CREATION_DATE"));
+                    result.setInternetDomain(rs.getString("INTERNET_DOMAIN"));
+                    result.setPictureContentType(rs.getString("PICTURE_CONTENT_TYPE"));
+                    result.setPictureFilename(rs.getString("PICTURE_FILENAME"));
+                    result.setPictureData(rs.getBytes("PICTURE_DATA"));
+                    result.setUnitCnt(rs.getInt("UNIT_CNT"));
+                    result.setUserCnt(rs.getInt("USER_CNT"));
+                    result.setRoleCnt(rs.getInt("ROLE_CNT"));
+                    result.setBoardCnt(rs.getInt("BOARD_CNT"));
+                }
+            }
         }
-        rs.close();
-        ps.close();
         return result;
     }
     
@@ -193,20 +189,20 @@ public class CompanyDAO {
                 + "INTERNET_DOMAIN = ? "
                 + "WHERE (ID = ?)";
         
-        PreparedStatement ps = cnn.prepareStatement(update);
-        ps.setString(1, c.getName());
-        ps.setString(2, c.getAddress());
-        ps.setString(3, c.getCity());
-        ps.setString(4, c.getPostCode());
-        ps.setString(5, c.getPhone());
-        ps.setString(6, c.getFax());
-        ps.setString(7, c.geteMail());
-        ps.setString(8, c.getRegistrationNo());
-        ps.setString(9, c.getVatRegistrationNo());
-        ps.setString(10, c.getInternetDomain());
-        ps.setInt(11, c.getId());
-        ps.executeUpdate();
-        ps.close();
+        try (PreparedStatement ps = cnn.prepareStatement(update)) {
+            ps.setString(1, c.getName());
+            ps.setString(2, c.getAddress());
+            ps.setString(3, c.getCity());
+            ps.setString(4, c.getPostCode());
+            ps.setString(5, c.getPhone());
+            ps.setString(6, c.getFax());
+            ps.setString(7, c.geteMail());
+            ps.setString(8, c.getRegistrationNo());
+            ps.setString(9, c.getVatRegistrationNo());
+            ps.setString(10, c.getInternetDomain());
+            ps.setInt(11, c.getId());
+            ps.executeUpdate();
+        }
     }
     
     public void savePicture(int companyId, String contentType, String fileName, byte[] data) throws SQLException {
@@ -215,12 +211,12 @@ public class CompanyDAO {
                 + "PICTURE_FILENAME = ?, "
                 + "PICTURE_DATA = ? "
                 + "WHERE ID = ?";
-        PreparedStatement ps = cnn.prepareStatement(update);
-        ps.setString(1, contentType);
-        ps.setString(2, fileName);
-        ps.setBytes(3, data);
-        ps.setInt(4, companyId);
-        ps.execute();
-        ps.close();
+        try (PreparedStatement ps = cnn.prepareStatement(update)) {
+            ps.setString(1, contentType);
+            ps.setString(2, fileName);
+            ps.setBytes(3, data);
+            ps.setInt(4, companyId);
+            ps.execute();
+        }
     }
 }

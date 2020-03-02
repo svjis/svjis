@@ -24,11 +24,11 @@
                     [<a href="Dispatcher?page=propertyEdit&key="><%=language.getText("Add new property") %></a>]<br>
                     <table class="list">
                         <tr>
-                            <th class="list">&nbsp;</th>
-                            <th class="list">&nbsp;</th>
-                            <th class="list">&nbsp;</th>
-                            <th class="list"><%=language.getText("Key") %></th>
-                            <th class="list"><%=language.getText("Value") %></th>
+                            <th class="list" scope="col">&nbsp;</th>
+                            <th class="list" scope="col">&nbsp;</th>
+                            <th class="list" scope="col">&nbsp;</th>
+                            <th class="list" scope="col"><%=language.getText("Key") %></th>
+                            <th class="list" scope="col"><%=language.getText("Value") %></th>
                         </tr>
                         <%
                         int i = 0;

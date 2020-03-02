@@ -26,10 +26,10 @@
                     
                     <table class="list">
                         <tr>
-                            <th class="list">&nbsp;</th>
-                            <th class="list"><%=language.getText("Name") %></th>
-                            <th class="list"><%=language.getText("Position") %></th>
-                            <th class="list">&nbsp;</th>
+                            <th class="list" scope="col">&nbsp;</th>
+                            <th class="list" scope="col"><%=language.getText("Name") %></th>
+                            <th class="list" scope="col"><%=language.getText("Position") %></th>
+                            <th class="list" scope="col">&nbsp;</th>
                         </tr>
                     <%
                     int i = 0;
