@@ -1,7 +1,5 @@
 # SVJIS
 
-![Java CI](https://github.com/svjis/svjis/workflows/Java%20CI/badge.svg)  
-
 Informační systém pro SVJ :house_with_garden:
 
 ## Popis projektu

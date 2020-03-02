@@ -38,9 +38,9 @@
                     <p>
                     <table class="list">
                         <tr>
-                            <th class="list">&nbsp;</th>
-                            <th class="list"><%=language.getText("Description") %></th>
-                            <th class="list"><%=language.getText("Votes") %></th>
+                            <th class="list" scope="col">&nbsp;</th>
+                            <th class="list" scope="col"><%=language.getText("Description") %></th>
+                            <th class="list" scope="col"><%=language.getText("Votes") %></th>
                         </tr>
                         <%
                             int i = 0;
@@ -62,10 +62,10 @@
                     <p>
                     <table class="list">
                         <tr>
-                            <th class="list">&nbsp;</th>
-                            <th class="list"><%=language.getText("Time") %></th>
-                            <th class="list"><%=language.getText("User") %></th>
-                            <th class="list"><%=language.getText("Option") %></th>
+                            <th class="list" scope="col">&nbsp;</th>
+                            <th class="list" scope="col"><%=language.getText("Time") %></th>
+                            <th class="list" scope="col"><%=language.getText("User") %></th>
+                            <th class="list" scope="col"><%=language.getText("Option") %></th>
                         </tr>
                         <%
                             i = 0;

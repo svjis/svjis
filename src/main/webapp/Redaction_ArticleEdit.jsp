@@ -159,7 +159,7 @@
                             <p>
                             <table class="list">
                                 <tr>
-                                    <th class="list" colspan="3"><%=language.getText("File") %></th>
+                                    <th class="list" colspan="3" scope="col"><%=language.getText("File") %></th>
                                 </tr>
                                 <%
                                 for (ArticleAttachment a: article.getAttachmentList()) {

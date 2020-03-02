@@ -67,14 +67,14 @@
 
                     <table class="list" width="100%">
                         <tr>
-                            <th class="list">&nbsp;</th>
-                            <th class="list">&nbsp;</th>
-                            <th class="list">&nbsp;</th>
-                            <th class="list"><%=language.getText("Article") %></th>
-                            <th class="list"><%=language.getText("Menu") %></th>
-                            <th class="list"><%=language.getText("Author") %></th>
-                            <th class="list"><%=language.getText("Date") %></th>
-                            <th class="list"><%=language.getText("Published") %></th>
+                            <th class="list" scope="col">&nbsp;</th>
+                            <th class="list" scope="col">&nbsp;</th>
+                            <th class="list" scope="col">&nbsp;</th>
+                            <th class="list" scope="col"><%=language.getText("Article") %></th>
+                            <th class="list" scope="col"><%=language.getText("Menu") %></th>
+                            <th class="list" scope="col"><%=language.getText("Author") %></th>
+                            <th class="list" scope="col"><%=language.getText("Date") %></th>
+                            <th class="list" scope="col"><%=language.getText("Published") %></th>
                         </tr>
                     <%
                         String search = "";

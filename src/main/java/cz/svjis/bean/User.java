@@ -4,6 +4,7 @@
  */
 package cz.svjis.bean;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -11,7 +12,7 @@ import java.util.HashMap;
  *
  * @author berk
  */
-public final class User {
+public final class User implements Serializable {
     private int id;
     private int companyId;
     private String firstName;

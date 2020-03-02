@@ -33,13 +33,13 @@
                     <% } %>
                     <table width="100%" class="list">
                         <tr>
-                            <th class="list">&nbsp;</th>
-                            <th class="list"><%=language.getText("Ticket id") %></th>
-                            <th class="list"><%=language.getText("Date") %></th>
-                            <th class="list"><%=language.getText("Subject") %></th>
-                            <th class="list"><%=language.getText("User") %></th>
-                            <th class="list"><%=language.getText("Resolver") %></th>
-                            <th class="list"><%=language.getText("Closed") %></th>
+                            <th class="list" scope="col">&nbsp;</th>
+                            <th class="list" scope="col"><%=language.getText("Ticket id") %></th>
+                            <th class="list" scope="col"><%=language.getText("Date") %></th>
+                            <th class="list" scope="col"><%=language.getText("Subject") %></th>
+                            <th class="list" scope="col"><%=language.getText("User") %></th>
+                            <th class="list" scope="col"><%=language.getText("Resolver") %></th>
+                            <th class="list" scope="col"><%=language.getText("Closed") %></th>
                         </tr>
                         <%
                         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");

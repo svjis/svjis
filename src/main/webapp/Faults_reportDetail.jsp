@@ -52,23 +52,23 @@
 
                     <table class="list" width="95%">
                         <tr>
-                            <th class="list" width="25%"><%=language.getText("Date") %></th>
+                            <th class="list" width="25%" scope="row"><%=language.getText("Date") %></th>
                             <td class="list" width="75%"><%=sdf.format(report.getCreationDate()) %></td>
                         </tr>
                         <tr>
-                            <th class="list"><%=language.getText("User") %></th>
+                            <th class="list" scope="row"><%=language.getText("User") %></th>
                             <td class="list"><%=(report.getCreatedByUser() != null) ? (report.getCreatedByUser().getFirstName() + "&nbsp;" +report.getCreatedByUser().getLastName()) : "&nbsp;" %></td>
                         </tr>
                         <tr>
-                            <th class="list"><%=language.getText("Resolver") %></th>
+                            <th class="list" scope="row"><%=language.getText("Resolver") %></th>
                             <td class="list"><%=(report.getAssignedToUser() != null) ? (report.getAssignedToUser().getFirstName() + "&nbsp;" +report.getAssignedToUser().getLastName()) : "&nbsp;" %></td>
                         </tr>
                         <tr>
-                            <th class="list"><%=language.getText("Closed") %></th>
+                            <th class="list" scope="row"><%=language.getText("Closed") %></th>
                             <td class="list"><%=(report.isClosed()) ? language.getText("yes") : language.getText("no") %></td>
                         </tr>
                         <tr>
-                            <th class="list"><%=language.getText("Description") %></th>
+                            <th class="list" scope="row"><%=language.getText("Description") %></th>
                             <td class="list"><%=HttpUtils.highlight(report.getDescription(), request.getParameter("search")).replaceAll("\n", "<br>") %></td>
                         </tr>
                     </table>
@@ -83,11 +83,11 @@
                             <p>
                             <table class="list">
                                 <tr>
-                                    <th class="list">&nbsp;</th>
-                                    <th class="list"><%=language.getText("File") %></th>
-                                    <th class="list"><%=language.getText("User") %></th>
-                                    <th class="list"><%=language.getText("Time") %></th>
-                                    <th class="list">&nbsp;</th>
+                                    <th class="list" scope="col">&nbsp;</th>
+                                    <th class="list" scope="col"><%=language.getText("File") %></th>
+                                    <th class="list" scope="col"><%=language.getText("User") %></th>
+                                    <th class="list" scope="col"><%=language.getText("Time") %></th>
+                                    <th class="list" scope="col">&nbsp;</th>
                                 </tr>
                                 <%
                                 for (FaultReportAttachment a: report.getAttachmentList()) {
