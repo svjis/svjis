@@ -200,3 +200,34 @@ padding:3px;
 vertical-align:top;
 text-align:left;
 }
+
+/* https://stackoverflow.com/questions/702181/replace-html-table-with-divs */
+
+.container
+{
+    display: table;
+}
+.row  
+{
+    display: table-row;
+}
+.left
+{
+    display: table-cell;
+    padding-right: 20px;
+}
+.right
+{
+    display: table-cell;
+    padding-left: 20px;
+}
+.middle 
+{
+    display: table-cell;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.left p, .right p, .middle p 
+{
+    margin: 1px 1px;
+}

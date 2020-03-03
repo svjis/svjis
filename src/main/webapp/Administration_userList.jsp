@@ -4,6 +4,8 @@
     Author     : berk
 --%>
 
+<%@page import="java.util.List"%>
+<%@page import="cz.svjis.bean.Role"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
@@ -22,36 +24,40 @@
             <div id="content-main">
                 <div id="content-main-in">
                     <h1 class="page-title"><%=language.getText("User list") %></h1>
-                    <table width="100%">
-                        <tr>
-                            <td align="left">
-                                [<a href="Dispatcher?page=userEdit&id=0"><%=language.getText("Add new user") %></a>]&nbsp;
-                                [<a href="Upload?page=exportUserListToXls"><%=language.getText("Export to Excel") %></a>]&nbsp;
-                            </td>
 
-                            <td align="right">
-                                <%=language.getText("Disabled users") %>:&nbsp;
-                            </td>
-                            <td align="right">
+                    <div class="container">
+                        <div class="row">
+
+                            <div class="left">
+                                <p>[<a href="Dispatcher?page=userEdit&id=0"><%=language.getText("Add new user") %></a>]</p>
+                            </div>
+                            <div class="left">
+                                <p>[<a href="Upload?page=exportUserListToXls"><%=language.getText("Export to Excel") %></a>]</p>
+                            </div>
+                            
+                            <div class="right">
+                                <p><%=language.getText("Disabled users") %></p>
+                            </div>
+                            <div class="middle">
+                                <p>
                                 <form action="Dispatcher" method="post">
                                     <input type="hidden" name="page" value="userList" />
                                     <input type="checkbox" name="disabledUsers"  onchange='this.form.submit()' <%=(disabledUsers.isValue()) ? "checked" : "" %> />
                                 </form>
-                            </td>
-
-                            <td align="right">
-                                <%=language.getText("Role filter") %>:&nbsp;
-                            </td>
-                            <td align="right">
+                                </p>
+                            </div>
+                            <div class="right">
+                                <p><%=language.getText("Role filter") %></p>
+                            </div>
+                            <div class="middle">
+                                <p>
                                 <form action="Dispatcher" method="post">
                                     <input type="hidden" name="page" value="userList" />
                                     <select name='roleId' onchange='this.form.submit()'>
                                         <option value="0"><%=language.getText("all") %></option>
                                         <%
                                             int roleId = Integer.valueOf((request.getParameter("roleId") == null) ? "0" : request.getParameter("roleId"));
-                                            java.util.Iterator<cz.svjis.bean.Role> roleI = roleList.iterator();
-                                            while (roleI.hasNext()) {
-                                                cz.svjis.bean.Role r = roleI.next();
+                                            for (Role r: (List<Role>) roleList) {
                                                 String sel;
                                                 if (roleId == r.getId()) {
                                                     sel = "selected";
@@ -63,9 +69,11 @@
                                         <% } %>
                                     </select>
                                 </form>
-                            </td>
-                        </tr>
-                    </table>
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
                     
                     <table class="list" width="100%">
                         <tr>
