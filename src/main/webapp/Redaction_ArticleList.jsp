@@ -30,40 +30,46 @@
             <div id="content-main">
                 <div id="content-main-in">
                     <h1 class="page-title"><%=language.getText("Article list") %></h1>
-                    <table width="100%">
-                        <tr>
-                            <td align="left">
-                                [<a href="Dispatcher?page=redactionArticleEdit&id=0"><%=language.getText("Add new article") %></a>]<br>
-                                </td>
-                            <td align="right">
-                            <td width="40%">&nbsp;</td>
-                            <td align="right">
-                                <%=language.getText("Role filter") %>:&nbsp;
-                            </td>
-                            <td align="right">
-                                <form action="Dispatcher" method="post">
-                                    <input type="hidden" name="page" value="redactionArticleList" />
-                                    <select name='roleId' onchange='this.form.submit()'>
-                                        <option value="0"><%=language.getText("all") %></option>
-                                        <%
-                                            int roleId = Integer.valueOf((request.getParameter("roleId") == null) ? "0" : request.getParameter("roleId"));
-                                            java.util.Iterator<cz.svjis.bean.Role> roleI = roleList.iterator();
-                                            while (roleI.hasNext()) {
-                                                cz.svjis.bean.Role r = roleI.next();
-                                                String sel;
-                                                if (roleId == r.getId()) {
-                                                    sel = "selected";
-                                                } else {
-                                                    sel = "";
-                                                }
-                                        %>
-                                        <option value="<%=r.getId() %>" <%=sel %>><%=r.getDescription() %></option>
-                                        <% } %>
+                    
+                    <div class="container">
+                        <div class="row">
+                            
+                            <div class="left">
+                                <p>[<a href="Dispatcher?page=redactionArticleEdit&id=0"><%=language.getText("Add new article") %></a>]</p>
+                            </div>
+                            <div class="middle" style="padding-left: 300px">
+                                <p>&nbsp;</p>
+                            </div>
+                            <div class="right">
+                                <p><%=language.getText("Role filter") %>:</p>
+                            </div>
+                            <div class="middle">
+                                <p>
+                                    <form action="Dispatcher" method="post">
+                                        <input type="hidden" name="page" value="redactionArticleList" />
+                                        <select name='roleId' onchange='this.form.submit()'>
+                                            <option value="0"><%=language.getText("all") %></option>
+                                            <%
+                                                int roleId = Integer.valueOf((request.getParameter("roleId") == null) ? "0" : request.getParameter("roleId"));
+                                                java.util.Iterator<cz.svjis.bean.Role> roleI = roleList.iterator();
+                                                while (roleI.hasNext()) {
+                                                    cz.svjis.bean.Role r = roleI.next();
+                                                    String sel;
+                                                    if (roleId == r.getId()) {
+                                                        sel = "selected";
+                                                    } else {
+                                                        sel = "";
+                                                    }
+                                            %>
+                                            <option value="<%=r.getId() %>" <%=sel %>><%=r.getDescription() %></option>
+                                            <% } %>
                                         </select>
-                                </form>
-                            </td>
-                        </tr>
-                    </table>
+                                    </form>
+                                </p>
+                            </div>
+                            
+                        </div>
+                    </div>
 
                     <table class="list" width="100%">
                         <tr>

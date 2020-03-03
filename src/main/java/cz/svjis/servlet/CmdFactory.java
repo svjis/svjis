@@ -5,13 +5,13 @@
  */
 package cz.svjis.servlet;
 
-import cz.svjis.bean.BadPageCmd;
 import cz.svjis.servlet.cmd.ArticleDetailCmd;
 import cz.svjis.servlet.cmd.ArticleFastCmd;
 import cz.svjis.servlet.cmd.ArticleInquiryVoteCmd;
 import cz.svjis.servlet.cmd.ArticleInsertCommentCmd;
 import cz.svjis.servlet.cmd.ArticleListCmd;
 import cz.svjis.servlet.cmd.ArticleSearchCmd;
+import cz.svjis.servlet.cmd.BadPageCmd;
 import cz.svjis.servlet.cmd.BoardDeleteCmd;
 import cz.svjis.servlet.cmd.BoardEditCmd;
 import cz.svjis.servlet.cmd.BoardListCmd;
