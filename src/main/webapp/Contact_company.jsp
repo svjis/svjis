@@ -26,43 +26,43 @@
                     <table border="0">
                         <% if (!company.getAddress().equals("")) { %>
                         <tr>
-                            <td><strong><%=language.getText("Address") %>:&nbsp;</strong></td>
+                            <th scope="row" style="text-align: left"><%=language.getText("Address") %>:&nbsp;</th>
                             <td><%=company.getAddress() %></td>
                         </tr>
                         <% } %>
                         <% if (!company.getCity().equals("")) { %>
                         <tr>
-                            <td><strong><%=language.getText("City") %>:&nbsp;</strong></td>
+                            <th scope="row" style="text-align: left"><%=language.getText("City") %>:&nbsp;</th>
                             <td><%=company.getCity() %></td>
                         </tr>
                         <% } %>
                         <% if (!company.getPostCode().equals("")) { %>
                         <tr>
-                            <td><strong><%=language.getText("Post code") %>:&nbsp;</strong></td>
+                            <th scope="row" style="text-align: left"><%=language.getText("Post code") %>:&nbsp;</th>
                             <td><%=company.getPostCode() %></td>
                         </tr>
                         <% } %>
                         <% if (!company.getPhone().equals("")) { %>
                         <tr>
-                            <td><strong><%=language.getText("Phone") %>:&nbsp;</strong></td>
+                            <th scope="row" style="text-align: left"><%=language.getText("Phone") %>:&nbsp;</th>
                             <td><%=company.getPhone() %></td>
                         </tr>
                         <% } %>
                         <% if (!company.getFax().equals("")) { %>
                         <tr>
-                            <td><strong><%=language.getText("Fax") %>:&nbsp;</strong></td>
+                            <th scope="row" style="text-align: left"><%=language.getText("Fax") %>:&nbsp;</th>
                             <td><%=company.getFax() %></td>
                         </tr>
                         <% } %>
                         <% if (!company.geteMail().equals("")) { %>
                         <tr>
-                            <td><strong><%=language.getText("E-Mail") %>:&nbsp;</strong></td>
+                            <th scope="row" style="text-align: left"><%=language.getText("E-Mail") %>:&nbsp;</th>
                             <td><a href="mailto:<%=company.geteMail() %>"><%=company.geteMail() %></a></td>
                         </tr>
                         <% } %>
                         <% if (!company.getRegistrationNo().equals("")) { %>
                         <tr>
-                            <td><strong><%=language.getText("Registration No.") %>:&nbsp;</strong></td>
+                            <th scope="row" style="text-align: left"><%=language.getText("Registration No.") %>:&nbsp;</th>
                             <td><%=company.getRegistrationNo() %></td>
                         </tr>
                         <% } %>
@@ -71,7 +71,7 @@
                     <% if (!boardList.isEmpty()) { %>
                     <table border="0">
                         <tr>
-                            <td colspan="3"><strong><%=language.getText("Board") %>:&nbsp;</strong></td>
+                            <th scope="col" style="text-align: left" colspan="3"><%=language.getText("Board") %>:&nbsp;</th>
                         </tr>
                     <%
                         for (BoardMember bm: (ArrayList<BoardMember>) boardList) {

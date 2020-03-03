@@ -53,7 +53,7 @@
                                     InquiryOption io = ioI.next();
                             %>
                                 <tr>
-                                    <td width="10%"><%=++i %></td>
+                                    <th width="10%" scope="row" style="text-align: left"><%=++i %></th>
                                     <td width="80%">
                                         <input type="hidden" name="oid_<%=i %>" value="<%=io.getId() %>">
                                         <input id="common-input" type="text" name="o_<%=i %>" size="50" maxlength="250" value="<%=io.getDescription() %>">
@@ -68,7 +68,7 @@
                                }
                             %>
                                 <tr>
-                                    <td width="10%"><%=++i %></td>
+                                    <th width="10%" scope="row" style="text-align: left"><%=++i %></th>
                                     <td width="80%">
                                         <input type="hidden" name="oid_<%=i %>" value="0">
                                         <input id="common-input" type="text" name="o_<%=i %>" size="50" maxlength="250" value="">
