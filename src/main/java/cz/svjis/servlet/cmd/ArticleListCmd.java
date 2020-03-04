@@ -25,7 +25,7 @@ import javax.servlet.RequestDispatcher;
  * @author jaroslav_b
  */
 public class ArticleListCmd extends Command {
-
+    
     public ArticleListCmd(CmdContext ctx) {
         super(ctx);
     }    

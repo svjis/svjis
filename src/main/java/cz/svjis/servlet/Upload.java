@@ -7,17 +7,13 @@ package cz.svjis.servlet;
 import cz.svjis.servlet.cmd.HandleErrorCmd;
 import cz.svjis.bean.Company;
 import cz.svjis.bean.User;
-import cz.svjis.validator.InputValidationException;
 import cz.svjis.validator.Validator;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +25,8 @@ import javax.sql.DataSource;
  * @author berk
  */
 public class Upload extends HttpServlet {
+    
+    private static final Logger logger = Logger.getLogger(Upload.class.getName());
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,13 +34,9 @@ public class Upload extends HttpServlet {
      *
      * @param request servlet request
      * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
 
         CmdContext ctx = new CmdContext();
         ctx.setRequest(request);
@@ -61,6 +55,8 @@ public class Upload extends HttpServlet {
         Connection cnn = null;
 
         try {
+            request.setCharacterEncoding("UTF-8");
+            
             cnn = createConnection();
             ctx.setCnn(cnn);
             
@@ -81,7 +77,7 @@ public class Upload extends HttpServlet {
             }
 
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.log(Level.SEVERE, "Could not dispatch upload", ex);
 
             //-- send e-mail
             HandleErrorCmd errCmd = new HandleErrorCmd(ctx, ex);
@@ -103,7 +99,7 @@ public class Upload extends HttpServlet {
             try {
                 cnn.close();
             } catch (SQLException ex) {
-                Logger.getLogger(Dispatcher.class.getName()).log(Level.SEVERE, null, ex);
+                logger.log(Level.SEVERE, null, ex);
             }
         }
     }    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -113,12 +109,9 @@ public class Upload extends HttpServlet {
      *
      * @param request servlet request
      * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         processRequest(request, response);
     }
 
@@ -127,12 +120,9 @@ public class Upload extends HttpServlet {
      *
      * @param request servlet request
      * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         processRequest(request, response);
     }
 

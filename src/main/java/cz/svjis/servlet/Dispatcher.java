@@ -16,9 +16,7 @@ import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
 import cz.svjis.common.PermanentLoginUtils;
 import cz.svjis.servlet.cmd.SelectCompanyCmd;
-import cz.svjis.validator.InputValidationException;
 import cz.svjis.validator.Validator;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -28,8 +26,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,26 +38,27 @@ import javax.sql.DataSource;
  */
 public class Dispatcher extends HttpServlet {
 
+    private static final Logger logger = Logger.getLogger(Dispatcher.class.getName());
+    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
      * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
-        PrintWriter out = response.getWriter();
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
         
         CmdContext ctx = new CmdContext();
         ctx.setRequest(request);
         ctx.setResponse(response);
         
+        PrintWriter out = null;
         Connection cnn = null;
         
         try {
+            response.setContentType("text/html;charset=UTF-8");
+            request.setCharacterEncoding("UTF-8");
+            out = response.getWriter();
+        
             cnn = createConnection();
             ctx.setCnn(cnn);
             
@@ -161,13 +158,15 @@ public class Dispatcher extends HttpServlet {
             cmd.execute();
             
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.log(Level.SEVERE, "Could not dispatch page", ex);
 
             //-- send e-mail
             HandleErrorCmd errCmd = new HandleErrorCmd(ctx, ex);
             errCmd.execute();
-        } finally {            
-            out.close();
+        } finally {
+            if (out != null) {
+                out.close();
+            }
             closeConnection(cnn);
         }
     }
@@ -177,12 +176,9 @@ public class Dispatcher extends HttpServlet {
      * Handles the HTTP <code>GET</code> method.
      * @param request servlet request
      * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         processRequest(request, response);
     }
 
@@ -190,12 +186,9 @@ public class Dispatcher extends HttpServlet {
      * Handles the HTTP <code>POST</code> method.
      * @param request servlet request
      * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         processRequest(request, response);
     }
 
@@ -233,7 +226,7 @@ public class Dispatcher extends HttpServlet {
             try {
                 cnn.close();
             } catch (SQLException ex) {
-                Logger.getLogger(Dispatcher.class.getName()).log(Level.SEVERE, null, ex);
+                logger.log(Level.SEVERE, null, ex);
             }
         }
     }

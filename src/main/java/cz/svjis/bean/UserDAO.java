@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.bind.DatatypeConverter;
 
 /**
@@ -24,6 +26,8 @@ import javax.xml.bind.DatatypeConverter;
  */
 public class UserDAO extends DAO {
 
+    private static final Logger logger = Logger.getLogger(UserDAO.class.getName());
+    
     public UserDAO (Connection cnn) {
         super(cnn);
     }
@@ -323,7 +327,7 @@ public class UserDAO extends DAO {
             result = DatatypeConverter.printHexBinary(hash).toLowerCase();
 
         } catch (UnsupportedEncodingException | NoSuchAlgorithmException ex) {
-            ex.printStackTrace();
+            logger.log(Level.SEVERE, "Culd not generate hash", ex);
         }
         return result;
     }

@@ -26,6 +26,7 @@ import javax.sql.DataSource;
  * @author berk
  */
 public class MailSenderJob implements Runnable {
+    private static final Logger logger = Logger.getLogger(MailSenderJob.class.getName());
     
     @Override
     public void run() {
@@ -37,8 +38,8 @@ public class MailSenderJob implements Runnable {
             for(Company c: companyList) {
                 processAllMessagesForCompany(cnn, c);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, "Could not run MailSenderJob", ex);
         } finally {
             closeConnection(cnn);
         }
@@ -63,8 +64,8 @@ public class MailSenderJob implements Runnable {
                 mailDao.updateMessageStatus(m.getId(), 1, new Date());
             }
             
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, "Could not process all messages", ex);
         }
     }
      
