@@ -7,6 +7,8 @@ package cz.svjis.bean;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -52,7 +54,7 @@ public class Article {
         commentsAllowed = false;
         numOfComments = 0;
         numOfReads = 0;
-        attachmentList = new ArrayList<ArticleAttachment>();
+        attachmentList = new ArrayList<>();
         commentList = null;
         roles = new HashMap();
     }
@@ -228,15 +230,15 @@ public class Article {
     /**
      * @return the attachmentList
      */
-    public ArrayList<ArticleAttachment> getAttachmentList() {
+    public List<ArticleAttachment> getAttachmentList() {
         return attachmentList;
     }
 
     /**
      * @param attachmentList the attachmentList to set
      */
-    public void setAttachmentList(ArrayList<ArticleAttachment> attachmentList) {
-        this.attachmentList = attachmentList;
+    public void setAttachmentList(List<ArticleAttachment> attachmentList) {
+        this.attachmentList = new ArrayList(attachmentList);
     }
 
     /**
@@ -249,8 +251,8 @@ public class Article {
     /**
      * @param commentList the commentList to set
      */
-    public void setCommentList(ArrayList<ArticleComment> commentList) {
-        this.commentList = commentList;
+    public void setCommentList(List<ArticleComment> commentList) {
+        this.commentList = new ArrayList(commentList);
     }
 
     /**
@@ -270,15 +272,15 @@ public class Article {
     /**
      * @return the roleList
      */
-    public HashMap getRoles() {
+    public Map getRoles() {
         return roles;
     }
 
     /**
      * @param roleList the roleList to set
      */
-    public void setRoles(HashMap roleList) {
-        this.roles = roleList;
+    public void setRoles(Map roleList) {
+        this.roles = new HashMap(roleList);
     }
 
     /**
