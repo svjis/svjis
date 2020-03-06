@@ -113,8 +113,8 @@
                             String bar = (io.getCount() != inquiry.getMaximum()) ? "gfx/inq_0242.gif" : "gfx/inq_0212.gif";
                             String pct = (inquiry.getCount() != 0) ? df.format(100 * io.getCount() / inquiry.getCount()) : "0";
                         %>
-                            <p><input type="radio" name="i_<%=inquiry.getId() %>" value="o_<%=io.getId() %>">&nbsp;<%=io.getDescription() %>&nbsp;-&nbsp;<i><%=pct %>%</i><br>
-                                <img src="<%=bar %>" width="<%=Integer.valueOf(pct) * 2 %>" height="11">
+                            <p><input type="radio" name="i_<%=inquiry.getId() %>" value="o_<%=io.getId() %>">&nbsp;<%=io.getDescription() %>&nbsp;-&nbsp;<em><%=pct %>%</em><br>
+                                <img src="<%=bar %>" width="<%=Integer.valueOf(pct) * 2 %>" height="11" alt="Bar">
                         <%
                         }
                         %>
@@ -130,8 +130,8 @@
                             String bar = (io.getCount() != inquiry.getMaximum()) ? "gfx/inq_0242.gif" : "gfx/inq_0212.gif";
                             String pct = (inquiry.getCount() != 0) ? df.format(100 * io.getCount() / inquiry.getCount()) : "0";
                         %>
-                            <p><%=io.getDescription() %>&nbsp;-&nbsp;<i><%=pct %>%</i><br>
-                                <img src="<%=bar %>" width="<%=Integer.valueOf(pct) * 2 %>" height="11">
+                            <p><%=io.getDescription() %>&nbsp;-&nbsp;<em><%=pct %>%</em><br>
+                                <img src="<%=bar %>" width="<%=Integer.valueOf(pct) * 2 %>" height="11" alt="Bar">
                         <%
                         }
                         %>

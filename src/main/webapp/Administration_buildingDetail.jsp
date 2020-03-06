@@ -50,7 +50,7 @@
                             <legend><%=language.getText("Building picture (size 529 x 94 px)") %></legend>
                             <% if (company.getPictureFilename() != null) { %>
                             <p>
-                                <img src="<%=company.getPictureUrl(request.getServletContext().getRealPath("/")) %>" />
+                                <img src="<%=company.getPictureUrl(request.getServletContext().getRealPath("/")) %>" alt="<%=language.getText("Building picture (size 529 x 94 px)") %>" />
                             </p>
                             <% } %>
                             <p>
