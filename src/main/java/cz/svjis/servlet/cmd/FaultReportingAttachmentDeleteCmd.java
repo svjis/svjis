@@ -42,7 +42,7 @@ public class FaultReportingAttachmentDeleteCmd extends Command {
         FaultReport f = faultDao.getFault(getCompany().getId(), fa.getFaultReportId());
         if ((f != null) && (!f.isClosed()) && (fa.getUser().getId() == getUser().getId())) {
             faultDao.deleteFaultAttachment(id);
-            logDao.log(getUser().getId(), LogDAO.operationTypeDeleteFaultAttachment, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
+            logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_DELETE_FAULT_ATTACHMENT, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
         }
         String url = "Dispatcher?page=faultDetail&id=" + fa.getFaultReportId();
         getRequest().setAttribute("url", url);

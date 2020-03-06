@@ -67,17 +67,17 @@ public class RedactionArticleSaveCmd extends Command {
         while (roleI.hasNext()) {
             Role r = roleI.next();
             if (getRequest().getParameter("r_" + r.getId()) != null) {
-                uRoles.put(new Integer(r.getId()), r.getDescription());
+                uRoles.put(r.getId(), r.getDescription());
             }
         }
         a.setRoles(uRoles);
         if (a.getId() == 0) {
             a.setId(articleDao.insertArticle(a));
             articleDao.setUserWatchingArticle(a.getId(), getUser().getId());
-            logDao.log(getUser().getId(), LogDAO.operationTypeCreateArticle, a.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
+            logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_CREATE_ARTICLE, a.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
         } else {
             articleDao.modifyArticle(a);
-            logDao.log(getUser().getId(), LogDAO.operationTypeModifyArticle, a.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
+            logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_MODIFY_ARTICLE, a.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
         }
         String url = "Dispatcher?page=redactionArticleEdit&id=" + a.getId();
         getRequest().setAttribute("url", url);

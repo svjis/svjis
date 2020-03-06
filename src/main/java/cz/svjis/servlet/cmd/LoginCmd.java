@@ -42,7 +42,7 @@ public class LoginCmd extends Command {
             getRequest().getSession().setAttribute("user", user);
             Language language = languageDao.getDictionary(user.getLanguageId());
             getRequest().getSession().setAttribute("language", language);
-            logDao.log(user.getId(), LogDAO.operationTypeLogin, LogDAO.idNull, getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
+            logDao.log(user.getId(), LogDAO.OPERATION_TYPE_LOGIN, LogDAO.ID_NULL, getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
             PermanentLoginUtils.savePermanentLogin(getRequest(), getResponse(), user, userDao);
             
             String url = "Dispatcher?page=articleList";

@@ -49,7 +49,7 @@ public class LostPasswordSubmitCmd extends Command {
                 String newPassword = RandomString.randomString(8);
                 userDao.storeNewPassword(u.getCompanyId(), u.getLogin(), newPassword);
                 logins += "Login: " + u.getLogin() + " " + "Password: " + newPassword + "<br>";
-                logDao.log(u.getId(), LogDAO.operationTypeSendLostPassword, LogDAO.idNull, getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
+                logDao.log(u.getId(), LogDAO.OPERATION_TYPE_SEND_LOST_PASSWORD, LogDAO.ID_NULL, getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
             }
             String body = getSetup().getProperty("mail.template.lost.password");
             body = String.format(body, logins);

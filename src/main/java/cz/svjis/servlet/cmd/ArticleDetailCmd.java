@@ -56,6 +56,6 @@ public class ArticleDetailCmd extends Command {
         
         RequestDispatcher rd = getRequest().getRequestDispatcher("/ArticleDetail.jsp");
         rd.forward(getRequest(), getResponse());
-        logDao.log(getUser().getId(), LogDAO.operationTypeRead, article.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
+        logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_READ, article.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
     }
 }

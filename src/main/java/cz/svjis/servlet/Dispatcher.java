@@ -38,7 +38,7 @@ import javax.sql.DataSource;
  */
 public class Dispatcher extends HttpServlet {
 
-    private static final Logger logger = Logger.getLogger(Dispatcher.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(Dispatcher.class.getName());
     
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -122,7 +122,7 @@ public class Dispatcher extends HttpServlet {
                 if (PermanentLoginUtils.checkPermanentLogin(request, response, userDao, company.getId()) != 0) {
                     user = userDao.getUser(company.getId(), PermanentLoginUtils.checkPermanentLogin(request, response, userDao, company.getId()));
                     user.setUserLogged(true);
-                    logDao.log(user.getId(), LogDAO.operationTypeLogin, LogDAO.idNull, request.getRemoteAddr(), request.getHeader("User-Agent"));
+                    logDao.log(user.getId(), LogDAO.OPERATION_TYPE_LOGIN, LogDAO.ID_NULL, request.getRemoteAddr(), request.getHeader("User-Agent"));
                     PermanentLoginUtils.savePermanentLogin(request, response, user, userDao);
                 } else {
                     user = new User();
@@ -158,7 +158,7 @@ public class Dispatcher extends HttpServlet {
             cmd.execute();
             
         } catch (Exception ex) {
-            logger.log(Level.SEVERE, "Could not dispatch page", ex);
+            LOGGER.log(Level.SEVERE, "Could not dispatch page", ex);
 
             //-- send e-mail
             HandleErrorCmd errCmd = new HandleErrorCmd(ctx, ex);
@@ -226,7 +226,7 @@ public class Dispatcher extends HttpServlet {
             try {
                 cnn.close();
             } catch (SQLException ex) {
-                logger.log(Level.SEVERE, null, ex);
+                LOGGER.log(Level.SEVERE, null, ex);
             }
         }
     }

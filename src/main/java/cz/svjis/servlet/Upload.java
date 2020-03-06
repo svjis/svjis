@@ -26,7 +26,7 @@ import javax.sql.DataSource;
  */
 public class Upload extends HttpServlet {
     
-    private static final Logger logger = Logger.getLogger(Upload.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(Upload.class.getName());
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -77,7 +77,7 @@ public class Upload extends HttpServlet {
             }
 
         } catch (Exception ex) {
-            logger.log(Level.SEVERE, "Could not dispatch upload", ex);
+            LOGGER.log(Level.SEVERE, "Could not dispatch upload", ex);
 
             //-- send e-mail
             HandleErrorCmd errCmd = new HandleErrorCmd(ctx, ex);
@@ -99,7 +99,7 @@ public class Upload extends HttpServlet {
             try {
                 cnn.close();
             } catch (SQLException ex) {
-                logger.log(Level.SEVERE, null, ex);
+                LOGGER.log(Level.SEVERE, null, ex);
             }
         }
     }    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -35,7 +35,7 @@ public class RedactionArticleSendNotificationsConfirmationCmd extends Command {
         ArticleDAO articleDao = new ArticleDAO(getCnn());
         LogDAO logDao = new LogDAO(getCnn());
 
-        Article article = null;
+        Article article;
         if (parId == 0) {
             article = new Article();
         } else {
@@ -64,7 +64,7 @@ public class RedactionArticleSendNotificationsConfirmationCmd extends Command {
             }
         }
         
-        logDao.log(getUser().getId(), LogDAO.operationTypeSendArticleNotification, article.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
+        logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_SEND_ARTICLE_NOTIFICATION, article.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
         article.setNumOfReads(counter);
 
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Redaction_ArticleSendNotificationsConfirmation.jsp");

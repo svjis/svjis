@@ -62,7 +62,7 @@ public class FaultReportingAttachmentSaveCmd extends Command {
                 FaultReport fr = faultDao.getFault(getCompany().getId(), fa.getFaultReportId());
                 if ((fr != null) && (!fr.isClosed()) && !fa.getFileName().equals("")) {
                     faultDao.insertFaultReportAttachment(fa);
-                    logDao.log(getUser().getId(), LogDAO.operationTypeInsertFaultAttachment, fr.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
+                    logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_INSERT_FAULT_ATTACHMENT, fr.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
                 }
             }
         }

@@ -38,13 +38,13 @@ public class FaultReportingFastCmd extends FaultAbstractCmd {
                 f.setAssignedToUser(getUser());
                 faultDao.modifyFault(f);
                 faultDao.setUserWatchingFaultReport(f.getId(), f.getAssignedToUser().getId());
-                logDao.log(getUser().getId(), LogDAO.operationTypeModifyFault, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
+                logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_MODIFY_FAULT, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
             }
             if (getRequest().getParameter("closeTicket") != null) {
                 f.setClosed(true);
                 faultDao.modifyFault(f);
                 sendNotification(f, "mail.template.fault.closed", faultDao.getUserListWatchingFaultReport(f.getId()));
-                logDao.log(getUser().getId(), LogDAO.operationTypeCloseFault, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
+                logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_CLOSE_FAULT, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
             }
         }
         

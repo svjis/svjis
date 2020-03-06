@@ -45,6 +45,6 @@ public class FaultReportingDetailCmd extends Command {
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Faults_reportDetail.jsp");
         rd.forward(getRequest(), getResponse());
 
-        logDao.log(getUser().getId(), LogDAO.operationTypeReadFault, report.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
+        logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_READ_FAULT, report.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
     }
 }

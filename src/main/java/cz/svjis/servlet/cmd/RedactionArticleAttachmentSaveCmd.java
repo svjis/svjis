@@ -67,6 +67,6 @@ public class RedactionArticleAttachmentSaveCmd extends Command {
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
-        logDao.log(getUser().getId(), LogDAO.operationTypeInsertAttachment, parArticleId, getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
+        logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_INSERT_ATTACHMENT, parArticleId, getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
     }
 }
