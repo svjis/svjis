@@ -296,8 +296,6 @@ public class Company implements Serializable {
             if (!tfp.isFileExists(getPictureFilename())) {
                 try {
                     tfp.createFile(getPictureFilename(), getPictureData());
-                } catch (FileNotFoundException ex) {
-                    Logger.getLogger(Company.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {
                     Logger.getLogger(Company.class.getName()).log(Level.SEVERE, null, ex);
                 }

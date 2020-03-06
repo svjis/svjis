@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -84,7 +85,7 @@ public class BuildingDAO extends DAO {
     }
     
     
-    public ArrayList<BuildingUnitType> getBuildingUnitTypeList() throws SQLException {
+    public List<BuildingUnitType> getBuildingUnitTypeList() throws SQLException {
         ArrayList<BuildingUnitType> result = new ArrayList<>();
         String select = "SELECT a.ID, a.DESCRIPTION FROM BUILDING_UNIT_TYPE a ORDER BY a.ID";
         try (Statement st = cnn.createStatement(); ResultSet rs = st.executeQuery(select)) {
@@ -98,7 +99,7 @@ public class BuildingDAO extends DAO {
         return result;
     }
     
-    public ArrayList<BuildingUnit> getBuildingUnitList(int buildingId, int typeId) throws SQLException {
+    public List<BuildingUnit> getBuildingUnitList(int buildingId, int typeId) throws SQLException {
         ArrayList<BuildingUnit> result = new ArrayList<>();
         String select = "SELECT "
                 + "a.ID, "
@@ -140,7 +141,7 @@ public class BuildingDAO extends DAO {
         return result;
     }
     
-    public ArrayList<BuildingUnit> getUnconnectedBuildingUnitList(int companyId) throws SQLException {
+    public List<BuildingUnit> getUnconnectedBuildingUnitList(int companyId) throws SQLException {
         ArrayList<BuildingUnit> result = new ArrayList<>();
         String select = "SELECT "
                 + "u.ID, "
@@ -178,7 +179,7 @@ public class BuildingDAO extends DAO {
         return result;
     }
     
-    public ArrayList<BuildingUnit> getUserHasBuildingUnitList(int userId) throws SQLException {
+    public List<BuildingUnit> getUserHasBuildingUnitList(int userId) throws SQLException {
         ArrayList<BuildingUnit> result = new ArrayList<>();
         String select = "SELECT "
                 + "u.ID, "
@@ -215,7 +216,7 @@ public class BuildingDAO extends DAO {
         return result;
     }
     
-    public ArrayList<User> getBuildingUnitHasUserList(int buildingUnitId) throws SQLException {
+    public List<User> getBuildingUnitHasUserList(int buildingUnitId) throws SQLException {
         ArrayList<User> result = new ArrayList<>();
         String select = "SELECT "
                 + "a.USER_ID, "

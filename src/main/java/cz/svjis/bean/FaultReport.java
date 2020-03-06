@@ -7,6 +7,7 @@ package cz.svjis.bean;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -23,7 +24,7 @@ public class FaultReport {
     private User assignedToUser;
     private boolean closed;
     private ArrayList<FaultReportAttachment> attachmentList;
-    private ArrayList<FaultReportComment> FaultReportCommentList = new ArrayList<FaultReportComment>();
+    private ArrayList<FaultReportComment> faultReportCommentList = new ArrayList<>();
     
     public FaultReport() {
         clear();
@@ -155,29 +156,29 @@ public class FaultReport {
     /**
      * @return the FaultReportCommentList
      */
-    public ArrayList<FaultReportComment> getFaultReportCommentList() {
-        return FaultReportCommentList;
+    public List<FaultReportComment> getFaultReportCommentList() {
+        return faultReportCommentList;
     }
 
     /**
-     * @param FaultReportCommentList the FaultReportCommentList to set
+     * @param faultReportCommentList the faultReportCommentList to set
      */
-    public void setFaultReportCommentList(ArrayList<FaultReportComment> FaultReportCommentList) {
-        this.FaultReportCommentList = FaultReportCommentList;
+    public void setFaultReportCommentList(List<FaultReportComment> faultReportCommentList) {
+        this.faultReportCommentList = new ArrayList(faultReportCommentList);
     }
 
     /**
      * @return the attachmentList
      */
-    public ArrayList<FaultReportAttachment> getAttachmentList() {
+    public List<FaultReportAttachment> getAttachmentList() {
         return attachmentList;
     }
 
     /**
      * @param attachmentList the attachmentList to set
      */
-    public void setAttachmentList(ArrayList<FaultReportAttachment> attachmentList) {
-        this.attachmentList = attachmentList;
+    public void setAttachmentList(List<FaultReportAttachment> attachmentList) {
+        this.attachmentList = new ArrayList(attachmentList);
     }
     
 }

@@ -27,7 +27,7 @@ public class ContactCompanyCmd extends Command {
         
         BoardMemberDAO boardDao = new BoardMemberDAO(getCnn());
         
-        ArrayList<BoardMember> boardList = boardDao.getBoardMembers(getCompany().getId());
+        ArrayList<BoardMember> boardList = new ArrayList(boardDao.getBoardMembers(getCompany().getId()));
         getRequest().setAttribute("boardList", boardList);
         
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Contact_company.jsp");

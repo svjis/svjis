@@ -39,7 +39,7 @@ public class RedactionNewsEditCmd extends Command {
         }
         getRequest().setAttribute("miniNews", miniNews);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Redaction_MiniNewsEdit.jsp");
-        ArrayList<Language> languageList = languageDao.getLanguageList();
+        ArrayList<Language> languageList = new ArrayList(languageDao.getLanguageList());
         getRequest().setAttribute("languageList", languageList);
         rd.forward(getRequest(), getResponse());
     }

@@ -36,7 +36,7 @@ public class BuildingUnitOwnerCmd extends Command {
         int id = Integer.valueOf(getRequest().getParameter("id"));
         BuildingUnit buildingUnit = buildingDao.getBuildingUnit(id);
         getRequest().setAttribute("buildingUnit", buildingUnit);
-        ArrayList<User> userList = buildingDao.getBuildingUnitHasUserList(id);
+        ArrayList<User> userList = new ArrayList(buildingDao.getBuildingUnitHasUserList(id));
         getRequest().setAttribute("userList", userList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_buildingUnitOwner.jsp");
         rd.forward(getRequest(), getResponse());

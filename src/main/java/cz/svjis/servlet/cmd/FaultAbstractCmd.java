@@ -11,7 +11,7 @@ import cz.svjis.bean.User;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -23,7 +23,7 @@ public abstract class FaultAbstractCmd  extends Command {
         super(cmdCtx);
     }
     
-    protected void sendNotification(FaultReport f, String templatePropertyName, ArrayList<User> userList) throws SQLException {
+    protected void sendNotification(FaultReport f, String templatePropertyName, List<User> userList) throws SQLException {
         if (getSetup().getProperty(templatePropertyName) != null) {
             
             MailDAO mailDao = new MailDAO(

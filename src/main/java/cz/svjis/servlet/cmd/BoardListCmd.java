@@ -33,7 +33,7 @@ public class BoardListCmd extends Command {
         Company currCompany = compDao.getCompany(getCompany().getId());
         getRequest().setAttribute("currCompany", currCompany);
 
-        ArrayList<BoardMember> boardList = boardDao.getBoardMembers(getCompany().getId());
+        ArrayList<BoardMember> boardList = new ArrayList(boardDao.getBoardMembers(getCompany().getId()));
         getRequest().setAttribute("boardList", boardList);
 
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_boardList.jsp");

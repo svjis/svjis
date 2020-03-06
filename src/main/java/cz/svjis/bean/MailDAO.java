@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 
@@ -82,7 +83,7 @@ public class MailDAO extends DAO {
         return str;
     }
     
-    public ArrayList<Message> getWaitingMessages(int companyId) throws SQLException {
+    public List<Message> getWaitingMessages(int companyId) throws SQLException {
         ArrayList<Message> result = new ArrayList<>();
         String select = "SELECT "
             + "a.ID, "
@@ -134,7 +135,7 @@ public class MailDAO extends DAO {
         }
     }
     
-    public void sendErrorReport(int companyId, String recipient, String url, String user, String userAgent, Throwable throwable) throws SQLException, EmailException {
+    public void sendErrorReport(int companyId, String recipient, String url, String user, String userAgent, Throwable throwable) throws EmailException {
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         String subject = "SVJIS: Error report";
         String body = "<p>Time: " + sdf.format(new Date()) + "</p>"

@@ -16,11 +16,11 @@ public class Language implements Serializable {
     private String description;
     private Properties phrases = new Properties();
     
-    public String getText(String Id) {
-        if (phrases.getProperty(Id) == null) {
-            return "?" + description + ": " + Id;
+    public String getText(String id) {
+        if (phrases.getProperty(id) == null) {
+            return "?" + description + ": " + id;
         } else {
-            return this.phrases.getProperty(Id);
+            return this.phrases.getProperty(id);
         }
     }
 

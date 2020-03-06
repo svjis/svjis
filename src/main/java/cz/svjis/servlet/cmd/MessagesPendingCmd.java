@@ -36,7 +36,7 @@ public class MessagesPendingCmd extends Command {
                 getSetup().getProperty("mail.login"),
                 getSetup().getProperty("mail.password"),
                 getSetup().getProperty("mail.sender"));
-        ArrayList<Message> messageList = mailDao.getWaitingMessages(getCompany().getId());
+        ArrayList<Message> messageList = new ArrayList(mailDao.getWaitingMessages(getCompany().getId()));
         getRequest().setAttribute("messageList", messageList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_messageList.jsp");
         rd.forward(getRequest(), getResponse());

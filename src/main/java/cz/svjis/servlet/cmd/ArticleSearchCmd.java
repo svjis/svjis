@@ -87,7 +87,7 @@ public class ArticleSearchCmd extends Command {
         getRequest().setAttribute("sectionId", String.valueOf(parSection));
         ArrayList<MiniNews> miniNewsList = newsDao.getMiniNews(getUser(), true);
         getRequest().setAttribute("miniNewsList", miniNewsList);
-        ArrayList<Inquiry> inquiryList = inquiryDao.getInquiryList(getUser(), true);
+        ArrayList<Inquiry> inquiryList = new ArrayList(inquiryDao.getInquiryList(getUser(), true));
         getRequest().setAttribute("inquiryList", inquiryList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/ArticleList.jsp");
         rd.forward(getRequest(), getResponse());

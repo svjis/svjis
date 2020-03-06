@@ -49,7 +49,7 @@ public class UserEditCmd extends Command {
             cUser = userDao.getUser(getCompany().getId(), parId);
         }
         getRequest().setAttribute("cUser", cUser);
-        ArrayList<Language> languageList = languageDao.getLanguageList();
+        ArrayList<Language> languageList = new ArrayList(languageDao.getLanguageList());
         getRequest().setAttribute("languageList", languageList);
         ArrayList<Role> roleList = roleDao.getRoleList(getCompany().getId());
         getRequest().setAttribute("roleList", roleList);
