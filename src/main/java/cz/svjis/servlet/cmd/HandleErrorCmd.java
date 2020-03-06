@@ -49,7 +49,6 @@ public class HandleErrorCmd extends Command {
                         setup.getProperty("mail.sender"));
 
                 mailDao.sendErrorReport(
-                        user.getCompanyId(),
                         setup.getProperty("error.report.recipient"), 
                         getRequest().getRequestURL().toString() + "/" + getRequest().getQueryString(), 
                         userId,

@@ -24,8 +24,8 @@ import org.apache.commons.mail.HtmlEmail;
  */
 public class MailDAO extends DAO {
     
-    public static final int messageTypeMail = 1;
-    public static final int messageTypeSMS = 2;
+    public static final int MAIL = 1;
+    public static final int SMS = 2;
     
     private String smtp;
     private String login;
@@ -62,7 +62,7 @@ public class MailDAO extends DAO {
                 + "STATUS, "
                 + "COMPANY_ID) VALUES (?,?,?,?,?,?,?)";
         try (PreparedStatement ps = cnn.prepareStatement(insert)) {
-            ps.setInt(1, MailDAO.messageTypeMail);
+            ps.setInt(1, MailDAO.MAIL);
             ps.setString(2, truncate(recipient,50));
             ps.setString(3, truncate(subject,100));
             ps.setString(4, body);
@@ -99,7 +99,7 @@ public class MailDAO extends DAO {
             + "WHERE (a.STATUS = 0) and (a.MESSAGE_TYPE_ID = ?) and (a.COMPANY_ID = ?)";
         
         try (PreparedStatement psSelect = cnn.prepareStatement(select)) {
-            psSelect.setInt(1, MailDAO.messageTypeMail);
+            psSelect.setInt(1, MailDAO.MAIL);
             psSelect.setInt(2, companyId);
             try (ResultSet rs = psSelect.executeQuery()) {
                 while (rs.next()) {
@@ -135,7 +135,7 @@ public class MailDAO extends DAO {
         }
     }
     
-    public void sendErrorReport(int companyId, String recipient, String url, String user, String userAgent, Throwable throwable) throws EmailException {
+    public void sendErrorReport(String recipient, String url, String user, String userAgent, Throwable throwable) throws EmailException {
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         String subject = "SVJIS: Error report";
         String body = "<p>Time: " + sdf.format(new Date()) + "</p>"
