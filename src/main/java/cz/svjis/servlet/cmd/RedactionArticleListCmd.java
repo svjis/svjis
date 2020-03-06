@@ -52,17 +52,17 @@ public class RedactionArticleListCmd extends Command {
         sl.setCurrentPage(parPageNo);
         sl.setNumOfItemsAtPage(Integer.valueOf(getSetup().getProperty("article.page.size")));
 
-        ArrayList<Article> articleList = new ArrayList<Article>();
+        ArrayList<Article> articleList = new ArrayList<>();
         if (parPage.equals("redactionArticleList")) {
             sl.setTotalNumOfItems(articleDao.getNumOfArticles(getUser(), parSection, false, !getUser().hasPermission("redaction_articles_all"), parRoleId));
-            articleList = articleDao.getArticleList(
+            articleList = new ArrayList(articleDao.getArticleList(
                 getUser(),
                 parSection,
                 parPageNo,
                 Integer.valueOf(getSetup().getProperty("article.page.size")),
                 false,
                 !getUser().hasPermission("redaction_articles_all"),
-                parRoleId);
+                parRoleId));
         }
 
         if (parPage.equals("redactionArticleSearch")) {
@@ -86,12 +86,12 @@ public class RedactionArticleListCmd extends Command {
                 return;
             }
 
-            articleList = articleDao.getArticleListFromSearch(parSearch, getUser(),
+            articleList = new ArrayList(articleDao.getArticleListFromSearch(parSearch, getUser(),
                 parSection,
                 parPageNo,
                 Integer.valueOf(getSetup().getProperty("article.page.size")),
                 false,
-                !getUser().hasPermission("redaction_articles_all"));
+                !getUser().hasPermission("redaction_articles_all")));
         }
 
         getRequest().setAttribute("slider", sl);

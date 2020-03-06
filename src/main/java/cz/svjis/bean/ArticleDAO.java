@@ -15,6 +15,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  *
@@ -26,14 +27,14 @@ public class ArticleDAO extends DAO {
         super(cnn);
     }
     
-    public ArrayList<Article> getArticleTopList(User u, int top, int cnt_last_months) throws SQLException {
+    public List<Article> getArticleTopList(User u, int top, int cntLastMonths) throws SQLException {
         ArrayList<Article> result = new ArrayList<>();
         
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date d = new Date();
         Calendar c = Calendar.getInstance();
         c.setTime(d);
-        c.add(Calendar.MONTH, -1 * cnt_last_months);
+        c.add(Calendar.MONTH, -1 * cntLastMonths);
         d = c.getTime();
 
         String select = "SELECT FIRST " + top + " " +
@@ -126,7 +127,7 @@ public class ArticleDAO extends DAO {
      * @throws SQLException 
      */
     
-    public ArrayList<Article> getArticleList(User u, int menuNodeId, int pageNo, int pageSize, boolean publishedOnly, boolean ownedOnly, int role) throws SQLException {
+    public List<Article> getArticleList(User u, int menuNodeId, int pageNo, int pageSize, boolean publishedOnly, boolean ownedOnly, int role) throws SQLException {
         ArrayList<Article> result = new ArrayList<>();
         
         String menuNodeFilter = "";
@@ -232,7 +233,7 @@ public class ArticleDAO extends DAO {
         return result;
     }
     
-    public ArrayList<Article> getArticleListFromSearch(String search, User u, int menuNodeId, int pageNo, int pageSize, boolean publishedOnly, boolean ownedOnly) throws SQLException {
+    public List<Article> getArticleListFromSearch(String search, User u, int menuNodeId, int pageNo, int pageSize, boolean publishedOnly, boolean ownedOnly) throws SQLException {
         ArrayList<Article> result = new ArrayList<>();
         
         String menuNodeFilter = "";
@@ -648,7 +649,7 @@ public class ArticleDAO extends DAO {
         }
     }
     
-    public ArrayList<User> getUserListForNotificationAboutNewArticle(int articleId) throws SQLException {
+    public List<User> getUserListForNotificationAboutNewArticle(int articleId) throws SQLException {
         ArrayList<User> result = new ArrayList<>();
         String select = "SELECT "
                 + "a.ARTICLE_ID, "
@@ -687,7 +688,7 @@ public class ArticleDAO extends DAO {
     }
     
     
-    public ArrayList<User> getUserListWatchingArticle(int articleId) throws SQLException {
+    public List<User> getUserListWatchingArticle(int articleId) throws SQLException {
         ArrayList<User> result = new ArrayList<>();
         String select = "SELECT \n" +
                         "    a.ID, \n" +

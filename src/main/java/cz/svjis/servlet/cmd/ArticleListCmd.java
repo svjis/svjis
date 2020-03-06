@@ -56,15 +56,15 @@ public class ArticleListCmd extends Command {
         sl.setNumOfItemsAtPage(Integer.valueOf(getSetup().getProperty("article.page.size")));
         sl.setTotalNumOfItems(articleDao.getNumOfArticles(getUser(), section, true, false, 0));
         getRequest().setAttribute("slider", sl);
-        ArrayList<Article> articleList = articleDao.getArticleList(getUser(),
+        ArrayList<Article> articleList = new ArrayList(articleDao.getArticleList(getUser(),
                 section,
                 pageNo,
                 Integer.valueOf(getSetup().getProperty("article.page.size")),
-                true, false, 0);
+                true, false, 0));
         getRequest().setAttribute("articleList", articleList);
-        ArrayList<Article> articleTopList = articleDao.getArticleTopList(getUser(),
+        ArrayList<Article> articleTopList = new ArrayList(articleDao.getArticleTopList(getUser(),
                 Integer.valueOf(getSetup().getProperty("article.top.size")),
-                (getSetup().getProperty("article.top.months") != null) ? Integer.valueOf(getSetup().getProperty("article.top.months")) : 12);
+                (getSetup().getProperty("article.top.months") != null) ? Integer.valueOf(getSetup().getProperty("article.top.months")) : 12));
         getRequest().setAttribute("articleTopList", articleTopList);
         getRequest().setAttribute("sectionId", String.valueOf(parSection));
         ArrayList<MiniNews> miniNewsList = newsDao.getMiniNews(getUser(), true);

@@ -41,7 +41,7 @@ public class RedactionArticleSendNotificationsCmd extends Command {
         
         getRequest().setAttribute("article", article);
 
-        ArrayList<User> userList = articleDao.getUserListForNotificationAboutNewArticle(parId);
+        ArrayList<User> userList = new ArrayList(articleDao.getUserListForNotificationAboutNewArticle(parId));
         RequestDispatcher rd;
         
         if (userList.isEmpty()) {
