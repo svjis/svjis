@@ -4,6 +4,7 @@
     Author     : berk
 --%>
 
+<%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="cz.svjis.bean.MenuItem"%>
 <%@page import="java.util.ArrayList"%>
@@ -13,7 +14,7 @@
 <jsp:useBean id="menu" scope="request" class="cz.svjis.bean.Menu" />
 
 <%!
-    private String writeSubMenu(ArrayList<MenuItem> menu, int activeSection, boolean isTopLevel) {
+    private String writeSubMenu(List<MenuItem> menu, int activeSection, boolean isTopLevel) {
         String output = "";
         if (!isTopLevel) {
             output += "<ul>";

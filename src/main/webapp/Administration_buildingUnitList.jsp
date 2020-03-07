@@ -68,7 +68,7 @@
                         <tr>
                             <td class="list" style="text-align: right"><%=++i %></td>
                             <td class="list"><a href="Dispatcher?page=buildingUnitEdit&id=<%=u.getId() %>"><img src="gfx/pencil.png" border="0" title="<%=language.getText("Edit") %>" alt="<%=language.getText("Edit") %>"></a></td>
-                            <td class="list"><a href="Dispatcher?page=buildingUnitOwner&id=<%=u.getId() %>"><img src="gfx/user.png" border="0" title="<%=language.getText("Owner list") %>" alt="<%=language.getText("Owner list") %>></a></td>
+                            <td class="list"><a href="Dispatcher?page=buildingUnitOwner&id=<%=u.getId() %>"><img src="gfx/user.png" border="0" title="<%=language.getText("Owner list") %>" alt="<%=language.getText("Owner list") %>"></a></td>
                             <td class="list"><a onclick="if (!confirm('<%=language.getText("Really do you want to remove unit") %> <%=u.getId() %> ?')) return false;" href="Dispatcher?page=buildingUnitDelete&id=<%=u.getId() %>"><img src="gfx/delete.png" border="0" title="<%=language.getText("Delete") %>" alt="<%=language.getText("Delete") %>"></a></td>
                             <td class="list" style="text-align: right"><%=u.getId() %></td>
                             <td class="list"><%=u.getBuildingUnitType() %></td>

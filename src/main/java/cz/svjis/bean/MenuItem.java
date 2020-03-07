@@ -42,7 +42,11 @@ public class MenuItem {
      * @param subSections the subSections to set
      */
     public void setSubSections(List<MenuItem> subSections) {
-        this.subSections = new ArrayList(subSections);
+        if (subSections != null) {
+            this.subSections = new ArrayList(subSections);
+        } else {
+            this.subSections = null;
+        }
     }
 
 }

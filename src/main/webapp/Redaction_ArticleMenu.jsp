@@ -4,6 +4,7 @@
     Author     : berk
 --%>
 
+<%@page import="java.util.List"%>
 <%@page import="cz.svjis.bean.Language"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="cz.svjis.bean.MenuItem"%>
@@ -13,7 +14,7 @@
 <jsp:useBean id="menu" scope="request" class="cz.svjis.bean.Menu" />
 
 <%!
-    private String writeSubMenu(ArrayList<MenuItem> menu, int level, Language language) {
+    private String writeSubMenu(List<MenuItem> menu, int level, Language language) {
         String ident = "&nbsp;&nbsp;&nbsp;";
         String output = "";
 
