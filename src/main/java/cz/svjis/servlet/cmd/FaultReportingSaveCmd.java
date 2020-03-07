@@ -30,10 +30,10 @@ public class FaultReportingSaveCmd extends FaultAbstractCmd {
     @Override
     public void execute() throws Exception {
         
-        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
         String parSubject = Validator.getString(getRequest(), "subject", 0, 50, false, false);
-        String parBody = Validator.getString(getRequest(), "body", 0, Validator.maxStringLenAllowed, false, getUser().hasPermission("can_write_html"));
-        int parResolver = Validator.getInt(getRequest(), "resolverId", 0, Validator.maxIntAllowed, true);
+        String parBody = Validator.getString(getRequest(), "body", 0, Validator.MAX_STRING_LEN_ALLOWED, false, getUser().hasPermission("can_write_html"));
+        int parResolver = Validator.getInt(getRequest(), "resolverId", 0, Validator.MAX_INT_ALLOWED, true);
         boolean parClosed = Validator.getBoolean(getRequest(), "closed");
 
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());

@@ -37,11 +37,11 @@ public class UserSaveCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
         String parSalutation = Validator.getString(getRequest(), "salutation", 0, 30, false, false);
         String parFirstName = Validator.getString(getRequest(), "firstName", 0, 30, false, false);
         String parLastName = Validator.getString(getRequest(), "lastName", 0, 30, false, false);
-        int parLangId = Validator.getInt(getRequest(), "language", 0, Validator.maxIntAllowed, false);
+        int parLangId = Validator.getInt(getRequest(), "language", 0, Validator.MAX_INT_ALLOWED, false);
         String parAddress = Validator.getString(getRequest(), "address", 0, 50, false, false);
         String parCity = Validator.getString(getRequest(), "city", 0, 50, false, false);
         String parPostCode = Validator.getString(getRequest(), "postCode", 0, 10, false, false);

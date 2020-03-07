@@ -62,7 +62,7 @@ public class Dispatcher extends HttpServlet {
             cnn = createConnection();
             ctx.setCnn(cnn);
             
-            int parSetCompany = Validator.getInt(request, "setcompany", 0, Validator.maxIntAllowed, true);
+            int parSetCompany = Validator.getInt(request, "setcompany", 0, Validator.MAX_INT_ALLOWED, true);
             String parPage = Validator.getString(request, "page", 0, 100, true, false);
             
             CompanyDAO compDao = new CompanyDAO(cnn);
@@ -202,7 +202,7 @@ public class Dispatcher extends HttpServlet {
     }// </editor-fold>
     
     private ArrayList<SystemMenuEntry> createSystemMenu(User u) {
-        ArrayList<SystemMenuEntry> result = new ArrayList<SystemMenuEntry>();
+        ArrayList<SystemMenuEntry> result = new ArrayList<>();
         if (u.hasPermission("menu_articles")) result.add(new SystemMenuEntry("Articles", "Dispatcher?page=articleList"));
         if (u.hasPermission("menu_contact")) result.add(new SystemMenuEntry("Contact", "Dispatcher?page=contact"));
         if (u.hasPermission("menu_building_units")) result.add(new SystemMenuEntry("Units", "Dispatcher?page=myBuildingUnitList"));

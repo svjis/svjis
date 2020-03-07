@@ -32,14 +32,14 @@ public class RedactionArticleSaveCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
         String parHeader = Validator.getString(getRequest(), "header", 0, 50, false, false);
-        String parDescription = Validator.getString(getRequest(), "description", 0, Validator.maxStringLenAllowed, false, true);
-        String parBody = Validator.getString(getRequest(), "body", 0, Validator.maxStringLenAllowed, false, true);
-        int parLangId = Validator.getInt(getRequest(), "language", 0, Validator.maxIntAllowed, false);
-        int parAuthorId = Validator.getInt(getRequest(), "authorId", 0, Validator.maxIntAllowed, false);
+        String parDescription = Validator.getString(getRequest(), "description", 0, Validator.MAX_STRING_LEN_ALLOWED, false, true);
+        String parBody = Validator.getString(getRequest(), "body", 0, Validator.MAX_STRING_LEN_ALLOWED, false, true);
+        int parLangId = Validator.getInt(getRequest(), "language", 0, Validator.MAX_INT_ALLOWED, false);
+        int parAuthorId = Validator.getInt(getRequest(), "authorId", 0, Validator.MAX_INT_ALLOWED, false);
         String parCreationDate = Validator.getString(getRequest(), "creationDate", 0, 30, false, false);
-        int parMenuId = Validator.getInt(getRequest(), "menuId", 0, Validator.maxIntAllowed, false);
+        int parMenuId = Validator.getInt(getRequest(), "menuId", 0, Validator.MAX_INT_ALLOWED, false);
         boolean parCommentsAllowed = Validator.getBoolean(getRequest(), "commentsAllowed");
         boolean parPublish = Validator.getBoolean(getRequest(), "publish");
 

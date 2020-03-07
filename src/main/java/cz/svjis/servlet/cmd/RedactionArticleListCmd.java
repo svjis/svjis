@@ -33,10 +33,10 @@ public class RedactionArticleListCmd extends Command {
     public void execute() throws Exception {
 
         String parPage = Validator.getString(getRequest(), "page", 0, 100, false, false);
-        int parSection = Validator.getInt(getRequest(), "section", 0, Validator.maxIntAllowed, true);
-        int parPageNo = Validator.getInt(getRequest(), "pageNo", 0, Validator.maxIntAllowed, true);
-        int parRoleId = Validator.getInt(getRequest(), "roleId", 0, Validator.maxIntAllowed, true);
-        String parSearch = Validator.getString(getRequest(), "search", 0, Validator.maxStringLenAllowed, true, false);
+        int parSection = Validator.getInt(getRequest(), "section", 0, Validator.MAX_INT_ALLOWED, true);
+        int parPageNo = Validator.getInt(getRequest(), "pageNo", 0, Validator.MAX_INT_ALLOWED, true);
+        int parRoleId = Validator.getInt(getRequest(), "roleId", 0, Validator.MAX_INT_ALLOWED, true);
+        String parSearch = Validator.getString(getRequest(), "search", 0, Validator.MAX_STRING_LEN_ALLOWED, true, false);
 
         MenuDAO menuDao = new MenuDAO(getCnn());
         ArticleDAO articleDao = new ArticleDAO(getCnn());

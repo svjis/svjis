@@ -34,8 +34,8 @@ public class ArticleSearchCmd extends Command {
     @Override
     public void execute() throws Exception {
         
-        int parSection = Validator.getInt(getRequest(), "section", 0, Validator.maxIntAllowed, true);
-        int parPageNo = Validator.getInt(getRequest(), "pageNo", 0, Validator.maxIntAllowed, true);
+        int parSection = Validator.getInt(getRequest(), "section", 0, Validator.MAX_INT_ALLOWED, true);
+        int parPageNo = Validator.getInt(getRequest(), "pageNo", 0, Validator.MAX_INT_ALLOWED, true);
         String parSearch = Validator.getString(getRequest(), "search", 0, 50, false, false);
 
         MenuDAO menuDao = new MenuDAO(getCnn());

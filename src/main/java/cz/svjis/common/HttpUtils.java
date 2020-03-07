@@ -6,8 +6,11 @@
 package cz.svjis.common;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URLEncoder;
-import javax.servlet.ServletException;
+import java.nio.charset.StandardCharsets;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.binary.Base64;
@@ -17,29 +20,30 @@ import org.apache.commons.codec.binary.Base64;
  * @author jaroslav_b
  */
 public class HttpUtils {
+    
+    private static final Logger LOGGER = Logger.getLogger(HttpUtils.class.getName());
 
     public static void writeBinaryData(String contentType, String fileName, byte[] data, HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws IOException {
         
         String userAgent = request.getHeader("User-Agent");
         String encodedFileName = null;
         if (userAgent.contains("MSIE") || userAgent.contains("Edge") || userAgent.contains("Opera") || userAgent.contains("Trident")) {
-            encodedFileName = URLEncoder.encode(fileName.replace(" ", "_"), "UTF-8");
+            encodedFileName = URLEncoder.encode(fileName.replace(" ", "_"), StandardCharsets.UTF_8);
         } else {
             encodedFileName = "=?UTF-8?B?" + Base64.encodeBase64String(fileName.replace(" ", "_").getBytes("UTF-8")) + "?=";
         }
 
         response.setContentType(contentType);
         response.setHeader("Content-Disposition", "attachment; filename=\"" + encodedFileName + "\"");
-        //response.setContentLength(data.length);
         response.setDateHeader("Expires", 0);
 
-        java.io.OutputStream outb = null;
+        OutputStream outb = null;
         try {
             outb = response.getOutputStream();
             outb.write(data, 0, data.length);
         } catch (java.io.IOException ex) {
-            //ClientAbortException:  java.io.IOException: Roura přerušena (SIGPIPE) 
+            LOGGER.log(Level.SEVERE, "ClientAbortException:  java.io.IOException: Roura přerušena (SIGPIPE) ", ex);
         } finally {
             if (outb != null) {
                 outb.close();

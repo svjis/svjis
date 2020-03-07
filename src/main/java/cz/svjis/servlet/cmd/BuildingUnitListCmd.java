@@ -29,7 +29,7 @@ public class BuildingUnitListCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        int parTypeId = Validator.getInt(getRequest(), "typeId", 0, Validator.maxIntAllowed, true);
+        int parTypeId = Validator.getInt(getRequest(), "typeId", 0, Validator.MAX_INT_ALLOWED, true);
 
         CompanyDAO compDao = new CompanyDAO(getCnn());
         BuildingDAO buildingDao = new BuildingDAO(getCnn());

@@ -28,7 +28,7 @@ public class RedactionNewsEditCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
 
         MiniNewsDAO newsDao = new MiniNewsDAO(getCnn());
         LanguageDAO languageDao = new LanguageDAO(getCnn());

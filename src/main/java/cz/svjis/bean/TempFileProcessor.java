@@ -6,7 +6,6 @@ package cz.svjis.bean;
 
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,7 +17,7 @@ import java.util.logging.Logger;
  * @author berk
  */
 public class TempFileProcessor {
-    private static final Logger logger = Logger.getLogger(TempFileProcessor.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(TempFileProcessor.class.getName());
     
     private String directory = "gfx";
     private String companyDomain;
@@ -44,7 +43,7 @@ public class TempFileProcessor {
         try {
             Files.delete(f.toPath());
         } catch (IOException ex) {
-            logger.log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, null, ex);
         }
     }
     

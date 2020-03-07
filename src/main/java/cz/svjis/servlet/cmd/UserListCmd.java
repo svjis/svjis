@@ -30,7 +30,7 @@ public class UserListCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        int parRoleId = Validator.getInt(getRequest(), "roleId", 0, Validator.maxIntAllowed, true);
+        int parRoleId = Validator.getInt(getRequest(), "roleId", 0, Validator.MAX_INT_ALLOWED, true);
         boolean parDisabledUsers = Validator.getBoolean(getRequest(), "disabledUsers");
 
         CompanyDAO compDao = new CompanyDAO(getCnn());

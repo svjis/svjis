@@ -29,8 +29,8 @@ public class UserBuildingUnitAddCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        int parUnitId = Validator.getInt(getRequest(), "unitId", 0, Validator.maxIntAllowed, false);
-        int parUserId = Validator.getInt(getRequest(), "userId", 0, Validator.maxIntAllowed, false);
+        int parUnitId = Validator.getInt(getRequest(), "unitId", 0, Validator.MAX_INT_ALLOWED, false);
+        int parUserId = Validator.getInt(getRequest(), "userId", 0, Validator.MAX_INT_ALLOWED, false);
 
         BuildingDAO buildingDao = new BuildingDAO(getCnn());
         UserDAO userDao = new UserDAO(getCnn());

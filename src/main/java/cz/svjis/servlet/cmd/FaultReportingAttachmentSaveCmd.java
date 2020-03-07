@@ -34,7 +34,7 @@ public class FaultReportingAttachmentSaveCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        int parReportId = Validator.getInt(getRequest(), "reportId", 0, Validator.maxIntAllowed, false);
+        int parReportId = Validator.getInt(getRequest(), "reportId", 0, Validator.MAX_INT_ALLOWED, false);
 
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
         LogDAO logDao = new LogDAO(getCnn());

@@ -33,8 +33,8 @@ public class ArticleListCmd extends Command {
     @Override
     public void execute() throws Exception {
         
-        int parSection = Validator.getInt(getRequest(), "section", 0, Validator.maxIntAllowed, true);
-        int parPageNo = Validator.getInt(getRequest(), "pageNo", 0, Validator.maxIntAllowed, true);
+        int parSection = Validator.getInt(getRequest(), "section", 0, Validator.MAX_INT_ALLOWED, true);
+        int parPageNo = Validator.getInt(getRequest(), "pageNo", 0, Validator.MAX_INT_ALLOWED, true);
         
         MenuDAO menuDao = new MenuDAO(getCnn());
         ArticleDAO articleDao = new ArticleDAO(getCnn());

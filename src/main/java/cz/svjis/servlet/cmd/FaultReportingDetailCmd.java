@@ -27,7 +27,7 @@ public class FaultReportingDetailCmd extends Command {
     @Override
     public void execute() throws Exception {
         
-        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
         Validator.getString(getRequest(), "search", 0, 50, true, false);
         
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());

@@ -25,12 +25,12 @@ public class BuildingUnitSaveCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
-        int parBuildingUnitTypeId = Validator.getInt(getRequest(), "typeId", 0, Validator.maxIntAllowed, false);
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
+        int parBuildingUnitTypeId = Validator.getInt(getRequest(), "typeId", 0, Validator.MAX_INT_ALLOWED, false);
         String parRegistrationId = Validator.getString(getRequest(), "registrationNo", 0, 50, false, false);
         String parDescription = Validator.getString(getRequest(), "description", 0, 50, false, false);
-        int parNumerator = Validator.getInt(getRequest(), "numerator", 0, Validator.maxIntAllowed, false);
-        int parDenominator = Validator.getInt(getRequest(), "denominator", 0, Validator.maxIntAllowed, false);
+        int parNumerator = Validator.getInt(getRequest(), "numerator", 0, Validator.MAX_INT_ALLOWED, false);
+        int parDenominator = Validator.getInt(getRequest(), "denominator", 0, Validator.MAX_INT_ALLOWED, false);
         
         BuildingDAO buildingDao = new BuildingDAO(getCnn());
         

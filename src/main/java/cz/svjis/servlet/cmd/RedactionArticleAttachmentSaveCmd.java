@@ -33,7 +33,7 @@ public class RedactionArticleAttachmentSaveCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        int parArticleId = Validator.getInt(getRequest(), "articleId", 0, Validator.maxIntAllowed, false);
+        int parArticleId = Validator.getInt(getRequest(), "articleId", 0, Validator.MAX_INT_ALLOWED, false);
 
         ArticleDAO articleDao = new ArticleDAO(getCnn());
         LogDAO logDao = new LogDAO(getCnn());

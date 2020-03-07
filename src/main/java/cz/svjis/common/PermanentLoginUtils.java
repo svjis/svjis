@@ -49,7 +49,7 @@ public class PermanentLoginUtils {
     
     public static int checkPermanentLogin(HttpServletRequest request, HttpServletResponse response, UserDAO userDao, int companyId) throws SQLException, NoSuchAlgorithmException {
         int result = 0;
-        Cookie cookies[] = request.getCookies();
+        Cookie[] cookies = request.getCookies();
         int company = (getCookie(cookies, "company").equals("")) ? 0 : Integer.valueOf(getCookie(cookies, "company"));
         String login = getCookie(cookies, "login");
         String token = getCookie(cookies, "password");
@@ -60,7 +60,7 @@ public class PermanentLoginUtils {
         return result;
     }
     
-    private static String getCookie(Cookie cookies[], String key) {
+    private static String getCookie(Cookie[] cookies, String key) {
         String result = "";
         if (cookies != null) {
             for (int i = 0; i < cookies.length; i++) {

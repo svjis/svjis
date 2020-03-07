@@ -27,7 +27,7 @@ public class FaultReportingAttachmentDeleteCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
 
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
         LogDAO logDao = new LogDAO(getCnn());

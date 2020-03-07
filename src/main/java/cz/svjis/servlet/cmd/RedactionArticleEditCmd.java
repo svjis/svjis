@@ -32,7 +32,7 @@ public class RedactionArticleEditCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        int parArticleId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, true);
+        int parArticleId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, true);
 
         MenuDAO menuDao = new MenuDAO(getCnn());
         ArticleDAO articleDao = new ArticleDAO(getCnn());
