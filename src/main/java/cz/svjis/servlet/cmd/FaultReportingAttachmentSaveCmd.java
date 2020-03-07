@@ -34,7 +34,7 @@ public class FaultReportingAttachmentSaveCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        int parReportId = Validator.getInt(getRequest(), "reportId", 0, Validator.maxIntAllowed, false);
+        int parReportId = Validator.getInt(getRequest(), "reportId", 0, Validator.MAX_INT_ALLOWED, false);
 
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
         LogDAO logDao = new LogDAO(getCnn());
@@ -62,7 +62,7 @@ public class FaultReportingAttachmentSaveCmd extends Command {
                 FaultReport fr = faultDao.getFault(getCompany().getId(), fa.getFaultReportId());
                 if ((fr != null) && (!fr.isClosed()) && !fa.getFileName().equals("")) {
                     faultDao.insertFaultReportAttachment(fa);
-                    logDao.log(getUser().getId(), LogDAO.operationTypeInsertFaultAttachment, fr.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
+                    logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_INSERT_FAULT_ATTACHMENT, fr.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
                 }
             }
         }

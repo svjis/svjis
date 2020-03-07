@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -21,7 +22,7 @@ public class CompanyDAO extends DAO {
         super(cnn);
     }
     
-    public ArrayList<Company> getCompanyList() throws SQLException {
+    public List<Company> getCompanyList() throws SQLException {
         ArrayList<Company> result = new ArrayList<>();
         
         String select = "SELECT "

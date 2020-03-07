@@ -32,14 +32,14 @@ public class RedactionArticleEditCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        int parArticleId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, true);
+        int parArticleId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, true);
 
         MenuDAO menuDao = new MenuDAO(getCnn());
         ArticleDAO articleDao = new ArticleDAO(getCnn());
         RoleDAO roleDao = new RoleDAO(getCnn());
         LanguageDAO languageDao = new LanguageDAO(getCnn());
 
-        Article article = null;
+        Article article;
         
         if (parArticleId == 0) {
             article = new Article();
@@ -49,11 +49,11 @@ public class RedactionArticleEditCmd extends Command {
         
         getRequest().setAttribute("article", article);
 
-        ArrayList<MenuItem> menuNodeList = menuDao.getMenu(getCompany().getId()).getMenu();
+        ArrayList<MenuItem> menuNodeList = new ArrayList(menuDao.getMenu(getCompany().getId()).getMenu());
         getRequest().setAttribute("menuNodeList", menuNodeList);
-        ArrayList<Language> languageList = languageDao.getLanguageList();
+        ArrayList<Language> languageList = new ArrayList(languageDao.getLanguageList());
         getRequest().setAttribute("languageList", languageList);
-        ArrayList<Role> roleList = roleDao.getRoleList(getCompany().getId());
+        ArrayList<Role> roleList = new ArrayList(roleDao.getRoleList(getCompany().getId()));
         getRequest().setAttribute("roleList", roleList);
 
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Redaction_ArticleEdit.jsp");

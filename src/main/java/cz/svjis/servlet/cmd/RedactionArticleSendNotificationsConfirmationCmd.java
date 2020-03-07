@@ -30,12 +30,12 @@ public class RedactionArticleSendNotificationsConfirmationCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
         
         ArticleDAO articleDao = new ArticleDAO(getCnn());
         LogDAO logDao = new LogDAO(getCnn());
 
-        Article article = null;
+        Article article;
         if (parId == 0) {
             article = new Article();
         } else {
@@ -54,7 +54,7 @@ public class RedactionArticleSendNotificationsConfirmationCmd extends Command {
                 getSetup().getProperty("mail.sender"));
 
         int counter = 0;
-        ArrayList<User> userList = articleDao.getUserListForNotificationAboutNewArticle(parId);
+        ArrayList<User> userList = new ArrayList(articleDao.getUserListForNotificationAboutNewArticle(parId));
         Iterator<User> it = userList.iterator();
         while (it.hasNext()) {
             User u = it.next();
@@ -64,7 +64,7 @@ public class RedactionArticleSendNotificationsConfirmationCmd extends Command {
             }
         }
         
-        logDao.log(getUser().getId(), LogDAO.operationTypeSendArticleNotification, article.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
+        logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_SEND_ARTICLE_NOTIFICATION, article.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
         article.setNumOfReads(counter);
 
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Redaction_ArticleSendNotificationsConfirmation.jsp");

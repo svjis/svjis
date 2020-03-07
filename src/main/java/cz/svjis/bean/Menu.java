@@ -6,6 +6,7 @@ package cz.svjis.bean;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  *
@@ -22,8 +23,8 @@ public class Menu {
     public Menu() {
     }
     
-    public Menu(ArrayList<MenuNode> nodes) {
-        this.buffer = nodes;
+    public Menu(List<MenuNode> nodes) {
+        this.buffer = new ArrayList(nodes);
         buildMenu();
     }
 
@@ -45,14 +46,14 @@ public class Menu {
     /**
      * @return the navigationBar
      */
-    public ArrayList<MenuNode> getNavigationBar() {
+    public List<MenuNode> getNavigationBar() {
         return navigationBar;
     }
 
     /**
      * @return the menu
      */
-    public ArrayList<MenuItem> getMenu() {
+    public List<MenuItem> getMenu() {
         return menu;
     }
 
@@ -73,7 +74,7 @@ public class Menu {
     }
 
     private void buildMenu() {
-        navigationBar = new ArrayList<MenuNode>();
+        navigationBar = new ArrayList<>();
         MenuNode as;
         int currSection = activeSection;
         while ((as = findSectionInBuffer(currSection)) != null) {
@@ -81,7 +82,7 @@ public class Menu {
             currSection = as.getParentId();
         }
 
-        menu = new ArrayList<MenuItem>();
+        menu = new ArrayList<>();
         Iterator i = buffer.iterator();
         int navigationLevel = 0;
         while (i.hasNext()) {
@@ -102,10 +103,9 @@ public class Menu {
     }
 
     private ArrayList<MenuItem> buildSubMenu(int navigationLevel, int parent) {
-        ArrayList<MenuItem> subMenu = new ArrayList<MenuItem>();
-        Iterator i = buffer.iterator();
-        while (i.hasNext()) {
-            MenuNode as = (MenuNode) i.next();
+        ArrayList<MenuItem> subMenu = new ArrayList<>();
+        
+        for (MenuNode as: buffer) {
             if ((as.getParentId() != 0) && (as.getParentId() == parent)) {
                 MenuItem ami = new MenuItem();
                 ami.setSection(as);
@@ -127,12 +127,11 @@ public class Menu {
         return writeSubMenu(menu);
     }
 
-    private String writeSubMenu(ArrayList<MenuItem> menu) {
+    private String writeSubMenu(List<MenuItem> menu) {
         String output = "";
         output = output + "<ul>" + "\n";
-        Iterator i = menu.iterator();
-        while (i.hasNext()) {
-            MenuItem ami = (MenuItem) i.next();
+
+        for (MenuItem ami: menu) {
             output = output + "<li>" + ami.getSection().getDescription();
             if (ami.getSubSections() != null)
                 output = output + writeSubMenu(ami.getSubSections());

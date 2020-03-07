@@ -25,7 +25,7 @@ public class RedactionArticleMenuDeleteCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        int parMenuId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+        int parMenuId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
 
         MenuDAO menuDao = new MenuDAO(getCnn());
         

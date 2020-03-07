@@ -26,7 +26,7 @@ public class PersonalUserDetailCmd extends Command {
     public void execute() throws Exception {
         LanguageDAO languageDao = new LanguageDAO(getCnn());
         
-        ArrayList<Language> languageList = languageDao.getLanguageList();
+        ArrayList<Language> languageList = new ArrayList(languageDao.getLanguageList());
         getRequest().setAttribute("languageList", languageList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/PersonalSettings_userDetail.jsp");
         rd.forward(getRequest(), getResponse());

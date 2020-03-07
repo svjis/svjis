@@ -40,7 +40,7 @@
                             <td class="list" style="text-align: right"><%=++i %></td>
                             <td class="list"><%=bm.getUser().getSalutation() %>&nbsp;<%=bm.getUser().getFirstName() %>&nbsp;<%=bm.getUser().getLastName() %></td>
                             <td class="list"><%=bm.getBoardMemberType().getDescription() %></td>
-                            <td class="list"><a onclick="if (!confirm('<%=language.getText("Really do you want to remove board member") %>&nbsp;<%=bm.getUser().getFirstName() %>&nbsp;<%=bm.getUser().getLastName() %> ?')) return false;" href="Dispatcher?page=boardMemberDelete&typeId=<%=bm.getBoardMemberType().getId() %>&userId=<%=bm.getUser().getId() %>"><img src="gfx/delete.png" border="0" title="<%=language.getText("Delete") %>"></a></td>
+                            <td class="list"><a onclick="if (!confirm('<%=language.getText("Really do you want to remove board member") %>&nbsp;<%=bm.getUser().getFirstName() %>&nbsp;<%=bm.getUser().getLastName() %> ?')) return false;" href="Dispatcher?page=boardMemberDelete&typeId=<%=bm.getBoardMemberType().getId() %>&userId=<%=bm.getUser().getId() %>"><img src="gfx/delete.png" border="0" title="<%=language.getText("Delete") %>" alt="<%=language.getText("Delete") %>"></a></td>
                         </tr>
                     <%
                     }

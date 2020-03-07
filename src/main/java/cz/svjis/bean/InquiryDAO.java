@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  *
@@ -46,7 +47,7 @@ public class InquiryDAO extends DAO {
         return result;
     }
     
-    public ArrayList<Inquiry> getInquiryList(User user, boolean publishedOnly) throws SQLException {
+    public List<Inquiry> getInquiryList(User user, boolean publishedOnly) throws SQLException {
         ArrayList<Inquiry> result = new ArrayList<>();
         
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -129,7 +130,7 @@ public class InquiryDAO extends DAO {
         return result;
     }
     
-    public ArrayList<InquiryLog> getInquiryLog(User user, int id) throws SQLException {
+    public List<InquiryLog> getInquiryLog(User user, int id) throws SQLException {
         ArrayList<InquiryLog> result = new ArrayList<>();
         String select = "SELECT " +
                         "  a.VOTING_TIME " +
@@ -154,7 +155,7 @@ public class InquiryDAO extends DAO {
         return result;
     }
     
-    public ArrayList<InquiryOption> getInquiryOptionList(int inquiryId) throws SQLException {
+    public List<InquiryOption> getInquiryOptionList(int inquiryId) throws SQLException {
         ArrayList<InquiryOption> result = new ArrayList<>();
         String select = "SELECT "
                 + "a.ID, "

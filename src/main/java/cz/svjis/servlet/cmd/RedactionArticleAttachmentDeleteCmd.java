@@ -27,7 +27,7 @@ public class RedactionArticleAttachmentDeleteCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
 
         ArticleDAO articleDao = new ArticleDAO(getCnn());
         LogDAO logDao = new LogDAO(getCnn());
@@ -46,6 +46,6 @@ public class RedactionArticleAttachmentDeleteCmd extends Command {
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
-        logDao.log(getUser().getId(), LogDAO.operationTypeDeleteAttachment, aa.getArticleId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
+        logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_DELETE_ATTACHMENT, aa.getArticleId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
     }
 }

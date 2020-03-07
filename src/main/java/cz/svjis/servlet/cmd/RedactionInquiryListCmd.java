@@ -25,7 +25,7 @@ public class RedactionInquiryListCmd extends Command {
     @Override
     public void execute() throws Exception {
         InquiryDAO inquiryDao = new InquiryDAO(getCnn());
-        ArrayList<Inquiry> inquiryList = inquiryDao.getInquiryList(getUser(), false);
+        ArrayList<Inquiry> inquiryList = new ArrayList(inquiryDao.getInquiryList(getUser(), false));
         getRequest().setAttribute("inquiryList", inquiryList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Redaction_InquiryList.jsp");
         rd.forward(getRequest(), getResponse());

@@ -6,15 +6,19 @@ package cz.svjis.bean;
 
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author berk
  */
 public class TempFileProcessor {
+    private static final Logger LOGGER = Logger.getLogger(TempFileProcessor.class.getName());
+    
     private String directory = "gfx";
     private String companyDomain;
     private String realPath;
@@ -36,10 +40,14 @@ public class TempFileProcessor {
     
     public void deleteFile(String fileName) {
         File f = new File(destinationPath.getAbsolutePath() + File.separator + fileName);
-        f.delete();
+        try {
+            Files.delete(f.toPath());
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+        }
     }
     
-    public void createFile(String fileName, byte[] data) throws FileNotFoundException, IOException {
+    public void createFile(String fileName, byte[] data) throws IOException {
         File f = new File(destinationPath.getAbsolutePath() + File.separator + fileName);
         try (DataOutputStream os = new DataOutputStream(new FileOutputStream(f))) {
             os.write(data);

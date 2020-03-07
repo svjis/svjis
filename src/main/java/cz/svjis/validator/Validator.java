@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class Validator {
     
-    public static final int maxIntAllowed = 10000000;
-    public static final int maxStringLenAllowed = 1000000;
+    public static final int MAX_INT_ALLOWED = 10000000;
+    public static final int MAX_STRING_LEN_ALLOWED = 1000000;
 
     
     public static String getString(HttpServletRequest request, String parName, int minLen, int maxLen, boolean canBeNull, boolean canContainHtmlTags) throws InputValidationException {
@@ -65,7 +65,7 @@ public class Validator {
         
         try {
             i = Integer.valueOf(s);
-        } catch (Exception ex) {
+        } catch (NumberFormatException ex) {
             return false;
         }
         
@@ -76,12 +76,8 @@ public class Validator {
         if (i > maxInt) {
             return false;
         }
-        
-        if (!isInjectionFree(s)) {
-            return false;
-        }
 
-        return true;
+        return isInjectionFree(s);
     }
     
     protected static boolean validateString(String s, int minLen, int maxLen) {
@@ -97,24 +93,16 @@ public class Validator {
             return false;
         }
         
-        if (!isInjectionFree(s)) {
-            return false;
-        }
-        
-        return true;
+        return isInjectionFree(s);
     }
     
     private static boolean isInjectionFree(String s) {
         String sup = s.toUpperCase();
         
-        if (sup.contains(";") && 
-                (sup.contains("SELECT") || sup.contains("INSERT") || sup.contains("UPDATE") || 
-                sup.contains("DELETE") || sup.contains("DROP") || sup.contains("CREATE") || sup.contains("ALTER") || 
-                sup.contains("EXECUTE") || sup.contains("COMMIT") || sup.contains("ROLLBACK"))) {
-            return false;
-        }
-        
-        return true;
+        return !(sup.contains(";") && 
+            (sup.contains("SELECT") || sup.contains("INSERT") || sup.contains("UPDATE") || 
+            sup.contains("DELETE") || sup.contains("DROP") || sup.contains("CREATE") || sup.contains("ALTER") || 
+            sup.contains("EXECUTE") || sup.contains("COMMIT") || sup.contains("ROLLBACK")));
     }
     
     protected static String fixTextInput(String input, boolean enableHtml) {

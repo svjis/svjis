@@ -25,9 +25,9 @@ public class RedactionArticleMenuSaveCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
         String parDescription = Validator.getString(getRequest(), "description", 0, 50, false, false);
-        int parParentId = Validator.getInt(getRequest(), "parent", 0, Validator.maxIntAllowed, false);
+        int parParentId = Validator.getInt(getRequest(), "parent", 0, Validator.MAX_INT_ALLOWED, false);
 
         MenuDAO menuDao = new MenuDAO(getCnn());
         MenuNode n = new MenuNode();

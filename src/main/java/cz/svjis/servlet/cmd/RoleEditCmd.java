@@ -29,7 +29,7 @@ public class RoleEditCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
 
         CompanyDAO compDao = new CompanyDAO(getCnn());
         RoleDAO roleDao = new RoleDAO(getCnn());
@@ -44,7 +44,7 @@ public class RoleEditCmd extends Command {
             role = roleDao.getRole(getCompany().getId(), parId);
         }
         getRequest().setAttribute("role", role);
-        ArrayList<Permission> permissionList = roleDao.getPermissionList();
+        ArrayList<Permission> permissionList = new ArrayList(roleDao.getPermissionList());
         getRequest().setAttribute("permissionList", permissionList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_roleDetail.jsp");
         rd.forward(getRequest(), getResponse());

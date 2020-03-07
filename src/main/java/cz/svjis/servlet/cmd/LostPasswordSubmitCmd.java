@@ -13,7 +13,7 @@ import cz.svjis.common.RandomString;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
-import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 
 /**
@@ -41,15 +41,15 @@ public class LostPasswordSubmitCmd extends Command {
             rd.forward(getRequest(), getResponse());
             return;
         }
-        RequestDispatcher rd = null;
-        ArrayList<User> result = userDao.findLostPassword(getCompany().getId(), parEmail);
+        RequestDispatcher rd;
+        List<User> result = userDao.findLostPassword(getCompany().getId(), parEmail);
         if (!result.isEmpty()) {
             String logins = "";
             for (User u : result) {
                 String newPassword = RandomString.randomString(8);
                 userDao.storeNewPassword(u.getCompanyId(), u.getLogin(), newPassword);
                 logins += "Login: " + u.getLogin() + " " + "Password: " + newPassword + "<br>";
-                logDao.log(u.getId(), LogDAO.operationTypeSendLostPassword, LogDAO.idNull, getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
+                logDao.log(u.getId(), LogDAO.OPERATION_TYPE_SEND_LOST_PASSWORD, LogDAO.ID_NULL, getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
             }
             String body = getSetup().getProperty("mail.template.lost.password");
             body = String.format(body, logins);

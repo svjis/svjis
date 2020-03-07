@@ -5,6 +5,7 @@
 package cz.svjis.bean;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -73,15 +74,15 @@ public class Role {
     /**
      * @return the permissions
      */
-    public HashMap getPermissions() {
+    public Map getPermissions() {
         return permissions;
     }
 
     /**
      * @param permissions the permissions to set
      */
-    public void setPermissions(HashMap permissions) {
-        this.permissions = permissions;
+    public void setPermissions(Map permissions) {
+        this.permissions = new HashMap(permissions);
     }
 
     /**

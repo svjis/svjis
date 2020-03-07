@@ -33,10 +33,10 @@ public class RedactionArticleListCmd extends Command {
     public void execute() throws Exception {
 
         String parPage = Validator.getString(getRequest(), "page", 0, 100, false, false);
-        int parSection = Validator.getInt(getRequest(), "section", 0, Validator.maxIntAllowed, true);
-        int parPageNo = Validator.getInt(getRequest(), "pageNo", 0, Validator.maxIntAllowed, true);
-        int parRoleId = Validator.getInt(getRequest(), "roleId", 0, Validator.maxIntAllowed, true);
-        String parSearch = Validator.getString(getRequest(), "search", 0, Validator.maxStringLenAllowed, true, false);
+        int parSection = Validator.getInt(getRequest(), "section", 0, Validator.MAX_INT_ALLOWED, true);
+        int parPageNo = Validator.getInt(getRequest(), "pageNo", 0, Validator.MAX_INT_ALLOWED, true);
+        int parRoleId = Validator.getInt(getRequest(), "roleId", 0, Validator.MAX_INT_ALLOWED, true);
+        String parSearch = Validator.getString(getRequest(), "search", 0, Validator.MAX_STRING_LEN_ALLOWED, true, false);
 
         MenuDAO menuDao = new MenuDAO(getCnn());
         ArticleDAO articleDao = new ArticleDAO(getCnn());
@@ -52,17 +52,17 @@ public class RedactionArticleListCmd extends Command {
         sl.setCurrentPage(parPageNo);
         sl.setNumOfItemsAtPage(Integer.valueOf(getSetup().getProperty("article.page.size")));
 
-        ArrayList<Article> articleList = new ArrayList<Article>();
+        ArrayList<Article> articleList = new ArrayList<>();
         if (parPage.equals("redactionArticleList")) {
             sl.setTotalNumOfItems(articleDao.getNumOfArticles(getUser(), parSection, false, !getUser().hasPermission("redaction_articles_all"), parRoleId));
-            articleList = articleDao.getArticleList(
+            articleList = new ArrayList(articleDao.getArticleList(
                 getUser(),
                 parSection,
                 parPageNo,
                 Integer.valueOf(getSetup().getProperty("article.page.size")),
                 false,
                 !getUser().hasPermission("redaction_articles_all"),
-                parRoleId);
+                parRoleId));
         }
 
         if (parPage.equals("redactionArticleSearch")) {
@@ -86,18 +86,18 @@ public class RedactionArticleListCmd extends Command {
                 return;
             }
 
-            articleList = articleDao.getArticleListFromSearch(parSearch, getUser(),
+            articleList = new ArrayList(articleDao.getArticleListFromSearch(parSearch, getUser(),
                 parSection,
                 parPageNo,
                 Integer.valueOf(getSetup().getProperty("article.page.size")),
                 false,
-                !getUser().hasPermission("redaction_articles_all"));
+                !getUser().hasPermission("redaction_articles_all")));
         }
 
         getRequest().setAttribute("slider", sl);
         getRequest().setAttribute("articleList", articleList);
 
-        ArrayList<Role> roleList = roleDao.getRoleList(getCompany().getId());
+        ArrayList<Role> roleList = new ArrayList(roleDao.getRoleList(getCompany().getId()));
         getRequest().setAttribute("roleList", roleList);
 
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Redaction_ArticleList.jsp");

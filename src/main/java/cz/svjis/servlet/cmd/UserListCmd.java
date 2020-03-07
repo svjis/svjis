@@ -30,7 +30,7 @@ public class UserListCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        int parRoleId = Validator.getInt(getRequest(), "roleId", 0, Validator.maxIntAllowed, true);
+        int parRoleId = Validator.getInt(getRequest(), "roleId", 0, Validator.MAX_INT_ALLOWED, true);
         boolean parDisabledUsers = Validator.getBoolean(getRequest(), "disabledUsers");
 
         CompanyDAO compDao = new CompanyDAO(getCnn());
@@ -40,9 +40,9 @@ public class UserListCmd extends Command {
         getRequest().setAttribute("disabledUsers", new cz.svjis.bean.Boolean(parDisabledUsers));
         Company currCompany = compDao.getCompany(getCompany().getId());
         getRequest().setAttribute("currCompany", currCompany);
-        ArrayList<Role> roleList = roleDao.getRoleList(getCompany().getId());
+        ArrayList<Role> roleList = new ArrayList(roleDao.getRoleList(getCompany().getId()));
         getRequest().setAttribute("roleList", roleList);
-        ArrayList<User> userList = userDao.getUserList(getCompany().getId(), false, parRoleId, !parDisabledUsers);
+        ArrayList<User> userList = new ArrayList(userDao.getUserList(getCompany().getId(), false, parRoleId, !parDisabledUsers));
         getRequest().setAttribute("userList", userList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_userList.jsp");
         rd.forward(getRequest(), getResponse());

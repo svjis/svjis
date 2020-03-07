@@ -29,7 +29,7 @@ public class RoleSaveCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
         String parDescription = Validator.getString(getRequest(), "description", 0, 50, false, false);
 
         RoleDAO roleDao = new RoleDAO(getCnn());
@@ -39,7 +39,7 @@ public class RoleSaveCmd extends Command {
         role.setCompanyId(getCompany().getId());
         role.setDescription(parDescription);
         HashMap props = new HashMap();
-        ArrayList<Permission> perms = roleDao.getPermissionList();
+        ArrayList<Permission> perms = new ArrayList(roleDao.getPermissionList());
         Iterator<Permission> permsI = perms.iterator();
         while (permsI.hasNext()) {
             Permission p = permsI.next();

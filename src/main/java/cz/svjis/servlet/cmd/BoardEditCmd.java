@@ -36,10 +36,10 @@ public class BoardEditCmd extends Command {
         Company currCompany = compDao.getCompany(getCompany().getId());
         getRequest().setAttribute("currCompany", currCompany);
 
-        ArrayList<BoardMemberType> boardTypes = boardDao.getBoardMemberTypes();
+        ArrayList<BoardMemberType> boardTypes = new ArrayList(boardDao.getBoardMemberTypes());
         getRequest().setAttribute("boardTypes", boardTypes);
 
-        ArrayList<User> userList = userDao.getUserList(getCompany().getId(), false, 0, true);
+        ArrayList<User> userList = new ArrayList(userDao.getUserList(getCompany().getId(), false, 0, true));
         getRequest().setAttribute("userList", userList);
 
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_boardEdit.jsp");

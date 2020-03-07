@@ -30,10 +30,10 @@ public class FaultReportingSaveCmd extends FaultAbstractCmd {
     @Override
     public void execute() throws Exception {
         
-        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
         String parSubject = Validator.getString(getRequest(), "subject", 0, 50, false, false);
-        String parBody = Validator.getString(getRequest(), "body", 0, Validator.maxStringLenAllowed, false, getUser().hasPermission("can_write_html"));
-        int parResolver = Validator.getInt(getRequest(), "resolverId", 0, Validator.maxIntAllowed, true);
+        String parBody = Validator.getString(getRequest(), "body", 0, Validator.MAX_STRING_LEN_ALLOWED, false, getUser().hasPermission("can_write_html"));
+        int parResolver = Validator.getInt(getRequest(), "resolverId", 0, Validator.MAX_INT_ALLOWED, true);
         boolean parClosed = Validator.getBoolean(getRequest(), "closed");
 
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
@@ -75,10 +75,10 @@ public class FaultReportingSaveCmd extends FaultAbstractCmd {
                 if (f.getAssignedToUser() != null) {
                     faultDao.setUserWatchingFaultReport(f.getId(), f.getAssignedToUser().getId());
                 }
-                logDao.log(getUser().getId(), LogDAO.operationTypeCreateFault, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
+                logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_CREATE_FAULT, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
                 if (f.isClosed()) {
                     sendNotification(f, "mail.template.fault.closed", faultDao.getUserListWatchingFaultReport(f.getId()));
-                    logDao.log(getUser().getId(), LogDAO.operationTypeCloseFault, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
+                    logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_CLOSE_FAULT, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
                 }
             }
         } else {
@@ -94,14 +94,14 @@ public class FaultReportingSaveCmd extends FaultAbstractCmd {
                 if (f.getAssignedToUser() != null) {
                     faultDao.setUserWatchingFaultReport(f.getId(), f.getAssignedToUser().getId());
                 }
-                logDao.log(getUser().getId(), LogDAO.operationTypeModifyFault, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
+                logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_MODIFY_FAULT, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
                 if (!origFault.isClosed() && f.isClosed()) {
                     sendNotification(f, "mail.template.fault.closed", faultDao.getUserListWatchingFaultReport(f.getId()));
-                    logDao.log(getUser().getId(), LogDAO.operationTypeCloseFault, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
+                    logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_CLOSE_FAULT, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
                 }
                 if (origFault.isClosed() && !f.isClosed()) {
                     sendNotification(f, "mail.template.fault.reopened", faultDao.getUserListWatchingFaultReport(f.getId()));
-                    logDao.log(getUser().getId(), LogDAO.operationTypeReopenFault, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
+                    logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_REOPEN_FAULT, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
                 }
             }
         }
@@ -121,7 +121,7 @@ public class FaultReportingSaveCmd extends FaultAbstractCmd {
                 (!f.getAssignedToUser().geteMail().equals("")) && 
                 (getSetup().getProperty("mail.template.fault.assigned") != null)) {
                 
-                ArrayList<User> recipient = new ArrayList<User>();
+                ArrayList<User> recipient = new ArrayList<>();
                 recipient.add(f.getAssignedToUser());
                 sendNotification(f, "mail.template.fault.assigned", recipient);
             }

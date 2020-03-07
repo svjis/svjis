@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -21,7 +22,7 @@ public class LanguageDAO extends DAO {
         super(cnn);
     }
     
-    public ArrayList<Language> getLanguageList() throws SQLException {
+    public List<Language> getLanguageList() throws SQLException {
         ArrayList<Language> result = new ArrayList<>();
         String select = "SELECT a.ID, a.DESCRIPTION FROM LANGUAGE a ORDER BY a.ID";
         try (Statement st = cnn.createStatement(); ResultSet rs = st.executeQuery(select)) {

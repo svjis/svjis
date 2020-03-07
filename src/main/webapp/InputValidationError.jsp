@@ -17,7 +17,7 @@
     <body>
         <h1>Input validation error.</h1>
         <p>
-            <b><%=message %></b>
+            <strong><%=message %></strong>
         </p>
         <p>
             You can continue <a href="Dispatcher">here</a>.

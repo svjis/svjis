@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -23,7 +24,7 @@ public class BoardMemberDAO extends DAO {
     }
     
     
-    public ArrayList<BoardMemberType> getBoardMemberTypes() throws SQLException {
+    public List<BoardMemberType> getBoardMemberTypes() throws SQLException {
         ArrayList<BoardMemberType> result = new ArrayList<>();
         String select = "SELECT a.ID, a.DESCRIPTION FROM BOARD_MEMBER_TYPE a ORDER BY a.ID";
         
@@ -44,7 +45,7 @@ public class BoardMemberDAO extends DAO {
     }
     
     
-    public ArrayList<BoardMember> getBoardMembers(int companyId) throws SQLException {
+    public List<BoardMember> getBoardMembers(int companyId) throws SQLException {
         ArrayList<BoardMember> result = new ArrayList<>();
         String select = "SELECT a.USER_ID,\n" +
                         "       c.FIRST_NAME,\n" +

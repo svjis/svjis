@@ -13,8 +13,8 @@ import cz.svjis.bean.User;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 
 /**
@@ -30,8 +30,8 @@ public class FaultReportingInsertCommentCmd extends Command {
     @Override
     public void execute() throws Exception {
         
-        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
-        String parBody = Validator.getString(getRequest(), "body", 0, Validator.maxStringLenAllowed, false, getUser().hasPermission("can_write_html"));
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
+        String parBody = Validator.getString(getRequest(), "body", 0, Validator.MAX_STRING_LEN_ALLOWED, false, getUser().hasPermission("can_write_html"));
         
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
 
@@ -60,7 +60,7 @@ public class FaultReportingInsertCommentCmd extends Command {
                     getSetup().getProperty("mail.login"),
                     getSetup().getProperty("mail.password"),
                     getSetup().getProperty("mail.sender"));
-            ArrayList<User> userList = faultDao.getUserListWatchingFaultReport(report.getId());
+            List<User> userList = faultDao.getUserListWatchingFaultReport(report.getId());
             for (User u : userList) {
                 if (u.getId() == getUser().getId()) {
                     continue;

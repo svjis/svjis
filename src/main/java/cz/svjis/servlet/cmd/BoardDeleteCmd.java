@@ -24,8 +24,8 @@ public class BoardDeleteCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        int parTypeId = Validator.getInt(getRequest(), "typeId", 0, Validator.maxIntAllowed, false);
-        int parUserId = Validator.getInt(getRequest(), "userId", 0, Validator.maxIntAllowed, false);
+        int parTypeId = Validator.getInt(getRequest(), "typeId", 0, Validator.MAX_INT_ALLOWED, false);
+        int parUserId = Validator.getInt(getRequest(), "userId", 0, Validator.MAX_INT_ALLOWED, false);
 
         BoardMemberDAO boardDao = new BoardMemberDAO(getCnn());
 

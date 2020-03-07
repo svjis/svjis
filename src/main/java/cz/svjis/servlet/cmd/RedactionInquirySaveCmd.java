@@ -28,7 +28,7 @@ public class RedactionInquirySaveCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
         String parDescription = Validator.getString(getRequest(), "description", 0, 250, false, getUser().hasPermission("can_write_html"));
         String parStartDate = Validator.getString(getRequest(), "startingDate", 0, 30, false, false);
         String parEndDate = Validator.getString(getRequest(), "endingDate", 0, 30, false, false);
@@ -45,7 +45,7 @@ public class RedactionInquirySaveCmd extends Command {
         i.setStartingDate(sdf.parse(parStartDate));
         i.setEndingDate(sdf.parse(parEndDate));
         i.setEnabled(parEnabled);
-        ArrayList<InquiryOption> ioList = new ArrayList<InquiryOption>();
+        ArrayList<InquiryOption> ioList = new ArrayList<>();
         int n = 1;
         while (getRequest().getParameter("oid_" + n) != null) {
             InquiryOption io = new InquiryOption();

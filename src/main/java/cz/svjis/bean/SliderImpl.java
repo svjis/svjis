@@ -22,13 +22,13 @@ public class SliderImpl implements Slider {
     public SliderImpl() {
         numOfItemsAtPage = 10;
         totalNumOfItems = 0;
-        itemList = new ArrayList<SliderItem>();
+        itemList = new ArrayList<>();
     }
     
     private void update() {
         if (numOfItemsAtPage == 0) {
             totalNumOfPages = 0;
-            itemList = new ArrayList<SliderItem>();
+            itemList = new ArrayList<>();
             return;
         }
         totalNumOfPages = (int)(totalNumOfItems / numOfItemsAtPage);

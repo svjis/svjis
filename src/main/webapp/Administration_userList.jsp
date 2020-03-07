@@ -95,8 +95,8 @@
                     %>
                         <tr>
                             <td class="list" style="text-align: right"><%=++i %></td>
-                            <td class="list"><a href="Dispatcher?page=userEdit&id=<%=u.getId() %>"><img src="gfx/pencil.png" border="0" title="<%=language.getText("Edit") %>"></a></td>
-                            <td class="list"><a href="Dispatcher?page=userBuildingUnits&id=<%=u.getId() %>"><img src="gfx/house.png" border="0" title="<%=language.getText("Building unit list") %>"></a></td>
+                            <td class="list"><a href="Dispatcher?page=userEdit&id=<%=u.getId() %>"><img src="gfx/pencil.png" border="0" title="<%=language.getText("Edit") %>" alt="<%=language.getText("Edit") %>"></a></td>
+                            <td class="list"><a href="Dispatcher?page=userBuildingUnits&id=<%=u.getId() %>"><img src="gfx/house.png" border="0" title="<%=language.getText("Building unit list") %>" alt="<%=language.getText("Building unit list") %>"></a></td>
                             <td class="list"><%=u.getLastName() %></td>
                             <td class="list"><%=u.getFirstName() %></td>
                             <td class="list"><%=(u.isEnabled()) ? language.getText("yes") : language.getText("no") %></td>

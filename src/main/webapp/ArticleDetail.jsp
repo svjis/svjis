@@ -75,7 +75,7 @@
                             }
                         %>
                         <tr>
-                            <td class="list"><img src="<%=icon%>" border="0"></td>
+                            <td class="list"><img src="<%=icon%>" alt="<%=a.getFileName() %>" border="0"></td>
                             <td class="list"><a href="Upload?page=download&id=<%=a.getId() %>"><%=a.getFileName() %></a></td>
                         </tr>
                         <%

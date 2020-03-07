@@ -94,9 +94,9 @@
                             Article a = (Article) articleListI.next();
                     %>
                         <tr>
-                            <td class="list"><a href="Dispatcher?page=articleDetail&id=<%=a.getId() %><%=search %>"><img src="gfx/find.png" border="0" title="View"></a></td>
-                            <td class="list"><a href="Dispatcher?page=redactionArticleEdit&id=<%=a.getId() %>"><img src="gfx/pencil.png" border="0" title="<%=language.getText("Edit") %>"></a></td>
-                            <td class="list"><a href="Dispatcher?page=redactionArticleSendNotifications&id=<%=a.getId() %>"><img src="gfx/email_open_image.png" border="0" title="<%=language.getText("Send notifications") %>"></td>
+                            <td class="list"><a href="Dispatcher?page=articleDetail&id=<%=a.getId() %><%=search %>"><img src="gfx/find.png" border="0" title="View" alt="View"></a></td>
+                            <td class="list"><a href="Dispatcher?page=redactionArticleEdit&id=<%=a.getId() %>"><img src="gfx/pencil.png" border="0" title="<%=language.getText("Edit") %>" alt="<%=language.getText("Edit") %>"></a></td>
+                            <td class="list"><a href="Dispatcher?page=redactionArticleSendNotifications&id=<%=a.getId() %>"><img src="gfx/email_open_image.png" border="0" title="<%=language.getText("Send notifications") %>" alt="<%=language.getText("Send notifications") %>"></td>
                             <td class="list"><%=HttpUtils.highlight(a.getHeader(), request.getParameter("search")) %></td>
                             <td class="list"><%=a.getMenuNodeDescription() %></td>
                             <td class="list"><%=a.getAuthor().getFirstName() %>&nbsp;<%=a.getAuthor().getLastName() %></td>

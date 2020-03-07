@@ -27,15 +27,15 @@ public class RedactionInquiryLogCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
         
         InquiryDAO inquiryDao = new InquiryDAO(getCnn());
 
         Inquiry inquiry = new Inquiry();
-        ArrayList<InquiryLog> log = new ArrayList<InquiryLog>();
+        ArrayList<InquiryLog> log = new ArrayList<>();
         if (parId != 0) {
             inquiry = inquiryDao.getInquiry(getUser(), parId);
-            log = inquiryDao.getInquiryLog(getUser(), parId);
+            log = new ArrayList(inquiryDao.getInquiryLog(getUser(), parId));
         }
         getRequest().setAttribute("inquiry", inquiry);
         getRequest().setAttribute("log", log);
