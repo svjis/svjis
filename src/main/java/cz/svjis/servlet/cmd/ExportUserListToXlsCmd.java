@@ -51,7 +51,7 @@ public class ExportUserListToXlsCmd extends Command {
             LanguageDAO languageDao = new LanguageDAO(getCnn());
             Language lang = languageDao.getDictionary(getUser().getLanguageId());
             UserDAO userDao = new UserDAO(getCnn());
-            ArrayList<User> userList = userDao.getUserList(getUser().getCompanyId(), false, 0, true);
+            ArrayList<User> userList = new ArrayList(userDao.getUserList(getUser().getCompanyId(), false, 0, true));
 
             WritableCellFormat bold = new WritableCellFormat(new WritableFont(WritableFont.ARIAL, 10, WritableFont.BOLD));
             WritableCellFormat boldGr = new WritableCellFormat(new WritableFont(WritableFont.ARIAL, 10, WritableFont.BOLD));

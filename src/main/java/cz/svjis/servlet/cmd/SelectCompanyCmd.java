@@ -26,7 +26,7 @@ public class SelectCompanyCmd extends Command {
     public void execute() throws Exception {
         CompanyDAO compDao = new CompanyDAO(getCnn());
 
-        ArrayList<Company> companyList = compDao.getCompanyList();
+        ArrayList<Company> companyList = new ArrayList(compDao.getCompanyList());
         getRequest().setAttribute("companyList", companyList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/CompanyList.jsp");
         rd.forward(getRequest(), getResponse());

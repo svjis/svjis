@@ -16,9 +16,7 @@ import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
 import cz.svjis.common.PermanentLoginUtils;
 import cz.svjis.servlet.cmd.SelectCompanyCmd;
-import cz.svjis.validator.InputValidationException;
 import cz.svjis.validator.Validator;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -28,8 +26,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,30 +38,31 @@ import javax.sql.DataSource;
  */
 public class Dispatcher extends HttpServlet {
 
+    private static final Logger LOGGER = Logger.getLogger(Dispatcher.class.getName());
+    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
      * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
-        PrintWriter out = response.getWriter();
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
         
         CmdContext ctx = new CmdContext();
         ctx.setRequest(request);
         ctx.setResponse(response);
         
+        PrintWriter out = null;
         Connection cnn = null;
         
         try {
+            response.setContentType("text/html;charset=UTF-8");
+            request.setCharacterEncoding("UTF-8");
+            out = response.getWriter();
+        
             cnn = createConnection();
             ctx.setCnn(cnn);
             
-            int parSetCompany = Validator.getInt(request, "setcompany", 0, Validator.maxIntAllowed, true);
+            int parSetCompany = Validator.getInt(request, "setcompany", 0, Validator.MAX_INT_ALLOWED, true);
             String parPage = Validator.getString(request, "page", 0, 100, true, false);
             
             CompanyDAO compDao = new CompanyDAO(cnn);
@@ -125,7 +122,7 @@ public class Dispatcher extends HttpServlet {
                 if (PermanentLoginUtils.checkPermanentLogin(request, response, userDao, company.getId()) != 0) {
                     user = userDao.getUser(company.getId(), PermanentLoginUtils.checkPermanentLogin(request, response, userDao, company.getId()));
                     user.setUserLogged(true);
-                    logDao.log(user.getId(), LogDAO.operationTypeLogin, LogDAO.idNull, request.getRemoteAddr(), request.getHeader("User-Agent"));
+                    logDao.log(user.getId(), LogDAO.OPERATION_TYPE_LOGIN, LogDAO.ID_NULL, request.getRemoteAddr(), request.getHeader("User-Agent"));
                     PermanentLoginUtils.savePermanentLogin(request, response, user, userDao);
                 } else {
                     user = new User();
@@ -161,13 +158,15 @@ public class Dispatcher extends HttpServlet {
             cmd.execute();
             
         } catch (Exception ex) {
-            ex.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Could not dispatch page", ex);
 
             //-- send e-mail
             HandleErrorCmd errCmd = new HandleErrorCmd(ctx, ex);
             errCmd.execute();
-        } finally {            
-            out.close();
+        } finally {
+            if (out != null) {
+                out.close();
+            }
             closeConnection(cnn);
         }
     }
@@ -177,12 +176,9 @@ public class Dispatcher extends HttpServlet {
      * Handles the HTTP <code>GET</code> method.
      * @param request servlet request
      * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         processRequest(request, response);
     }
 
@@ -190,12 +186,9 @@ public class Dispatcher extends HttpServlet {
      * Handles the HTTP <code>POST</code> method.
      * @param request servlet request
      * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         processRequest(request, response);
     }
 
@@ -209,7 +202,7 @@ public class Dispatcher extends HttpServlet {
     }// </editor-fold>
     
     private ArrayList<SystemMenuEntry> createSystemMenu(User u) {
-        ArrayList<SystemMenuEntry> result = new ArrayList<SystemMenuEntry>();
+        ArrayList<SystemMenuEntry> result = new ArrayList<>();
         if (u.hasPermission("menu_articles")) result.add(new SystemMenuEntry("Articles", "Dispatcher?page=articleList"));
         if (u.hasPermission("menu_contact")) result.add(new SystemMenuEntry("Contact", "Dispatcher?page=contact"));
         if (u.hasPermission("menu_building_units")) result.add(new SystemMenuEntry("Units", "Dispatcher?page=myBuildingUnitList"));
@@ -233,7 +226,7 @@ public class Dispatcher extends HttpServlet {
             try {
                 cnn.close();
             } catch (SQLException ex) {
-                Logger.getLogger(Dispatcher.class.getName()).log(Level.SEVERE, null, ex);
+                LOGGER.log(Level.SEVERE, null, ex);
             }
         }
     }

@@ -40,8 +40,8 @@
                             Inquiry i = (Inquiry) inquiryListI.next();
                     %>
                         <tr>
-                            <td class="list"><a href="Dispatcher?page=redactionInquiryEdit&id=<%=i.getId() %>"><img src="gfx/pencil.png" border="0" title="<%=language.getText("Edit") %>"></a></td>
-                            <td class="list"><a href="Dispatcher?page=redactionInquiryLog&id=<%=i.getId() %>"><img src="gfx/chart_bar.png" border="0" title="<%=language.getText("Log") %>"></a></td>
+                            <td class="list"><a href="Dispatcher?page=redactionInquiryEdit&id=<%=i.getId() %>"><img src="gfx/pencil.png" border="0" title="<%=language.getText("Edit") %>" alt="<%=language.getText("Edit") %>"></a></td>
+                            <td class="list"><a href="Dispatcher?page=redactionInquiryLog&id=<%=i.getId() %>"><img src="gfx/chart_bar.png" border="0" title="<%=language.getText("Log") %>" alt="<%=language.getText("Log") %>"></a></td>
                             <td class="list"><%=i.getDescription() %></td>
                             <td class="list"><%=sdf.format(i.getStartingDate()) %></td>
                             <td class="list"><%=sdf.format(i.getEndingDate()) %></td>

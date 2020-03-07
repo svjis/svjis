@@ -26,7 +26,7 @@ public class RedactionNewsListCmd extends Command {
     public void execute() throws Exception {
         MiniNewsDAO newsDao = new MiniNewsDAO(getCnn());
         
-        ArrayList<MiniNews> miniNewsList = newsDao.getMiniNews(getUser(), false);
+        ArrayList<MiniNews> miniNewsList = new ArrayList(newsDao.getMiniNews(getUser(), false));
         getRequest().setAttribute("miniNewsList", miniNewsList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Redaction_MiniNewsList.jsp");
         rd.forward(getRequest(), getResponse());

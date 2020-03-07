@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -21,11 +22,10 @@ public class MenuDAO extends DAO {
     }
     
     public Menu getMenu(int companyId) throws SQLException {
-        Menu result = new Menu(getMenuNodeList(companyId));
-        return result;
+        return new Menu(getMenuNodeList(companyId));
     }
     
-    public ArrayList<MenuNode> getMenuNodeList(int companyId) throws SQLException {
+    public List<MenuNode> getMenuNodeList(int companyId) throws SQLException {
         ArrayList<MenuNode> result = new ArrayList<>();
         String select = "SELECT "
                 + "a.ID, "

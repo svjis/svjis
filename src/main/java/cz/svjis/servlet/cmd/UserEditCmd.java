@@ -32,7 +32,7 @@ public class UserEditCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
 
         CompanyDAO compDao = new CompanyDAO(getCnn());
         RoleDAO roleDao = new RoleDAO(getCnn());
@@ -41,7 +41,7 @@ public class UserEditCmd extends Command {
 
         Company currCompany = compDao.getCompany(getCompany().getId());
         getRequest().setAttribute("currCompany", currCompany);
-        User cUser = null;
+        User cUser;
         if (parId == 0) {
             cUser = new User();
             cUser.setCompanyId(getCompany().getId());
@@ -49,9 +49,9 @@ public class UserEditCmd extends Command {
             cUser = userDao.getUser(getCompany().getId(), parId);
         }
         getRequest().setAttribute("cUser", cUser);
-        ArrayList<Language> languageList = languageDao.getLanguageList();
+        ArrayList<Language> languageList = new ArrayList(languageDao.getLanguageList());
         getRequest().setAttribute("languageList", languageList);
-        ArrayList<Role> roleList = roleDao.getRoleList(getCompany().getId());
+        ArrayList<Role> roleList = new ArrayList(roleDao.getRoleList(getCompany().getId()));
         getRequest().setAttribute("roleList", roleList);
         getRequest().setAttribute("sendCredentials", new cz.svjis.bean.Boolean(false));
         getRequest().setAttribute("message", "");

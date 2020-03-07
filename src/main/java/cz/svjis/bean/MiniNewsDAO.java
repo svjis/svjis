@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -21,7 +22,7 @@ public class MiniNewsDAO extends DAO {
         super(cnn);
     }
     
-    public ArrayList<MiniNews> getMiniNews(User u, boolean publishedOnly) throws SQLException {
+    public List<MiniNews> getMiniNews(User u, boolean publishedOnly) throws SQLException {
         ArrayList<MiniNews> result = new ArrayList<>();
         
         String filter = "";

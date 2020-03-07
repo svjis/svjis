@@ -29,7 +29,7 @@ public class FaultReportingEditCmd extends Command {
     @Override
     public void execute() throws Exception {
         
-        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
         
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
         UserDAO userDao = new UserDAO(getCnn());
@@ -41,7 +41,7 @@ public class FaultReportingEditCmd extends Command {
         }
         getRequest().setAttribute("report", report);
         
-        ArrayList<User> resolverList = userDao.getUserListWithPermission(getCompany().getId(), "fault_reporting_resolver");
+        ArrayList<User> resolverList = new ArrayList(userDao.getUserListWithPermission(getCompany().getId(), "fault_reporting_resolver"));
         getRequest().setAttribute("resolverList", resolverList);
         
         FaultReportMenuCounters counters = faultDao.getMenuCounters(getCompany().getId(), getUser().getId());

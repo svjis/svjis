@@ -52,9 +52,9 @@ public class ExportBuildingUnitListToXlsCmd extends Command {
             LanguageDAO languageDao = new LanguageDAO(getCnn());
             Language lang = languageDao.getDictionary(getUser().getLanguageId());
             BuildingDAO buildingDao = new BuildingDAO(getCnn());
-            ArrayList<BuildingUnit> buildingUnitList = buildingDao.getBuildingUnitList(
+            ArrayList<BuildingUnit> buildingUnitList = new ArrayList(buildingDao.getBuildingUnitList(
                     buildingDao.getBuilding(getUser().getCompanyId()).getId(),
-                    0);
+                    0));
 
             WritableCellFormat bold = new WritableCellFormat(new WritableFont(WritableFont.ARIAL, 10, WritableFont.BOLD));
             WritableCellFormat boldGr = new WritableCellFormat(new WritableFont(WritableFont.ARIAL, 10, WritableFont.BOLD));
@@ -102,7 +102,7 @@ public class ExportBuildingUnitListToXlsCmd extends Command {
                 s.addCell(new jxl.write.Number(c++, l, u.getNumerator(), num));
                 s.addCell(new jxl.write.Number(c++, l, u.getDenominator(), num));
 
-                ArrayList<User> userList = buildingDao.getBuildingUnitHasUserList(u.getId());
+                ArrayList<User> userList = new ArrayList(buildingDao.getBuildingUnitHasUserList(u.getId()));
                 Iterator<User> userIterator = userList.iterator();
                 while (userIterator.hasNext()) {
                     User owner = userIterator.next();

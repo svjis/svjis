@@ -10,6 +10,8 @@ import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.InputValidationException;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpSession;
 
@@ -19,6 +21,7 @@ import javax.servlet.http.HttpSession;
  */
 public class HandleErrorCmd extends Command {
     
+    private static final Logger logger = Logger.getLogger(HandleErrorCmd.class.getName());
     private final Throwable throwable;
 
     public HandleErrorCmd(CmdContext ctx, Throwable throwable) {
@@ -46,7 +49,6 @@ public class HandleErrorCmd extends Command {
                         setup.getProperty("mail.sender"));
 
                 mailDao.sendErrorReport(
-                        user.getCompanyId(),
                         setup.getProperty("error.report.recipient"), 
                         getRequest().getRequestURL().toString() + "/" + getRequest().getQueryString(), 
                         userId,
@@ -64,7 +66,7 @@ public class HandleErrorCmd extends Command {
 
             rd.forward(getRequest(), getResponse());
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.log(Level.SEVERE, "Could not run HandleErrorCmd", throwable);
         }
     }
 }

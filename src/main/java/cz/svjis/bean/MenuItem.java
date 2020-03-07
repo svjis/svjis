@@ -6,6 +6,7 @@
 package cz.svjis.bean;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -33,15 +34,19 @@ public class MenuItem {
     /**
      * @return the subSections
      */
-    public ArrayList<MenuItem> getSubSections() {
+    public List<MenuItem> getSubSections() {
         return subSections;
     }
 
     /**
      * @param subSections the subSections to set
      */
-    public void setSubSections(ArrayList<MenuItem> subSections) {
-        this.subSections = subSections;
+    public void setSubSections(List<MenuItem> subSections) {
+        if (subSections != null) {
+            this.subSections = new ArrayList(subSections);
+        } else {
+            this.subSections = null;
+        }
     }
 
 }

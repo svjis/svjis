@@ -26,7 +26,7 @@ public class RedactionArticleMenuEditCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
 
         MenuDAO menuDao = new MenuDAO(getCnn());
         
@@ -35,7 +35,7 @@ public class RedactionArticleMenuEditCmd extends Command {
             menuNode = menuDao.getMenuNode(parId, getUser().getCompanyId());
         }
         getRequest().setAttribute("menuNode", menuNode);
-        ArrayList<MenuNode> menuNodeList = menuDao.getMenuNodeList(getUser().getCompanyId());
+        ArrayList<MenuNode> menuNodeList = new ArrayList(menuDao.getMenuNodeList(getUser().getCompanyId()));
         getRequest().setAttribute("menuNodeList", menuNodeList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Redaction_ArticleMenuEdit.jsp");
         rd.forward(getRequest(), getResponse());

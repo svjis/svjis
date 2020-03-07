@@ -34,8 +34,8 @@ public class ArticleSearchCmd extends Command {
     @Override
     public void execute() throws Exception {
         
-        int parSection = Validator.getInt(getRequest(), "section", 0, Validator.maxIntAllowed, true);
-        int parPageNo = Validator.getInt(getRequest(), "pageNo", 0, Validator.maxIntAllowed, true);
+        int parSection = Validator.getInt(getRequest(), "section", 0, Validator.MAX_INT_ALLOWED, true);
+        int parPageNo = Validator.getInt(getRequest(), "pageNo", 0, Validator.MAX_INT_ALLOWED, true);
         String parSearch = Validator.getString(getRequest(), "search", 0, 50, false, false);
 
         MenuDAO menuDao = new MenuDAO(getCnn());
@@ -74,20 +74,20 @@ public class ArticleSearchCmd extends Command {
         }
 
         getRequest().setAttribute("slider", sl);
-        ArrayList<Article> articleList = articleDao.getArticleListFromSearch(parSearch, getUser(),
+        ArrayList<Article> articleList = new ArrayList(articleDao.getArticleListFromSearch(parSearch, getUser(),
                 section,
                 pageNo,
                 Integer.valueOf(getSetup().getProperty("article.page.size")),
-                true, false);
+                true, false));
         getRequest().setAttribute("articleList", articleList);
-        ArrayList<Article> articleTopList = articleDao.getArticleTopList(getUser(), 
+        ArrayList<Article> articleTopList = new ArrayList(articleDao.getArticleTopList(getUser(), 
                 Integer.valueOf(getSetup().getProperty("article.top.size")),
-                (getSetup().getProperty("article.top.months") != null) ? Integer.valueOf(getSetup().getProperty("article.top.months")) : 12);
+                (getSetup().getProperty("article.top.months") != null) ? Integer.valueOf(getSetup().getProperty("article.top.months")) : 12));
         getRequest().setAttribute("articleTopList", articleTopList);
         getRequest().setAttribute("sectionId", String.valueOf(parSection));
-        ArrayList<MiniNews> miniNewsList = newsDao.getMiniNews(getUser(), true);
+        ArrayList<MiniNews> miniNewsList = new ArrayList(newsDao.getMiniNews(getUser(), true));
         getRequest().setAttribute("miniNewsList", miniNewsList);
-        ArrayList<Inquiry> inquiryList = inquiryDao.getInquiryList(getUser(), true);
+        ArrayList<Inquiry> inquiryList = new ArrayList(inquiryDao.getInquiryList(getUser(), true));
         getRequest().setAttribute("inquiryList", inquiryList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/ArticleList.jsp");
         rd.forward(getRequest(), getResponse());

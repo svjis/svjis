@@ -27,7 +27,7 @@ public class FaultReportingAttachmentDeleteCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
 
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
         LogDAO logDao = new LogDAO(getCnn());
@@ -42,7 +42,7 @@ public class FaultReportingAttachmentDeleteCmd extends Command {
         FaultReport f = faultDao.getFault(getCompany().getId(), fa.getFaultReportId());
         if ((f != null) && (!f.isClosed()) && (fa.getUser().getId() == getUser().getId())) {
             faultDao.deleteFaultAttachment(id);
-            logDao.log(getUser().getId(), LogDAO.operationTypeDeleteFaultAttachment, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
+            logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_DELETE_FAULT_ATTACHMENT, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
         }
         String url = "Dispatcher?page=faultDetail&id=" + fa.getFaultReportId();
         getRequest().setAttribute("url", url);

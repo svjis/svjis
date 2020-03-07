@@ -40,8 +40,8 @@
                         %>
                         <tr>
                             <td class="list" style="text-align: right"><%=++i %></td>
-                            <td class="list"><a href="Dispatcher?page=propertyEdit&key=<%=key %>"><img src="gfx/pencil.png" border="0" title="<%=language.getText("Edit") %>"></a></td>
-                            <td class="list"><a onclick="if (!confirm('<%=language.getText("Really do you want to remove property") %> <%=key %> ?')) return false;" href="Dispatcher?page=propertyDelete&key=<%=key %>"><img src="gfx/delete.png" border="0" title="<%=language.getText("Delete") %>"></a></td>
+                            <td class="list"><a href="Dispatcher?page=propertyEdit&key=<%=key %>"><img src="gfx/pencil.png" border="0" title="<%=language.getText("Edit") %>" alt="<%=language.getText("Edit") %>"></a></td>
+                            <td class="list"><a onclick="if (!confirm('<%=language.getText("Really do you want to remove property") %> <%=key %> ?')) return false;" href="Dispatcher?page=propertyDelete&key=<%=key %>"><img src="gfx/delete.png" border="0" title="<%=language.getText("Delete") %>" alt="<%=language.getText("Delete") %>"></a></td>
                             <td class="list"><%=key %></td>
                             <td class="list"><%=setup.getProperty(key) %></td>
                         </tr>

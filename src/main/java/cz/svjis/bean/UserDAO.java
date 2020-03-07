@@ -4,8 +4,8 @@
  */
 package cz.svjis.bean;
 
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
@@ -15,7 +15,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.bind.DatatypeConverter;
 
 /**
@@ -24,6 +27,8 @@ import javax.xml.bind.DatatypeConverter;
  */
 public class UserDAO extends DAO {
 
+    private static final Logger LOGGER = Logger.getLogger(UserDAO.class.getName());
+    
     public UserDAO (Connection cnn) {
         super(cnn);
     }
@@ -37,7 +42,7 @@ public class UserDAO extends DAO {
      * @return List of users
      * @throws SQLException 
      */
-    public ArrayList<User> getUserList(int companyId, boolean inPhoneListOnly, int roleId, boolean enabled) throws SQLException {
+    public List<User> getUserList(int companyId, boolean inPhoneListOnly, int roleId, boolean enabled) throws SQLException {
         ArrayList<User> result = new ArrayList<>();
         String filter = "";
         
@@ -109,7 +114,7 @@ public class UserDAO extends DAO {
         return result;
     }
     
-    public ArrayList<User> getUserListWithPermission(int companyId, String permission) throws SQLException {
+    public List<User> getUserListWithPermission(int companyId, String permission) throws SQLException {
         ArrayList<User> result = new ArrayList<>();
         String select = "SELECT a.ID, a.COMPANY_ID, a.FIRST_NAME, a.LAST_NAME, a.E_MAIL, d.DESCRIPTION\n" +
                         "FROM \"USER\" a\n" +
@@ -309,8 +314,8 @@ public class UserDAO extends DAO {
     public static String generateHash(String password, String salt){
         String result = "";
         try {
-            byte[] saltBytes = salt.getBytes("UTF-16LE");
-            byte[] passwordBytes = password.getBytes("UTF-16LE");
+            byte[] saltBytes = salt.getBytes(StandardCharsets.UTF_16LE);
+            byte[] passwordBytes = password.getBytes(StandardCharsets.UTF_16LE);
             
             byte[] bytesToHash = new byte[saltBytes.length + passwordBytes.length];
             
@@ -319,11 +324,10 @@ public class UserDAO extends DAO {
             
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] hash = md.digest(bytesToHash);
-            //result = Base64.encodeBase64String(hash);
             result = DatatypeConverter.printHexBinary(hash).toLowerCase();
 
-        } catch (UnsupportedEncodingException | NoSuchAlgorithmException ex) {
-            ex.printStackTrace();
+        } catch (NoSuchAlgorithmException ex) {
+            LOGGER.log(Level.SEVERE, "Culd not generate hash", ex);
         }
         return result;
     }
@@ -359,7 +363,7 @@ public class UserDAO extends DAO {
             }
         }
         
-        if (loginUser && (result == false)) {
+        if (loginUser && (!result)) {
             u.clear();
         }
         
@@ -614,7 +618,7 @@ public class UserDAO extends DAO {
         return result;
     }
     
-    public ArrayList<User> findLostPassword(int companyId, String email) throws SQLException {
+    public List<User> findLostPassword(int companyId, String email) throws SQLException {
         ArrayList<User> result = new ArrayList<>();
 
         String select = "SELECT a.ID, a.COMPANY_ID, a.E_MAIL, a.LOGIN FROM \"USER\" a "

@@ -27,7 +27,7 @@ public class FaultReportingDetailCmd extends Command {
     @Override
     public void execute() throws Exception {
         
-        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
         Validator.getString(getRequest(), "search", 0, 50, true, false);
         
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
@@ -45,6 +45,6 @@ public class FaultReportingDetailCmd extends Command {
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Faults_reportDetail.jsp");
         rd.forward(getRequest(), getResponse());
 
-        logDao.log(getUser().getId(), LogDAO.operationTypeReadFault, report.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
+        logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_READ_FAULT, report.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
     }
 }

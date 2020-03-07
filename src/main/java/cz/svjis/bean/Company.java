@@ -4,7 +4,6 @@
  */
 package cz.svjis.bean;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
@@ -296,8 +295,6 @@ public class Company implements Serializable {
             if (!tfp.isFileExists(getPictureFilename())) {
                 try {
                     tfp.createFile(getPictureFilename(), getPictureData());
-                } catch (FileNotFoundException ex) {
-                    Logger.getLogger(Company.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {
                     Logger.getLogger(Company.class.getName()).log(Level.SEVERE, null, ex);
                 }

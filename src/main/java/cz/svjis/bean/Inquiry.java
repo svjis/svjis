@@ -6,6 +6,7 @@ package cz.svjis.bean;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -36,7 +37,7 @@ public class Inquiry {
         startingDate = null;
         endingDate = null;
         enabled = false;
-        optionList = new ArrayList<InquiryOption>();
+        optionList = new ArrayList<>();
         userCanVote = false;
         count = 0;
         maximum = 0;
@@ -143,15 +144,15 @@ public class Inquiry {
     /**
      * @return the optionList
      */
-    public ArrayList<InquiryOption> getOptionList() {
+    public List<InquiryOption> getOptionList() {
         return optionList;
     }
 
     /**
      * @param optionList the optionList to set
      */
-    public void setOptionList(ArrayList<InquiryOption> optionList) {
-        this.optionList = optionList;
+    public void setOptionList(List<InquiryOption> optionList) {
+        this.optionList = new ArrayList(optionList);
     }
 
     /**

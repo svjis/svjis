@@ -99,7 +99,7 @@
                                     }
                                 %>
                                 <tr>
-                                    <td class="list"><img src="<%=icon%>" border="0"></td>
+                                    <td class="list"><img src="<%=icon%>" border="0" alt="<%=a.getFileName() %>"></td>
                                     <td class="list"><a href="Upload?page=faultReportingDownload&id=<%=a.getId() %>"><%=a.getFileName() %></a></td>
                                     <td class="list"><%=a.getUser().getFirstName() %>&nbsp;<%=a.getUser().getLastName() %></td>
                                     <td class="list"><%=sdf.format(a.getUploadTime()) %></td>

@@ -29,19 +29,19 @@ public class BuildingUnitListCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        int parTypeId = Validator.getInt(getRequest(), "typeId", 0, Validator.maxIntAllowed, true);
+        int parTypeId = Validator.getInt(getRequest(), "typeId", 0, Validator.MAX_INT_ALLOWED, true);
 
         CompanyDAO compDao = new CompanyDAO(getCnn());
         BuildingDAO buildingDao = new BuildingDAO(getCnn());
         
         Company currCompany = compDao.getCompany(getCompany().getId());
         getRequest().setAttribute("currCompany", currCompany);
-        ArrayList<BuildingUnitType> buildingUnitType = buildingDao.getBuildingUnitTypeList();
+        ArrayList<BuildingUnitType> buildingUnitType = new ArrayList(buildingDao.getBuildingUnitTypeList());
         getRequest().setAttribute("buildingUnitType", buildingUnitType);
         int typeId = parTypeId;
-        ArrayList<BuildingUnit> buildingUnitList = buildingDao.getBuildingUnitList(
+        ArrayList<BuildingUnit> buildingUnitList = new ArrayList(buildingDao.getBuildingUnitList(
                 buildingDao.getBuilding(getCompany().getId()).getId(),
-                typeId);
+                typeId));
         getRequest().setAttribute("buildingUnitList", buildingUnitList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_buildingUnitList.jsp");
         rd.forward(getRequest(), getResponse());

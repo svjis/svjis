@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -27,7 +28,7 @@ public class FaultReportDAO extends DAO {
         return getFaultListSize(String.format("WHERE a.COMPANY_ID = %d AND a.CLOSED = %d ", companyId, closed));
     }
     
-    public ArrayList<FaultReport> getFaultList(int companyId, int pageNo, int pageSize, int closed) throws SQLException {
+    public List<FaultReport> getFaultList(int companyId, int pageNo, int pageSize, int closed) throws SQLException {
         return getFaultList(pageNo, pageSize, String.format("WHERE a.COMPANY_ID = %d AND a.CLOSED = %d ", companyId, closed));
     }
     
@@ -35,7 +36,7 @@ public class FaultReportDAO extends DAO {
         return getFaultListSize(String.format("WHERE a.COMPANY_ID = %d AND a.CREATED_BY_USER_ID = %d ", companyId, userId));
     }
     
-    public ArrayList<FaultReport> getFaultListByCreator(int companyId, int pageNo, int pageSize, int userId) throws SQLException {
+    public List<FaultReport> getFaultListByCreator(int companyId, int pageNo, int pageSize, int userId) throws SQLException {
         return getFaultList(pageNo, pageSize, String.format("WHERE a.COMPANY_ID = %d AND a.CREATED_BY_USER_ID = %d ", companyId, userId));
     }
     
@@ -43,7 +44,7 @@ public class FaultReportDAO extends DAO {
         return getFaultListSize(String.format("WHERE a.COMPANY_ID = %d AND a.ASSIGNED_TO_USER_ID = %d ", companyId, userId));
     }
     
-    public ArrayList<FaultReport> getFaultListByResolver(int companyId, int pageNo, int pageSize, int userId) throws SQLException {
+    public List<FaultReport> getFaultListByResolver(int companyId, int pageNo, int pageSize, int userId) throws SQLException {
         return getFaultList(pageNo, pageSize, String.format("WHERE a.COMPANY_ID = %d AND a.ASSIGNED_TO_USER_ID = %d ", companyId, userId));
     }
     
@@ -127,7 +128,7 @@ public class FaultReportDAO extends DAO {
         return result;        
     }
     
-    public ArrayList<FaultReport> getFaultListFromSearch(int companyId, int pageNo, int pageSize, String search) throws SQLException {
+    public List<FaultReport> getFaultListFromSearch(int companyId, int pageNo, int pageSize, String search) throws SQLException {
         
         String select = "SELECT FIRST " + (pageNo * pageSize) + "\n" +
                         "    a.ID, \n" +
@@ -497,7 +498,7 @@ public class FaultReportDAO extends DAO {
         }
     }
     
-    public ArrayList<User> getUserListWatchingFaultReport(int faultReportId) throws SQLException {
+    public List<User> getUserListWatchingFaultReport(int faultReportId) throws SQLException {
         ArrayList<User> result = new ArrayList<>();
         String select = "SELECT \n" +
                         "    a.ID, \n" +

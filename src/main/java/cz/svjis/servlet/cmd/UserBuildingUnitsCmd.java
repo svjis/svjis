@@ -30,7 +30,7 @@ public class UserBuildingUnitsCmd extends Command {
     @Override
     public void execute() throws Exception {
 
-        int parId = Validator.getInt(getRequest(), "id", 0, Validator.maxIntAllowed, false);
+        int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
 
         CompanyDAO compDao = new CompanyDAO(getCnn());
         UserDAO userDao = new UserDAO(getCnn());
@@ -40,9 +40,9 @@ public class UserBuildingUnitsCmd extends Command {
         getRequest().setAttribute("currCompany", currCompany);
         User cUser = userDao.getUser(getCompany().getId(), parId);
         getRequest().setAttribute("cUser", cUser);
-        ArrayList<BuildingUnit> userHasUnitList = buildingDao.getUserHasBuildingUnitList(cUser.getId());
+        ArrayList<BuildingUnit> userHasUnitList = new ArrayList(buildingDao.getUserHasBuildingUnitList(cUser.getId()));
         getRequest().setAttribute("userHasUnitList", userHasUnitList);
-        ArrayList<BuildingUnit> unitList = buildingDao.getBuildingUnitList(getCompany().getId(), 0);
+        ArrayList<BuildingUnit> unitList = new ArrayList(buildingDao.getBuildingUnitList(getCompany().getId(), 0));
         getRequest().setAttribute("unitList", unitList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_userUnits.jsp");
         rd.forward(getRequest(), getResponse());

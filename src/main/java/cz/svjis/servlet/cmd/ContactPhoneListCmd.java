@@ -26,7 +26,7 @@ public class ContactPhoneListCmd extends Command {
     public void execute() throws Exception {
         UserDAO userDao = new UserDAO(getCnn());
         
-        ArrayList<User> userList = userDao.getUserList(getCompany().getId(), true, 0, true);
+        ArrayList<User> userList = new ArrayList(userDao.getUserList(getCompany().getId(), true, 0, true));
         getRequest().setAttribute("userList", userList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Contact_userList.jsp");
         rd.forward(getRequest(), getResponse());
