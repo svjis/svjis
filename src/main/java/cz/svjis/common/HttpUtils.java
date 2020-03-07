@@ -8,7 +8,6 @@ package cz.svjis.common;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
@@ -27,9 +26,9 @@ public class HttpUtils {
             throws IOException {
         
         String userAgent = request.getHeader("User-Agent");
-        String encodedFileName = null;
+        String encodedFileName;
         if (userAgent.contains("MSIE") || userAgent.contains("Edge") || userAgent.contains("Opera") || userAgent.contains("Trident")) {
-            encodedFileName = URLEncoder.encode(fileName.replace(" ", "_"), StandardCharsets.UTF_8);
+            encodedFileName = URLEncoder.encode(fileName.replace(" ", "_"), "UTF-8");
         } else {
             encodedFileName = "=?UTF-8?B?" + Base64.encodeBase64String(fileName.replace(" ", "_").getBytes("UTF-8")) + "?=";
         }
@@ -38,16 +37,11 @@ public class HttpUtils {
         response.setHeader("Content-Disposition", "attachment; filename=\"" + encodedFileName + "\"");
         response.setDateHeader("Expires", 0);
 
-        OutputStream outb = null;
-        try {
-            outb = response.getOutputStream();
+        
+        try (OutputStream outb= response.getOutputStream()) {
             outb.write(data, 0, data.length);
         } catch (java.io.IOException ex) {
             LOGGER.log(Level.SEVERE, "ClientAbortException:  java.io.IOException: Roura přerušena (SIGPIPE) ", ex);
-        } finally {
-            if (outb != null) {
-                outb.close();
-            }
         }
     }
     
