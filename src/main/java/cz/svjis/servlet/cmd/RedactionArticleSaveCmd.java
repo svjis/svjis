@@ -62,7 +62,7 @@ public class RedactionArticleSaveCmd extends Command {
         a.setMenuNodeId(parMenuId);
 
         HashMap uRoles = new HashMap();
-        ArrayList<Role> roles = roleDao.getRoleList(getCompany().getId());
+        ArrayList<Role> roles = new ArrayList(roleDao.getRoleList(getCompany().getId()));
         Iterator<Role> roleI = roles.iterator();
         while (roleI.hasNext()) {
             Role r = roleI.next();

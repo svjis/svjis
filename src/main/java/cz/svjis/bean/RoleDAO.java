@@ -12,6 +12,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  *
@@ -64,7 +65,7 @@ public class RoleDAO extends DAO {
         return result;
     }
     
-    public ArrayList<Role> getRoleList(int companyId) throws SQLException {
+    public List<Role> getRoleList(int companyId) throws SQLException {
         ArrayList<Role> result = new ArrayList<>();
         String select  = "SELECT "
                 + "a.ID, "
@@ -88,7 +89,7 @@ public class RoleDAO extends DAO {
         return result;
     }
     
-    public ArrayList<Permission> getPermissionList() throws SQLException {
+    public List<Permission> getPermissionList() throws SQLException {
         ArrayList<Permission> result = new ArrayList<>();
         String select  = "SELECT a.ID, a.DESCRIPTION FROM PERMISSION a ORDER BY a.ID";
         try (Statement st = cnn.createStatement(); ResultSet rs = st.executeQuery(select)) {

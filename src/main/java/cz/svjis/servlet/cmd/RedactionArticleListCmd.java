@@ -97,7 +97,7 @@ public class RedactionArticleListCmd extends Command {
         getRequest().setAttribute("slider", sl);
         getRequest().setAttribute("articleList", articleList);
 
-        ArrayList<Role> roleList = roleDao.getRoleList(getCompany().getId());
+        ArrayList<Role> roleList = new ArrayList(roleDao.getRoleList(getCompany().getId()));
         getRequest().setAttribute("roleList", roleList);
 
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Redaction_ArticleList.jsp");

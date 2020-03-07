@@ -21,6 +21,7 @@ import cz.svjis.validator.Validator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 
 /**
@@ -80,12 +81,12 @@ public class UserSaveCmd extends Command {
         u.setEnabled(parEnabled);
         u.setInternalNote(parInternalNote);
         HashMap uRoles = new HashMap();
-        ArrayList<Role> roles = roleDao.getRoleList(getCompany().getId());
+        List<Role> roles = roleDao.getRoleList(getCompany().getId());
         Iterator<Role> roleI = roles.iterator();
         while (roleI.hasNext()) {
             Role r = roleI.next();
             if (Validator.getBoolean(getRequest(), "r_" + r.getId())) {
-                uRoles.put(new Integer(r.getId()), r.getDescription());
+                uRoles.put(r.getId(), r.getDescription());
             }
         }
         u.setRoles(uRoles);
@@ -98,12 +99,6 @@ public class UserSaveCmd extends Command {
         if (!userDao.testLoginDuplicity(u.getLogin(), u.getId(), u.getCompanyId())) {
             errorMessage += getLanguage().getText("Login already exists.") + " (" + u.getLogin() + ")<br>";
         }
-        //if (!userDao.testPasswordValidity(u.getPassword())) {
-        //    errorMessage += language.getText("Password is too short. Minimum is 6 characters.") + "<br>";
-        //}
-        //if (sendCredentials && (u.getPassword() == null || u.getPassword().equals(""))) {
-        //    errorMessage += getLanguage().getText("Password is missing.") + "<br>";
-        //}
         if (parSendCredentials && (u.geteMail() == null || u.geteMail().equals(""))) {
             errorMessage += getLanguage().getText("E-Mail is missing.") + "<br>";
         }
@@ -138,7 +133,7 @@ public class UserSaveCmd extends Command {
         getRequest().setAttribute("cUser", u);
         ArrayList<Language> languageList = new ArrayList(languageDao.getLanguageList());
         getRequest().setAttribute("languageList", languageList);
-        ArrayList<Role> roleList = roleDao.getRoleList(getCompany().getId());
+        ArrayList<Role> roleList = new ArrayList(roleDao.getRoleList(getCompany().getId()));
         getRequest().setAttribute("roleList", roleList);
         getRequest().setAttribute("sendCredentials", new cz.svjis.bean.Boolean(parSendCredentials));
         getRequest().setAttribute("message", message);

@@ -7,6 +7,7 @@ package cz.svjis.bean;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -306,15 +307,15 @@ public final class User implements Serializable {
     /**
      * @return the roles
      */
-    public HashMap getRoles() {
+    public Map getRoles() {
         return roles;
     }
 
     /**
      * @param roles the roles to set
      */
-    public void setRoles(HashMap roles) {
-        this.roles = roles;
+    public void setRoles(Map roles) {
+        this.roles = new HashMap(roles);
     }
     
     public boolean hasRole(String r) {
@@ -338,15 +339,15 @@ public final class User implements Serializable {
     /**
      * @return the permissions
      */
-    public HashMap getPermissions() {
+    public Map getPermissions() {
         return permissions;
     }
 
     /**
      * @param permissions the permissions to set
      */
-    public void setPermissions(HashMap permissions) {
-        this.permissions = permissions;
+    public void setPermissions(Map permissions) {
+        this.permissions = new HashMap(permissions);
     }
     
     public boolean hasPermission(String p) {

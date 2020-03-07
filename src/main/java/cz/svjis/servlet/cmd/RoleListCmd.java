@@ -31,7 +31,7 @@ public class RoleListCmd extends Command {
 
         Company currCompany = compDao.getCompany(getCompany().getId());
         getRequest().setAttribute("currCompany", currCompany);
-        ArrayList<Role> roleList = roleDao.getRoleList(getCompany().getId());
+        ArrayList<Role> roleList = new ArrayList(roleDao.getRoleList(getCompany().getId()));
         getRequest().setAttribute("roleList", roleList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_roleList.jsp");
         rd.forward(getRequest(), getResponse());

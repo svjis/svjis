@@ -41,7 +41,7 @@ public class FaultReportingEditCmd extends Command {
         }
         getRequest().setAttribute("report", report);
         
-        ArrayList<User> resolverList = userDao.getUserListWithPermission(getCompany().getId(), "fault_reporting_resolver");
+        ArrayList<User> resolverList = new ArrayList(userDao.getUserListWithPermission(getCompany().getId(), "fault_reporting_resolver"));
         getRequest().setAttribute("resolverList", resolverList);
         
         FaultReportMenuCounters counters = faultDao.getMenuCounters(getCompany().getId(), getUser().getId());
