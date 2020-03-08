@@ -181,7 +181,6 @@ public class ArticleDAO extends DAO {
                     a.setLanguageId(rs.getInt("LANGUAGE_ID"));
                     a.setHeader(rs.getString("HEADER"));
                     a.setDescription(rs.getString("DESCRIPTION"));
-                    //a.setBody(rs.getString("BODY"));
                     a.setAuthorId(rs.getInt("CREATED_BY_USER_ID"));
                     a.setCreationDate(rs.getTimestamp("CREATION_DATE"));
                     a.setPublished(rs.getBoolean("PUBLISHED"));
@@ -287,7 +286,6 @@ public class ArticleDAO extends DAO {
                         a.setLanguageId(rs.getInt("LANGUAGE_ID"));
                         a.setHeader(rs.getString("HEADER"));
                         a.setDescription(rs.getString("DESCRIPTION"));
-                        //a.setBody(rs.getString("BODY"));
                         a.setAuthorId(rs.getInt("CREATED_BY_USER_ID"));
                         a.setCreationDate(rs.getTimestamp("CREATION_DATE"));
                         a.setPublished(rs.getBoolean("PUBLISHED"));
