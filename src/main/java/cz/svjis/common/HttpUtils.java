@@ -21,6 +21,8 @@ import org.apache.commons.codec.binary.Base64;
 public class HttpUtils {
     
     private static final Logger LOGGER = Logger.getLogger(HttpUtils.class.getName());
+    
+    private HttpUtils() {}
 
     public static void writeBinaryData(String contentType, String fileName, byte[] data, HttpServletRequest request, HttpServletResponse response)
             throws IOException {

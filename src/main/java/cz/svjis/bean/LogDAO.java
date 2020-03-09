@@ -38,8 +38,8 @@ public class LogDAO extends DAO {
     }
     
     public void log(int userId, int operationId, int documentId, String remoteIp, String userAgent) throws SQLException {
-        int articleId = ID_NULL;
-        int faultId = ID_NULL;
+        int articleId;
+        int faultId;
 
         switch (operationId) {
             case OPERATION_TYPE_READ:
@@ -49,6 +49,7 @@ public class LogDAO extends DAO {
             case OPERATION_TYPE_INSERT_ATTACHMENT:
             case OPERATION_TYPE_DELETE_ATTACHMENT:
                     articleId = documentId;
+                    faultId = ID_NULL;
                     break;
             case OPERATION_TYPE_READ_FAULT:
             case OPERATION_TYPE_CREATE_FAULT:
@@ -57,8 +58,12 @@ public class LogDAO extends DAO {
             case OPERATION_TYPE_REOPEN_FAULT:
             case OPERATION_TYPE_INSERT_FAULT_ATTACHMENT:
             case OPERATION_TYPE_DELETE_FAULT_ATTACHMENT:
+                    articleId = ID_NULL;
                     faultId = documentId;
                     break;
+            default:
+                    articleId = ID_NULL;
+                    faultId = ID_NULL;
         }
 
         String insert = "INSERT INTO LOG (\"TIME\", USER_ID, OPERATION_ID, ARTICLE_ID, FAULT_ID, REMOTE_IP, USER_AGENT) VALUES (?,?,?,?,?,?,?)";

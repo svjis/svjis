@@ -14,6 +14,8 @@ import java.security.SecureRandom;
 public class RandomString {
     static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     static SecureRandom rnd = new SecureRandom();
+    
+    private RandomString() {}
 
     public static String randomString(int len) {
         StringBuilder sb = new StringBuilder(len);

@@ -19,9 +19,11 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class PermanentLoginUtils {
     
-    public static void clearPermanentLogin(HttpServletRequest request, HttpServletResponse response) {
+    private PermanentLoginUtils() {}
+    
+    public static void clearPermanentLogin(HttpServletResponse response) {
         int age = 365 * 24 * 60 * 60;
-        Cookie cookie = null;
+        Cookie cookie;
         cookie = new Cookie("company", "0");
         cookie.setMaxAge(age);
         response.addCookie(cookie);
@@ -33,9 +35,9 @@ public class PermanentLoginUtils {
         response.addCookie(cookie);
     }
     
-    public static void savePermanentLogin(HttpServletRequest request, HttpServletResponse response, User user, UserDAO userDao) throws NoSuchAlgorithmException, SQLException {
+    public static void savePermanentLogin(HttpServletResponse response, User user, UserDAO userDao) throws NoSuchAlgorithmException, SQLException {
         int age = 365 * 24 * 60 * 60;
-        Cookie cookie = null;
+        Cookie cookie;
         cookie = new Cookie("company", String.valueOf(user.getCompanyId()));
         cookie.setMaxAge(age);
         response.addCookie(cookie);
@@ -47,7 +49,7 @@ public class PermanentLoginUtils {
         response.addCookie(cookie);
     }
     
-    public static int checkPermanentLogin(HttpServletRequest request, HttpServletResponse response, UserDAO userDao, int companyId) throws SQLException, NoSuchAlgorithmException {
+    public static int checkPermanentLogin(HttpServletRequest request, UserDAO userDao, int companyId) throws SQLException, NoSuchAlgorithmException {
         int result = 0;
         Cookie[] cookies = request.getCookies();
         int company = (getCookie(cookies, "company").equals("")) ? 0 : Integer.valueOf(getCookie(cookies, "company"));
