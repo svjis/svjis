@@ -44,8 +44,8 @@
                         </p>
                         
                         <fieldset>
-                            <legend><%=language.getText("Options") %></legend>
-                            <table border="0">
+                            <legend id="tbl-desc"><%=language.getText("Options") %></legend>
+                            <table border="0" aria-describedby="tbl-desc">
                             <%
                                 int i = 0;
                                 Iterator<InquiryOption> ioI = inquiry.getOptionList().iterator();

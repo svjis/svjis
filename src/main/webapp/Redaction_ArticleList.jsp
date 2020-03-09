@@ -29,7 +29,7 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h1 class="page-title"><%=language.getText("Article list") %></h1>
+                    <h1 class="page-title" id="tbl-desc"><%=language.getText("Article list") %></h1>
                     
                     <div class="container">
                         <div class="row">
@@ -71,7 +71,7 @@
                         </div>
                     </div>
 
-                    <table class="list" width="100%">
+                    <table class="list" width="100%" aria-describedby="tbl-desc">
                         <tr>
                             <th class="list" scope="col">&nbsp;</th>
                             <th class="list" scope="col">&nbsp;</th>

@@ -43,7 +43,7 @@
                     %>
                     <div class="article-detail">
                     <div class="article-desc">
-                    <h1 class="article-title"><%=HttpUtils.highlight(article.getHeader(), request.getParameter("search")) %></h1>
+                    <h1 class="article-title" id="tbl-desc"><%=HttpUtils.highlight(article.getHeader(), request.getParameter("search")) %></h1>
                     <p class="info">
                         <%=language.getText("Published:") %> <strong><%=sdf.format(article.getCreationDate()) %></strong> 
                         <%=language.getText("by:") %> <strong><%=article.getAuthor().getFirstName() %> <%=article.getAuthor().getLastName() %></strong> 
@@ -58,7 +58,7 @@
                         if ((article.getAttachmentList() != null) && (article.getAttachmentList().size() != 0)) {
                     %>
                     <p>
-                    <table class="list">
+                    <table class="list" aria-describedby="tbl-desc">
                         <tr>
                             <th class="list" scope="col">&nbsp;</th>
                             <th class="list" scope="col"><%=language.getText("Attachments:") %></th>

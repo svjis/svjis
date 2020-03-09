@@ -21,7 +21,7 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h1 class="page-title"><%=language.getText("Building unit list") %></h1>
+                    <h1 class="page-title" id="tbl-desc"><%=language.getText("Building unit list") %></h1>
                     <%=language.getText("Filter") %>:
                     <form action="Dispatcher" method="post" >
                         <input type="hidden" name="page" value="buildingUnitList">
@@ -46,7 +46,7 @@
 
                     [<a href="Dispatcher?page=buildingUnitEdit&id=0"><%=language.getText("Add new building unit") %></a>]&nbsp;
                     [<a href="Upload?page=exportBuildingUnitListToXls"><%=language.getText("Export to Excel") %></a>]<br>
-                    <table class="list">
+                    <table class="list" aria-describedby="tbl-desc">
                         <tr>
                             <th class="list" scope="col">&nbsp;</th>
                             <th class="list" scope="col">&nbsp;</th>

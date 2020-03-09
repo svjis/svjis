@@ -20,11 +20,11 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h1 class="page-title"><%=language.getText("Board") %></h1>
+                    <h1 class="page-title" id="tbl-desc"><%=language.getText("Board") %></h1>
 
                     [<a href="Dispatcher?page=boardMemberEdit&id=0"><%=language.getText("Add new member") %></a>]
                     
-                    <table class="list">
+                    <table class="list" aria-describedby="tbl-desc">
                         <tr>
                             <th class="list" scope="col">&nbsp;</th>
                             <th class="list" scope="col"><%=language.getText("Name") %></th>

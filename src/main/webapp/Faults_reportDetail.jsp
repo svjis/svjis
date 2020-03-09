@@ -32,7 +32,7 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h1 class="page-title" style="<%=stl %>">#<%=report.getId() %>&nbsp;-&nbsp;<%=HttpUtils.highlight(report.getSubject(), request.getParameter("search")) %></h1>
+                    <h1 class="page-title" style="<%=stl %>" id="tbl-desc">#<%=report.getId() %>&nbsp;-&nbsp;<%=HttpUtils.highlight(report.getSubject(), request.getParameter("search")) %></h1>
 
                     <% if (user.hasPermission("fault_reporting_resolver")) { %>
                     [<a href="Dispatcher?page=faultReportingEdit&id=<%=report.getId() %>"><%=language.getText("Edit") %></a>]&nbsp;
@@ -50,7 +50,7 @@
                         [<a href="Dispatcher?page=faultReportingFast&id=<%=report.getId() %>&watch=0"><%=language.getText("Stop watching") %></a>]&nbsp;
                     <% } %>
 
-                    <table class="list" width="95%">
+                    <table class="list" width="95%" aria-describedby="tbl-desc">
                         <tr>
                             <th class="list" width="25%" scope="row"><%=language.getText("Date") %></th>
                             <td class="list" width="75%"><%=sdf.format(report.getCreationDate()) %></td>
@@ -76,12 +76,12 @@
                     <% if (report.getId() != 0) { %>
                     <form action="Dispatcher?page=faultReportingAttachmentSave&reportId=<%=report.getId() %>" enctype="multipart/form-data" method="post">
                         <fieldset>
-                            <legend><%=language.getText("Attachments") %></legend>
+                            <legend id="tbl2-desc"><%=language.getText("Attachments") %></legend>
                             <%
                                 if ((report.getAttachmentList() != null) && (report.getAttachmentList().size() != 0)) {
                             %>
                             <p>
-                            <table class="list">
+                            <table class="list" aria-describedby="tbl2-desc">
                                 <tr>
                                     <th class="list" scope="col">&nbsp;</th>
                                     <th class="list" scope="col"><%=language.getText("File") %></th>

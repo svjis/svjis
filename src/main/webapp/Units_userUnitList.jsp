@@ -21,9 +21,9 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h1 class="page-title"><%=user.getFirstName() %>&nbsp;<%=user.getLastName() %> - <%=language.getText("Building unit list") %></h1>
+                    <h1 class="page-title" id="tbl-desc"><%=user.getFirstName() %>&nbsp;<%=user.getLastName() %> - <%=language.getText("Building unit list") %></h1>
                     
-                    <table class="list">
+                    <table class="list" aria-describedby="tbl-desc">
                         <tr>
                             <th class="list" scope="col">&nbsp;</th>
                             <th class="list" scope="col"><%=language.getText("Type") %></th>

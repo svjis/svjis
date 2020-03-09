@@ -51,10 +51,10 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h1 class="page-title"><%=language.getText("Article menu") %></h1>
+                    <h1 class="page-title" id="tbl-desc"><%=language.getText("Article menu") %></h1>
                     [<a href="Dispatcher?page=redactionArticleMenuEdit&id=0"><%=language.getText("Add new menu node") %></a>]
                     <p>
-                        <table class="list">
+                        <table class="list" aria-describedby="tbl-desc">
                             <tr>
                                 <th class="list" scope="col"><%=language.getText("Menu node name") %></th>
                                 <th class="list" scope="col">&nbsp;</th>
