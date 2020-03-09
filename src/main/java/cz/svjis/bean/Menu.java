@@ -121,16 +121,16 @@ public class Menu {
     }
 
     private String writeSubMenu(List<MenuItem> menu) {
-        String output = "";
-        output = output + "<ul>" + "\n";
-
+        StringBuilder sb = new StringBuilder(); 
+        sb.append("<ul>" + "\n");
         for (MenuItem ami: menu) {
-            output = output + "<li>" + ami.getSection().getDescription();
+            sb.append("<li>");
+            sb.append(ami.getSection().getDescription());
             if (ami.getSubSections() != null)
-                output = output + writeSubMenu(ami.getSubSections());
-            output = output + "</li>" + "\n";
+                sb.append(writeSubMenu(ami.getSubSections()));
+            sb.append("</li>" + "\n");
         }
-        output = output + "</ul>" + "\n";
-        return output;
+        sb.append("</ul>" + "\n");
+        return sb.toString();
     }
 }

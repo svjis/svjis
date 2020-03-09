@@ -57,17 +57,18 @@ public class HttpUtils {
         if ((textToFind != null) && !textToFind.equals("")) {
 
             char[] arr = textToFind.toCharArray();
-            String regexp = "";
+            StringBuilder sbu = new StringBuilder();
             for (int i = 0; i < arr.length; i++) {
                 if (i > 0) {
-                    regexp += subp2;
+                    sbu.append(subp2);
                 } else {
-                    regexp += subp1;
+                    sbu.append(subp1);
                 }
 
-                regexp += String.valueOf(arr[i]);
+                sbu.append(String.valueOf(arr[i]));
             }
-
+            String regexp = sbu.toString();
+            
             java.util.regex.Pattern p = java.util.regex.Pattern.compile(regexp, java.util.regex.Pattern.CASE_INSENSITIVE);
             java.util.regex.Matcher m = p.matcher(html);
             StringBuffer sb = new StringBuffer();

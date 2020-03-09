@@ -455,12 +455,13 @@ public class ArticleDAO extends DAO {
         //-- Creator
         String creator = "(a.CREATED_BY_USER_ID = " + u.getId() + ") ";
         //-- Roles filter
-        String roles = "";
+        StringBuilder sb = new StringBuilder();
         Iterator<Integer> roleI = u.getRoles().keySet().iterator();
         while (roleI.hasNext()) {
-            roles += roleI.next().toString();
-            if (roleI.hasNext()) roles += ",";
+            sb.append(roleI.next().toString());
+            if (roleI.hasNext()) sb.append(",");
         }
+        String roles = sb.toString();
         if (roles.equals("")) roles = "-1";
         roles = "(a.ID in (SELECT distinct b.ARTICLE_ID FROM ARTICLE_IS_VISIBLE_TO_ROLE b WHERE (b.ROLE_ID in (" + roles + ")))) "; 
         
