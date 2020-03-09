@@ -109,7 +109,6 @@ public class ExportUserListToXlsCmd extends Command {
                 s.addCell(new jxl.write.Label(c++, l, u.getSalutation(), std));
                 s.addCell(new jxl.write.Label(c++, l, u.getFirstName(), std));
                 s.addCell(new jxl.write.Label(c++, l, u.getLastName(), std));
-                //s.addCell(new jxl.write.Number(c++, l, u.getLanguageId(), num));
                 s.addCell(new jxl.write.Label(c++, l, languageDao.getLanguage(u.getLanguageId()).getDescription(), std));
                 s.addCell(new jxl.write.Label(c++, l, u.getAddress(), std));
                 s.addCell(new jxl.write.Label(c++, l, u.getCity(), std));

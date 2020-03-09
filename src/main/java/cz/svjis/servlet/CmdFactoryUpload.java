@@ -16,6 +16,8 @@ import cz.svjis.servlet.cmd.FaultReportingDownloadCmd;
  * @author jaroslav_b
  */
 public class CmdFactoryUpload {
+    
+    private CmdFactoryUpload() {}
 
     public static Command create(String page, CmdContext ctx) {
         

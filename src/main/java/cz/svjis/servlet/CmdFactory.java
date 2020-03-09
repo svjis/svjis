@@ -88,6 +88,8 @@ import cz.svjis.servlet.cmd.UserSaveCmd;
  */
 public class CmdFactory {
 
+    private CmdFactory() {}
+    
     public static Command create(String page, CmdContext ctx) {
 
         // *****************

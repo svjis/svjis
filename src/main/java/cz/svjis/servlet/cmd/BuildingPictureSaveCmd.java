@@ -33,7 +33,6 @@ public class BuildingPictureSaveCmd extends Command {
 
         FileItemFactory factory = new DiskFileItemFactory();
         ServletFileUpload upload = new ServletFileUpload(factory);
-        //upload.setSizeMax(yourMaxRequestSize);
         List items = upload.parseRequest(getRequest());
         java.util.Iterator iterator = items.iterator();
         while (iterator.hasNext()) {

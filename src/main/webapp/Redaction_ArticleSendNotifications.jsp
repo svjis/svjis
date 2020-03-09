@@ -23,13 +23,13 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h1 class="page-title"><%=language.getText("Send notifications") %> - <%=article.getHeader() %></h1>
+                    <h1 class="page-title" id="tbl-desc"><%=language.getText("Send notifications") %> - <%=article.getHeader() %></h1>
                     
                     <form action="Dispatcher" method="post">
                         <input type="hidden" name="page" value="redactionArticleSendNotificationsConfirmation">
                         <input type="hidden" name="id" value="<%=article.getId() %>">
                             
-                    <table class="list" width="100%">
+                    <table class="list" width="100%" aria-describedby="tbl-desc">
                         <tr>
                             <th class="list" scope="col">&nbsp;</th>
                             <th class="list" scope="col"><%=language.getText("Last name") %></th>

@@ -27,11 +27,11 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h1 class="page-title"><%=language.getText("Fault reporting") %></h1>
+                    <h1 class="page-title" id="tbl-desc"><%=language.getText("Fault reporting") %></h1>
                     <% if (user.hasPermission("fault_reporting_reporter")) { %>
                     [<a href="Dispatcher?page=faultReportingEdit&id=0"><%=language.getText("Report new fault") %></a>]<br>
                     <% } %>
-                    <table width="100%" class="list">
+                    <table width="100%" class="list" aria-describedby="tbl-desc">
                         <tr>
                             <th class="list" scope="col">&nbsp;</th>
                             <th class="list" scope="col"><%=language.getText("Ticket id") %></th>

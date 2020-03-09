@@ -33,10 +33,10 @@
                     
                     <h1 class="page-title"><%=language.getText("Inquiry") %></h1>
                         
-                    <p><%=inquiry.getDescription() %></p>
+                    <p id="tbl-desc"><%=inquiry.getDescription() %></p>
 
                     <p>
-                    <table class="list">
+                    <table class="list" aria-describedby="tbl-desc">
                         <tr>
                             <th class="list" scope="col">&nbsp;</th>
                             <th class="list" scope="col"><%=language.getText("Description") %></th>
@@ -57,10 +57,10 @@
                     </table>
                     </p>
 
-                    <h2 class="page-title"><%=language.getText("Inquiry log") %></h2>
+                    <h2 class="page-title" id="tbl2-desc"><%=language.getText("Inquiry log") %></h2>
                     
                     <p>
-                    <table class="list">
+                    <table class="list" aria-describedby="tbl2-desc">
                         <tr>
                             <th class="list" scope="col">&nbsp;</th>
                             <th class="list" scope="col"><%=language.getText("Time") %></th>

@@ -16,6 +16,7 @@ public class Validator {
     public static final int MAX_INT_ALLOWED = 10000000;
     public static final int MAX_STRING_LEN_ALLOWED = 1000000;
 
+    private Validator() {}
     
     public static String getString(HttpServletRequest request, String parName, int minLen, int maxLen, boolean canBeNull, boolean canContainHtmlTags) throws InputValidationException {
         String val = request.getParameter(parName);
@@ -113,8 +114,8 @@ public class Validator {
         }
         
         if (!enableHtml) {
-            result = result.replaceAll("<", "&lt;");
-            result = result.replaceAll(">", "&gt;");
+            result = result.replace("<", "&lt;");
+            result = result.replace(">", "&gt;");
         }
         
         return result;

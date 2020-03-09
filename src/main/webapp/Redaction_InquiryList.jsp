@@ -21,10 +21,10 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h1 class="page-title"><%=language.getText("Inquiry list") %></h1>
+                    <h1 class="page-title" id="tbl-desc"><%=language.getText("Inquiry list") %></h1>
                     [<a href="Dispatcher?page=redactionInquiryEdit&id=0"><%=language.getText("Add new inquiry") %></a>]<br>
 
-                    <table class="list" width="100%">
+                    <table class="list" width="100%" aria-describedby="tbl-desc">
                         <tr>
                             <th class="list" scope="col">&nbsp;</th>
                             <th class="list" scope="col">&nbsp;</th>
