@@ -5,7 +5,6 @@
 package cz.svjis.bean;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -17,9 +16,7 @@ public class Menu {
     private int activeSection;
     private ArrayList<MenuNode> navigationBar = null;
     private ArrayList<MenuNode> buffer = null;
-    private ArrayList<MenuItem> menu = null;
-    private ArrayList<MenuItem> allMenu = null;
-    
+    private ArrayList<MenuItem> menuContent = null;    
     public Menu() {
     }
     
@@ -54,7 +51,7 @@ public class Menu {
      * @return the menu
      */
     public List<MenuItem> getMenu() {
-        return menu;
+        return menuContent;
     }
 
     
@@ -62,9 +59,7 @@ public class Menu {
     private MenuNode findSectionInBuffer(int section) {
         if (section == 0) return null;
 
-        Iterator i = buffer.iterator();
-        while (i.hasNext()) {
-            MenuNode as = (MenuNode) i.next();
+        for (MenuNode as: buffer) {
             if (as.getId() == section) {
                 return as;
             }
@@ -75,18 +70,16 @@ public class Menu {
 
     private void buildMenu() {
         navigationBar = new ArrayList<>();
-        MenuNode as;
         int currSection = activeSection;
-        while ((as = findSectionInBuffer(currSection)) != null) {
-            navigationBar.add(0, as);
-            currSection = as.getParentId();
+        MenuNode mn;
+        while ((mn = findSectionInBuffer(currSection)) != null) {
+            navigationBar.add(0, mn);
+            currSection = mn.getParentId();
         }
 
-        menu = new ArrayList<>();
-        Iterator i = buffer.iterator();
+        menuContent = new ArrayList<>();
         int navigationLevel = 0;
-        while (i.hasNext()) {
-            as = (MenuNode) i.next();
+        for (MenuNode as: buffer) {
             if (as.getParentId() == 0) {
                 MenuItem ami = new MenuItem();
                 ami.setSection(as);
@@ -97,7 +90,7 @@ public class Menu {
                 } else {
                     ami.setSubSections(null);
                 }
-                menu.add(ami);
+                menuContent.add(ami);
             }
         }
     }
@@ -124,20 +117,20 @@ public class Menu {
     }
 
     public  String writeMenu() {
-        return writeSubMenu(menu);
+        return writeSubMenu(menuContent);
     }
 
     private String writeSubMenu(List<MenuItem> menu) {
-        String output = "";
-        output = output + "<ul>" + "\n";
-
+        StringBuilder sb = new StringBuilder(); 
+        sb.append("<ul>" + "\n");
         for (MenuItem ami: menu) {
-            output = output + "<li>" + ami.getSection().getDescription();
+            sb.append("<li>");
+            sb.append(ami.getSection().getDescription());
             if (ami.getSubSections() != null)
-                output = output + writeSubMenu(ami.getSubSections());
-            output = output + "</li>" + "\n";
+                sb.append(writeSubMenu(ami.getSubSections()));
+            sb.append("</li>" + "\n");
         }
-        output = output + "</ul>" + "\n";
-        return output;
+        sb.append("</ul>" + "\n");
+        return sb.toString();
     }
 }

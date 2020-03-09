@@ -21,9 +21,7 @@ public class SchedulerServiceListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent event) {
         scheduler = Executors.newSingleThreadScheduledExecutor();
-        //scheduler = Executors.newScheduledThreadPool(1);
         scheduler.scheduleAtFixedRate(new MailSenderJob(), 1, 5, TimeUnit.MINUTES);
-        //scheduler.scheduleAtFixedRate(new YourParsingJob(), 0, 5, TimeUnit.HOUR);
     }
 
     @Override

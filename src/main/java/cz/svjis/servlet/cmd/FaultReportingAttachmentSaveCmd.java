@@ -42,15 +42,14 @@ public class FaultReportingAttachmentSaveCmd extends Command {
         int reportId = parReportId;
         FileItemFactory factory = new DiskFileItemFactory();
         ServletFileUpload upload = new ServletFileUpload(factory);
-        //upload.setSizeMax(yourMaxRequestSize);
         List<FileItem> items = upload.parseRequest(getRequest());
         for (FileItem item: items) {
             File f = new File(item.getName());
             if (!item.isFormField()) {
                 FaultReportAttachment fa = new FaultReportAttachment();
                 String fileName = f.getName().replace(" ", "_");
-                if (fileName.lastIndexOf("\\") > -1) {
-                    fileName = fileName.substring(fileName.lastIndexOf("\\") + 1);
+                if (fileName.lastIndexOf('\\') > -1) {
+                    fileName = fileName.substring(fileName.lastIndexOf('\\') + 1);
                 }
                 fa.setFileName(fileName);
                 fa.setContentType(item.getContentType());

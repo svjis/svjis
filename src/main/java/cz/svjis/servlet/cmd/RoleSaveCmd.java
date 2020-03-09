@@ -44,7 +44,7 @@ public class RoleSaveCmd extends Command {
         while (permsI.hasNext()) {
             Permission p = permsI.next();
             if (Validator.getBoolean(getRequest(), "p_" + p.getId())) {
-                props.put(new Integer(p.getId()), p.getDescription());
+                props.put(p.getId(), p.getDescription());
             }
         }
         role.setPermissions(props);

@@ -20,9 +20,9 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h1 class="page-title"><%=language.getText("Property list") %></h1>
+                    <h1 class="page-title" id="tbl-desc"><%=language.getText("Property list") %></h1>
                     [<a href="Dispatcher?page=propertyEdit&key="><%=language.getText("Add new property") %></a>]<br>
-                    <table class="list">
+                    <table class="list" aria-describedby="tbl-desc">
                         <tr>
                             <th class="list" scope="col">&nbsp;</th>
                             <th class="list" scope="col">&nbsp;</th>

@@ -19,9 +19,9 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h1 class="page-title"><%=language.getText("Message list") %></h1>
+                    <h1 class="page-title" id="tbl-desc"><%=language.getText("Message list") %></h1>
                     
-                    <table class="list">
+                    <table class="list" aria-describedby="tbl-desc">
                         <tr>
                             <th class="list" scope="col">&nbsp;</th>
                             <th class="list" scope="col"><%=language.getText("Recipient") %></th>

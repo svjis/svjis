@@ -119,11 +119,11 @@ public class Dispatcher extends HttpServlet {
             Language language = (Language) session.getAttribute("language");
                         
             if (user == null) {
-                if (PermanentLoginUtils.checkPermanentLogin(request, response, userDao, company.getId()) != 0) {
-                    user = userDao.getUser(company.getId(), PermanentLoginUtils.checkPermanentLogin(request, response, userDao, company.getId()));
+                if (PermanentLoginUtils.checkPermanentLogin(request, userDao, company.getId()) != 0) {
+                    user = userDao.getUser(company.getId(), PermanentLoginUtils.checkPermanentLogin(request, userDao, company.getId()));
                     user.setUserLogged(true);
                     logDao.log(user.getId(), LogDAO.OPERATION_TYPE_LOGIN, LogDAO.ID_NULL, request.getRemoteAddr(), request.getHeader("User-Agent"));
-                    PermanentLoginUtils.savePermanentLogin(request, response, user, userDao);
+                    PermanentLoginUtils.savePermanentLogin(response, user, userDao);
                 } else {
                     user = new User();
                     user.setCompanyId(company.getId());

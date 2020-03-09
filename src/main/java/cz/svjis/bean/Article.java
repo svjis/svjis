@@ -244,7 +244,7 @@ public class Article {
     /**
      * @return the commentList
      */
-    public ArrayList<ArticleComment> getCommentList() {
+    public List<ArticleComment> getCommentList() {
         return commentList;
     }
 

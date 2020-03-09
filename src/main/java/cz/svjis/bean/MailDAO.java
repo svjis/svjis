@@ -143,7 +143,6 @@ public class MailDAO extends DAO {
                 + "<p>User Agent: " + userAgent + "</p>"
                 + "<p>URL: " + url + "</p>"
                 + "<p>" + getStackTrace(throwable).replace("\n", "<br>") + "</p>";
-        //queueMail(companyId, recipient, subject, body);
         sendInstantMail(recipient, subject, body);
     }
     

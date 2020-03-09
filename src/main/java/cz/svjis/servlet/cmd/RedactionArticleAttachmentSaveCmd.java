@@ -40,7 +40,6 @@ public class RedactionArticleAttachmentSaveCmd extends Command {
         
         FileItemFactory factory = new DiskFileItemFactory();
         ServletFileUpload upload = new ServletFileUpload(factory);
-        //upload.setSizeMax(yourMaxRequestSize);
         List items = upload.parseRequest(getRequest());
         java.util.Iterator iterator = items.iterator();
         while (iterator.hasNext()) {
@@ -49,8 +48,8 @@ public class RedactionArticleAttachmentSaveCmd extends Command {
             if (!item.isFormField()) {
                 ArticleAttachment aa = new ArticleAttachment();
                 String fileName = f.getName().replace(" ", "_");
-                if (fileName.lastIndexOf("\\") > -1) {
-                    fileName = fileName.substring(fileName.lastIndexOf("\\") + 1);
+                if (fileName.lastIndexOf('\\') > -1) {
+                    fileName = fileName.substring(fileName.lastIndexOf('\\') + 1);
                 }
                 aa.setFileName(fileName);
                 aa.setContentType(item.getContentType());

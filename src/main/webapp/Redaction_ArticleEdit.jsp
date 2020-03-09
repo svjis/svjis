@@ -148,16 +148,15 @@
                     </form>
                         
                     <% if (article.getId() != 0) { %>
-                    <h1 class="page-title"><%=language.getText("Attachments") %></h1>
+                    <h1 class="page-title" id="tbl-desc"><%=language.getText("Attachments") %></h1>
 
                     <form action="Dispatcher?page=redactionArticleAttachmentSave&articleId=<%=article.getId() %>" enctype="multipart/form-data" method="post">
                         <fieldset>
-                            <!-- <legend><%=language.getText("Attachments") %></legend> -->
                             <%
                                 if ((article.getAttachmentList() != null) && (article.getAttachmentList().size() != 0)) {
                             %>
                             <p>
-                            <table class="list">
+                            <table class="list" aria-describedby="tbl-desc">
                                 <tr>
                                     <th class="list" colspan="3" scope="col"><%=language.getText("File") %></th>
                                 </tr>

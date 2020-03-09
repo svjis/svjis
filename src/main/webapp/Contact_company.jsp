@@ -21,9 +21,9 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h1 class="page-title"><%=company.getName() %></h1>
+                    <h1 class="page-title" id="tbl-desc"><%=company.getName() %></h1>
                     
-                    <table border="0">
+                    <table border="0" aria-describedby="tbl-desc">
                         <% if (!company.getAddress().equals("")) { %>
                         <tr>
                             <th scope="row" style="text-align: left"><%=language.getText("Address") %>:&nbsp;</th>
@@ -69,7 +69,7 @@
                     </table>
 
                     <% if (!boardList.isEmpty()) { %>
-                    <table border="0">
+                    <table border="0" aria-describedby="tbl-desc">
                         <tr>
                             <th scope="col" style="text-align: left" colspan="3"><%=language.getText("Board") %>:&nbsp;</th>
                         </tr>
