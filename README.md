@@ -1,6 +1,6 @@
 # SVJIS
 
-![Java CI](https://github.com/svjis/svjis/workflows/Java%20CI/badge.svg?branch=master) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=svjis_svjis&metric=alert_status)](https://sonarcloud.io/dashboard?id=svjis_svjis)  
+![build](https://github.com/svjis/svjis/workflows/build/badge.svg) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=svjis_svjis&metric=alert_status)](https://sonarcloud.io/dashboard?id=svjis_svjis)  
 
 Informační systém pro SVJ :house_with_garden:
 
