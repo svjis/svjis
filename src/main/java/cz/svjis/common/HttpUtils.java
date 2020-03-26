@@ -47,6 +47,34 @@ public class HttpUtils {
         }
     }
     
+    
+    public static String makeHyperlins(String s) {
+        String result = s;
+        String urlRegex = "\\b\\({0,1}(^(?!/)(www|ftp)\\.[^ ,\"\"\\s<)]*)\\b";
+        String urlReplacement = "<a href=\\\"http://%s\\\" target=\\\"_blank\\\">%s</a>";
+        String httpUrlRegex = "\\b\\({0,1}(^(?!>|\")(http://|http://|https://|ftp://)[^,\"\"\\s<)]*)\\b";
+        String httpUrlReplacement = "<a href=\"%s\" target=\"_blank\">%s</a>";
+        
+        result = makeHyperlnks(result, urlRegex, urlReplacement);
+        result = makeHyperlnks(result, httpUrlRegex, httpUrlReplacement);
+        
+        return result;
+    }
+    
+    protected static String makeHyperlnks(String s, String regex, String replacement) {
+        String result = s;
+        
+        java.util.regex.Pattern p = java.util.regex.Pattern.compile(regex, java.util.regex.Pattern.CASE_INSENSITIVE);
+        java.util.regex.Matcher m = p.matcher(s);
+        
+        while (m.find()) {
+            result = result.replaceAll(m.group(1), String.format(replacement, m.group(1), m.group(1)));
+        }
+        
+        return result;
+    }
+    
+    
     public static String highlight(String html, String textToFind) {
         return envelStrInHtml(html, textToFind, "<b style=\"color:black;background-color:#ffff66\">", "</b>");
     }

@@ -28,4 +28,14 @@ public class HttpUtilsTest {
         assertEquals("Ahoj <font color=\"red\">jak se</font> máš?", HttpUtils.envelStrInHtml("Ahoj <font color=\"red\">jak se</font> máš?", "red", "*", "#"), "Html 3");
     }
     
+    @Test
+    @DisplayName("Make hyperlinks")
+    public void testMakeHyperlins() {
+        assertEquals("Ahoj jak se máš?", HttpUtils.makeHyperlins("Ahoj jak se máš?"), "Negative test");
+        assertEquals("<a href=\"http://www.seznam.cz\" target=\"_blank\">www.seznam.cz</a>", HttpUtils.makeHyperlins("www.seznam.cz"), "www");
+        assertEquals("<a href=\"http://www.seznam.cz\" target=\"_blank\">http://www.seznam.cz</a>", HttpUtils.makeHyperlins("http://www.seznam.cz"), "http");
+        assertEquals("<a href=\"https://www.seznam.cz\" target=\"_blank\">https://www.seznam.cz</a>", HttpUtils.makeHyperlins("https://www.seznam.cz"), "https");
+        assertEquals("<a href=\"https://www.seznam.cz\" target=\"_blank\">https://www.seznam.cz</a>", HttpUtils.makeHyperlins("<a href=\"https://www.seznam.cz\" target=\"_blank\">https://www.seznam.cz</a>"), "https link");
+    }
+    
 }
