@@ -50,12 +50,12 @@ public class HttpUtils {
     
     public static String makeHyperlins(String s) {
         String result = s;
-        String urlRegex = "\\b\\({0,1}(^(?!/)(www|ftp)\\.[^ ,\"\"\\s<)]*)\\b";
-        String urlReplacement = "<a href=\\\"http://%s\\\" target=\\\"_blank\\\">%s</a>";
-        String httpUrlRegex = "\\b\\({0,1}(^(?!>|\")(http://|http://|https://|ftp://)[^,\"\"\\s<)]*)\\b";
+        //String urlRegex = "\\b((www|ftp)\\.[^,\"\"\\s<)]*)\\b";
+        //String urlReplacement = "<a href=\\\"http://%s\\\" target=\\\"_blank\\\">%s</a>";
+        String httpUrlRegex = "\\b(?![^<]*<\\/)(((http:\\/\\/|https:\\/\\/))[^,\"\\s<)]*)\\b";
         String httpUrlReplacement = "<a href=\"%s\" target=\"_blank\">%s</a>";
         
-        result = makeHyperlnks(result, urlRegex, urlReplacement);
+        //result = makeHyperlnks(result, urlRegex, urlReplacement);
         result = makeHyperlnks(result, httpUrlRegex, httpUrlReplacement);
         
         return result;
