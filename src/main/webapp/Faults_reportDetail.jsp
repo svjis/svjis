@@ -140,7 +140,7 @@
                         %>
                             <div class="article box">
                             <strong><%=c.getUser().getFirstName() %>&nbsp;<%=c.getUser().getLastName() %> <%=sdft.format(c.getInsertionTime()) %></strong><br>
-                            <%=c.getBody().replace("\n", "<br>") %>
+                            <%=HttpUtils.makeHyperlins(c.getBody().replace("\n", "<br>")) %>
                             </div>
                         <%
                             }
