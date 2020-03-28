@@ -50,27 +50,27 @@ public class HttpUtils {
     
     public static String makeHyperlins(String s) {
         String result = s;
-        //String urlRegex = "\\b((www|ftp)\\.[^,\"\"\\s<)]*)\\b";
-        //String urlReplacement = "<a href=\\\"http://%s\\\" target=\\\"_blank\\\">%s</a>";
         String httpUrlRegex = "\\b(?![^<]*<\\/)(((http:\\/\\/|https:\\/\\/))[^,\"\\s<)]*)\\b";
         String httpUrlReplacement = "<a href=\"%s\" target=\"_blank\">%s</a>";
-        
-        //result = makeHyperlnks(result, urlRegex, urlReplacement);
+        String emailUrlRegex = "\\b(?![^<]*<\\/)([a-zA-Z_0-9.-]+\\@[a-zA-Z_0-9.-]+\\.\\w+)\\b";
+        String emailUrlReplacement = "<a href=\"mailto:%s\">%s</a>";
+
         result = makeHyperlnks(result, httpUrlRegex, httpUrlReplacement);
-        
+        result = makeHyperlnks(result, emailUrlRegex, emailUrlReplacement);
+
         return result;
     }
     
     protected static String makeHyperlnks(String s, String regex, String replacement) {
         String result = s;
-        
+
         java.util.regex.Pattern p = java.util.regex.Pattern.compile(regex, java.util.regex.Pattern.CASE_INSENSITIVE);
         java.util.regex.Matcher m = p.matcher(s);
-        
+
         while (m.find()) {
             result = result.replaceFirst(m.group(1), String.format(replacement, m.group(1), m.group(1)));
         }
-        
+
         return result;
     }
     

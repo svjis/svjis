@@ -33,12 +33,6 @@ public class HttpUtilsTest {
     public void testMakeHyperlins() {
         assertEquals("Ahoj jak se máš?", HttpUtils.makeHyperlins("Ahoj jak se máš?"), "Negative test");
         
-        //assertEquals("<a href=\"http://www.seznam.cz\" target=\"_blank\">www.seznam.cz</a>", HttpUtils.makeHyperlins("www.seznam.cz"), "www alone");
-        //assertEquals("<a href=\"http://www.seznam.cz\" target=\"_blank\">www.seznam.cz</a> bla.", HttpUtils.makeHyperlins("www.seznam.cz bla."), "www begin");
-        //assertEquals("Bla <a href=\"http://www.seznam.cz\" target=\"_blank\">www.seznam.cz</a>", HttpUtils.makeHyperlins("Bla www.seznam.cz"), "www end");
-        //assertEquals("Bla <a href=\"http://www.seznam.cz\" target=\"_blank\">www.seznam.cz</a>.", HttpUtils.makeHyperlins("Bla www.seznam.cz."), "www end dot");
-        //assertEquals("Bla <a href=\"http://www.seznam.cz\" target=\"_blank\">www.seznam.cz</a>,", HttpUtils.makeHyperlins("Bla www.seznam.cz,"), "www end comma");
-        
         assertEquals("<a href=\"http://www.seznam.cz\" target=\"_blank\">http://www.seznam.cz</a>", HttpUtils.makeHyperlins("http://www.seznam.cz"), "http alone");
         assertEquals("<a href=\"http://www.seznam.cz\" target=\"_blank\">http://www.seznam.cz</a> bla.", HttpUtils.makeHyperlins("http://www.seznam.cz bla."), "http begin");
         assertEquals("Bla <a href=\"http://www.seznam.cz\" target=\"_blank\">http://www.seznam.cz</a>", HttpUtils.makeHyperlins("Bla http://www.seznam.cz"), "http end");
@@ -52,6 +46,16 @@ public class HttpUtilsTest {
         assertEquals("Bla <a href=\"https://www.seznam.cz\" target=\"_blank\">https://www.seznam.cz</a>,", HttpUtils.makeHyperlins("Bla https://www.seznam.cz,"), "https end comma");
         
         assertEquals("<a href=\"https://www.seznam.cz\" target=\"_blank\">https://www.seznam.cz</a>", HttpUtils.makeHyperlins("<a href=\"https://www.seznam.cz\" target=\"_blank\">https://www.seznam.cz</a>"), "https link alone");
+        
+        assertEquals("Ahoj @Jarda", HttpUtils.makeHyperlins("Ahoj @Jarda"), "Negative test");
+        assertEquals("<a href=\"mailto:test@test.edu\">test@test.edu</a>", HttpUtils.makeHyperlins("test@test.edu"), "email alone");
+        assertEquals("<a href=\"mailto:test@test.edu\">test@test.edu</a>  bla.", HttpUtils.makeHyperlins("test@test.edu  bla."), "email begin");
+        assertEquals("Bla <a href=\"mailto:test@test.edu\">test@test.edu</a>", HttpUtils.makeHyperlins("Bla test@test.edu"), "email end");
+        assertEquals("Bla <a href=\"mailto:test@test.edu\">test@test.edu</a>.", HttpUtils.makeHyperlins("Bla test@test.edu."), "email dot");
+        assertEquals("Bla <a href=\"mailto:test@test.edu\">test@test.edu</a>,", HttpUtils.makeHyperlins("Bla test@test.edu,"), "email comma");
+        
+        assertEquals("<a href=\"mailto:test@test.edu\">test@test.edu</a>", HttpUtils.makeHyperlins("<a href=\"mailto:test@test.edu\">test@test.edu</a>"), "email link alone");
+        
     }
     
 }
