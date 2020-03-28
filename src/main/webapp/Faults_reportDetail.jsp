@@ -69,7 +69,7 @@
                         </tr>
                         <tr>
                             <th class="list" scope="row"><%=language.getText("Description") %></th>
-                            <td class="list"><%=HttpUtils.highlight(report.getDescription(), request.getParameter("search")).replaceAll("\n", "<br>") %></td>
+                            <td class="list"><%=HttpUtils.highlight(HttpUtils.makeHyperlins(report.getDescription()), request.getParameter("search")).replaceAll("\n", "<br>") %></td>
                         </tr>
                     </table>
                         
@@ -140,7 +140,7 @@
                         %>
                             <div class="article box">
                             <strong><%=c.getUser().getFirstName() %>&nbsp;<%=c.getUser().getLastName() %> <%=sdft.format(c.getInsertionTime()) %></strong><br>
-                            <%=c.getBody().replace("\n", "<br>") %>
+                            <%=HttpUtils.makeHyperlins(c.getBody().replace("\n", "<br>")) %>
                             </div>
                         <%
                             }
