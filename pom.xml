@@ -9,14 +9,16 @@
     <packaging>war</packaging>
 
     <name>SVJIS</name>
+    <url>https://github.com/svjis/svjis/wiki</url>
 
     <properties>
-        <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <targetJdk>1.6</targetJdk>
+        <maven.compiler.source>7</maven.compiler.source>
+        <maven.compiler.target>7</maven.compiler.target>
         <sonar.projectKey>svjis_svjis</sonar.projectKey>
         <sonar.organization>svjis</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
     </properties>
 
     <dependencies>

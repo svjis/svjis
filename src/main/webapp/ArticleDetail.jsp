@@ -98,13 +98,11 @@
                     <%
                         if ((article.getCommentList() != null) && (article.getCommentList().size() != 0)) {
                             SimpleDateFormat sdft = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-                            Iterator<ArticleComment> commI = article.getCommentList().iterator();
-                            while (commI.hasNext()) {
-                                ArticleComment c = commI.next();
+                            for (ArticleComment c: article.getCommentList()) {
                     %>
                             <div class="article box">
-                            <strong><%=c.getUser().getFirstName() %>&nbsp;<%=c.getUser().getLastName() %> <%=sdft.format(c.getInsertionTime()) %></strong><br>
-                            <%=c.getBody().replace("\n", "<br>") %>
+                                <strong><%=c.getUser().getFirstName() %>&nbsp;<%=c.getUser().getLastName() %> <%=sdft.format(c.getInsertionTime()) %></strong><br>
+                            <%=HttpUtils.makeHyperlins(c.getBody().replace("\n", "<br>")) %>
                             </div>
                         <%
                             }

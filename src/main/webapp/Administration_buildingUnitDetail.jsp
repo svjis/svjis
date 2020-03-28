@@ -26,6 +26,7 @@
                         <input type="hidden" name="page" value="buildingUnitSave" />
                         <input type="hidden" name="id" value="<%=buildingUnit.getId() %>" />
                         <fieldset>
+                            <legend class="hidden-legend"><%=language.getText("General") %></legend>
                             <p>
                                 <label id="common-label" for="common-input"><%=language.getText("Type") %></label>
                                 <select id="common-input" name="typeId">
