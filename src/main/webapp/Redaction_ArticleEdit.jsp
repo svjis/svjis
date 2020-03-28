@@ -152,6 +152,7 @@
 
                     <form action="Dispatcher?page=redactionArticleAttachmentSave&articleId=<%=article.getId() %>" enctype="multipart/form-data" method="post">
                         <fieldset>
+                            <legend class="hidden-legend"><%=language.getText("General") %></legend>
                             <%
                                 if ((article.getAttachmentList() != null) && (article.getAttachmentList().size() != 0)) {
                             %>

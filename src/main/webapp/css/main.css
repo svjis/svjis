@@ -103,6 +103,7 @@ h3 {font-size: small;}
             #common-submit input {margin-left: 15em;} 
             fieldset {border: 1px solid #e5e5e5; width: 50em; padding: 15px}
             legend {color: #000000; background: #d0d0d0; border: 1px solid #d0d0d0; padding: 2px 6px;} 
+            .hidden-legend {display: none;}
             
             #aside h4 {font-size:100%;}
             #aside h4.margin {margin:15px 0 5px 0;}

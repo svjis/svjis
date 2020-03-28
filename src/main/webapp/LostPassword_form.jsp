@@ -19,6 +19,7 @@
                         <form action="Dispatcher" method="post">
                         <input type="hidden" name="page" value="lostPassword_submit" />
                         <fieldset>
+                            <legend class="hidden-legend"><%=language.getText("General") %></legend>
                             <p>
                                 <label id="common-label" for="common-input"><%=language.getText("Your e-mail")%></label>
                                 <input id="common-input" type="text" name="email" maxlength="50" value="" />
