@@ -27,6 +27,7 @@
                     <form action="Dispatcher" method="post">
                         <input type="hidden" name="page" value="companySave" />
                         <fieldset>
+                            <legend class="hidden-legend"><%=language.getText("General") %></legend>
                             <p>
                                 <label id="common-label" for="common-input"><%=language.getText("Name") %></label>
                                 <input id="common-input" type="text" name="name" maxlength="50" size="50" value="<%=company.getName() %>">
