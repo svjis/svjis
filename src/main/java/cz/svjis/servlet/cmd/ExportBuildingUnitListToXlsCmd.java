@@ -41,7 +41,7 @@ public class ExportBuildingUnitListToXlsCmd extends Command {
             getResponse().setHeader("Content-Disposition", "attachment; filename=BuildingUnitList_" + sdf.format(new Date()) + ".xlsx");
             outb = getResponse().getOutputStream();
             try (XSSFWorkbook workbook = new XSSFWorkbook()) {
-                XSSFSheet sheet = workbook.createSheet("Users");
+                XSSFSheet sheet = workbook.createSheet("Building units");
 
                 LanguageDAO languageDao = new LanguageDAO(getCnn());
                 Language lang = languageDao.getDictionary(getUser().getLanguageId());
