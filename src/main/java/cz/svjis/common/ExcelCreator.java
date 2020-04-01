@@ -23,16 +23,16 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class ExcelCreator {
     
-    public static final String contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    public static final String CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
     
     private XSSFWorkbook workbook;
     private XSSFSheet sheet;
     private int line;
     private int maxCols;
     
-    public CellStyle headerStyle;
-    public CellStyle tableHeaderStyle;
-    public CellStyle normalStyle;
+    private CellStyle headerStyle;
+    private CellStyle tableHeaderStyle;
+    private CellStyle normalStyle;
     
     public void createWorkbook() {
         workbook = new XSSFWorkbook();
@@ -40,12 +40,12 @@ public class ExcelCreator {
         font.setBold(true);
         
         headerStyle = workbook.createCellStyle();
-        headerStyle.setFont(font);
+        getHeaderStyle().setFont(font);
         
         tableHeaderStyle = workbook.createCellStyle();
-        tableHeaderStyle.setFont(font);
-        tableHeaderStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
-        tableHeaderStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        getTableHeaderStyle().setFont(font);
+        getTableHeaderStyle().setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+        getTableHeaderStyle().setFillPattern(FillPatternType.SOLID_FOREGROUND);
         
         normalStyle = workbook.createCellStyle();
     }
@@ -78,6 +78,27 @@ public class ExcelCreator {
                 maxCols = i;
             }
         }
+    }
+
+    /**
+     * @return the headerStyle
+     */
+    public CellStyle getHeaderStyle() {
+        return headerStyle;
+    }
+
+    /**
+     * @return the tableHeaderStyle
+     */
+    public CellStyle getTableHeaderStyle() {
+        return tableHeaderStyle;
+    }
+
+    /**
+     * @return the normalStyle
+     */
+    public CellStyle getNormalStyle() {
+        return normalStyle;
     }
     
 }

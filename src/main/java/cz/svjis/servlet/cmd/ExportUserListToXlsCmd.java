@@ -34,7 +34,7 @@ public class ExportUserListToXlsCmd extends Command {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
             SimpleDateFormat sdf2 = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-            getResponse().setContentType(ExcelCreator.contentType);
+            getResponse().setContentType(ExcelCreator.CONTENT_TYPE);
             getResponse().setHeader("Content-Disposition", "attachment; filename=UserList_" + sdf.format(new Date()) + ".xlsx");
             outb = getResponse().getOutputStream();
 
@@ -48,9 +48,9 @@ public class ExportUserListToXlsCmd extends Command {
             ec.createSheet(lang.getText("User list"));
             ArrayList<String> line = new ArrayList<>();
             line.add(lang.getText("User list"));
-            ec.addLine(line, ec.headerStyle);
+            ec.addLine(line, ec.getHeaderStyle());
             line = new ArrayList<>();
-            ec.addLine(line, ec.normalStyle);
+            ec.addLine(line, ec.getNormalStyle());
             line = new ArrayList<>();
             line.add(lang.getText("Salutation"));
             line.add(lang.getText("First name"));
@@ -65,7 +65,7 @@ public class ExportUserListToXlsCmd extends Command {
             line.add(lang.getText("E-Mail"));
             line.add(lang.getText("Enabled"));
             line.add(lang.getText("Last login"));
-            ec.addLine(line, ec.tableHeaderStyle);
+            ec.addLine(line, ec.getTableHeaderStyle());
                 
             for (User u: userList) {
                 line = new ArrayList<>();
@@ -84,7 +84,7 @@ public class ExportUserListToXlsCmd extends Command {
                 if (u.getLastLogin() != null) {
                     line.add(sdf2.format(u.getLastLogin()));
                 }
-                ec.addLine(line, ec.normalStyle);
+                ec.addLine(line, ec.getNormalStyle());
             }
             
             ec.writeWorkbook(outb);

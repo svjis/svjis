@@ -34,7 +34,7 @@ public class ExportBuildingUnitListToXlsCmd extends Command {
 
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
-            getResponse().setContentType(ExcelCreator.contentType);
+            getResponse().setContentType(ExcelCreator.CONTENT_TYPE);
             getResponse().setHeader("Content-Disposition", "attachment; filename=BuildingUnitList_" + sdf.format(new Date()) + ".xlsx");
             outb = getResponse().getOutputStream();
 
@@ -50,9 +50,9 @@ public class ExportBuildingUnitListToXlsCmd extends Command {
             ec.createSheet(lang.getText("Building unit list"));
             ArrayList<String> line = new ArrayList<>();
             line.add(lang.getText("Building unit list"));
-            ec.addLine(line, ec.headerStyle);
+            ec.addLine(line, ec.getHeaderStyle());
             line = new ArrayList<>();
-            ec.addLine(line, ec.normalStyle);
+            ec.addLine(line, ec.getNormalStyle());
             line = new ArrayList<>();
             line.add(lang.getText("Type"));
             line.add(lang.getText("Registration Id."));
@@ -60,7 +60,7 @@ public class ExportBuildingUnitListToXlsCmd extends Command {
             line.add(lang.getText("Owner list"));
             line.add(lang.getText("Numerator"));
             line.add(lang.getText("Denominator"));
-            ec.addLine(line, ec.tableHeaderStyle);
+            ec.addLine(line, ec.getTableHeaderStyle());
             
             for (BuildingUnit u: buildingUnitList) {
                 line = new ArrayList<>();
@@ -70,7 +70,7 @@ public class ExportBuildingUnitListToXlsCmd extends Command {
                 line.add("");
                 line.add(String.valueOf(u.getNumerator()));
                 line.add(String.valueOf(u.getDenominator()));
-                ec.addLine(line, ec.normalStyle);
+                ec.addLine(line, ec.getNormalStyle());
                 
                 ArrayList<User> userList = new ArrayList(buildingDao.getBuildingUnitHasUserList(u.getId()));
                 for (User owner: userList) {
@@ -79,7 +79,7 @@ public class ExportBuildingUnitListToXlsCmd extends Command {
                     line.add("");
                     line.add("");
                     line.add(String.valueOf(owner.getSalutation() + " " + owner.getFirstName() + " " + owner.getLastName()).trim());
-                    ec.addLine(line, ec.normalStyle);
+                    ec.addLine(line, ec.getNormalStyle());
                 }
             }
             
