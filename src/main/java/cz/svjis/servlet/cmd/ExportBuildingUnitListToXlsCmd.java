@@ -10,20 +10,13 @@ import cz.svjis.bean.BuildingUnit;
 import cz.svjis.bean.Language;
 import cz.svjis.bean.LanguageDAO;
 import cz.svjis.bean.User;
+import cz.svjis.common.ExcelCreator;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
@@ -41,7 +34,7 @@ public class ExportBuildingUnitListToXlsCmd extends Command {
 
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
-            getResponse().setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            getResponse().setContentType(ExcelCreator.contentType);
             getResponse().setHeader("Content-Disposition", "attachment; filename=BuildingUnitList_" + sdf.format(new Date()) + ".xlsx");
             outb = getResponse().getOutputStream();
 
@@ -52,80 +45,46 @@ public class ExportBuildingUnitListToXlsCmd extends Command {
                     buildingDao.getBuilding(getUser().getCompanyId()).getId(),
                     0));
 
-            try (XSSFWorkbook workbook = new XSSFWorkbook()) {
-                XSSFSheet sheet = workbook.createSheet(lang.getText("Building unit list"));
-
-                int l = 0;
-                int c = 0;
-
-                //-- Header
-                Font font = workbook.createFont();
-                font.setBold(true);
-                CellStyle style1 = workbook.createCellStyle();
-                style1.setFont(font);
-                CellStyle style2 = workbook.createCellStyle();
-                style2.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
-                style2.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-                style2.setFont(font);
-
-                Row row = sheet.createRow(l++);
-                Cell cell = row.createCell(c++);
-                cell.setCellStyle(style1);
-                cell.setCellValue(lang.getText("Building unit list"));
-                l++;
-                row = sheet.createRow(l++);
-                c = 0;
-                cell = row.createCell(c++);
-                cell.setCellStyle(style2);
-                cell.setCellValue(lang.getText("Type"));
-                cell = row.createCell(c++);
-                cell.setCellStyle(style2);
-                cell.setCellValue(lang.getText("Registration Id."));
-                cell = row.createCell(c++);
-                cell.setCellStyle(style2);
-                cell.setCellValue(lang.getText("Description"));
-                cell = row.createCell(c++);
-                cell.setCellStyle(style2);
-                cell.setCellValue(lang.getText("Owner list"));
-                cell = row.createCell(c++);
-                cell.setCellStyle(style2);
-                cell.setCellValue(lang.getText("Numerator"));
-                cell = row.createCell(c++);
-                cell.setCellStyle(style2);
-                cell.setCellValue(lang.getText("Denominator"));
-
-                for (BuildingUnit u: buildingUnitList) {
-                    row = sheet.createRow(l++);
-                    c = 0;
-
-                    cell = row.createCell(c++);
-                    cell.setCellValue(u.getBuildingUnitType());
-                    cell = row.createCell(c++);
-                    cell.setCellValue(u.getRegistrationId());
-                    cell = row.createCell(c++);
-                    cell.setCellValue(u.getDescription());
-                    c++;
-                    cell = row.createCell(c++);
-                    cell.setCellValue(u.getNumerator());
-                    cell = row.createCell(c++);
-                    cell.setCellValue(u.getDenominator());
-
-                    ArrayList<User> userList = new ArrayList(buildingDao.getBuildingUnitHasUserList(u.getId()));
-                    for (User owner: userList) {
-                        row = sheet.createRow(l++);
-                        c = 3;
-                        cell = row.createCell(c++);
-                        cell.setCellValue(String.valueOf(owner.getSalutation() + " " + owner.getFirstName() + " " + owner.getLastName()).trim());
-                    }
+            ExcelCreator ec = new ExcelCreator();
+            ec.createWorkbook();
+            ec.createSheet(lang.getText("Building unit list"));
+            ArrayList<String> line = new ArrayList<>();
+            line.add(lang.getText("Building unit list"));
+            ec.addLine(line, ec.headerStyle);
+            line = new ArrayList<>();
+            ec.addLine(line, ec.normalStyle);
+            line = new ArrayList<>();
+            line.add(lang.getText("Type"));
+            line.add(lang.getText("Registration Id."));
+            line.add(lang.getText("Description"));
+            line.add(lang.getText("Owner list"));
+            line.add(lang.getText("Numerator"));
+            line.add(lang.getText("Denominator"));
+            ec.addLine(line, ec.tableHeaderStyle);
+            
+            for (BuildingUnit u: buildingUnitList) {
+                line = new ArrayList<>();
+                line.add(u.getBuildingUnitType());
+                line.add(u.getRegistrationId());
+                line.add(u.getDescription());
+                line.add("");
+                line.add(String.valueOf(u.getNumerator()));
+                line.add(String.valueOf(u.getDenominator()));
+                ec.addLine(line, ec.normalStyle);
+                
+                ArrayList<User> userList = new ArrayList(buildingDao.getBuildingUnitHasUserList(u.getId()));
+                for (User owner: userList) {
+                    line = new ArrayList<>();
+                    line.add("");
+                    line.add("");
+                    line.add("");
+                    line.add(String.valueOf(owner.getSalutation() + " " + owner.getFirstName() + " " + owner.getLastName()).trim());
+                    ec.addLine(line, ec.normalStyle);
                 }
-                sheet.autoSizeColumn(0);
-                sheet.autoSizeColumn(1);
-                sheet.autoSizeColumn(2);
-                sheet.autoSizeColumn(3);
-                sheet.autoSizeColumn(4);
-                sheet.autoSizeColumn(5);
-                workbook.write(outb);
             }
+            
+            ec.writeWorkbook(outb);
+            ec.closeWorkbook();
         } finally {
             if (outb != null) {
                 outb.close();
