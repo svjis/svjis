@@ -7,7 +7,7 @@ package cz.svjis.common;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
+import java.util.List;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
@@ -67,7 +67,7 @@ public class ExcelCreator {
         workbook.close();
     }
     
-    public void addLine(ArrayList<String> columns, CellStyle style) {
+    public void addLine(List<String> columns, CellStyle style) {
         Row row = sheet.createRow(line++);
         int i = 0;
         for (String c: columns) {
