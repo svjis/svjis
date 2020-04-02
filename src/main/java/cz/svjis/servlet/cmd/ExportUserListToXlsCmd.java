@@ -9,22 +9,13 @@ import cz.svjis.bean.Language;
 import cz.svjis.bean.LanguageDAO;
 import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
+import cz.svjis.common.ExcelCreator;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
-import jxl.Workbook;
-import jxl.format.Colour;
-import jxl.format.VerticalAlignment;
-import jxl.write.Label;
-import jxl.write.NumberFormats;
-import jxl.write.WritableCellFormat;
-import jxl.write.WritableFont;
-import jxl.write.WritableSheet;
-import jxl.write.WritableWorkbook;
 
 /**
  *
@@ -42,91 +33,62 @@ public class ExportUserListToXlsCmd extends Command {
 
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
-            getResponse().setContentType("application/vnd.ms-excel");
-            getResponse().setHeader("Content-Disposition", "attachment; filename=UserList_" + sdf.format(new Date()) + ".xls");
+            SimpleDateFormat sdf2 = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+            getResponse().setContentType(ExcelCreator.CONTENT_TYPE);
+            getResponse().setHeader("Content-Disposition", "attachment; filename=UserList_" + sdf.format(new Date()) + ".xlsx");
             outb = getResponse().getOutputStream();
-            WritableWorkbook w = Workbook.createWorkbook(outb);
-            WritableSheet s = w.createSheet("RequestList", 0);
 
             LanguageDAO languageDao = new LanguageDAO(getCnn());
             Language lang = languageDao.getDictionary(getUser().getLanguageId());
             UserDAO userDao = new UserDAO(getCnn());
             ArrayList<User> userList = new ArrayList(userDao.getUserList(getUser().getCompanyId(), false, 0, true));
 
-            WritableCellFormat bold = new WritableCellFormat(new WritableFont(WritableFont.ARIAL, 10, WritableFont.BOLD));
-            WritableCellFormat boldGr = new WritableCellFormat(new WritableFont(WritableFont.ARIAL, 10, WritableFont.BOLD));
-            boldGr.setBackground(Colour.GREY_25_PERCENT);
-
-            WritableCellFormat std = new WritableCellFormat(new WritableFont(WritableFont.ARIAL, 10, WritableFont.NO_BOLD));
-            std.setShrinkToFit(true);
-            std.setWrap(true);
-            std.setVerticalAlignment(VerticalAlignment.TOP);
-
-            WritableCellFormat num = new WritableCellFormat(NumberFormats.INTEGER);
-            num.setVerticalAlignment(VerticalAlignment.TOP);
-            WritableCellFormat dateTimeFormat = new WritableCellFormat(new jxl.write.DateFormat("dd.MM.yyyy HH:mm"));
-            dateTimeFormat.setVerticalAlignment(VerticalAlignment.TOP);
-
-            int l = 0;
-            int c = 0;
-
-            //-- Header
-            s.addCell(new Label(c, l, lang.getText("User list"), bold));
-            l += 2;
-            s.setColumnView(c, 14);
-            s.addCell(new Label(c++, l, lang.getText("Salutation"), boldGr));
-            s.setColumnView(c, 14);
-            s.addCell(new Label(c++, l, lang.getText("First name"), boldGr));
-            s.setColumnView(c, 14);
-            s.addCell(new Label(c++, l, lang.getText("Last name"), boldGr));
-            s.setColumnView(c, 14);
-            s.addCell(new Label(c++, l, lang.getText("Language"), boldGr));
-            s.setColumnView(c, 30);
-            s.addCell(new Label(c++, l, lang.getText("Address"), boldGr));
-            s.setColumnView(c, 14);
-            s.addCell(new Label(c++, l, lang.getText("City"), boldGr));
-            s.setColumnView(c, 14);
-            s.addCell(new Label(c++, l, lang.getText("Post code"), boldGr));
-            s.setColumnView(c, 14);
-            s.addCell(new Label(c++, l, lang.getText("Country"), boldGr));
-            s.setColumnView(c, 20);
-            s.addCell(new Label(c++, l, lang.getText("Fixed phone"), boldGr));
-            s.setColumnView(c, 20);
-            s.addCell(new Label(c++, l, lang.getText("Cell phone"), boldGr));
-            s.setColumnView(c, 30);
-            s.addCell(new Label(c++, l, lang.getText("E-Mail"), boldGr));
-            s.setColumnView(c, 14);
-            s.addCell(new Label(c++, l, lang.getText("Enabled"), boldGr));
-            s.setColumnView(c, 20);
-            s.addCell(new Label(c++, l, lang.getText("Last login"), boldGr));
-
-            Iterator<User> i = userList.iterator();
-            while (i.hasNext()) {
-                User u = i.next();
-                l++;
-                c = 0;
-
-                s.addCell(new jxl.write.Label(c++, l, u.getSalutation(), std));
-                s.addCell(new jxl.write.Label(c++, l, u.getFirstName(), std));
-                s.addCell(new jxl.write.Label(c++, l, u.getLastName(), std));
-                s.addCell(new jxl.write.Label(c++, l, languageDao.getLanguage(u.getLanguageId()).getDescription(), std));
-                s.addCell(new jxl.write.Label(c++, l, u.getAddress(), std));
-                s.addCell(new jxl.write.Label(c++, l, u.getCity(), std));
-                s.addCell(new jxl.write.Label(c++, l, u.getPostCode(), std));
-                s.addCell(new jxl.write.Label(c++, l, u.getCountry(), std));
-                s.addCell(new jxl.write.Label(c++, l, u.getFixedPhone(), std));
-                s.addCell(new jxl.write.Label(c++, l, u.getCellPhone(), std));
-                s.addCell(new jxl.write.Label(c++, l, u.geteMail(), std));
-                s.addCell(new jxl.write.Label(c++, l, (u.isEnabled()) ? lang.getText("yes") : lang.getText("no"), std));
+            ExcelCreator ec = new ExcelCreator();
+            ec.createWorkbook();
+            ec.createSheet(lang.getText("User list"));
+            ArrayList<String> line = new ArrayList<>();
+            line.add(lang.getText("User list"));
+            ec.addLine(line, ec.getHeaderStyle());
+            line = new ArrayList<>();
+            ec.addLine(line, ec.getNormalStyle());
+            line = new ArrayList<>();
+            line.add(lang.getText("Salutation"));
+            line.add(lang.getText("First name"));
+            line.add(lang.getText("Last name"));
+            line.add(lang.getText("Language"));
+            line.add(lang.getText("Address"));
+            line.add(lang.getText("City"));
+            line.add(lang.getText("Post code"));
+            line.add(lang.getText("Country"));
+            line.add(lang.getText("Fixed phone"));
+            line.add(lang.getText("Cell phone"));
+            line.add(lang.getText("E-Mail"));
+            line.add(lang.getText("Enabled"));
+            line.add(lang.getText("Last login"));
+            ec.addLine(line, ec.getTableHeaderStyle());
+                
+            for (User u: userList) {
+                line = new ArrayList<>();
+                line.add(u.getSalutation());
+                line.add(u.getFirstName());
+                line.add(u.getLastName());
+                line.add(languageDao.getLanguage(u.getLanguageId()).getDescription());
+                line.add(u.getAddress());
+                line.add(u.getCity());
+                line.add(u.getPostCode());
+                line.add(u.getCountry());
+                line.add(u.getFixedPhone());
+                line.add(u.getCellPhone());
+                line.add(u.geteMail());
+                line.add((u.isEnabled()) ? lang.getText("yes") : lang.getText("no"));
                 if (u.getLastLogin() != null) {
-                    s.addCell(new jxl.write.DateTime(c++, l, u.getLastLogin(), dateTimeFormat));
-                } else {
-                    c++;
+                    line.add(sdf2.format(u.getLastLogin()));
                 }
+                ec.addLine(line, ec.getNormalStyle());
             }
-
-            w.write();
-            w.close();
+            
+            ec.writeWorkbook(outb);
+            ec.closeWorkbook();
         } finally {
             if (outb != null) {
                 outb.close();

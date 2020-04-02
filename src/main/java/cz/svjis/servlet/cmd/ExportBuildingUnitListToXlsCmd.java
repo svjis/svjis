@@ -10,22 +10,13 @@ import cz.svjis.bean.BuildingUnit;
 import cz.svjis.bean.Language;
 import cz.svjis.bean.LanguageDAO;
 import cz.svjis.bean.User;
+import cz.svjis.common.ExcelCreator;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
-import jxl.Workbook;
-import jxl.format.Colour;
-import jxl.format.VerticalAlignment;
-import jxl.write.Label;
-import jxl.write.NumberFormats;
-import jxl.write.WritableCellFormat;
-import jxl.write.WritableFont;
-import jxl.write.WritableSheet;
-import jxl.write.WritableWorkbook;
 
 /**
  *
@@ -43,11 +34,9 @@ public class ExportBuildingUnitListToXlsCmd extends Command {
 
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
-            getResponse().setContentType("application/vnd.ms-excel");
-            getResponse().setHeader("Content-Disposition", "attachment; filename=BuildingUnitList_" + sdf.format(new Date()) + ".xls");
+            getResponse().setContentType(ExcelCreator.CONTENT_TYPE);
+            getResponse().setHeader("Content-Disposition", "attachment; filename=BuildingUnitList_" + sdf.format(new Date()) + ".xlsx");
             outb = getResponse().getOutputStream();
-            WritableWorkbook w = Workbook.createWorkbook(outb);
-            WritableSheet s = w.createSheet("RequestList", 0);
 
             LanguageDAO languageDao = new LanguageDAO(getCnn());
             Language lang = languageDao.getDictionary(getUser().getLanguageId());
@@ -56,65 +45,46 @@ public class ExportBuildingUnitListToXlsCmd extends Command {
                     buildingDao.getBuilding(getUser().getCompanyId()).getId(),
                     0));
 
-            WritableCellFormat bold = new WritableCellFormat(new WritableFont(WritableFont.ARIAL, 10, WritableFont.BOLD));
-            WritableCellFormat boldGr = new WritableCellFormat(new WritableFont(WritableFont.ARIAL, 10, WritableFont.BOLD));
-            boldGr.setBackground(Colour.GREY_25_PERCENT);
-
-            WritableCellFormat std = new WritableCellFormat(new WritableFont(WritableFont.ARIAL, 10, WritableFont.NO_BOLD));
-            std.setShrinkToFit(true);
-            std.setWrap(true);
-            std.setVerticalAlignment(VerticalAlignment.TOP);
-
-            WritableCellFormat num = new WritableCellFormat(NumberFormats.INTEGER);
-            num.setVerticalAlignment(VerticalAlignment.TOP);
-            WritableCellFormat dateTimeFormat = new WritableCellFormat(new jxl.write.DateFormat("dd.MM.yyyy HH:mm"));
-            dateTimeFormat.setVerticalAlignment(VerticalAlignment.TOP);
-
-            int l = 0;
-            int c = 0;
-
-            //-- Header
-            s.addCell(new Label(c, l, lang.getText("Building unit list"), bold));
-            l += 2;
-            s.setColumnView(c, 20);
-            s.addCell(new Label(c++, l, lang.getText("Type"), boldGr));
-            s.setColumnView(c, 14);
-            s.addCell(new Label(c++, l, lang.getText("Registration Id."), boldGr));
-            s.setColumnView(c, 20);
-            s.addCell(new Label(c++, l, lang.getText("Description"), boldGr));
-            s.setColumnView(c, 30);
-            s.addCell(new Label(c++, l, lang.getText("Owner list"), boldGr));
-            s.setColumnView(c, 14);
-            s.addCell(new Label(c++, l, lang.getText("Numerator"), boldGr));
-            s.setColumnView(c, 14);
-            s.addCell(new Label(c++, l, lang.getText("Denominator"), boldGr));
-
-            Iterator<BuildingUnit> i = buildingUnitList.iterator();
-            while (i.hasNext()) {
-                BuildingUnit u = i.next();
-                l++;
-                c = 0;
-
-                s.addCell(new jxl.write.Label(c++, l, u.getBuildingUnitType(), std));
-                s.addCell(new jxl.write.Label(c++, l, u.getRegistrationId(), std));
-                s.addCell(new jxl.write.Label(c++, l, u.getDescription(), std));
-                c++;
-                s.addCell(new jxl.write.Number(c++, l, u.getNumerator(), num));
-                s.addCell(new jxl.write.Number(c++, l, u.getDenominator(), num));
-
+            ExcelCreator ec = new ExcelCreator();
+            ec.createWorkbook();
+            ec.createSheet(lang.getText("Building unit list"));
+            ArrayList<String> line = new ArrayList<>();
+            line.add(lang.getText("Building unit list"));
+            ec.addLine(line, ec.getHeaderStyle());
+            line = new ArrayList<>();
+            ec.addLine(line, ec.getNormalStyle());
+            line = new ArrayList<>();
+            line.add(lang.getText("Type"));
+            line.add(lang.getText("Registration Id."));
+            line.add(lang.getText("Description"));
+            line.add(lang.getText("Owner list"));
+            line.add(lang.getText("Numerator"));
+            line.add(lang.getText("Denominator"));
+            ec.addLine(line, ec.getTableHeaderStyle());
+            
+            for (BuildingUnit u: buildingUnitList) {
+                line = new ArrayList<>();
+                line.add(u.getBuildingUnitType());
+                line.add(u.getRegistrationId());
+                line.add(u.getDescription());
+                line.add("");
+                line.add(String.valueOf(u.getNumerator()));
+                line.add(String.valueOf(u.getDenominator()));
+                ec.addLine(line, ec.getNormalStyle());
+                
                 ArrayList<User> userList = new ArrayList(buildingDao.getBuildingUnitHasUserList(u.getId()));
-                Iterator<User> userIterator = userList.iterator();
-                while (userIterator.hasNext()) {
-                    User owner = userIterator.next();
-                    l++;
-                    c = 3;
-                    s.addCell(new jxl.write.Label(c++, l,
-                            String.valueOf(owner.getSalutation() + " " + owner.getFirstName() + " " + owner.getLastName()).trim(), std));
+                for (User owner: userList) {
+                    line = new ArrayList<>();
+                    line.add("");
+                    line.add("");
+                    line.add("");
+                    line.add(String.valueOf(owner.getSalutation() + " " + owner.getFirstName() + " " + owner.getLastName()).trim());
+                    ec.addLine(line, ec.getNormalStyle());
                 }
             }
-
-            w.write();
-            w.close();
+            
+            ec.writeWorkbook(outb);
+            ec.closeWorkbook();
         } finally {
             if (outb != null) {
                 outb.close();
