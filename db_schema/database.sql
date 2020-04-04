@@ -1924,3 +1924,11 @@ INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Stop watching d
 INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Stop watching discussion', '2', 'Stop watching discussion');
 INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Internal note', '1', 'Interní poznámka');
 INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Internal note', '2', 'Internal note');
+INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Building entrance list', '1', 'Seznam vchodů');
+INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Building entrance list', '2', 'Entrance list');
+INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Add new building entrance', '1', 'Přidat nový vchod');
+INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Add new building entrance', '2', 'Add new entrance');
+INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Really do you want to remove entrance', '1', 'Opravdu chcete odstranit vchod');
+INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Really do you want to remove entrance', '2', 'Really do you want to remove entrance');
+INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Building entrance', '1', 'Vchod');
+INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Building entrance', '2', 'Entrance');
