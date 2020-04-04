@@ -408,13 +408,12 @@ public class BuildingDAO extends DAO {
     public int insertBuildingEntrance(BuildingEntrance be) throws SQLException {
         int result = 0;
         
-        String insert = "INSERT INTO BUILDING_ENTRANCE (ID, BUILDING_ID, DESCRIPTION, ADDRESS) VALUES (?,?,?,?)  returning ID";
+        String insert = "INSERT INTO BUILDING_ENTRANCE (BUILDING_ID, DESCRIPTION, ADDRESS) VALUES (?,?,?)  returning ID";
         
         try (PreparedStatement ps = cnn.prepareStatement(insert)) {
-            ps.setInt(1, be.getId());
-            ps.setInt(2, be.getBuildingId());
-            ps.setString(3, be.getDescription());
-            ps.setString(4, be.getAddress());
+            ps.setInt(1, be.getBuildingId());
+            ps.setString(2, be.getDescription());
+            ps.setString(3, be.getAddress());
             
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {

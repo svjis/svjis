@@ -30,6 +30,7 @@ public class Company implements Serializable {
     private String pictureContentType;
     private String pictureFilename;
     private byte[] pictureData;
+    private int entranceCnt;
     private int unitCnt;
     private int boardCnt;
     private int userCnt;
@@ -338,5 +339,19 @@ public class Company implements Serializable {
      */
     public void setBoardCnt(int boardCnt) {
         this.boardCnt = boardCnt;
+    }
+    
+    /**
+     * @return the entranceCnt
+     */
+    public int getEntranceCnt() {
+        return entranceCnt;
+    }
+
+    /**
+     * @param entranceCnt the entranceCnt to set
+     */
+    public void setEntranceCnt(int entranceCnt) {
+        this.entranceCnt = entranceCnt;
     }
 }

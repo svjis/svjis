@@ -81,6 +81,7 @@ public class CompanyDAO extends DAO {
                 + "a.PICTURE_CONTENT_TYPE, "
                 + "a.PICTURE_FILENAME, "
                 + "a.PICTURE_DATA, "
+                + "(SELECT count(*) FROM BUILDING b left join BUILDING_ENTRANCE en on (en.BUILDING_ID = b.ID) where (b.COMPANY_ID = a.ID) AND (en.ID IS NOT null)) AS ENTRANCE_CNT, "
                 + "(SELECT count(*) FROM BUILDING b left join BUILDING_UNIT u on (u.BUILDING_ID = b.ID) where (b.COMPANY_ID = a.ID) AND (u.ID IS NOT null)) AS UNIT_CNT, "
                 + "(SELECT count(*) FROM BOARD_MEMBER m LEFT JOIN \"USER\" u ON u.ID = m.USER_ID WHERE u.COMPANY_ID = a.ID) AS BOARD_CNT, "
                 + "(SELECT count(*) FROM \"USER\" u where (u.COMPANY_ID = a.ID) AND (u.ENABLED = 1)) AS USER_CNT, "
@@ -109,6 +110,7 @@ public class CompanyDAO extends DAO {
                     result.setPictureContentType(rs.getString("PICTURE_CONTENT_TYPE"));
                     result.setPictureFilename(rs.getString("PICTURE_FILENAME"));
                     result.setPictureData(rs.getBytes("PICTURE_DATA"));
+                    result.setEntranceCnt(rs.getInt("ENTRANCE_CNT"));
                     result.setUnitCnt(rs.getInt("UNIT_CNT"));
                     result.setBoardCnt(rs.getInt("BOARD_CNT"));
                     result.setUserCnt(rs.getInt("USER_CNT"));
