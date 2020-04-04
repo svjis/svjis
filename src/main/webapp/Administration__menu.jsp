@@ -28,6 +28,7 @@
             <ul class="nav">
                 <li <%=(p.startsWith("companyDetail") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=companyDetail"><%=language.getText("Company") %></a></li>
                 <li <%=(p.startsWith("buildingDetail") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=buildingDetail"><%=language.getText("Building") %></a></li>
+                <li <%=(p.startsWith("buildingEntranceList") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=buildingEntranceList"><%=language.getText("Building entrance list") %> (<%=currCompany.getEntranceCnt() %>)</a></li>
                 <li <%=(p.startsWith("buildingUnitList") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=buildingUnitList"><%=language.getText("Building unit list") %> (<%=currCompany.getUnitCnt() %>)</a></li>
                 <li <%=(p.startsWith("boardMemberList") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=boardMemberList"><%=language.getText("Board") %> (<%=currCompany.getBoardCnt() %>)</a></li>
                 <li <%=(p.startsWith("userList") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=userList"><%=language.getText("User list") %> (<%=currCompany.getUserCnt() %>)</a></li>
