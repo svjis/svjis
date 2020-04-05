@@ -84,10 +84,15 @@ public class FaultReportDAO extends DAO {
                         "    a.ASSIGNED_TO_USER_ID, \n" +
                         "    ass.FIRST_NAME as AS_FIRST_NAME, \n" +
                         "    ass.LAST_NAME as AS_LAST_NAME, \n" +
-                        "    a.CLOSED\n" +
+                        "    a.CLOSED, \n " +
+                        "    be.ID as BE_ID, \n " +
+                        "    be.BUILDING_ID as BE_BUILDING_ID, \n " +
+                        "    be.DESCRIPTION as BE_DESCRIPTION, \n " +
+                        "    be.ADDRESS as BE_ADDRESS \n" +
                         "FROM FAULT_REPORT a \n" +
                         "LEFT JOIN \"USER\" cr on cr.ID = a.CREATED_BY_USER_ID \n" +
                         "LEFT JOIN \"USER\" ass on ass.ID = a.ASSIGNED_TO_USER_ID \n" +
+                        "LEFT JOIN BUILDING_ENTRANCE be on be.ID = BUILDING_ENTRANCE_ID \n" +
                         where +
                         "ORDER BY a.CREATION_DATE desc;";
         
@@ -142,10 +147,15 @@ public class FaultReportDAO extends DAO {
                         "    a.ASSIGNED_TO_USER_ID, \n" +
                         "    ass.FIRST_NAME as AS_FIRST_NAME, \n" +
                         "    ass.LAST_NAME as AS_LAST_NAME, \n" +
-                        "    a.CLOSED\n" +
+                        "    a.CLOSED, \n " +
+                        "    be.ID as BE_ID, \n " +
+                        "    be.BUILDING_ID as BE_BUILDING_ID, \n " +
+                        "    be.DESCRIPTION as BE_DESCRIPTION, \n " +
+                        "    be.ADDRESS as BE_ADDRESS \n" +
                         "FROM FAULT_REPORT a \n" +
                         "LEFT JOIN \"USER\" cr on cr.ID = a.CREATED_BY_USER_ID \n" +
                         "LEFT JOIN \"USER\" ass on ass.ID = a.ASSIGNED_TO_USER_ID \n" +
+                        "LEFT JOIN BUILDING_ENTRANCE be on be.ID = BUILDING_ENTRANCE_ID \n" +
                         "WHERE a.COMPANY_ID = ? AND (\n" +
                             "(UPPER(a.SUBJECT) like UPPER(?)) OR \n" +
                             "(UPPER(a.DESCRIPTION) like UPPER(?)) \n" +
@@ -192,6 +202,14 @@ public class FaultReportDAO extends DAO {
                     u.setLastName(rs.getString("AS_LAST_NAME"));
                     f.setAssignedToUser(u);
                 }
+                if (rs.getInt("BE_ID") != 0) {
+                    BuildingEntrance be = new BuildingEntrance();
+                    be.setId(rs.getInt("BE_ID"));
+                    be.setBuildingId(rs.getInt("BE_BUILDING_ID"));
+                    be.setDescription(rs.getString("BE_DESCRIPTION"));
+                    be.setAddress(rs.getString("BE_ADDRESS"));
+                    f.setBuildingEntrance(be);
+                }
                 f.setClosed(rs.getBoolean("CLOSED"));
                 result.add(f);   
             }
@@ -221,10 +239,15 @@ public class FaultReportDAO extends DAO {
                         "    a.ASSIGNED_TO_USER_ID, \n" +
                         "    ass.FIRST_NAME as AS_FIRST_NAME, \n" +
                         "    ass.LAST_NAME as AS_LAST_NAME, \n" +
-                        "    a.CLOSED\n" +
+                        "    a.CLOSED, \n " +
+                        "    be.ID as BE_ID, \n " +
+                        "    be.BUILDING_ID as BE_BUILDING_ID, \n " +
+                        "    be.DESCRIPTION as BE_DESCRIPTION, \n " +
+                        "    be.ADDRESS as BE_ADDRESS \n" +
                         "FROM FAULT_REPORT a \n" +
                         "LEFT JOIN \"USER\" cr on cr.ID = a.CREATED_BY_USER_ID \n" +
                         "LEFT JOIN \"USER\" ass on ass.ID = a.ASSIGNED_TO_USER_ID \n" +
+                        "LEFT JOIN BUILDING_ENTRANCE be on be.ID = BUILDING_ENTRANCE_ID \n" +
                         "WHERE a.COMPANY_ID = ? AND a.ID = ? ;";
         
         try (PreparedStatement ps = cnn.prepareStatement(select)) {
@@ -251,6 +274,14 @@ public class FaultReportDAO extends DAO {
                         u.setFirstName(rs.getString("AS_FIRST_NAME"));
                         u.setLastName(rs.getString("AS_LAST_NAME"));
                         result.setAssignedToUser(u);
+                    }
+                    if (rs.getInt("BE_ID") != 0) {
+                        BuildingEntrance be = new BuildingEntrance();
+                        be.setId(rs.getInt("BE_ID"));
+                        be.setBuildingId(rs.getInt("BE_BUILDING_ID"));
+                        be.setDescription(rs.getString("BE_DESCRIPTION"));
+                        be.setAddress(rs.getString("BE_ADDRESS"));
+                        result.setBuildingEntrance(be);
                     }
                     result.setClosed(rs.getBoolean("CLOSED"));
                 }
@@ -379,8 +410,9 @@ public class FaultReportDAO extends DAO {
                         + "CREATION_DATE, "
                         + "CREATED_BY_USER_ID, "
                         + "ASSIGNED_TO_USER_ID, "
-                        + "CLOSED) " +
-                        " VALUES (?,?,?,?,?,?,?) returning ID;";
+                        + "CLOSED, "
+                        + "BUILDING_ENTRANCE_ID) " +
+                        " VALUES (?,?,?,?,?,?,?,?) returning ID;";
         
         try (PreparedStatement ps = cnn.prepareStatement(insert)) {
             ps.setInt(1, f.getCompanyId());
@@ -394,6 +426,11 @@ public class FaultReportDAO extends DAO {
                 ps.setNull(6, java.sql.Types.INTEGER);
             }
             ps.setBoolean(7, f.isClosed());
+            if (f.getBuildingEntrance() != null) {
+                ps.setInt(8, f.getBuildingEntrance().getId());
+            } else {
+                ps.setNull(8, java.sql.Types.INTEGER);
+            }
             
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -407,7 +444,7 @@ public class FaultReportDAO extends DAO {
     
     public void modifyFault(FaultReport f) throws SQLException {
         String update = "UPDATE FAULT_REPORT a \n" +
-                        "SET a.SUBJECT = ?, a.DESCRIPTION = ?, a.ASSIGNED_TO_USER_ID = ?, a.CLOSED = ?\n" +
+                        "SET a.SUBJECT = ?, a.DESCRIPTION = ?, a.ASSIGNED_TO_USER_ID = ?, a.CLOSED = ?, a.BUILDING_ENTRANCE_ID = ?\n" +
                         "WHERE a.COMPANY_ID = ? AND a.ID = ? ;";
         
         try (PreparedStatement ps = cnn.prepareStatement(update)) {
@@ -419,8 +456,13 @@ public class FaultReportDAO extends DAO {
                 ps.setNull(3, java.sql.Types.INTEGER);
             }
             ps.setBoolean(4, f.isClosed());
-            ps.setInt(5, f.getCompanyId());
-            ps.setInt(6, f.getId());
+            if (f.getBuildingEntrance() != null) {
+                ps.setInt(5, f.getBuildingEntrance().getId());
+            } else {
+                ps.setNull(5, java.sql.Types.INTEGER);
+            }
+            ps.setInt(6, f.getCompanyId());
+            ps.setInt(7, f.getId());
             
             ps.execute();
         }

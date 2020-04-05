@@ -4,6 +4,7 @@
     Author     : jarberan
 --%>
 
+<%@page import="cz.svjis.bean.BuildingEntrance"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="cz.svjis.bean.Language"%>
 <%@page import="cz.svjis.bean.User"%>
@@ -12,6 +13,7 @@
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
 <jsp:useBean id="report" scope="request" class="cz.svjis.bean.FaultReport" />
+<jsp:useBean id="entranceList" scope="request" class="java.util.ArrayList" />
 <jsp:useBean id="resolverList" scope="request" class="java.util.ArrayList" />
 
 <jsp:include page="_header.jsp" />
@@ -32,6 +34,20 @@
                         <p>
                             <%=language.getText("Subject") %><br>
                             <input id="common-input" type="text" name="subject" maxlength="50" size="80" value="<%=report.getSubject() %>">
+                        </p>
+                        
+                        <p>
+                        <%=language.getText("Building entrance") %><br>
+                        <select name="entranceId" id="common-input">
+                            <option value="0" ></option>
+                            <%
+                                for (BuildingEntrance be : (ArrayList<BuildingEntrance>) entranceList) {
+                            %>
+                            <option value="<%=be.getId() %>" <%=((report.getBuildingEntrance() != null) && (be.getId() == report.getBuildingEntrance().getId())) ? "SELECTED" : "" %>><%=be.getDescription() %>&nbsp;(<%=be.getAddress() %>)</option>
+                            <%
+                                }
+                            %>
+                        </select>
                         </p>
                         
                         <p>

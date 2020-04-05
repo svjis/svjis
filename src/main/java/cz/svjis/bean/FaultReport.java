@@ -23,6 +23,7 @@ public class FaultReport {
     private User createdByUser;
     private User assignedToUser;
     private boolean closed;
+    private BuildingEntrance buildingEntrance;
     private ArrayList<FaultReportAttachment> attachmentList;
     private ArrayList<FaultReportComment> faultReportCommentList = new ArrayList<>();
     
@@ -179,6 +180,20 @@ public class FaultReport {
      */
     public void setAttachmentList(List<FaultReportAttachment> attachmentList) {
         this.attachmentList = new ArrayList(attachmentList);
+    }
+
+    /**
+     * @return the buildingEntrance
+     */
+    public BuildingEntrance getBuildingEntrance() {
+        return buildingEntrance;
+    }
+
+    /**
+     * @param buildingEntrance the buildingEntrance to set
+     */
+    public void setBuildingEntrance(BuildingEntrance buildingEntrance) {
+        this.buildingEntrance = buildingEntrance;
     }
     
 }
