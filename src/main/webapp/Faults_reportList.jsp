@@ -37,6 +37,7 @@
                             <th class="list" scope="col"><%=language.getText("Ticket id") %></th>
                             <th class="list" scope="col"><%=language.getText("Date") %></th>
                             <th class="list" scope="col"><%=language.getText("Subject") %></th>
+                            <th class="list" scope="col"><%=language.getText("Building entrance") %></th>
                             <th class="list" scope="col"><%=language.getText("User") %></th>
                             <th class="list" scope="col"><%=language.getText("Resolver") %></th>
                             <th class="list" scope="col"><%=language.getText("Closed") %></th>
@@ -51,6 +52,7 @@
                             <td class="list" style="<%=stl %>text-align: right;"><%=f.getId() %></td>
                             <td class="list" style="<%=stl %>"><%=sdf.format(f.getCreationDate()) %></td>
                             <td class="list" style="<%=stl %>"><%=HttpUtils.highlight(f.getSubject(), request.getParameter("search")) %></td>
+                            <td class="list" style="<%=stl %>"><%=(f.getBuildingEntrance() != null) ? f.getBuildingEntrance().getDescription() : "&nbsp;" %></td>
                             <td class="list" style="<%=stl %>"><%=f.getCreatedByUser().getFirstName() %>&nbsp;<%=f.getCreatedByUser().getLastName() %></td>
                             <td class="list" style="<%=stl %>"><%=(f.getAssignedToUser() != null) ? (f.getAssignedToUser().getFirstName() + "&nbsp;" +f.getAssignedToUser().getLastName()) : "&nbsp;" %></td>
                             <td class="list" style="<%=stl %>"><%=(f.isClosed()) ? language.getText("yes") : language.getText("no") %></td>

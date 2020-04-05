@@ -17,6 +17,10 @@ import cz.svjis.servlet.cmd.BoardEditCmd;
 import cz.svjis.servlet.cmd.BoardListCmd;
 import cz.svjis.servlet.cmd.BoardSaveCmd;
 import cz.svjis.servlet.cmd.BuildingDetailCmd;
+import cz.svjis.servlet.cmd.BuildingEntranceDeleteCmd;
+import cz.svjis.servlet.cmd.BuildingEntranceEditCmd;
+import cz.svjis.servlet.cmd.BuildingEntranceListCmd;
+import cz.svjis.servlet.cmd.BuildingEntranceSaveCmd;
 import cz.svjis.servlet.cmd.BuildingPictureSaveCmd;
 import cz.svjis.servlet.cmd.BuildingSaveCmd;
 import cz.svjis.servlet.cmd.BuildingUnitDeleteCmd;
@@ -322,6 +326,22 @@ public class CmdFactory {
                 return new BuildingPictureSaveCmd(ctx);
             }
 
+            if (page.equals("buildingEntranceList")) {
+                return new BuildingEntranceListCmd(ctx);
+            }
+            
+            if (page.equals("buildingEntranceEdit")) {
+                return new BuildingEntranceEditCmd(ctx);
+            }
+            
+            if (page.equals("buildingEntranceSave")) {
+                return new BuildingEntranceSaveCmd(ctx);
+            }
+            
+            if (page.equals("buildingEntranceDelete")) {
+                return new BuildingEntranceDeleteCmd(ctx);
+            }
+            
             if (page.equals("buildingUnitList")) {
                 return new BuildingUnitListCmd(ctx);
             }

@@ -350,4 +350,102 @@ public class BuildingDAO extends DAO {
             ps.execute();
         }
     }
+    
+    public List<BuildingEntrance> getBuildingEntranceList(int buildingId) throws SQLException {
+        ArrayList<BuildingEntrance> result = new ArrayList<>();
+        
+        String select = "SELECT "
+                + "a.ID, "
+                + "a.BUILDING_ID, "
+                + "a.DESCRIPTION, "
+                + "a.ADDRESS "
+                + "FROM BUILDING_ENTRANCE a "
+                + "WHERE a.BUILDING_ID = ?"
+                + "ORDER BY a.DESCRIPTION, a.ADDRESS";
+        
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setInt(1, buildingId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    BuildingEntrance be = new BuildingEntrance();
+                    be.setId(rs.getInt("ID"));
+                    be.setBuildingId(rs.getInt("BUILDING_ID"));
+                    be.setDescription(rs.getString("DESCRIPTION"));
+                    be.setAddress(rs.getString("ADDRESS"));
+                    result.add(be);
+                }
+            }
+        }
+        return result;
+    }
+    
+    public BuildingEntrance getBuildingEntrance(int buildingEntranceId) throws SQLException {
+        BuildingEntrance result = null;
+        
+        String select = "SELECT "
+                + "a.ID, "
+                + "a.BUILDING_ID, "
+                + "a.DESCRIPTION, "
+                + "a.ADDRESS "
+                + "FROM BUILDING_ENTRANCE a "
+                + "WHERE a.ID = ?";
+        
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setInt(1, buildingEntranceId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    result = new BuildingEntrance();
+                    result.setId(rs.getInt("ID"));
+                    result.setBuildingId(rs.getInt("BUILDING_ID"));
+                    result.setDescription(rs.getString("DESCRIPTION"));
+                    result.setAddress(rs.getString("ADDRESS"));
+                }
+            }
+        }
+        return result;
+    }
+    
+    public int insertBuildingEntrance(BuildingEntrance be) throws SQLException {
+        int result = 0;
+        
+        String insert = "INSERT INTO BUILDING_ENTRANCE (BUILDING_ID, DESCRIPTION, ADDRESS) VALUES (?,?,?)  returning ID";
+        
+        try (PreparedStatement ps = cnn.prepareStatement(insert)) {
+            ps.setInt(1, be.getBuildingId());
+            ps.setString(2, be.getDescription());
+            ps.setString(3, be.getAddress());
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    result = rs.getInt("ID");
+                }
+            }
+        }
+        return result;
+    }
+    
+    public void modifyBuildingEntrance(BuildingEntrance be) throws SQLException {
+        String update = "UPDATE BUILDING_ENTRANCE SET "
+                + "BUILDING_ID = ?, "
+                + "DESCRIPTION = ?, "
+                + "ADDRESS = ? "
+                + "WHERE ID = ?";
+        
+        try (PreparedStatement ps = cnn.prepareStatement(update)) {
+            ps.setInt(1, be.getBuildingId());
+            ps.setString(2, be.getDescription());
+            ps.setString(3, be.getAddress());
+            ps.setInt(4, be.getId());
+            ps.execute();
+        }
+    }
+    
+    public void deleteBuildingEntrance(BuildingEntrance be) throws SQLException {
+        String delete = "DELETE FROM BUILDING_ENTRANCE WHERE (ID = ?) AND (BUILDING_ID = ?) ";
+        try (PreparedStatement ps = cnn.prepareStatement(delete)) {
+            ps.setInt(1, be.getId());
+            ps.setInt(2, be.getBuildingId());
+            ps.execute();
+        }
+    }
 }
