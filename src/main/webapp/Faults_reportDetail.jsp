@@ -68,6 +68,10 @@
                             <td class="list"><%=(report.isClosed()) ? language.getText("yes") : language.getText("no") %></td>
                         </tr>
                         <tr>
+                            <th class="list" scope="row"><%=language.getText("Building entrance") %></th>
+                            <td class="list"><%=(report.getBuildingEntrance() != null) ? report.getBuildingEntrance().getDescription() + "&nbsp;(" + report.getBuildingEntrance().getAddress() + ")"  : "&nbsp;" %></td>
+                        </tr>
+                        <tr>
                             <th class="list" scope="row"><%=language.getText("Description") %></th>
                             <td class="list"><%=HttpUtils.highlight(HttpUtils.makeHyperlins(report.getDescription()), request.getParameter("search")).replaceAll("\n", "<br>") %></td>
                         </tr>

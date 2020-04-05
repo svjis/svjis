@@ -5,6 +5,8 @@
  */
 package cz.svjis.servlet.cmd;
 
+import cz.svjis.bean.BuildingDAO;
+import cz.svjis.bean.BuildingEntrance;
 import cz.svjis.bean.FaultReport;
 import cz.svjis.bean.FaultReportDAO;
 import cz.svjis.bean.FaultReportMenuCounters;
@@ -31,6 +33,7 @@ public class FaultReportingEditCmd extends Command {
         
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
         
+        BuildingDAO buildingDao = new BuildingDAO(getCnn());
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
         UserDAO userDao = new UserDAO(getCnn());
         
@@ -43,6 +46,9 @@ public class FaultReportingEditCmd extends Command {
         
         ArrayList<User> resolverList = new ArrayList(userDao.getUserListWithPermission(getCompany().getId(), "fault_reporting_resolver"));
         getRequest().setAttribute("resolverList", resolverList);
+        
+        ArrayList<BuildingEntrance> entranceList = new ArrayList(buildingDao.getBuildingEntranceList(buildingDao.getBuilding(getCompany().getId()).getId()));
+        getRequest().setAttribute("entranceList", entranceList);
         
         FaultReportMenuCounters counters = faultDao.getMenuCounters(getCompany().getId(), getUser().getId());
         getRequest().setAttribute("counters", counters);

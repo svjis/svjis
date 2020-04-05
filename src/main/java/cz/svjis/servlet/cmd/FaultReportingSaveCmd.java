@@ -5,6 +5,7 @@
  */
 package cz.svjis.servlet.cmd;
 
+import cz.svjis.bean.BuildingDAO;
 import cz.svjis.bean.FaultReport;
 import cz.svjis.bean.FaultReportDAO;
 import cz.svjis.bean.LogDAO;
@@ -34,8 +35,10 @@ public class FaultReportingSaveCmd extends FaultAbstractCmd {
         String parSubject = Validator.getString(getRequest(), "subject", 0, 50, false, false);
         String parBody = Validator.getString(getRequest(), "body", 0, Validator.MAX_STRING_LEN_ALLOWED, false, getUser().hasPermission("can_write_html"));
         int parResolver = Validator.getInt(getRequest(), "resolverId", 0, Validator.MAX_INT_ALLOWED, true);
+        int parEntrance = Validator.getInt(getRequest(), "entranceId", 0, Validator.MAX_INT_ALLOWED, true);
         boolean parClosed = Validator.getBoolean(getRequest(), "closed");
 
+        BuildingDAO buildingDao = new BuildingDAO(getCnn());
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
         LogDAO logDao = new LogDAO(getCnn());
         UserDAO userDao = new UserDAO(getCnn());
@@ -62,6 +65,7 @@ public class FaultReportingSaveCmd extends FaultAbstractCmd {
             f.setAssignedToUser((resolver != 0) ? userDao.getUser(getCompany().getId(), resolver) : null);
             f.setClosed(parClosed);
         }
+        f.setBuildingEntrance((parEntrance != 0) ? buildingDao.getBuildingEntrance(parEntrance) : null);
         
         boolean isNew;
         User origAssignedTo = null;
