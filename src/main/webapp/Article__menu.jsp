@@ -19,9 +19,8 @@
         if (!isTopLevel) {
             output += "<ul>";
         }
-        Iterator i = menu.iterator();
-        while (i.hasNext()) {
-            MenuItem ami = (MenuItem) i.next();
+
+        for (MenuItem ami: menu) {
             String active = "";
             if ((isTopLevel) && ((activeSection == ami.getSection().getId()) || (ami.getSubSections() != null))) {
                 active = " id=\"nav-active\"";
@@ -31,6 +30,7 @@
                 output = output + writeSubMenu(ami.getSubSections(), activeSection, false);
             output = output + "</li>" + "\n";
         }
+
         if (!isTopLevel) {
             output += "</ul>";
         }
@@ -49,7 +49,15 @@
             </div> <!-- /padding -->
             
             <ul class="nav">
-                <%=writeSubMenu(menu.getMenu(), (request.getParameter("section") != null) ? Integer.valueOf(request.getParameter("section")) : 0, true) %>
+                <%
+                    int iSection = (request.getParameter("section") != null) ? Integer.valueOf(request.getParameter("section")) : 0;
+                    String active = "";
+                    if (iSection == 0) {
+                        active = " id=\"nav-active\"";
+                    }
+                %>
+                <li <%=active %>><a href="Dispatcher?page=articleList"><%=language.getText("All articles") %></a></li>
+                <%=writeSubMenu(menu.getMenu(), iSection, true) %>
             </ul>
                 
             <div class="padding">
