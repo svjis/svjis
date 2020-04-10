@@ -50,14 +50,13 @@
             
             <ul class="nav">
                 <%
-                    int iSection = (request.getParameter("section") != null) ? Integer.valueOf(request.getParameter("section")) : 0;
                     String active = "";
-                    if (iSection == 0) {
+                    if (menu.getActiveSection() == 0) {
                         active = " id=\"nav-active\"";
                     }
                 %>
                 <li <%=active %>><a href="Dispatcher?page=articleList"><%=language.getText("All articles") %></a></li>
-                <%=writeSubMenu(menu.getMenu(), iSection, true) %>
+                <%=writeSubMenu(menu.getMenu(), menu.getActiveSection(), true) %>
             </ul>
                 
             <div class="padding">
