@@ -1935,3 +1935,5 @@ INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Really do you w
 INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Really do you want to remove entrance', '2', 'Really do you want to remove entrance');
 INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Building entrance', '1', 'Vchod');
 INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Building entrance', '2', 'Entrance');
+INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('All articles', '1', 'Všechny články');
+INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('All articles', '2', 'All articles');
