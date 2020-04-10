@@ -14,6 +14,7 @@ import java.util.List;
 public class Menu {
 
     private int activeSection;
+    private int defaultSection;
     private ArrayList<MenuNode> navigationBar = null;
     private ArrayList<MenuNode> buffer = null;
     private ArrayList<MenuItem> menuContent = null;    
@@ -132,5 +133,19 @@ public class Menu {
         }
         sb.append("</ul>" + "\n");
         return sb.toString();
+    }
+
+    /**
+     * @return the defaultSection
+     */
+    public int getDefaultSection() {
+        return defaultSection;
+    }
+
+    /**
+     * @param defaultSection the defaultSection to set
+     */
+    public void setDefaultSection(int defaultSection) {
+        this.defaultSection = defaultSection;
     }
 }

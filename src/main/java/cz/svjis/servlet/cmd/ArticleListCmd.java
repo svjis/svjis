@@ -43,10 +43,12 @@ public class ArticleListCmd extends Command {
 
         Menu menu = menuDao.getMenu(getCompany().getId());
         int section = parSection;
-        if ((section == 0) && (getSetup().get("article.menu.default.item") != null)) {
-            section = Integer.valueOf(getSetup().getProperty("article.menu.default.item"));
+        int defaultSection = (getSetup().get("article.menu.default.item") != null) ? Integer.valueOf(getSetup().getProperty("article.menu.default.item")) : 0;
+        if ((section == 0) && (defaultSection != 0)) {
+            section = defaultSection;
         }
         menu.setActiveSection(section);
+        menu.setDefaultSection(defaultSection);
         getRequest().setAttribute("menu", menu);
 
         int pageNo = (parPageNo == 0) ? 1 : parPageNo;
