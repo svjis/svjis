@@ -50,12 +50,16 @@
             
             <ul class="nav">
                 <%
-                    String active = "";
-                    if (menu.getActiveSection() == 0) {
-                        active = " id=\"nav-active\"";
-                    }
+                    if (menu.getDefaultSection() == 0) {
+                        String active = "";
+                        if (menu.getActiveSection() == 0) {
+                            active = " id=\"nav-active\"";
+                        }
                 %>
                 <li <%=active %>><a href="Dispatcher?page=articleList"><%=language.getText("All articles") %></a></li>
+                <%
+                    }
+                %>
                 <%=writeSubMenu(menu.getMenu(), menu.getActiveSection(), true) %>
             </ul>
                 

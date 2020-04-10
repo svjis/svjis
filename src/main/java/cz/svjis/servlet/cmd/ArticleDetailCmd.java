@@ -49,6 +49,8 @@ public class ArticleDetailCmd extends Command {
 
         Menu menu = menuDao.getMenu(getCompany().getId());
         menu.setActiveSection(article.getMenuNodeId());
+        int defaultSection = (getSetup().get("article.menu.default.item") != null) ? Integer.valueOf(getSetup().getProperty("article.menu.default.item")) : 0;
+        menu.setDefaultSection(defaultSection);
         getRequest().setAttribute("menu", menu);
         
         String watching = (articleDao.isUserWatchingArticle(article.getId(), getUser().getId())) ? "1" : "0";
