@@ -54,7 +54,9 @@ public class ArticleSearchCmd extends Command {
 
         Menu menu = menuDao.getMenu(getCompany().getId());
         int section = parSection;
+        int defaultSection = (getSetup().get("article.menu.default.item") != null) ? Integer.valueOf(getSetup().getProperty("article.menu.default.item")) : 0;
         menu.setActiveSection(section);
+        menu.setDefaultSection(defaultSection);
         getRequest().setAttribute("menu", menu);
 
         int pageNo = (parPageNo == 0) ? 1 : parPageNo;

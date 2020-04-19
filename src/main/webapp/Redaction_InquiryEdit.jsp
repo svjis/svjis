@@ -16,9 +16,9 @@
 <jsp:include page="_header.jsp" />
 <jsp:include page="_tray.jsp" />
 
-<%
-    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-%>
+    <%
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+    %>
 
     <!-- Columns -->
     <div id="cols" class="box">
@@ -45,37 +45,53 @@
                         
                         <fieldset>
                             <legend id="tbl-desc"><%=language.getText("Options") %></legend>
-                            <table border="0" aria-describedby="tbl-desc">
+                            <table id="opt_parent" border="0" aria-describedby="tbl-desc">
                             <%
-                                int i = 0;
-                                Iterator<InquiryOption> ioI = inquiry.getOptionList().iterator();
-                                while (ioI.hasNext()) {
-                                    InquiryOption io = ioI.next();
+                                int i = 1;
+                                for (InquiryOption io: inquiry.getOptionList()) {
                             %>
-                                <tr>
-                                    <th width="10%" scope="row" style="text-align: left"><%=++i %></th>
-                                    <td width="80%">
-                                        <input type="hidden" name="oid_<%=i %>" value="<%=io.getId() %>">
-                                        <input id="common-input" type="text" name="o_<%=i %>" size="50" maxlength="250" value="<%=io.getDescription() %>">
-                                    </td>
-                                    <% if (inquiry.getCount() == 0) { %>
-                                    <td width="10%"><a href="Dispatcher?page=redactionInquiryOptionDelete&id=<%=io.getId() %>"><img src="gfx/delete.png" border="0" title="<%=language.getText("Delete") %>" alt="<%=language.getText("Delete") %>"></td>
-                                    <% } else { %>
-                                    <td width="10%" style="text-align: right"><%=io.getCount() %></td>
-                                    <% } %>
-                                </tr>
+                                    <tr id="opt_<%=i %>">
+                                        <th width="20%" scope="row" style="text-align: left"><%=language.getText("Option") %>&nbsp;<%=i %>:&nbsp;</th>
+                                        <td width="60%">
+                                            <input type="hidden" name="oid_<%=i %>" value="<%=io.getId() %>">
+                                            <input id="common-input" type="text" name="o_<%=i %>" size="50" maxlength="250" value="<%=io.getDescription() %>">
+                                        </td>
+                                        <% if (inquiry.getCount() == 0) { %>
+                                        <td width="20%">&nbsp;<a href="Dispatcher?page=redactionInquiryOptionDelete&id=<%=io.getId() %>"><img src="gfx/delete.png" border="0" title="<%=language.getText("Delete") %>" alt="<%=language.getText("Delete") %>"></td>
+                                        <% } else { %>
+                                        <td width="20%" style="text-align: right"><%=io.getCount() %></td>
+                                        <% } %>
+                                    </tr>
                             <%
-                               }
+                                    i++;
+                                }
+
+                                if (i == 1) {
                             %>
-                                <tr>
-                                    <th width="10%" scope="row" style="text-align: left"><%=++i %></th>
-                                    <td width="80%">
-                                        <input type="hidden" name="oid_<%=i %>" value="0">
-                                        <input id="common-input" type="text" name="o_<%=i %>" size="50" maxlength="250" value="">
-                                    </td>
-                                    <td width="10%">&nbsp;</td>
-                                </tr>
+                                    <tr id="opt_<%=i %>">
+                                        <th width="20%" scope="row" style="text-align: left"><%=language.getText("Option") %>&nbsp;<%=i %>:&nbsp;</th>
+                                        <td width="60%">
+                                            <input type="hidden" name="oid_<%=i %>" value="0">
+                                            <input id="common-input" type="text" name="o_<%=i %>" size="50" maxlength="250" value="">
+                                        </td>
+                                        <td width="20%">&nbsp;</td>
+                                    </tr>
+                            <%
+                                    i++;
+                                }
+                            %>
                             </table>
+
+                            <div class="container">
+                                <div class="row">
+                                    <div class="left">
+                                        <p><input id="add-option" type="button" value="<%=language.getText("Add option") %>" onclick="addOption();" /></p>
+                                    </div>
+                                    <div class="left">
+                                        <p><input id="remove-option" type="button" value="<%=language.getText("Remove option") %>" onclick="removeOption();" disabled /></p>
+                                    </div>
+                                </div>
+                            </div>
                         </fieldset>
                         
                         <fieldset>
@@ -106,4 +122,53 @@
     
     </div> <!-- /cols -->
 
+    <script>
+        "use strict";
+
+        function getLastOptionNo() {
+            var i = 0;
+            var p = null;
+        
+            do {
+                i++;
+                p = document.getElementById('opt_' + i);
+            } while (p !== null);
+            
+            return i - 1;
+        }
+        
+        function addOption() {
+            var lastOptionNo = getLastOptionNo();
+            lastOptionNo++;
+            var html =  '    <th width="20%" scope="row" style="text-align: left"><%=language.getText("Option") %>&nbsp;' + lastOptionNo + ':&nbsp;</th>\n' +
+                        '    <td width="60%">\n' +
+                        '        <input type="hidden" name="oid_' + lastOptionNo + '" value="0">\n' +
+                        '        <input id="common-input" type="text" name="o_' + lastOptionNo + '" size="50" maxlength="250" value="">\n' +
+                        '    </td>\n' +
+                        '    <td width="20%">&nbsp;</td>\n';
+            
+            var p = document.getElementById('opt_parent');
+            var newElement = document.createElement('tr');
+            newElement.setAttribute('id', 'opt_' + lastOptionNo);
+            newElement.innerHTML = html;
+            p.appendChild(newElement);
+            
+            var button = document.getElementById('remove-option');
+            button.disabled = false;
+        }
+
+        function removeOption() {
+            var lastOptionNo = getLastOptionNo();
+            var noDelete = <%=i-1 %>;
+            if (lastOptionNo !== noDelete) {
+                var element = document.getElementById('opt_' + lastOptionNo);
+                element.parentNode.removeChild(element);
+            }
+            if (noDelete === (lastOptionNo - 1)) {
+                var button = document.getElementById('remove-option');
+                button.disabled = true;
+            }
+        }
+
+    </script>
 <jsp:include page="_footer.jsp" />
