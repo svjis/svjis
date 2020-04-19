@@ -114,7 +114,7 @@
                             String pct = (inquiry.getCount() != 0) ? df.format(100 * io.getCount() / inquiry.getCount()) : "0";
                         %>
                             <p><input type="radio" name="i_<%=inquiry.getId() %>" value="o_<%=io.getId() %>">&nbsp;<%=io.getDescription() %>&nbsp;-&nbsp;<em><%=pct %>%</em><br>
-                                <img src="<%=bar %>" width="<%=Integer.valueOf(pct) * 2 %>" height="11" alt="Bar">
+                                <img src="<%=bar %>" width="<%=Integer.valueOf(pct) * 2 %>" height="22" alt="Bar">
                         <%
                         }
                         %>
@@ -131,7 +131,7 @@
                             String pct = (inquiry.getCount() != 0) ? df.format(100 * io.getCount() / inquiry.getCount()) : "0";
                         %>
                             <p><%=io.getDescription() %>&nbsp;-&nbsp;<em><%=pct %>%</em><br>
-                                <img src="<%=bar %>" width="<%=Integer.valueOf(pct) * 2 %>" height="11" alt="Bar">
+                                <img src="<%=bar %>" width="<%=Integer.valueOf(pct) * 2 %>" height="22" alt="Bar">
                         <%
                         }
                         %>
