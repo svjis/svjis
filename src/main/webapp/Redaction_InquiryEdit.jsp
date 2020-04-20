@@ -51,15 +51,15 @@
                                 for (InquiryOption io: inquiry.getOptionList()) {
                             %>
                                     <tr id="opt_<%=i %>">
-                                        <th width="20%" scope="row" style="text-align: left"><%=language.getText("Option") %>&nbsp;<%=i %>:&nbsp;</th>
-                                        <td width="60%">
+                                        <th scope="row" style="text-align: left"><%=language.getText("Option") %>&nbsp;<%=i %>:&nbsp;</th>
+                                        <td>
                                             <input type="hidden" name="oid_<%=i %>" value="<%=io.getId() %>">
                                             <input id="common-input" type="text" name="o_<%=i %>" size="50" maxlength="250" value="<%=io.getDescription() %>">
                                         </td>
                                         <% if (inquiry.getCount() == 0) { %>
-                                        <td width="20%">&nbsp;<a href="Dispatcher?page=redactionInquiryOptionDelete&id=<%=io.getId() %>"><img src="gfx/delete.png" border="0" title="<%=language.getText("Delete") %>" alt="<%=language.getText("Delete") %>"></td>
+                                        <td>&nbsp;<a href="Dispatcher?page=redactionInquiryOptionDelete&id=<%=io.getId() %>"><img src="gfx/delete.png" border="0" title="<%=language.getText("Delete") %>" alt="<%=language.getText("Delete") %>"></td>
                                         <% } else { %>
-                                        <td width="20%" style="text-align: right"><%=io.getCount() %></td>
+                                        <td style="text-align: right"><%=io.getCount() %></td>
                                         <% } %>
                                     </tr>
                             <%
@@ -69,12 +69,12 @@
                                 if (i == 1) {
                             %>
                                     <tr id="opt_<%=i %>">
-                                        <th width="20%" scope="row" style="text-align: left"><%=language.getText("Option") %>&nbsp;<%=i %>:&nbsp;</th>
-                                        <td width="60%">
+                                        <th scope="row" style="text-align: left"><%=language.getText("Option") %>&nbsp;<%=i %>:&nbsp;</th>
+                                        <td>
                                             <input type="hidden" name="oid_<%=i %>" value="0">
                                             <input id="common-input" type="text" name="o_<%=i %>" size="50" maxlength="250" value="">
                                         </td>
-                                        <td width="20%">&nbsp;</td>
+                                        <td>&nbsp;</td>
                                     </tr>
                             <%
                                     i++;
@@ -140,12 +140,12 @@
         function addOption() {
             var lastOptionNo = getLastOptionNo();
             lastOptionNo++;
-            var html =  '    <th width="20%" scope="row" style="text-align: left"><%=language.getText("Option") %>&nbsp;' + lastOptionNo + ':&nbsp;</th>\n' +
-                        '    <td width="60%">\n' +
+            var html =  '    <th scope="row" style="text-align: left"><%=language.getText("Option") %>&nbsp;' + lastOptionNo + ':&nbsp;</th>\n' +
+                        '    <td>\n' +
                         '        <input type="hidden" name="oid_' + lastOptionNo + '" value="0">\n' +
                         '        <input id="common-input" type="text" name="o_' + lastOptionNo + '" size="50" maxlength="250" value="">\n' +
                         '    </td>\n' +
-                        '    <td width="20%">&nbsp;</td>\n';
+                        '    <td>&nbsp;</td>\n';
             
             var p = document.getElementById('opt_parent');
             var newElement = document.createElement('tr');
