@@ -28,6 +28,7 @@
                         <tr>
                             <th class="list" scope="col">&nbsp;</th>
                             <th class="list" scope="col">&nbsp;</th>
+                            <th class="list" scope="col">&nbsp;</th>
                             <th class="list" scope="col"><%=language.getText("Description") %></th>
                             <th class="list" scope="col"><%=language.getText("Starting date") %></th>
                             <th class="list" scope="col"><%=language.getText("Ending date") %></th>
@@ -42,6 +43,7 @@
                         <tr>
                             <td class="list"><a href="Dispatcher?page=redactionInquiryEdit&id=<%=i.getId() %>"><img src="gfx/pencil.png" border="0" title="<%=language.getText("Edit") %>" alt="<%=language.getText("Edit") %>"></a></td>
                             <td class="list"><a href="Dispatcher?page=redactionInquiryLog&id=<%=i.getId() %>"><img src="gfx/chart_bar.png" border="0" title="<%=language.getText("Log") %>" alt="<%=language.getText("Log") %>"></a></td>
+                            <td class="list"><a href="Upload?page=exportInquiryLogToXls&id=<%=i.getId() %>"><img src="gfx/Files_xls.gif" border="0" title="<%=language.getText("Export to Excel") %>" alt="<%=language.getText("Export to Excel") %>"></a></td>
                             <td class="list"><%=i.getDescription() %></td>
                             <td class="list"><%=sdf.format(i.getStartingDate()) %></td>
                             <td class="list"><%=sdf.format(i.getEndingDate()) %></td>

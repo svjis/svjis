@@ -8,6 +8,7 @@ package cz.svjis.servlet;
 import cz.svjis.servlet.cmd.BuildingPictureCmd;
 import cz.svjis.servlet.cmd.DownloadCmd;
 import cz.svjis.servlet.cmd.ExportBuildingUnitListToXlsCmd;
+import cz.svjis.servlet.cmd.ExportInquiryLogToXlsCmd;
 import cz.svjis.servlet.cmd.ExportUserListToXlsCmd;
 import cz.svjis.servlet.cmd.FaultReportingDownloadCmd;
 
@@ -49,6 +50,15 @@ public class CmdFactoryUpload {
         if (ctx.getUser().hasPermission("menu_fault_reporting")) {
             if (page.equals("faultReportingDownload")) {
                 return new FaultReportingDownloadCmd(ctx);
+            }
+        }
+        
+        // *****************
+        // * Redaction     *
+        // *****************
+        if (ctx.getUser().hasPermission("menu_redaction")) {
+            if (page.equals("exportInquiryLogToXls")) {
+                return new ExportInquiryLogToXlsCmd(ctx);
             }
         }
         
