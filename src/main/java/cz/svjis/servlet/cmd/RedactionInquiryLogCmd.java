@@ -35,7 +35,7 @@ public class RedactionInquiryLogCmd extends Command {
         ArrayList<InquiryLog> log = new ArrayList<>();
         if (parId != 0) {
             inquiry = inquiryDao.getInquiry(getUser(), parId);
-            log = new ArrayList(inquiryDao.getInquiryLog(getUser(), parId));
+            log = new ArrayList<>(inquiryDao.getInquiryLog(getUser(), parId));
         }
         getRequest().setAttribute("inquiry", inquiry);
         getRequest().setAttribute("log", log);
