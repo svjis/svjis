@@ -39,9 +39,13 @@ public class RedactionArticleAttachmentDeleteCmd extends Command {
             return;
         }
         Article a = articleDao.getArticle(getUser(), aa.getArticleId());
-        if (a != null) {
-            articleDao.deleteArticleAttachment(parId);
+        if ((a == null) || ((a.getAuthor().getId() != getUser().getId()) && !getUser().hasPermission("redaction_articles_all"))) {
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
+            rd.forward(getRequest(), getResponse());
+            return;
         }
+        articleDao.deleteArticleAttachment(parId);
+        
         String url = "Dispatcher?page=redactionArticleEdit&id=" + aa.getArticleId();
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
