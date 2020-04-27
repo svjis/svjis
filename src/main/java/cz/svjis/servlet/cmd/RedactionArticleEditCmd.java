@@ -9,6 +9,7 @@ import cz.svjis.bean.Article;
 import cz.svjis.bean.ArticleDAO;
 import cz.svjis.bean.Language;
 import cz.svjis.bean.LanguageDAO;
+import cz.svjis.bean.Menu;
 import cz.svjis.bean.MenuDAO;
 import cz.svjis.bean.MenuItem;
 import cz.svjis.bean.Role;
@@ -45,6 +46,13 @@ public class RedactionArticleEditCmd extends Command {
             article = new Article();
         } else {
             article = articleDao.getArticle(getUser(), parArticleId);
+            if ((article.getAuthor().getId() != getUser().getId()) && !getUser().hasPermission("redaction_articles_all")) {
+                Menu menu = menuDao.getMenu(getCompany().getId());
+                getRequest().setAttribute("menu", menu);
+                RequestDispatcher rd = getRequest().getRequestDispatcher("/ArticleNotFound.jsp");
+                rd.forward(getRequest(), getResponse());
+                return;
+            }
         }
         
         getRequest().setAttribute("article", article);

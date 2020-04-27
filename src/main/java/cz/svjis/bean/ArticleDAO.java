@@ -325,6 +325,7 @@ public class ArticleDAO extends DAO {
                 + "a.CREATION_DATE, "
                 + "a.PUBLISHED, "
                 + "a.COMMENTS_ALLOWED, "
+                + "u.ID AS UID, "
                 + "u.FIRST_NAME, "
                 + "u.LAST_NAME "
                 + "FROM ARTICLE a "
@@ -352,6 +353,7 @@ public class ArticleDAO extends DAO {
                     result.setPublished(rs.getBoolean("PUBLISHED"));
                     result.setCommentsAllowed(rs.getBoolean("COMMENTS_ALLOWED"));
                     result.setAuthor(new User());
+                    result.getAuthor().setId(rs.getInt("UID"));
                     result.getAuthor().setFirstName(rs.getString("FIRST_NAME"));
                     result.getAuthor().setLastName(rs.getString("LAST_NAME"));
                 }
