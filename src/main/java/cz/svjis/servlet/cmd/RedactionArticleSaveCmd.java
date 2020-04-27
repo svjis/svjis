@@ -8,6 +8,8 @@ package cz.svjis.servlet.cmd;
 import cz.svjis.bean.Article;
 import cz.svjis.bean.ArticleDAO;
 import cz.svjis.bean.LogDAO;
+import cz.svjis.bean.Menu;
+import cz.svjis.bean.MenuDAO;
 import cz.svjis.bean.Role;
 import cz.svjis.bean.RoleDAO;
 import cz.svjis.servlet.CmdContext;
@@ -46,6 +48,7 @@ public class RedactionArticleSaveCmd extends Command {
         RoleDAO roleDao = new RoleDAO(getCnn());
         ArticleDAO articleDao = new ArticleDAO(getCnn());
         LogDAO logDao = new LogDAO(getCnn());
+        MenuDAO menuDao = new MenuDAO(getCnn());
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         Article a = new Article();
@@ -76,6 +79,16 @@ public class RedactionArticleSaveCmd extends Command {
             articleDao.setUserWatchingArticle(a.getId(), getUser().getId());
             logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_CREATE_ARTICLE, a.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
         } else {
+            //-- check permission
+            Article article = articleDao.getArticle(getUser(), a.getId());
+            if ((article.getAuthor().getId() != getUser().getId()) && !getUser().hasPermission("redaction_articles_all")) {
+                Menu menu = menuDao.getMenu(getCompany().getId());
+                getRequest().setAttribute("menu", menu);
+                RequestDispatcher rd = getRequest().getRequestDispatcher("/ArticleNotFound.jsp");
+                rd.forward(getRequest(), getResponse());
+                return;
+            }
+            //-- save
             articleDao.modifyArticle(a);
             logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_MODIFY_ARTICLE, a.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
         }

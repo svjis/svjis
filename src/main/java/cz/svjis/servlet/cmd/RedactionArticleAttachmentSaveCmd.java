@@ -5,6 +5,7 @@
  */
 package cz.svjis.servlet.cmd;
 
+import cz.svjis.bean.Article;
 import cz.svjis.bean.ArticleAttachment;
 import cz.svjis.bean.ArticleDAO;
 import cz.svjis.bean.LogDAO;
@@ -37,6 +38,13 @@ public class RedactionArticleAttachmentSaveCmd extends Command {
 
         ArticleDAO articleDao = new ArticleDAO(getCnn());
         LogDAO logDao = new LogDAO(getCnn());
+        
+        Article a = articleDao.getArticle(getUser(), parArticleId);
+        if ((a == null) || ((a.getAuthor().getId() != getUser().getId()) && !getUser().hasPermission("redaction_articles_all"))) {
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
+            rd.forward(getRequest(), getResponse());
+            return;
+        }
         
         FileItemFactory factory = new DiskFileItemFactory();
         ServletFileUpload upload = new ServletFileUpload(factory);
