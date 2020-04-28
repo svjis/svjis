@@ -39,6 +39,7 @@ public class FaultReportingListCmd extends Command {
         int pageSize = (getSetup().getProperty("faults.page.size") == null) ? 10 : Integer.valueOf(getSetup().getProperty("faults.page.size"));
         
         SliderImpl sl = new SliderImpl();
+        sl.setPageId(parPage);
         sl.setSliderWide(10);
         sl.setCurrentPage(pageNo);
         sl.setNumOfItemsAtPage(pageSize);
@@ -84,6 +85,7 @@ public class FaultReportingListCmd extends Command {
             reportList = new ArrayList(faultDao.getFaultListFromSearch(getCompany().getId(), pageNo, pageSize, parSearch));
         }
 
+        getRequest().setAttribute("searchKey", parSearch);
         getRequest().setAttribute("slider", sl);
         getRequest().setAttribute("reportList", reportList);
         

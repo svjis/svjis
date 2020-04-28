@@ -11,6 +11,10 @@ import java.util.List;
  * @author berk
  */
 public interface Slider {
+    
+    public String getPageId();
+    public void setPageId(String currentPage);
+    
     public int getCurrentPage();
     public void setCurrentPage(int currentPage);
         

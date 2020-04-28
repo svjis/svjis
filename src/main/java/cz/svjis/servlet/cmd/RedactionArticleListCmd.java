@@ -48,6 +48,7 @@ public class RedactionArticleListCmd extends Command {
 
         parPageNo = (parPageNo == 0) ? 1 : parPageNo;
         SliderImpl sl = new SliderImpl();
+        sl.setPageId(parPage);
         sl.setSliderWide(10);
         sl.setCurrentPage(parPageNo);
         sl.setNumOfItemsAtPage(Integer.valueOf(getSetup().getProperty("article.page.size")));
@@ -94,11 +95,13 @@ public class RedactionArticleListCmd extends Command {
                 !getUser().hasPermission("redaction_articles_all")));
         }
 
+        getRequest().setAttribute("searchKey", parSearch);
         getRequest().setAttribute("slider", sl);
         getRequest().setAttribute("articleList", articleList);
 
         ArrayList<Role> roleList = new ArrayList(roleDao.getRoleList(getCompany().getId()));
         getRequest().setAttribute("roleList", roleList);
+        getRequest().setAttribute("roleIds", String.valueOf(parRoleId));
 
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Redaction_ArticleList.jsp");
         rd.forward(getRequest(), getResponse());

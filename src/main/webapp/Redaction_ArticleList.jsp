@@ -18,6 +18,8 @@
 <jsp:useBean id="slider" scope="request" class="cz.svjis.bean.SliderImpl" />
 <jsp:useBean id="articleList" scope="request" class="java.util.ArrayList" />
 <jsp:useBean id="roleList" scope="request" class="java.util.ArrayList" />
+<jsp:useBean id="roleIds" scope="request" class="java.lang.String" />
+<jsp:useBean id="searchKey" scope="request" class="java.lang.String" />
 
 <jsp:include page="_header.jsp" />
 <jsp:include page="_tray.jsp" />
@@ -50,7 +52,7 @@
                                         <select name='roleId' onchange='this.form.submit()'>
                                             <option value="0"><%=language.getText("all") %></option>
                                             <%
-                                                int roleId = Integer.valueOf((request.getParameter("roleId") == null) ? "0" : request.getParameter("roleId"));
+                                                int roleId = Integer.valueOf(roleIds);
                                                 java.util.Iterator<cz.svjis.bean.Role> roleI = roleList.iterator();
                                                 while (roleI.hasNext()) {
                                                     cz.svjis.bean.Role r = roleI.next();
@@ -84,8 +86,8 @@
                         </tr>
                     <%
                         String search = "";
-                        if (request.getParameter("search") != null) {
-                            search = "&search=" + request.getParameter("search");
+                        if (searchKey != null) {
+                            search = "&search=" + searchKey;
                         }
 
                         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
@@ -113,15 +115,15 @@
                     <strong><%=language.getText("Pages:") %></strong>&nbsp;
                     <%
                         String roleFilter = "";
-                        if (request.getParameter("roleId") != null) {
-                            roleFilter = "&roleId=" + request.getParameter("roleId");
+                        if (!roleIds.equals("0")) {
+                            roleFilter = "&roleId=" + roleIds;
                         }
 
                         for (SliderItem item: slider.getItemList()) {
                             if (item.isCurrent()) {
                                 out.println("<b>" + item.getLabel() + "</b>&nbsp;");
                             } else {
-                                out.println("<a href=\"Dispatcher?page=" + request.getParameter("page") + "&section=0&pageNo=" + item.getPage() + roleFilter + search +"\">" + item.getLabel() + "</a>&nbsp;");
+                                out.println("<a href=\"Dispatcher?page=" + slider.getPageId() + "&section=0&pageNo=" + item.getPage() + roleFilter + search +"\">" + item.getLabel() + "</a>&nbsp;");
                             }
                         }
                     %>

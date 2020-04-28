@@ -12,6 +12,7 @@ import java.util.List;
  * @author berk
  */
 public class SliderImpl implements Slider {
+    private String pageId;
     private int currentPage;
     private int numOfItemsAtPage;
     private long totalNumOfItems;
@@ -151,5 +152,19 @@ public class SliderImpl implements Slider {
      */
     public void setSliderWide(int sliderWide) {
         this.sliderWide = sliderWide;
+    }
+
+    /**
+     * @return the pageId
+     */
+    public String getPageId() {
+        return pageId;
+    }
+
+    /**
+     * @param pageId the pageId to set
+     */
+    public void setPageId(String pageId) {
+        this.pageId = pageId;
     }
 }
