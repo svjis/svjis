@@ -101,6 +101,7 @@ public class RedactionArticleListCmd extends Command {
 
         ArrayList<Role> roleList = new ArrayList(roleDao.getRoleList(getCompany().getId()));
         getRequest().setAttribute("roleList", roleList);
+        getRequest().setAttribute("roleIds", String.valueOf(parRoleId));
 
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Redaction_ArticleList.jsp");
         rd.forward(getRequest(), getResponse());
