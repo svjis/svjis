@@ -30,6 +30,7 @@ public class ArticleDetailCmd extends Command {
         
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
         Validator.getString(getRequest(), "search", 0, 50, true, false);
+        String parSearch = Validator.getString(getRequest(), "search", 0, Validator.MAX_STRING_LEN_ALLOWED, true, false);
 
         MenuDAO menuDao = new MenuDAO(getCnn());
         ArticleDAO articleDao = new ArticleDAO(getCnn());
@@ -46,7 +47,8 @@ public class ArticleDetailCmd extends Command {
             return;
         }
         getRequest().setAttribute("article", article);
-
+        getRequest().setAttribute("searchKey", parSearch);
+        
         Menu menu = menuDao.getMenu(getCompany().getId());
         menu.setActiveSection(article.getMenuNodeId());
         int defaultSection = (getSetup().get("article.menu.default.item") != null) ? Integer.valueOf(getSetup().getProperty("article.menu.default.item")) : 0;

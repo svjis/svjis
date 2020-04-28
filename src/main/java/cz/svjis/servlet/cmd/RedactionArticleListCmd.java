@@ -48,6 +48,7 @@ public class RedactionArticleListCmd extends Command {
 
         parPageNo = (parPageNo == 0) ? 1 : parPageNo;
         SliderImpl sl = new SliderImpl();
+        sl.setPageId(parPage);
         sl.setSliderWide(10);
         sl.setCurrentPage(parPageNo);
         sl.setNumOfItemsAtPage(Integer.valueOf(getSetup().getProperty("article.page.size")));
@@ -94,6 +95,7 @@ public class RedactionArticleListCmd extends Command {
                 !getUser().hasPermission("redaction_articles_all")));
         }
 
+        getRequest().setAttribute("searchKey", parSearch);
         getRequest().setAttribute("slider", sl);
         getRequest().setAttribute("articleList", articleList);
 

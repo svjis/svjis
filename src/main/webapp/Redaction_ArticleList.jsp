@@ -18,6 +18,7 @@
 <jsp:useBean id="slider" scope="request" class="cz.svjis.bean.SliderImpl" />
 <jsp:useBean id="articleList" scope="request" class="java.util.ArrayList" />
 <jsp:useBean id="roleList" scope="request" class="java.util.ArrayList" />
+<jsp:useBean id="searchKey" scope="request" class="java.lang.String" />
 
 <jsp:include page="_header.jsp" />
 <jsp:include page="_tray.jsp" />
@@ -84,8 +85,8 @@
                         </tr>
                     <%
                         String search = "";
-                        if (request.getParameter("search") != null) {
-                            search = "&search=" + request.getParameter("search");
+                        if (searchKey != null) {
+                            search = "&search=" + searchKey;
                         }
 
                         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
@@ -121,7 +122,7 @@
                             if (item.isCurrent()) {
                                 out.println("<b>" + item.getLabel() + "</b>&nbsp;");
                             } else {
-                                out.println("<a href=\"Dispatcher?page=" + request.getParameter("page") + "&section=0&pageNo=" + item.getPage() + roleFilter + search +"\">" + item.getLabel() + "</a>&nbsp;");
+                                out.println("<a href=\"Dispatcher?page=" + slider.getPageId() + "&section=0&pageNo=" + item.getPage() + roleFilter + search +"\">" + item.getLabel() + "</a>&nbsp;");
                             }
                         }
                     %>

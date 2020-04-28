@@ -29,6 +29,7 @@ public class FaultReportingDetailCmd extends Command {
         
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
         Validator.getString(getRequest(), "search", 0, 50, true, false);
+        String parSearch = Validator.getString(getRequest(), "search", 0, Validator.MAX_STRING_LEN_ALLOWED, true, false);
         
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
         LogDAO logDao = new LogDAO(getCnn());
@@ -41,6 +42,8 @@ public class FaultReportingDetailCmd extends Command {
 
         String watching = (faultDao.isUserWatchingFaultReport(report.getId(), getUser().getId())) ? "1" : "0";
         getRequest().setAttribute("watching", watching);
+        
+        getRequest().setAttribute("searchKey", parSearch);
 
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Faults_reportDetail.jsp");
         rd.forward(getRequest(), getResponse());

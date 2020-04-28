@@ -16,6 +16,7 @@
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
 <jsp:useBean id="reportList" scope="request" class="java.util.ArrayList" />
 <jsp:useBean id="slider" scope="request" class="cz.svjis.bean.SliderImpl" />
+<jsp:useBean id="searchKey" scope="request" class="java.lang.String" />
 
 <jsp:include page="_header.jsp" />
 <jsp:include page="_tray.jsp" />
@@ -67,9 +68,9 @@
                         <strong><%=language.getText("Pages:") %></strong>&nbsp;
                         <%
                         String search = "";
-                        String pageId = "page=" + request.getParameter("page") + "&";
-                        if ((request.getParameter("search") != null) && (!request.getParameter("search").equals(""))) {
-                            search = "search=" + URLEncoder.encode(request.getParameter("search"), "UTF-8") + "&";
+                        String pageId = "page=" + slider.getPageId() + "&";
+                        if ((searchKey != null) && (!searchKey.equals(""))) {
+                            search = "search=" + URLEncoder.encode(searchKey, "UTF-8") + "&";
                         }
                         for (SliderItem item : slider.getItemList()) {
                             if (item.isCurrent()) {
