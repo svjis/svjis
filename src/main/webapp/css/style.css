@@ -106,5 +106,36 @@ h2.article-title {color:#739D13;}
   outline: none; /* odstraňovat vnější rámeček v Mozilla */
   border: none;
 } 
-.my-button:hover { background: #404040; } /* při najetí myší */
-.my-button:active { background: #606060; } /* při stisknutí */
+.my-button:hover { 
+    background: #404040; 
+    color:#ffffff;
+}
+.my-button:active { 
+    background: #ffffff; 
+}
+
+.create-button {
+	box-shadow:inset 0px 39px 0px -24px #e67a73;
+	background-color:#e4685d;
+	border-radius:4px;
+	border:1px solid #949294;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:"arial",sans-serif;
+	font-size:13px;
+	padding:6px 15px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #b23e35;
+}
+.create-button:hover {
+	background-color:#eb675e;
+        color:#ffffff;
+}
+.create-button:active {
+	position:relative;
+	top:1px;
+        color:#ffffff;
+}
+
+        
