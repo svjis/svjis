@@ -30,7 +30,7 @@
                 <div id="content-main-in">
                     <h1 class="page-title" id="tbl-desc"><%=language.getText("Fault reporting") %></h1>
                     <% if (user.hasPermission("fault_reporting_reporter")) { %>
-                    [<a href="Dispatcher?page=faultReportingEdit&id=0"><%=language.getText("Report new fault") %></a>]<br>
+                    <a href="Dispatcher?page=faultReportingEdit&id=0" class="create-button"><%=language.getText("Report new fault") %></a>
                     <% } %>
                     <table width="100%" class="list" aria-describedby="tbl-desc">
                         <tr>
