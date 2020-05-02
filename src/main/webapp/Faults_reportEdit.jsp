@@ -37,7 +37,7 @@
                         </p>
                         
                         <p>
-                        <%=language.getText("Building entrance") %><br>
+                        <%=language.getText("Building entrance") %>&nbsp;(<%=language.getText("optional") %>)<br>
                         <select name="entranceId" id="common-input">
                             <option value="0" ></option>
                             <%
