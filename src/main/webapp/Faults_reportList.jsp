@@ -39,7 +39,7 @@
                             <th class="list" scope="col"><%=language.getText("Date") %></th>
                             <th class="list" scope="col"><%=language.getText("Subject") %></th>
                             <th class="list" scope="col"><%=language.getText("Building entrance") %></th>
-                            <th class="list" scope="col"><%=language.getText("User") %></th>
+                            <th class="list" scope="col"><%=language.getText("Reporter") %></th>
                             <th class="list" scope="col"><%=language.getText("Resolver") %></th>
                             <th class="list" scope="col"><%=language.getText("Closed") %></th>
                         </tr>
