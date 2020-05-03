@@ -56,7 +56,7 @@
                             <td class="list" width="75%"><%=sdf.format(report.getCreationDate()) %></td>
                         </tr>
                         <tr>
-                            <th class="list" scope="row"><%=language.getText("User") %></th>
+                            <th class="list" scope="row"><%=language.getText("Reporter") %></th>
                             <td class="list"><%=(report.getCreatedByUser() != null) ? (report.getCreatedByUser().getFirstName() + "&nbsp;" +report.getCreatedByUser().getLastName()) : "&nbsp;" %></td>
                         </tr>
                         <tr>
