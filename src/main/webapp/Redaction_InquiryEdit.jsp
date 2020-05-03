@@ -122,53 +122,5 @@
     
     </div> <!-- /cols -->
 
-    <script>
-        "use strict";
-
-        function getLastOptionNo() {
-            var i = 0;
-            var p = null;
-        
-            do {
-                i++;
-                p = document.getElementById('opt_' + i);
-            } while (p !== null);
-            
-            return i - 1;
-        }
-        
-        function addOption() {
-            var lastOptionNo = getLastOptionNo();
-            lastOptionNo++;
-            var html =  '    <th scope="row" style="text-align: left"><%=language.getText("Option") %>&nbsp;' + lastOptionNo + ':&nbsp;</th>\n' +
-                        '    <td>\n' +
-                        '        <input type="hidden" name="oid_' + lastOptionNo + '" value="0">\n' +
-                        '        <input id="common-input" type="text" name="o_' + lastOptionNo + '" size="50" maxlength="250" value="">\n' +
-                        '    </td>\n' +
-                        '    <td>&nbsp;</td>\n';
-            
-            var p = document.getElementById('opt_parent');
-            var newElement = document.createElement('tr');
-            newElement.setAttribute('id', 'opt_' + lastOptionNo);
-            newElement.innerHTML = html;
-            p.appendChild(newElement);
-            
-            var button = document.getElementById('remove-option');
-            button.disabled = false;
-        }
-
-        function removeOption() {
-            var lastOptionNo = getLastOptionNo();
-            var noDelete = <%=i-1 %>;
-            if (lastOptionNo !== noDelete) {
-                var element = document.getElementById('opt_' + lastOptionNo);
-                element.parentNode.removeChild(element);
-            }
-            if (noDelete === (lastOptionNo - 1)) {
-                var button = document.getElementById('remove-option');
-                button.disabled = true;
-            }
-        }
-
-    </script>
+    <script src="js/Redaction_InquiryEdit.js"></script>
 <jsp:include page="_footer.jsp" />
