@@ -68,7 +68,7 @@ public class HttpUtils {
         java.util.regex.Matcher m = p.matcher(s);
 
         while (m.find()) {
-            result = result.replaceFirst(m.group(1), String.format(replacement, m.group(1), m.group(1)));
+            result = result.replaceFirst(m.group(1).replace("?", "\\?"), String.format(replacement, m.group(1), m.group(1)));
         }
 
         return result;
