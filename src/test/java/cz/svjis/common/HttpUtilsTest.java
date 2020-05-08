@@ -38,14 +38,14 @@ public class HttpUtilsTest {
         assertEquals("Bla <a href=\"http://www.seznam.cz\" target=\"_blank\">http://www.seznam.cz</a>", HttpUtils.makeHyperlins("Bla http://www.seznam.cz"), "http end");
         assertEquals("Bla <a href=\"http://www.seznam.cz\" target=\"_blank\">http://www.seznam.cz</a>.", HttpUtils.makeHyperlins("Bla http://www.seznam.cz."), "http end dot");
         assertEquals("Bla <a href=\"http://www.seznam.cz\" target=\"_blank\">http://www.seznam.cz</a>,", HttpUtils.makeHyperlins("Bla http://www.seznam.cz,"), "http end comma");
-        assertEquals("vím: <a href=\"http://www.vybor1491.cz/Dispatcher?page=articleDetail&id=563\" target=\"_blank\">http://www.vybor1491.cz/Dispatcher?page=articleDetail&id=563</a>", HttpUtils.makeHyperlins("vím: http://www.vybor1491.cz/Dispatcher?page=articleDetail&id=563"), "https query string");
+        assertEquals("vím: <a href=\"http://www.vybor.cz/Dispatcher?page=articleDetail&id=563\" target=\"_blank\">http://www.vybor.cz/Dispatcher?page=articleDetail&id=563</a>", HttpUtils.makeHyperlins("vím: http://www.vybor.cz/Dispatcher?page=articleDetail&id=563"), "https query string");
         
         assertEquals("<a href=\"https://www.seznam.cz\" target=\"_blank\">https://www.seznam.cz</a>", HttpUtils.makeHyperlins("https://www.seznam.cz"), "https alone");
         assertEquals("<a href=\"https://www.seznam.cz\" target=\"_blank\">https://www.seznam.cz</a> bla.", HttpUtils.makeHyperlins("https://www.seznam.cz bla."), "https begin");
         assertEquals("Bla <a href=\"https://www.seznam.cz\" target=\"_blank\">https://www.seznam.cz</a>", HttpUtils.makeHyperlins("Bla https://www.seznam.cz"), "https end");
         assertEquals("Bla <a href=\"https://www.seznam.cz\" target=\"_blank\">https://www.seznam.cz</a>.", HttpUtils.makeHyperlins("Bla https://www.seznam.cz."), "https end dot");
         assertEquals("Bla <a href=\"https://www.seznam.cz\" target=\"_blank\">https://www.seznam.cz</a>,", HttpUtils.makeHyperlins("Bla https://www.seznam.cz,"), "https end comma");
-        assertEquals("vím: <a href=\"https://www.vybor1491.cz/Dispatcher?page=articleDetail&id=563\" target=\"_blank\">https://www.vybor1491.cz/Dispatcher?page=articleDetail&id=563</a>,", HttpUtils.makeHyperlins("vím: https://www.vybor1491.cz/Dispatcher?page=articleDetail&id=563,"), "https query string");
+        assertEquals("vím: <a href=\"https://www.vybor.cz/Dispatcher?page=articleDetail&id=563\" target=\"_blank\">https://www.vybor.cz/Dispatcher?page=articleDetail&id=563</a>,", HttpUtils.makeHyperlins("vím: https://www.vybor.cz/Dispatcher?page=articleDetail&id=563,"), "https query string");
         
         assertEquals("<a href=\"https://www.seznam.cz\" target=\"_blank\">https://www.seznam.cz</a>", HttpUtils.makeHyperlins("<a href=\"https://www.seznam.cz\" target=\"_blank\">https://www.seznam.cz</a>"), "https link alone");
         
