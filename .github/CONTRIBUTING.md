@@ -38,4 +38,4 @@ Nejlepší pull requesty jsou ty malé a zaměřené na jeden konkrétní probl�
 
 ## Spolupráce na Code Review
 
-Pokud nemáte čas programovat, tak můžete stále pomoci s Code Review. V takovém případě jděte do Pull requests a můžete připomínkovat úpravy ostatních lidí.
+Pokud nemáte čas programovat, tak můžete stále pomoci třeba s Code Review. V takovém případě se podívejte do menu Pull requests a můžete zde připomínkovat úpravy ostatních.
