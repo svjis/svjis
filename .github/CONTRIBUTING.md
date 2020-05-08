@@ -1,42 +1,41 @@
-# Contributing to SVJIS
+# Jak přispívat do projektu SVJIS
 
-Thank you for considering contributing to SVJIS project. Here are some of the ways you can contribute to:
+Děkuji, že zvažujete přispívat do projektu SVJIS. Níže uvádím několik způsbů jak můžete spolupracovat:
 
-* Contribute new code.
-* File bug reports.
-* Fix bugs.
-* Develop ideas for new features and file them.
-* Participate in code reviews.
+* přidáváním nového kódu;
+* reportováním chyb;
+* opravami chyb;
+* vymýšlením nových vlastností systému;
+* spoluprací na code review.
 
-## How to Contribute Code
+## Jak přidávat nový kód
 
-New code contributions should be primarily made using GitHub pull requests. This involves you creating a personal fork of the project, adding your new code to a branch in your fork, and then triggering a pull request using the GitHub web UI (it's easier than it sounds). A pull request is both a technical process (to get the code from your branch into the main repository) and a framework for performing code reviews.  
+Nejlepším způsobem pro nové přispěvovatele je použití GitHub pull requestů. To znamená vytvoření privátního forku projektu, zapracování změn do větve ve vašem forku a nakonec vytvoření pull requestu prostřednistvím GitHub UI (je to jednodušší než se zdá). Pull request je jednak způsob jak převzít kód z vaší větve do hlavního repozitáře a jednak je to framework pro code review.  
 
-This project uses [Gitflow Workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow). The branch naming conventions in your fork should follow projects name conventions.  
+Tento projekt používá [Gitflow Workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow). Pojmenování větví ve vašem projektu by mělo respektovat konvenci používanou v hlavním projektu.  
 
-*For new features:*
+*Pro přidání nové vlastnosti systému:*
 
 * **feature/**meaningful-feature-name
-  * ex. `feature/component-error-handler`
+  * např. `feature/component-error-handler`
 
-*For defects:*
+*Pro opravu chyby:*
 
 * **fix/**feature-name/short-name-of-problem-being-fixed
-  * ex. `fix/error-page-handler/parent-page-lookup`
+  * např. `fix/error-page-handler/parent-page-lookup`
 
+Než začnete věnovat váš čas vlastnímu programování, je někdy lepší zamýšlenou úpravu nejprve prodiskutovat s komunitou. V tom případě vytvořte GitHub issue s popisem problému nebo vlastnosti kterou zamýšlíte řešit.  
 
-In many cases, it is worth having a discussion with the community before investing serious time in development. For these cases, create a GitHub issue with a description of the problem you are trying to solve.  
+Pokud už máte práva provádět commity, pak byste opravy a malé úpravy měli dělat přímo ve sdíleném repozitáři.  
 
-If you already have commit rights, bug fixes and minor updates should just be made in the shared repository itself.  
+Existuje hezký návod jak pracovat s pull requesty: [https://help.github.com/articles/using-pull-requests](https://help.github.com/articles/using-pull-requests). Tak jak je uvedeno v článku, používáme obojí **Fork & Pull** a **Shared Repository Model**.
 
-There's a good guide to performing pull requests at [https://help.github.com/articles/using-pull-requests](https://help.github.com/articles/using-pull-requests). In the terms used in that article, we use both the **Fork & Pull** and the **Shared Repository Model**.
+### Než začnete programovat
 
-### Before Contributing Code
+Nejlepší pull requesty jsou ty malé a zaměřené na jeden konkrétní problém. Nepokoušejte se v jednom pull requestu "předělat svět"
 
-The best pull request are small and focused. Don't try to change the world in one pull request.
+* Nezapomeňte přidat JUnit test pro váš kód.
 
-* Add JUnit test for Java code. Our coverage ratio isn't great, but we don't want it to get worse.
+## Spolupráce na Code Review
 
-## Participating in Code Reviews
-
-Even if you don't have time to contribute code, reviewing code contributed by other people is an option. To do this, go to Pull requests to see the open pull requests.
+Pokud nemáte čas programovat, tak můžete stále pomoci s Code Review. V takovém případě jděte do Pull requests a můžete připomínkovat úpravy ostatních lidí.
