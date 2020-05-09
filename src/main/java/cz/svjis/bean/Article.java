@@ -165,7 +165,7 @@ public class Article {
     }
 
     /**
-     * @param author the author to set
+     * @param authorId the author to set
      */
     public void setAuthorId(int authorId) {
         this.authorId = authorId;

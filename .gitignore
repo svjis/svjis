@@ -1,6 +1,14 @@
+# Eclipse
 .settings/
 .project
 .classpath
-nb-configuration.xml
-target/
 
+# NetBeans
+nb-configuration.xml
+
+# Eclipse
+.idea/
+*.iml
+
+# Maven
+target/
