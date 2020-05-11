@@ -952,6 +952,7 @@ BEGIN
   INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('mail.template.fault.comment.notification', :COMPANY_ID, 'Uživatel %s přidal nový komentář k závadě %s: <br><br><br>%s');
   INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('mail.template.fault.notification', :COMPANY_ID, 'Uživatel %s vložil novou závadu %s: <br><br><br>%s');
   INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('mail.template.lost.password', :COMPANY_ID, '<html><body>Dobrý den,<br>Vaše přihlašovací údaje jsou:<br><br>%s<br><br>Web SVJ</body></html>');
+  INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('permanent.login.hours', :COMPANY_ID, '336');
  
 END^
 SET TERM ; ^
