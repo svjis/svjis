@@ -45,9 +45,8 @@
                     <div class="article-desc">
                     <h1 class="article-title" id="tbl-desc"><%=HttpUtils.highlight(article.getHeader(), request.getParameter("search")) %></h1>
                     <p class="info">
-                        <%=language.getText("Published:") %> <strong><%=sdf.format(article.getCreationDate()) %></strong> 
-                        <%=language.getText("by:") %> <strong><%=article.getAuthor().getFirstName() %> <%=article.getAuthor().getLastName() %></strong> 
-                        <%=(article.getCommentList().size() != 0) ? language.getText("Comments:") + " <strong>" + article.getCommentList().size() + "</strong>" : "" %>
+                        <%=language.getText("Published:") %> <strong><%=sdf.format(article.getCreationDate()) %></strong>, 
+                        <%=language.getText("by:") %> <strong><%=article.getAuthor().getFirstName() %> <%=article.getAuthor().getLastName() %></strong><%=(article.getCommentList().size() != 0) ? ", " + language.getText("Comments:") + " <strong>" + article.getCommentList().size() + "</strong>" : "" %>
                     </p> 
                     <%=HttpUtils.highlight(article.getDescription(), request.getParameter("search")) %>
                     <%=HttpUtils.highlight(body, request.getParameter("search")) %>
