@@ -53,8 +53,8 @@
                         <div class="article-desc">
                             <h1 class="article-title-list"><a href="Dispatcher?page=articleDetail&id=<%=a.getId() %><%=(request.getParameter("search") != null) ? "&search=" + URLEncoder.encode(request.getParameter("search"), "UTF-8") : "" %>"><%=HttpUtils.highlight(a.getHeader(), request.getParameter("search")) %></a></h1>
                             <p class="info">
-                                <strong><a href="Dispatcher?page=articleList&section=<%=a.getMenuNodeId() %>"><%=a.getMenuNodeDescription() %></a></strong>,
-                                <%=language.getText("Published:") %> <strong><%=sdf.format(a.getCreationDate()) %></strong>,
+                                <a href="Dispatcher?page=articleList&section=<%=a.getMenuNodeId() %>"><%=a.getMenuNodeDescription() %></a>:
+                                <strong><%=sdf.format(a.getCreationDate()) %></strong>,
                                 <%=language.getText("by:") %> <strong><%=a.getAuthor().getFirstName() %> <%=a.getAuthor().getLastName() %></strong><%=(a.getNumOfComments() != 0) ? ", " + language.getText("Comments:") + " <strong>" + a.getNumOfComments() + "</strong>" : "" %></p> 
                             <%=HttpUtils.highlight(a.getDescription(), request.getParameter("search")) %>
                         </div>
