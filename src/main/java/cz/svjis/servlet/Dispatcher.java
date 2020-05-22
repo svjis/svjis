@@ -131,7 +131,7 @@ public class Dispatcher extends HttpServlet {
                     user = userDao.getUser(company.getId(), PermanentLoginUtils.checkPermanentLogin(request, userDao, company.getId()));
                     user.setUserLogged(true);
                     logDao.log(user.getId(), LogDAO.OPERATION_TYPE_LOGIN, LogDAO.ID_NULL, request.getRemoteAddr(), request.getHeader("User-Agent"));
-                    PermanentLoginUtils.savePermanentLogin(response, user, userDao);
+                    PermanentLoginUtils.savePermanentLogin(response, user, userDao, setup);
                 } else {
                     user = new User();
                     user.setCompanyId(company.getId());
