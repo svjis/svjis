@@ -17,7 +17,6 @@ import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
-import java.util.logging.Logger;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,7 +27,6 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class PermanentLoginUtils {
 
-    private static final Logger LOGGER = Logger.getLogger(PermanentLoginUtils.class.getName());
     public static final String PERMANENT_LOGIN_TTL = "permanent.login.hours";
 
     private PermanentLoginUtils() {}

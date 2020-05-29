@@ -12,6 +12,7 @@
 
 package cz.svjis.bean;
 
+import java.io.Serializable;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,7 +21,7 @@ import java.util.logging.Logger;
  *
  * @author jarberan
  */
-public class Setup {
+public class Setup implements Serializable {
     
     private static final Logger LOGGER = Logger.getLogger(Setup.class.getName());
     
@@ -71,14 +72,14 @@ public class Setup {
     private static final String PERMANENT_LOGIN_HOURS_KEY = "permanent.login.hours";
     private static final int PERMANENT_LOGIN_HOURS_DEFAULT = 336;
     
-    private Properties setup;
+    private Properties props;
     
     public Setup() {
-        this.setup = new Properties();
+        this.props = new Properties();
     }
     
     public Setup(Properties setup) {
-        this.setup = setup;
+        this.props = setup;
     }
     
     /**
@@ -269,15 +270,15 @@ public class Setup {
      * @return the setup
      */
     public Properties getSetupProps() {
-        return setup;
+        return props;
     }
     
     private int getIntValue(String key, int defaultValue) {
         int result = defaultValue;
         
-        if (setup.getProperty(key) != null) {
+        if (props.getProperty(key) != null) {
             try {
-                result = Integer.valueOf(setup.getProperty(key));
+                result = Integer.valueOf(props.getProperty(key));
             } catch (java.lang.NumberFormatException ex) {
                 LOGGER.log(Level.WARNING, "Could not convert string to integer", ex);
             }
@@ -289,8 +290,8 @@ public class Setup {
     private String getStringValue(String key, String defaultValue) {
         String result = defaultValue;
         
-        if (setup.getProperty(key) != null) {
-            result = setup.getProperty(key);
+        if (props.getProperty(key) != null) {
+            result = props.getProperty(key);
         }
         
         return result;

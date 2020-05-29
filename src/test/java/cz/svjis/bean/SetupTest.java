@@ -41,6 +41,15 @@ public class SetupTest {
     }
     
     @Test
+    @DisplayName("Article page size test")
+    public void testGetArticlePageSize() {
+        Properties p = new Properties();
+        p.setProperty("article.page.size", "test");
+        Setup s = new Setup(p);
+        assertEquals(10, s.getArticlePageSize());
+    }
+    
+    @Test
     @DisplayName("Mail login test")
     public void testGetMailLogin() {
         Properties p = new Properties();
