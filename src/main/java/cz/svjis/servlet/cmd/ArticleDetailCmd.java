@@ -58,7 +58,7 @@ public class ArticleDetailCmd extends Command {
         
         Menu menu = menuDao.getMenu(getCompany().getId());
         menu.setActiveSection(article.getMenuNodeId());
-        int defaultSection = (getSetup().get("article.menu.default.item") != null) ? Integer.valueOf(getSetup().getProperty("article.menu.default.item")) : 0;
+        int defaultSection = getSetup().getMenuDefaultItem();
         menu.setDefaultSection(defaultSection);
         getRequest().setAttribute("menu", menu);
         

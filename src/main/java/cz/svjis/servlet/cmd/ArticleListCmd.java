@@ -50,7 +50,7 @@ public class ArticleListCmd extends Command {
 
         Menu menu = menuDao.getMenu(getCompany().getId());
         int section = parSection;
-        int defaultSection = (getSetup().get("article.menu.default.item") != null) ? Integer.valueOf(getSetup().getProperty("article.menu.default.item")) : 0;
+        int defaultSection = getSetup().getMenuDefaultItem();
         if ((section == 0) && (defaultSection != 0)) {
             section = defaultSection;
         }
@@ -62,18 +62,18 @@ public class ArticleListCmd extends Command {
         SliderImpl sl = new SliderImpl();
         sl.setSliderWide(10);
         sl.setCurrentPage(pageNo);
-        sl.setNumOfItemsAtPage(Integer.valueOf(getSetup().getProperty("article.page.size")));
+        sl.setNumOfItemsAtPage(getSetup().getArticlePageSize());
         sl.setTotalNumOfItems(articleDao.getNumOfArticles(getUser(), section, true, false, 0));
         getRequest().setAttribute("slider", sl);
         ArrayList<Article> articleList = new ArrayList(articleDao.getArticleList(getUser(),
                 section,
                 pageNo,
-                Integer.valueOf(getSetup().getProperty("article.page.size")),
+                getSetup().getArticlePageSize(),
                 true, false, 0));
         getRequest().setAttribute("articleList", articleList);
         ArrayList<Article> articleTopList = new ArrayList(articleDao.getArticleTopList(getUser(),
-                Integer.valueOf(getSetup().getProperty("article.top.size")),
-                (getSetup().getProperty("article.top.months") != null) ? Integer.valueOf(getSetup().getProperty("article.top.months")) : 12));
+                getSetup().getArticleTopSize(),
+                getSetup().getArticleTopMonths()));
         getRequest().setAttribute("articleTopList", articleTopList);
         getRequest().setAttribute("sectionId", String.valueOf(parSection));
         ArrayList<MiniNews> miniNewsList = new ArrayList(newsDao.getMiniNews(getUser(), true));

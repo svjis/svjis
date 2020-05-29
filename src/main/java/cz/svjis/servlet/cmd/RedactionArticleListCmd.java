@@ -58,7 +58,7 @@ public class RedactionArticleListCmd extends Command {
         sl.setPageId(parPage);
         sl.setSliderWide(10);
         sl.setCurrentPage(parPageNo);
-        sl.setNumOfItemsAtPage(Integer.valueOf(getSetup().getProperty("article.page.size")));
+        sl.setNumOfItemsAtPage(getSetup().getArticlePageSize());
 
         ArrayList<Article> articleList = new ArrayList<>();
         if (parPage.equals("redactionArticleList")) {
@@ -67,7 +67,7 @@ public class RedactionArticleListCmd extends Command {
                 getUser(),
                 parSection,
                 parPageNo,
-                Integer.valueOf(getSetup().getProperty("article.page.size")),
+                getSetup().getArticlePageSize(),
                 false,
                 !getUser().hasPermission("redaction_articles_all"),
                 parRoleId));
@@ -97,7 +97,7 @@ public class RedactionArticleListCmd extends Command {
             articleList = new ArrayList(articleDao.getArticleListFromSearch(parSearch, getUser(),
                 parSection,
                 parPageNo,
-                Integer.valueOf(getSetup().getProperty("article.page.size")),
+                getSetup().getArticlePageSize(),
                 false,
                 !getUser().hasPermission("redaction_articles_all")));
         }

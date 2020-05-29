@@ -43,7 +43,7 @@ public class FaultReportingListCmd extends Command {
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
         
         int pageNo = (parPageNo == 0) ? 1 : parPageNo;
-        int pageSize = (getSetup().getProperty("faults.page.size") == null) ? 10 : Integer.valueOf(getSetup().getProperty("faults.page.size"));
+        int pageSize = getSetup().getFaultPageSize();
         
         SliderImpl sl = new SliderImpl();
         sl.setPageId(parPage);

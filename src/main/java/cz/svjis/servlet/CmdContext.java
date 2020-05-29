@@ -14,9 +14,9 @@ package cz.svjis.servlet;
 
 import cz.svjis.bean.Company;
 import cz.svjis.bean.Language;
+import cz.svjis.bean.Setup;
 import cz.svjis.bean.User;
 import java.sql.Connection;
-import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 public class CmdContext {
     
     private Company company;
-    private Properties setup;
+    private Setup setup;
     private Language language;
     private User user;
     private HttpServletRequest request;
@@ -51,14 +51,14 @@ public class CmdContext {
     /**
      * @return the setup
      */
-    public Properties getSetup() {
+    public Setup getSetup() {
         return setup;
     }
 
     /**
      * @param setup the setup to set
      */
-    public void setSetup(Properties setup) {
+    public void setSetup(Setup setup) {
         this.setup = setup;
     }
 

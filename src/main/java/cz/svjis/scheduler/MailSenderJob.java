@@ -17,12 +17,12 @@ import cz.svjis.bean.Company;
 import cz.svjis.bean.CompanyDAO;
 import cz.svjis.bean.MailDAO;
 import cz.svjis.bean.Message;
+import cz.svjis.bean.Setup;
 import cz.svjis.servlet.Dispatcher;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.Context;
@@ -58,14 +58,14 @@ public class MailSenderJob implements Runnable {
     private void processAllMessagesForCompany(Connection cnn, Company c) {
         try {
             ApplicationSetupDAO setup = new ApplicationSetupDAO(cnn);
-            Properties props = setup.getApplicationSetup(c.getId());
+            Setup s = setup.getApplicationSetup(c.getId());
             
             MailDAO mailDao = new MailDAO(
                     cnn,
-                    props.getProperty("mail.smtp"),
-                    props.getProperty("mail.login"),
-                    props.getProperty("mail.password"),
-                    props.getProperty("mail.sender"));
+                    s.getMailSmtp(),
+                    s.getMailLogin(),
+                    s.getMailPassword(),
+                    s.getMailSender());
             
             List<Message> messageList = mailDao.getWaitingMessages(c.getId());
             

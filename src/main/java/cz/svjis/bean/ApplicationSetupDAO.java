@@ -28,18 +28,18 @@ public class ApplicationSetupDAO extends DAO {
         super(cnn);
     }
     
-    public Properties getApplicationSetup(int companyId) throws SQLException {
-        Properties result = new Properties();
+    public Setup getApplicationSetup(int companyId) throws SQLException {
+        Properties p = new Properties();
         String select = "SELECT a.ID, a.\"VALUE\" FROM APPLICATION_SETUP a WHERE a.COMPANY_ID = ? ORDER BY a.ID";
         try (PreparedStatement ps = cnn.prepareStatement(select)) {
             ps.setInt(1, companyId);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    result.setProperty(rs.getString("ID"), rs.getString("VALUE"));
+                    p.setProperty(rs.getString("ID"), rs.getString("VALUE"));
                 }
             }
         }
-        return result;
+        return new Setup(p);
     }
     
     public void deleteProperty(int companyId, String key) throws SQLException {

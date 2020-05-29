@@ -6,7 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
-<jsp:useBean id="setup" scope="session" class="java.util.Properties" />
+<jsp:useBean id="setup" scope="session" class="cz.svjis.bean.Setup" />
 <jsp:useBean id="key" scope="request" class="java.lang.String" />
 
 <jsp:include page="_header.jsp" />
@@ -31,7 +31,7 @@
                             </p>
                             <p>
                                 <label id="common-label" for="common-input"><%=language.getText("Value") %></label>
-                                <input id="common-input" type="text" name="value" maxlength="1000" value="<%=(setup.getProperty(key) != null) ? setup.getProperty(key) : ""  %>" />
+                                <input id="common-input" type="text" name="value" maxlength="1000" value="<%=(setup.getSetupProps().getProperty(key) != null) ? setup.getSetupProps().getProperty(key) : ""  %>" />
                             </p>
                         </fieldset>
                         <p>

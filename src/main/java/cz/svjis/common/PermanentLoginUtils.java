@@ -12,12 +12,11 @@
 
 package cz.svjis.common;
 
+import cz.svjis.bean.Setup;
 import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
-import java.util.Properties;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -61,20 +60,8 @@ public class PermanentLoginUtils {
      * @throws NoSuchAlgorithmException
      * @throws SQLException
      */
-    public static void savePermanentLogin(HttpServletResponse response, User user, UserDAO userDao, Properties setup) throws NoSuchAlgorithmException, SQLException {
-        int ttl;
-
-        if (setup.getProperty(PERMANENT_LOGIN_TTL) == null) {
-            ttl = 1;
-        } else {
-            try {
-                ttl = Integer.valueOf(setup.getProperty(PERMANENT_LOGIN_TTL));
-            } catch (NumberFormatException ex) {
-                LOGGER.log(Level.SEVERE, "Invalid TTL value", ex);
-                ttl = 1;
-            }
-        }
-        int age = ttl * 3600;
+    public static void savePermanentLogin(HttpServletResponse response, User user, UserDAO userDao, Setup setup) throws NoSuchAlgorithmException, SQLException {
+        int age = setup.getPermanentLoginInHours() * 3600;
 
         Cookie cookie;
         cookie = new Cookie("company", String.valueOf(user.getCompanyId()));

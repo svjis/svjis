@@ -36,10 +36,7 @@ public class PropertySaveCmd extends Command {
         String parValue = Validator.getString(getRequest(), "value", 0, 1000, false, true);
 
         ApplicationSetupDAO setupDao = new ApplicationSetupDAO(getCnn());
-        
-        if (getSetup().getProperty(parOrigKey) != null) {
-            setupDao.deleteProperty(getCompany().getId(), parOrigKey);
-        }
+        setupDao.deleteProperty(getCompany().getId(), parOrigKey);
         setupDao.insertProperty(getCompany().getId(), parKey, parValue);
         getRequest().getSession().setAttribute("setup", null);
         String url = "Dispatcher?page=propertyList";

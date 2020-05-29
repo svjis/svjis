@@ -45,9 +45,8 @@ public class LogoutCmd extends Command {
         User user = new User();
         user.setCompanyId(getCompany().getId());
 
-        if ((getSetup().getProperty("anonymous.user.id") != null) && (userDao.getUser(getCompany().getId(),
-                Integer.valueOf(getSetup().getProperty("anonymous.user.id"))) != null)) {
-            user = userDao.getUser(getCompany().getId(), Integer.valueOf(getSetup().getProperty("anonymous.user.id")));
+        if (userDao.getUser(getCompany().getId(), getSetup().getAnonymousUserId()) != null) {
+            user = userDao.getUser(getCompany().getId(), getSetup().getAnonymousUserId());
         }
 
         getRequest().getSession().setAttribute("user", user);
