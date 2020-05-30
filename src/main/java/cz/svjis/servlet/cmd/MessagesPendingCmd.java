@@ -39,10 +39,10 @@ public class MessagesPendingCmd extends Command {
         getRequest().setAttribute("currCompany", currCompany);
         MailDAO mailDao = new MailDAO(
                 getCnn(),
-                getSetup().getProperty("mail.smtp"),
-                getSetup().getProperty("mail.login"),
-                getSetup().getProperty("mail.password"),
-                getSetup().getProperty("mail.sender"));
+                getSetup().getMailSmtp(),
+                getSetup().getMailLogin(),
+                getSetup().getMailPassword(),
+                getSetup().getMailSender());
         ArrayList<Message> messageList = new ArrayList(mailDao.getWaitingMessages(getCompany().getId()));
         getRequest().setAttribute("messageList", messageList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_messageList.jsp");

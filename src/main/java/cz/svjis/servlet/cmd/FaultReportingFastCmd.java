@@ -50,7 +50,7 @@ public class FaultReportingFastCmd extends FaultAbstractCmd {
             if (getRequest().getParameter("closeTicket") != null) {
                 f.setClosed(true);
                 faultDao.modifyFault(f);
-                sendNotification(f, "mail.template.fault.closed", faultDao.getUserListWatchingFaultReport(f.getId()));
+                sendNotification(f, getSetup().getMailTemplateFaultClosed(), faultDao.getUserListWatchingFaultReport(f.getId()));
                 logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_CLOSE_FAULT, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
             }
         }

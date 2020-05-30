@@ -61,14 +61,14 @@ public class RedactionArticleSendNotificationsConfirmationCmd extends Command {
         getRequest().setAttribute("article", article);
 
         String subject = getCompany().getInternetDomain() + ": " + article.getHeader();
-        String body = getSetup().getProperty("mail.template.article.notification");
+        String body = getSetup().getMailTemplateArticleNotification();
         body = String.format(body, "<a href=\"http://" + getCompany().getInternetDomain() + "/Dispatcher?page=articleDetail&id=" + article.getId() + "\">" + article.getHeader() + "</a>");
         MailDAO mailDao = new MailDAO(
                 getCnn(),
-                getSetup().getProperty("mail.smtp"),
-                getSetup().getProperty("mail.login"),
-                getSetup().getProperty("mail.password"),
-                getSetup().getProperty("mail.sender"));
+                getSetup().getMailSmtp(),
+                getSetup().getMailLogin(),
+                getSetup().getMailPassword(),
+                getSetup().getMailSender());
 
         int counter = 0;
         ArrayList<User> userList = new ArrayList(articleDao.getUserListForNotificationAboutNewArticle(parId));

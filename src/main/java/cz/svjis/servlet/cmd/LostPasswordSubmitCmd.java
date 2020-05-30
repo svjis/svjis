@@ -62,14 +62,14 @@ public class LostPasswordSubmitCmd extends Command {
                 logins.append("<br>");
                 logDao.log(u.getId(), LogDAO.OPERATION_TYPE_SEND_LOST_PASSWORD, LogDAO.ID_NULL, getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
             }
-            String body = getSetup().getProperty("mail.template.lost.password");
+            String body = getSetup().getMailTemplateLostPassword();
             body = String.format(body, logins);
             MailDAO mailDao = new MailDAO(
                     getCnn(),
-                    getSetup().getProperty("mail.smtp"),
-                    getSetup().getProperty("mail.login"),
-                    getSetup().getProperty("mail.password"),
-                    getSetup().getProperty("mail.sender"));
+                    getSetup().getMailSmtp(),
+                    getSetup().getMailLogin(),
+                    getSetup().getMailPassword(),
+                    getSetup().getMailSender());
             mailDao.sendInstantMail(parEmail, getCompany().getName(), body);
             getRequest().setAttribute("messageHeader", getLanguage().getText("Password assistance"));
             getRequest().setAttribute("message", getLanguage().getText("Your login and password were sent to your mail."));

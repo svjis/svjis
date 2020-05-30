@@ -30,31 +30,29 @@ public abstract class FaultAbstractCmd  extends Command {
         super(cmdCtx);
     }
     
-    protected void sendNotification(FaultReport f, String templatePropertyName, List<User> userList) throws SQLException {
-        if (getSetup().getProperty(templatePropertyName) != null) {
+    protected void sendNotification(FaultReport f, String template, List<User> userList) throws SQLException {
             
-            MailDAO mailDao = new MailDAO(
-                getCnn(),
-                getSetup().getProperty("mail.smtp"),
-                getSetup().getProperty("mail.login"),
-                getSetup().getProperty("mail.password"),
-                getSetup().getProperty("mail.sender"));
-            
-            String subject = getCompany().getInternetDomain() + ": #" + f.getId() + " - " + f.getSubject();
-            String link = String.format("<a href=\"http://%s/Dispatcher?page=faultDetail&id=%s\">#%s - %s</a>",
-                    getCompany().getInternetDomain(), String.valueOf(f.getId()), String.valueOf(f.getId()), f.getSubject());
-            String tBody = getSetup().getProperty(templatePropertyName);
+        MailDAO mailDao = new MailDAO(
+            getCnn(),
+            getSetup().getMailSmtp(),
+            getSetup().getMailLogin(),
+            getSetup().getMailPassword(),
+            getSetup().getMailSender());
 
-            for (User u : userList) {
-                if ((u.getId() == getUser().getId()) || (u.geteMail().equals(""))) {
-                    continue;
-                }
-                String body = String.format(tBody,
-                        getUser().getFirstName() + " " + getUser().getLastName(),
-                        link,
-                        f.getDescription().replace("\n", "<br>"));
-                mailDao.queueMail(getCompany().getId(), u.geteMail(), subject, body);
+        String subject = getCompany().getInternetDomain() + ": #" + f.getId() + " - " + f.getSubject();
+        String link = String.format("<a href=\"http://%s/Dispatcher?page=faultDetail&id=%s\">#%s - %s</a>",
+                getCompany().getInternetDomain(), String.valueOf(f.getId()), String.valueOf(f.getId()), f.getSubject());
+        String tBody = template;
+
+        for (User u : userList) {
+            if ((u.getId() == getUser().getId()) || (u.geteMail().equals(""))) {
+                continue;
             }
+            String body = String.format(tBody,
+                    getUser().getFirstName() + " " + getUser().getLastName(),
+                    link,
+                    f.getDescription().replace("\n", "<br>"));
+            mailDao.queueMail(getCompany().getId(), u.geteMail(), subject, body);
         }
     }
 }

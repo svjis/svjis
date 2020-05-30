@@ -123,14 +123,14 @@ public class UserSaveCmd extends Command {
                     userDao.storeNewPassword(u.getCompanyId(), u.getLogin(), u.getPassword());
                 }
                 String logins = "Login: " + u.getLogin() + " " + "Password: " + u.getPassword() + "<br>";
-                String body = getSetup().getProperty("mail.template.lost.password");
+                String body = getSetup().getMailTemplateLostPassword();
                 body = String.format(body, logins);
                 MailDAO mailDao = new MailDAO(
                         getCnn(),
-                        getSetup().getProperty("mail.smtp"),
-                        getSetup().getProperty("mail.login"),
-                        getSetup().getProperty("mail.password"),
-                        getSetup().getProperty("mail.sender"));
+                        getSetup().getMailSmtp(),
+                        getSetup().getMailLogin(),
+                        getSetup().getMailPassword(),
+                        getSetup().getMailSender());
                 mailDao.queueMail(getCompany().getId(), u.geteMail(), getCompany().getName(), body);
                 message += getLanguage().getText("Credentials has been send by e-mail.") + "<br>";
             }
