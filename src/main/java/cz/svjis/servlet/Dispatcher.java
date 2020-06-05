@@ -19,6 +19,7 @@ import cz.svjis.bean.CompanyDAO;
 import cz.svjis.bean.Language;
 import cz.svjis.bean.LanguageDAO;
 import cz.svjis.bean.LogDAO;
+import cz.svjis.bean.Setup;
 import cz.svjis.bean.SystemMenuEntry;
 import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
@@ -29,7 +30,6 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.Context;
@@ -112,7 +112,7 @@ public class Dispatcher extends HttpServlet {
             // * Setup         *
             // *****************
             
-            Properties setup = (Properties) session.getAttribute("setup");
+            Setup setup = (Setup) session.getAttribute("setup");
             if (setup == null) {
                 setup = setupDao.getApplicationSetup(company.getId());
                 session.setAttribute("setup", setup);
@@ -131,12 +131,12 @@ public class Dispatcher extends HttpServlet {
                     user = userDao.getUser(company.getId(), PermanentLoginUtils.checkPermanentLogin(request, userDao, company.getId()));
                     user.setUserLogged(true);
                     logDao.log(user.getId(), LogDAO.OPERATION_TYPE_LOGIN, LogDAO.ID_NULL, request.getRemoteAddr(), request.getHeader("User-Agent"));
-                    PermanentLoginUtils.savePermanentLogin(response, user, userDao);
+                    PermanentLoginUtils.savePermanentLogin(response, user, userDao, setup);
                 } else {
                     user = new User();
                     user.setCompanyId(company.getId());
-                    if ((setup.getProperty("anonymous.user.id") != null) && (userDao.getUser(company.getId(), Integer.valueOf(setup.getProperty("anonymous.user.id"))) != null)) {
-                        user = userDao.getUser(company.getId(), Integer.valueOf(setup.getProperty("anonymous.user.id")));
+                    if (userDao.getUser(company.getId(), setup.getAnonymousUserId()) != null) {
+                        user = userDao.getUser(company.getId(), setup.getAnonymousUserId());
                     }
                 }
                 session.setAttribute("user", user);

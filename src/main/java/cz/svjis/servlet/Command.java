@@ -14,9 +14,9 @@ package cz.svjis.servlet;
 
 import cz.svjis.bean.Company;
 import cz.svjis.bean.Language;
+import cz.svjis.bean.Setup;
 import cz.svjis.bean.User;
 import java.sql.Connection;
-import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -38,7 +38,7 @@ public abstract class Command {
         return cmdCtx.getCompany();
     }
     
-    public Properties getSetup() {
+    public Setup getSetup() {
         return cmdCtx.getSetup();
     }
     

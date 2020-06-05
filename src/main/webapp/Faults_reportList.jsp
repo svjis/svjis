@@ -41,7 +41,6 @@
                             <th class="list" scope="col"><%=language.getText("Building entrance") %></th>
                             <th class="list" scope="col"><%=language.getText("Reporter") %></th>
                             <th class="list" scope="col"><%=language.getText("Resolver") %></th>
-                            <th class="list" scope="col"><%=language.getText("Closed") %></th>
                         </tr>
                         <%
                         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
@@ -56,7 +55,6 @@
                             <td class="list" style="<%=stl %>"><%=(f.getBuildingEntrance() != null) ? f.getBuildingEntrance().getDescription() : "&nbsp;" %></td>
                             <td class="list" style="<%=stl %>"><%=f.getCreatedByUser().getFirstName() %>&nbsp;<%=f.getCreatedByUser().getLastName() %></td>
                             <td class="list" style="<%=stl %>"><%=(f.getAssignedToUser() != null) ? (f.getAssignedToUser().getFirstName() + "&nbsp;" +f.getAssignedToUser().getLastName()) : "&nbsp;" %></td>
-                            <td class="list" style="<%=stl %>"><%=(f.isClosed()) ? language.getText("yes") : language.getText("no") %></td>
                         </tr>
                         <%
                             }

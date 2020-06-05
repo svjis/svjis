@@ -7,7 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="company" scope="session" class="cz.svjis.bean.Company" />
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
-<jsp:useBean id="setup" scope="session" class="java.util.Properties" />
+<jsp:useBean id="setup" scope="session" class="cz.svjis.bean.Setup" />
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
@@ -18,11 +18,11 @@
     <meta name="author" lang="cs" content="All: SVJIS [https://github.com/svjis]; e-mail: svjis@seznam.cz" />
     <meta name="copyright" lang="cs" content="All: SVJIS [https://github.com/svjis]; e-mail: svjis@seznam.cz" />
 
-    <% if (setup.get("http.meta.description") != null) { %>
-    <meta name="description" content="<%=setup.get("http.meta.description") %>" />
+    <% if (!setup.getHttpMetaDescription().equals("")) { %>
+    <meta name="description" content="<%=setup.getHttpMetaDescription() %>" />
     <% } %>
-    <% if (setup.get("http.meta.keywords") != null) { %>
-    <meta name="keywords" content="<%=setup.get("http.meta.keywords") %>" />
+    <% if (!setup.getHttpMetaKeywords().equals("")) { %>
+    <meta name="keywords" content="<%=setup.getHttpMetaKeywords() %>" />
     <% } %>
 
     <link rel="stylesheet" media="screen,projection" type="text/css" href="css/reset.css" />
@@ -33,11 +33,11 @@
 
     <title><%=company.getName() %></title>
     
-    <% if (setup.get("google.analytics.id") != null) { %>
+    <% if (!setup.getGoogleAnalyticsId().equals("")) { %>
     <!-- Google analytics start -->
     <script type="text/javascript">
         var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', '<%=setup.get("google.analytics.id") %>']);
+        _gaq.push(['_setAccount', '<%=setup.getGoogleAnalyticsId() %>']);
         _gaq.push(['_trackPageview']);
 
         (function() {

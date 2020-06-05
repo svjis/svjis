@@ -63,13 +63,13 @@ public class ArticleInsertCommentCmd extends Command {
 
             // send notification
             String subject = getCompany().getInternetDomain() + ": " + article.getHeader() + " (New comment)";
-            String tBody = getSetup().getProperty("mail.template.comment.notification");
+            String tBody = getSetup().getMailTemplateCommentNotification();
             MailDAO mailDao = new MailDAO(
                     getCnn(),
-                    getSetup().getProperty("mail.smtp"),
-                    getSetup().getProperty("mail.login"),
-                    getSetup().getProperty("mail.password"),
-                    getSetup().getProperty("mail.sender"));
+                    getSetup().getMailSmtp(),
+                    getSetup().getMailLogin(),
+                    getSetup().getMailPassword(),
+                    getSetup().getMailSender());
 
             ArrayList<User> userList = new ArrayList(articleDao.getUserListWatchingArticle(article.getId()));
             for (User u : userList) {

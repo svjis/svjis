@@ -61,7 +61,7 @@ public class ArticleSearchCmd extends Command {
 
         Menu menu = menuDao.getMenu(getCompany().getId());
         int section = parSection;
-        int defaultSection = (getSetup().get("article.menu.default.item") != null) ? Integer.valueOf(getSetup().getProperty("article.menu.default.item")) : 0;
+        int defaultSection = getSetup().getMenuDefaultItem();
         menu.setActiveSection(section);
         menu.setDefaultSection(defaultSection);
         getRequest().setAttribute("menu", menu);
@@ -70,7 +70,7 @@ public class ArticleSearchCmd extends Command {
         SliderImpl sl = new SliderImpl();
         sl.setSliderWide(10);
         sl.setCurrentPage(pageNo);
-        sl.setNumOfItemsAtPage(Integer.valueOf(getSetup().getProperty("article.page.size")));
+        sl.setNumOfItemsAtPage(getSetup().getArticlePageSize());
         sl.setTotalNumOfItems(articleDao.getNumOfArticlesFromSearch(parSearch, getUser(), section, true, false));
 
         if (sl.getTotalNumOfItems() == 0) {
@@ -86,12 +86,12 @@ public class ArticleSearchCmd extends Command {
         ArrayList<Article> articleList = new ArrayList(articleDao.getArticleListFromSearch(parSearch, getUser(),
                 section,
                 pageNo,
-                Integer.valueOf(getSetup().getProperty("article.page.size")),
+                getSetup().getArticlePageSize(),
                 true, false));
         getRequest().setAttribute("articleList", articleList);
         ArrayList<Article> articleTopList = new ArrayList(articleDao.getArticleTopList(getUser(), 
-                Integer.valueOf(getSetup().getProperty("article.top.size")),
-                (getSetup().getProperty("article.top.months") != null) ? Integer.valueOf(getSetup().getProperty("article.top.months")) : 12));
+                getSetup().getArticleTopSize(),
+                getSetup().getArticleTopMonths()));
         getRequest().setAttribute("articleTopList", articleTopList);
         getRequest().setAttribute("sectionId", String.valueOf(parSection));
         ArrayList<MiniNews> miniNewsList = new ArrayList(newsDao.getMiniNews(getUser(), true));

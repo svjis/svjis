@@ -12,6 +12,7 @@
 
 package cz.svjis.common;
 
+import cz.svjis.bean.Setup;
 import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
 import java.security.NoSuchAlgorithmException;
@@ -25,11 +26,17 @@ import javax.servlet.http.HttpServletResponse;
  * @author jaroslav_b
  */
 public class PermanentLoginUtils {
-    
+
+    public static final String PERMANENT_LOGIN_TTL = "permanent.login.hours";
+
     private PermanentLoginUtils() {}
-    
+
+    /**
+     *
+     * @param response
+     */
     public static void clearPermanentLogin(HttpServletResponse response) {
-        int age = 365 * 24 * 60 * 60;
+        int age = 60;
         Cookie cookie;
         cookie = new Cookie("company", "0");
         cookie.setMaxAge(age);
@@ -41,9 +48,19 @@ public class PermanentLoginUtils {
         cookie.setMaxAge(age);
         response.addCookie(cookie);
     }
-    
-    public static void savePermanentLogin(HttpServletResponse response, User user, UserDAO userDao) throws NoSuchAlgorithmException, SQLException {
-        int age = 365 * 24 * 60 * 60;
+
+    /**
+     *
+     * @param response
+     * @param user
+     * @param userDao
+     * @param setup
+     * @throws NoSuchAlgorithmException
+     * @throws SQLException
+     */
+    public static void savePermanentLogin(HttpServletResponse response, User user, UserDAO userDao, Setup setup) throws NoSuchAlgorithmException, SQLException {
+        int age = setup.getPermanentLoginInHours() * 3600;
+
         Cookie cookie;
         cookie = new Cookie("company", String.valueOf(user.getCompanyId()));
         cookie.setMaxAge(age);
@@ -55,7 +72,16 @@ public class PermanentLoginUtils {
         cookie.setMaxAge(age);
         response.addCookie(cookie);
     }
-    
+
+    /**
+     *
+     * @param request
+     * @param userDao
+     * @param companyId
+     * @return returns userId
+     * @throws SQLException
+     * @throws NoSuchAlgorithmException
+     */
     public static int checkPermanentLogin(HttpServletRequest request, UserDAO userDao, int companyId) throws SQLException, NoSuchAlgorithmException {
         int result = 0;
         Cookie[] cookies = request.getCookies();
@@ -68,7 +94,13 @@ public class PermanentLoginUtils {
         }
         return result;
     }
-    
+
+    /**
+     *
+     * @param cookies
+     * @param key
+     * @return cookie value
+     */
     private static String getCookie(Cookie[] cookies, String key) {
         String result = "";
         if (cookies != null) {

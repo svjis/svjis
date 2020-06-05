@@ -8,7 +8,7 @@
 <%@page import="java.util.Iterator"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
-<jsp:useBean id="setup" scope="session" class="java.util.Properties" />
+<jsp:useBean id="setup" scope="session" class="cz.svjis.bean.Setup" />
 
 <jsp:include page="_header.jsp" />
 <jsp:include page="_tray.jsp" />
@@ -32,7 +32,7 @@
                         </tr>
                         <%
                         int i = 0;
-                        java.util.ArrayList<String> keys = new java.util.ArrayList<String>(setup.stringPropertyNames());
+                        java.util.ArrayList<String> keys = new java.util.ArrayList<String>(setup.getSetupProps().stringPropertyNames());
                         Collections.sort(keys);
                         Iterator<String> iKeys = keys.iterator();
                         while (iKeys.hasNext()) {
@@ -43,7 +43,7 @@
                             <td class="list"><a href="Dispatcher?page=propertyEdit&key=<%=key %>"><img src="gfx/pencil.png" border="0" title="<%=language.getText("Edit") %>" alt="<%=language.getText("Edit") %>"></a></td>
                             <td class="list"><a onclick="if (!confirm('<%=language.getText("Really do you want to remove property") %> <%=key %> ?')) return false;" href="Dispatcher?page=propertyDelete&key=<%=key %>"><img src="gfx/delete.png" border="0" title="<%=language.getText("Delete") %>" alt="<%=language.getText("Delete") %>"></a></td>
                             <td class="list"><%=key %></td>
-                            <td class="list"><%=setup.getProperty(key) %></td>
+                            <td class="list"><%=setup.getSetupProps().getProperty(key) %></td>
                         </tr>
                         <%
                         }

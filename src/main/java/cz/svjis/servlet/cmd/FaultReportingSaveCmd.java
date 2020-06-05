@@ -88,7 +88,7 @@ public class FaultReportingSaveCmd extends FaultAbstractCmd {
                 }
                 logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_CREATE_FAULT, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
                 if (f.isClosed()) {
-                    sendNotification(f, "mail.template.fault.closed", faultDao.getUserListWatchingFaultReport(f.getId()));
+                    sendNotification(f, getSetup().getMailTemplateFaultClosed(), faultDao.getUserListWatchingFaultReport(f.getId()));
                     logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_CLOSE_FAULT, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
                 }
             }
@@ -107,11 +107,11 @@ public class FaultReportingSaveCmd extends FaultAbstractCmd {
                 }
                 logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_MODIFY_FAULT, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
                 if (!origFault.isClosed() && f.isClosed()) {
-                    sendNotification(f, "mail.template.fault.closed", faultDao.getUserListWatchingFaultReport(f.getId()));
+                    sendNotification(f, getSetup().getMailTemplateFaultClosed(), faultDao.getUserListWatchingFaultReport(f.getId()));
                     logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_CLOSE_FAULT, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
                 }
                 if (origFault.isClosed() && !f.isClosed()) {
-                    sendNotification(f, "mail.template.fault.reopened", faultDao.getUserListWatchingFaultReport(f.getId()));
+                    sendNotification(f, getSetup().getMailTemplateFaultReopened(), faultDao.getUserListWatchingFaultReport(f.getId()));
                     logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_REOPEN_FAULT, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
                 }
             }
@@ -119,7 +119,7 @@ public class FaultReportingSaveCmd extends FaultAbstractCmd {
 
         // send new fault notification
         if (isNew && (f.getAssignedToUser() == null)) {
-            sendNotification(f, "mail.template.fault.notification", userDao.getUserListWithPermission(getCompany().getId(), "fault_reporting_resolver"));
+            sendNotification(f, getSetup().getMailTemplateFaultNotification(), userDao.getUserListWithPermission(getCompany().getId(), "fault_reporting_resolver"));
         }
         
         // send fault assignment notification
@@ -130,11 +130,11 @@ public class FaultReportingSaveCmd extends FaultAbstractCmd {
             
             if ((f.getAssignedToUser().getId() != getUser().getId()) && 
                 (!f.getAssignedToUser().geteMail().equals("")) && 
-                (getSetup().getProperty("mail.template.fault.assigned") != null)) {
+                (!getSetup().getMailTemplateFaultAssigned().equals(""))) {
                 
                 ArrayList<User> recipient = new ArrayList<>();
                 recipient.add(f.getAssignedToUser());
-                sendNotification(f, "mail.template.fault.assigned", recipient);
+                sendNotification(f, getSetup().getMailTemplateFaultAssigned(), recipient);
             }
         }
         
