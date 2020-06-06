@@ -141,7 +141,8 @@ h1.article-title {margin:0; padding:10px 10px 0px 0px; font-weight:normal;}
 h2.article-title {margin:0; padding:10px 10px 10px 0px; font-weight:normal;}
 .article .article-desc .info {margin:0; font-size:85%;}
 .article-detail .article-desc .info {margin:0; padding:0px 10px 10px 0px; font-size:85%;}
-.article .article-desc p, .article-detail .article-desc p {margin-top:8px; text-align:justify; margin-bottom:0 !important;}
+.article .article-desc p {margin-top:8px; text-align:justify; margin-bottom:0 !important;}
+.article-detail .article-desc p {margin-top:8px; text-align:justify;}
 .article-desc ul,.article-desc ol {padding-left:10px; margin-left:10px; padding-top: 10px; padding-bottom: 0px}
 .article-desc li {padding-left:10px; margin-left:10px;}
 
