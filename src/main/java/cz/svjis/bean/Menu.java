@@ -25,7 +25,8 @@ public class Menu {
     private int defaultSection;
     private ArrayList<MenuNode> navigationBar = null;
     private ArrayList<MenuNode> buffer = null;
-    private ArrayList<MenuItem> menuContent = null;    
+    private ArrayList<MenuItem> menuContent = null;
+    
     public Menu() {
     }
     
@@ -48,7 +49,7 @@ public class Menu {
         this.activeSection = activeSection;
         buildMenu();
     }
-
+    
     /**
      * @return the navigationBar
      */
@@ -63,7 +64,16 @@ public class Menu {
         return menuContent;
     }
 
-    
+    public MenuNode findActiveSection(Language l) {
+        MenuNode result = findSectionInBuffer(activeSection);
+        if (result == null) {
+            result = new MenuNode();
+            result.setId(0);
+            result.setDescription(l.getText("All articles"));
+        }
+        
+        return result;
+    }
 
     private MenuNode findSectionInBuffer(int section) {
         if (section == 0) return null;
