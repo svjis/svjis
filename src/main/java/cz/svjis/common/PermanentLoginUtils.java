@@ -26,6 +26,10 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class PermanentLoginUtils {
 
+    public static final String PM_COMPANY = "company";
+    public static final String PM_LOGIN = "login";
+    public static final String PM_PASSWORD = "password";
+    
     private PermanentLoginUtils() {}
 
     /**
@@ -34,9 +38,9 @@ public class PermanentLoginUtils {
      */
     public static void clearPermanentLogin(HttpServletResponse response) {
         int age = 60;
-        response.addCookie(createCookie("company", "0", age));
-        response.addCookie(createCookie("login", "", age));
-        response.addCookie(createCookie("password", "", age));
+        response.addCookie(createCookie(PM_COMPANY, "0", age));
+        response.addCookie(createCookie(PM_LOGIN, "", age));
+        response.addCookie(createCookie(PM_PASSWORD, "", age));
     }
 
     /**
@@ -55,9 +59,9 @@ public class PermanentLoginUtils {
             token = userDao.createNewAuthToken(user.getCompanyId(), user.getLogin(), setup.getPermanentLoginInHours());
         }
 
-        response.addCookie(createCookie("company", String.valueOf(user.getCompanyId()), age));
-        response.addCookie(createCookie("login", user.getLogin(), age));
-        response.addCookie(createCookie("password", token, age));
+        response.addCookie(createCookie(PM_COMPANY, String.valueOf(user.getCompanyId()), age));
+        response.addCookie(createCookie(PM_LOGIN, user.getLogin(), age));
+        response.addCookie(createCookie(PM_PASSWORD, token, age));
     }
 
     /**
