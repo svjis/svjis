@@ -27,8 +27,6 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class PermanentLoginUtils {
 
-    public static final String PERMANENT_LOGIN_TTL = "permanent.login.hours";
-
     private PermanentLoginUtils() {}
 
     /**
@@ -60,6 +58,11 @@ public class PermanentLoginUtils {
      */
     public static void savePermanentLogin(HttpServletResponse response, User user, UserDAO userDao, Setup setup) throws NoSuchAlgorithmException, SQLException {
         int age = setup.getPermanentLoginInHours() * 3600;
+        String token = userDao.getAuthToken(user.getCompanyId(), user.getLogin());
+        
+        if (token == null) {
+            token = userDao.createNewAuthToken(user.getCompanyId(), user.getLogin(), setup.getPermanentLoginInHours());
+        }
 
         Cookie cookie;
         cookie = new Cookie("company", String.valueOf(user.getCompanyId()));
@@ -68,7 +71,7 @@ public class PermanentLoginUtils {
         cookie = new Cookie("login", user.getLogin());
         cookie.setMaxAge(age);
         response.addCookie(cookie);
-        cookie = new Cookie("password", userDao.getAuthToken(user.getCompanyId(), user.getLogin()));
+        cookie = new Cookie("password", token);
         cookie.setMaxAge(age);
         response.addCookie(cookie);
     }
@@ -78,7 +81,7 @@ public class PermanentLoginUtils {
      * @param request
      * @param userDao
      * @param companyId
-     * @return returns userId
+     * @return returns userId in case of success or 0 in case of failure
      * @throws SQLException
      * @throws NoSuchAlgorithmException
      */
@@ -89,9 +92,20 @@ public class PermanentLoginUtils {
         String login = getCookie(cookies, "login");
         String token = getCookie(cookies, "password");
         User u = userDao.getUserByLogin(company, login);
-        if ((company == companyId) && (u != null) && userDao.verifyAuthToken(company, login, token) && (u.isEnabled())) {
+        if ((company == companyId) && (u != null) && verifyAuthToken(userDao, company, login, token) && (u.isEnabled())) {
             result = u.getId();
         }
+        return result;
+    }
+    
+    private static boolean verifyAuthToken(UserDAO userDao, int companyId, String login, String token) throws SQLException {
+        boolean result = false;
+                
+        String t = userDao.getAuthToken(companyId, login);
+        if ((t != null) && (token != null) && !token.equals("") && token.equals(t)) {
+            result = true;
+        }
+        
         return result;
     }
 
