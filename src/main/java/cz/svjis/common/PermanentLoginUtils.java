@@ -75,9 +75,9 @@ public class PermanentLoginUtils {
     public static int checkPermanentLogin(HttpServletRequest request, UserDAO userDao, int companyId) throws SQLException {
         int result = 0;
         Cookie[] cookies = request.getCookies();
-        int company = (getCookie(cookies, "company").equals("")) ? 0 : Integer.valueOf(getCookie(cookies, "company"));
-        String login = getCookie(cookies, "login");
-        String token = getCookie(cookies, "password");
+        int company = (getCookie(cookies, PM_COMPANY).equals("")) ? 0 : Integer.valueOf(getCookie(cookies, PM_COMPANY));
+        String login = getCookie(cookies, PM_LOGIN);
+        String token = getCookie(cookies, PM_PASSWORD);
         User u = userDao.getUserByLogin(company, login);
         if ((company == companyId) && (u != null) && verifyAuthToken(userDao, company, login, token) && (u.isEnabled())) {
             result = u.getId();
