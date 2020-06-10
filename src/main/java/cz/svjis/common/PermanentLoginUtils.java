@@ -53,11 +53,7 @@ public class PermanentLoginUtils {
      */
     public static void savePermanentLogin(HttpServletResponse response, User user, UserDAO userDao, Setup setup) throws SQLException {
         int age = setup.getPermanentLoginInHours() * 3600;
-        String token = userDao.getAuthToken(user.getCompanyId(), user.getLogin());
-        
-        if (token == null) {
-            token = userDao.createNewAuthToken(user.getCompanyId(), user.getLogin(), setup.getPermanentLoginInHours());
-        }
+        String token = userDao.createNewAuthToken(user.getCompanyId(), user.getLogin(), setup.getPermanentLoginInHours());
 
         response.addCookie(createCookie(PM_COMPANY, String.valueOf(user.getCompanyId()), age));
         response.addCookie(createCookie(PM_LOGIN, user.getLogin(), age));
@@ -126,7 +122,7 @@ public class PermanentLoginUtils {
         Cookie c = new Cookie(name, value);
         c.setMaxAge(expiry);
         c.setHttpOnly(true);
-        c.setSecure(true);
+        //c.setSecure(true);
         return c;
     }
     
