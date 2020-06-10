@@ -122,7 +122,7 @@ public class PermanentLoginUtils {
         Cookie c = new Cookie(name, value);
         c.setMaxAge(expiry);
         c.setHttpOnly(true);
-        //c.setSecure(true);
+        c.setSecure(true);
         return c;
     }
     
