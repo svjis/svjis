@@ -15,7 +15,6 @@ package cz.svjis.common;
 import cz.svjis.bean.Setup;
 import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
-import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -27,8 +26,10 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class PermanentLoginUtils {
 
-    public static final String PERMANENT_LOGIN_TTL = "permanent.login.hours";
-
+    public static final String PM_COMPANY = "company";
+    public static final String PM_LOGIN = "login";
+    public static final String PM_PASSWORD = "password";
+    
     private PermanentLoginUtils() {}
 
     /**
@@ -37,16 +38,9 @@ public class PermanentLoginUtils {
      */
     public static void clearPermanentLogin(HttpServletResponse response) {
         int age = 60;
-        Cookie cookie;
-        cookie = new Cookie("company", "0");
-        cookie.setMaxAge(age);
-        response.addCookie(cookie);
-        cookie = new Cookie("login", "");
-        cookie.setMaxAge(age);
-        response.addCookie(cookie);
-        cookie = new Cookie("password", "");
-        cookie.setMaxAge(age);
-        response.addCookie(cookie);
+        response.addCookie(createCookie(PM_COMPANY, "0", age));
+        response.addCookie(createCookie(PM_LOGIN, "", age));
+        response.addCookie(createCookie(PM_PASSWORD, "", age));
     }
 
     /**
@@ -55,22 +49,15 @@ public class PermanentLoginUtils {
      * @param user
      * @param userDao
      * @param setup
-     * @throws NoSuchAlgorithmException
      * @throws SQLException
      */
-    public static void savePermanentLogin(HttpServletResponse response, User user, UserDAO userDao, Setup setup) throws NoSuchAlgorithmException, SQLException {
+    public static void savePermanentLogin(HttpServletResponse response, User user, UserDAO userDao, Setup setup) throws SQLException {
         int age = setup.getPermanentLoginInHours() * 3600;
+        String token = userDao.createNewAuthToken(user.getCompanyId(), user.getLogin(), setup.getPermanentLoginInHours());
 
-        Cookie cookie;
-        cookie = new Cookie("company", String.valueOf(user.getCompanyId()));
-        cookie.setMaxAge(age);
-        response.addCookie(cookie);
-        cookie = new Cookie("login", user.getLogin());
-        cookie.setMaxAge(age);
-        response.addCookie(cookie);
-        cookie = new Cookie("password", userDao.getAuthToken(user.getCompanyId(), user.getLogin()));
-        cookie.setMaxAge(age);
-        response.addCookie(cookie);
+        response.addCookie(createCookie(PM_COMPANY, String.valueOf(user.getCompanyId()), age));
+        response.addCookie(createCookie(PM_LOGIN, user.getLogin(), age));
+        response.addCookie(createCookie(PM_PASSWORD, token, age));
     }
 
     /**
@@ -78,20 +65,30 @@ public class PermanentLoginUtils {
      * @param request
      * @param userDao
      * @param companyId
-     * @return returns userId
+     * @return returns userId in case of success or 0 in case of failure
      * @throws SQLException
-     * @throws NoSuchAlgorithmException
      */
-    public static int checkPermanentLogin(HttpServletRequest request, UserDAO userDao, int companyId) throws SQLException, NoSuchAlgorithmException {
+    public static int checkPermanentLogin(HttpServletRequest request, UserDAO userDao, int companyId) throws SQLException {
         int result = 0;
         Cookie[] cookies = request.getCookies();
-        int company = (getCookie(cookies, "company").equals("")) ? 0 : Integer.valueOf(getCookie(cookies, "company"));
-        String login = getCookie(cookies, "login");
-        String token = getCookie(cookies, "password");
+        int company = (getCookie(cookies, PM_COMPANY).equals("")) ? 0 : Integer.valueOf(getCookie(cookies, PM_COMPANY));
+        String login = getCookie(cookies, PM_LOGIN);
+        String token = getCookie(cookies, PM_PASSWORD);
         User u = userDao.getUserByLogin(company, login);
-        if ((company == companyId) && (u != null) && userDao.verifyAuthToken(company, login, token) && (u.isEnabled())) {
+        if ((company == companyId) && (u != null) && verifyAuthToken(userDao, company, login, token) && (u.isEnabled())) {
             result = u.getId();
         }
+        return result;
+    }
+    
+    private static boolean verifyAuthToken(UserDAO userDao, int companyId, String login, String token) throws SQLException {
+        boolean result = false;
+                
+        String t = userDao.getAuthToken(companyId, login);
+        if ((t != null) && (token != null) && !token.equals("") && token.equals(t)) {
+            result = true;
+        }
+        
         return result;
     }
 
@@ -112,6 +109,21 @@ public class PermanentLoginUtils {
             }
         }
         return result;
+    }
+    
+    /**
+     * 
+     * @param name
+     * @param value
+     * @param expiry
+     * @return cookie
+     */
+    private static Cookie createCookie(String name, String value, int expiry) {
+        Cookie c = new Cookie(name, value);
+        c.setMaxAge(expiry);
+        c.setHttpOnly(true);
+        //c.setSecure(true);
+        return c;
     }
     
 }
