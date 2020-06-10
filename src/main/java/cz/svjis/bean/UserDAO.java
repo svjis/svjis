@@ -12,7 +12,6 @@
 
 package cz.svjis.bean;
 
-import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -20,7 +19,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -378,10 +380,14 @@ public class UserDAO extends DAO {
         return result;
     }
     
-    public String getAuthToken(int companyId, String login) throws SQLException, NoSuchAlgorithmException {
-        String result = "";
+    public String getAuthToken(int companyId, String login) throws SQLException {
+        String result = null;
+        String hash = null;
+        Timestamp exp = null;
+        
         String select = "SELECT "
-                + "a.PASSWORD_SALT "
+                + "a.PERM_LOGIN_HASH, "
+                + "a.PERM_LOGIN_EXPIRES "
                 + "FROM \"USER\" a "
                 + "WHERE (a.COMPANY_ID = ?) AND (a.LOGIN  collate UNICODE_CI_AI = ?) ";
         
@@ -390,34 +396,39 @@ public class UserDAO extends DAO {
             ps.setString(2, login);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    result = rs.getString("PASSWORD_SALT");
-                    result = getMd5Digest(result);
+                    hash = rs.getString("PERM_LOGIN_HASH");
+                    exp = rs.getTimestamp("PERM_LOGIN_EXPIRES");
                 }
             }
         }
         
-        return result;
-    }
-    
-    public boolean verifyAuthToken(int companyId, String login, String token) throws SQLException, NoSuchAlgorithmException {
-        boolean result = false;
-        
-        /* find plain passwords and encrypt them */
-        convertPasswords();
-        
-        String t = getAuthToken(companyId, login);
-        if ((t != null) && (token != null) && !token.equals("") && token.equals(t)) {
-            result = true;
+        if ((exp != null) && (exp.getTime() > new Date().getTime())) {
+            result = hash;
         }
         
         return result;
     }
     
-    private String getMd5Digest(String pInput) throws NoSuchAlgorithmException {    
-        MessageDigest lDigest = MessageDigest.getInstance("MD5");
-        lDigest.update(pInput.getBytes());
-        BigInteger lHashInt = new BigInteger(1, lDigest.digest());
-        return String.format("%1$032X", lHashInt);
+    public String createNewAuthToken(int companyId, String login, int validityInHours) throws SQLException {
+        String update = "UPDATE \"USER\" a "
+                + "SET a.PERM_LOGIN_HASH = ?, a.PERM_LOGIN_EXPIRES = ? "
+                + "WHERE (a.COMPANY_ID = ?) AND (a.LOGIN  collate UNICODE_CI_AI = ?) ";
+        
+        String token = UUID.randomUUID().toString();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.HOUR, validityInHours);
+        Date expires = cal.getTime();
+        
+        try (PreparedStatement ps = cnn.prepareStatement(update)) {
+            ps.setString(1, token);
+            ps.setTimestamp(2, new Timestamp(expires.getTime()));
+            ps.setInt(3, companyId);
+            ps.setString(4, login);
+            ps.execute();
+        }
+        
+        return token;
     }
     
     private void convertPasswords() throws SQLException {
