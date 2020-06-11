@@ -33,8 +33,12 @@ public class PermanentLoginUtils {
     private PermanentLoginUtils() {}
 
     /**
-     *
+     * 
      * @param response
+     * @param user
+     * @param userDao
+     * @param setup
+     * @throws SQLException 
      */
     public static void clearPermanentLogin(HttpServletResponse response, User user, UserDAO userDao, Setup setup) throws SQLException {
         int age = 60;
