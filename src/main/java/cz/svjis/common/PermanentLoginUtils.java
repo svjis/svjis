@@ -33,14 +33,19 @@ public class PermanentLoginUtils {
     private PermanentLoginUtils() {}
 
     /**
-     *
+     * 
      * @param response
+     * @param user
+     * @param userDao
+     * @param setup
+     * @throws SQLException 
      */
-    public static void clearPermanentLogin(HttpServletResponse response) {
+    public static void clearPermanentLogin(HttpServletResponse response, User user, UserDAO userDao, Setup setup) throws SQLException {
         int age = 60;
         response.addCookie(createCookie(PM_COMPANY, "0", age));
         response.addCookie(createCookie(PM_LOGIN, "", age));
         response.addCookie(createCookie(PM_PASSWORD, "", age));
+        userDao.createNewAuthToken(user.getCompanyId(), user.getLogin(), setup.getPermanentLoginInHours());
     }
 
     /**
@@ -122,7 +127,7 @@ public class PermanentLoginUtils {
         Cookie c = new Cookie(name, value);
         c.setMaxAge(expiry);
         c.setHttpOnly(true);
-        //c.setSecure(true);
+        c.setSecure(true);
         return c;
     }
     

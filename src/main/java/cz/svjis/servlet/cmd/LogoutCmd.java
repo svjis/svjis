@@ -40,7 +40,7 @@ public class LogoutCmd extends Command {
 
         if (getUser() != null) {
             logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_LOGOUT, LogDAO.ID_NULL, getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
-            PermanentLoginUtils.clearPermanentLogin(getResponse());
+            PermanentLoginUtils.clearPermanentLogin(getResponse(), getUser(), userDao, getSetup());
         }
         User user = new User();
         user.setCompanyId(getCompany().getId());
