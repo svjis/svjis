@@ -18,7 +18,6 @@ import cz.svjis.bean.Language;
 import cz.svjis.bean.LanguageDAO;
 import cz.svjis.bean.Menu;
 import cz.svjis.bean.MenuDAO;
-import cz.svjis.bean.MenuItem;
 import cz.svjis.bean.Role;
 import cz.svjis.bean.RoleDAO;
 import cz.svjis.servlet.CmdContext;
@@ -64,8 +63,9 @@ public class RedactionArticleEditCmd extends Command {
         
         getRequest().setAttribute("article", article);
 
-        ArrayList<MenuItem> menuNodeList = new ArrayList(menuDao.getMenu(getCompany().getId()).getMenu());
-        getRequest().setAttribute("menuNodeList", menuNodeList);
+        Menu menu = menuDao.getMenu(getCompany().getId());
+        menu.setActiveSection(-1);
+        getRequest().setAttribute("menu", menu);
         ArrayList<Language> languageList = new ArrayList(languageDao.getLanguageList());
         getRequest().setAttribute("languageList", languageList);
         ArrayList<Role> roleList = new ArrayList(roleDao.getRoleList(getCompany().getId()));

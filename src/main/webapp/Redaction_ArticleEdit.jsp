@@ -4,6 +4,7 @@
     Author     : berk
 --%>
 
+<%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.io.File"%>
 <%@page import="cz.svjis.bean.ArticleAttachment"%>
@@ -18,7 +19,34 @@
 <jsp:useBean id="article" scope="request" class="cz.svjis.bean.Article" />
 <jsp:useBean id="languageList" scope="request" class="java.util.ArrayList" />
 <jsp:useBean id="roleList" scope="request" class="java.util.ArrayList" />
-<jsp:useBean id="menuNodeList" scope="request" class="java.util.ArrayList" />
+<jsp:useBean id="menu" scope="request" class="cz.svjis.bean.Menu" />
+
+<%!
+    private String writeSubMenu(List<MenuItem> menu, int level, int selected) {
+        String ident = "&nbsp;&nbsp;&nbsp;";
+        String output = "";
+
+        for (MenuItem m: menu) {
+            String idn = "";
+            for (int n = 0; n < level; n++) {
+                idn += ident;
+            }
+
+            String sel;
+            if (m.getSection().getId() == selected) {
+                sel = "SELECTED";
+            } else {
+                sel = "";
+            }
+
+            output += String.format("<option value=\"%d\" %s>%s</option>\n", m.getSection().getId(), sel, idn + m.getSection().getDescription());
+
+            if ((m.getSubSections() != null) && (!m.getSubSections().isEmpty()))
+                output += writeSubMenu(m.getSubSections(), level + 1, selected);
+        }
+        return output;
+    }
+%>
 
 <jsp:include page="_header.jsp" />
 <jsp:include page="_tray.jsp" />
@@ -92,13 +120,7 @@
                             <p>
                                 <label id="common-label" for="common-input"><%=language.getText("Menu") %></label>
                                 <select name="menuId" id="common-input">
-                                    <%
-                                        for (MenuItem m: (ArrayList<MenuItem>) menuNodeList) {
-                                    %>
-                                        <option value="<%=m.getSection().getId() %>" <%=(m.getSection().getId() == article.getMenuNodeId()) ? "SELECTED" : "" %>><%=m.getSection().getDescription() %></option>
-                                    <%
-                                        }
-                                    %>
+                                    <%=writeSubMenu(menu.getMenu(), 0, article.getMenuNodeId()) %>
                                 </select>
                             </p>
                             <p>
