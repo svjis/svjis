@@ -4,6 +4,7 @@
     Author     : berk
 --%>
 
+<%@page import="java.util.ArrayList"%>
 <%@page import="java.io.File"%>
 <%@page import="cz.svjis.bean.ArticleAttachment"%>
 <%@page import="cz.svjis.bean.Role"%>
@@ -92,9 +93,7 @@
                                 <label id="common-label" for="common-input"><%=language.getText("Menu") %></label>
                                 <select name="menuId" id="common-input">
                                     <%
-                                        Iterator menuI = menuNodeList.iterator();
-                                        while (menuI.hasNext()) {
-                                            MenuItem m = (MenuItem) menuI.next();
+                                        for (MenuItem m: (ArrayList<MenuItem>) menuNodeList) {
                                     %>
                                         <option value="<%=m.getSection().getId() %>" <%=(m.getSection().getId() == article.getMenuNodeId()) ? "SELECTED" : "" %>><%=m.getSection().getDescription() %></option>
                                     <%

@@ -23,9 +23,9 @@ public class Menu {
 
     private int activeSection;
     private int defaultSection;
-    private ArrayList<MenuNode> navigationBar = null;
     private ArrayList<MenuNode> buffer = null;
     private ArrayList<MenuItem> menuContent = null;
+    private ArrayList<MenuNode> activeMenuContent = null;
     
     public Menu() {
     }
@@ -51,10 +51,10 @@ public class Menu {
     }
     
     /**
-     * @return the navigationBar
+     * @return the activeMenuContent
      */
-    public List<MenuNode> getNavigationBar() {
-        return navigationBar;
+    public List<MenuNode> getActiveMenuContent() {
+        return activeMenuContent;
     }
 
     /**
@@ -88,41 +88,26 @@ public class Menu {
     }
 
     private void buildMenu() {
-        navigationBar = new ArrayList<>();
+        activeMenuContent = new ArrayList<>();
         int currSection = activeSection;
         MenuNode mn;
         while ((mn = findSectionInBuffer(currSection)) != null) {
-            navigationBar.add(0, mn);
+            activeMenuContent.add(0, mn);
             currSection = mn.getParentId();
         }
 
-        menuContent = new ArrayList<>();
-        int navigationLevel = 0;
-        for (MenuNode as: buffer) {
-            if (as.getParentId() == 0) {
-                MenuItem ami = new MenuItem();
-                ami.setSection(as);
-                if (((navigationBar.size() >= navigationLevel + 1) &&
-                        (navigationBar.get(navigationLevel).getId() == as.getId())) || 
-                        (activeSection == -1)) {
-                    ami.setSubSections(buildSubMenu(navigationLevel + 1, as.getId()));
-                } else {
-                    ami.setSubSections(null);
-                }
-                menuContent.add(ami);
-            }
-        }
+        menuContent = buildSubMenu(0, 0);
     }
 
     private ArrayList<MenuItem> buildSubMenu(int navigationLevel, int parent) {
         ArrayList<MenuItem> subMenu = new ArrayList<>();
         
         for (MenuNode as: buffer) {
-            if ((as.getParentId() != 0) && (as.getParentId() == parent)) {
+            if (as.getParentId() == parent) {
                 MenuItem ami = new MenuItem();
                 ami.setSection(as);
-                if (((navigationBar.size() >= navigationLevel + 1) &&
-                        (navigationBar.get(navigationLevel).getId() == as.getId())) || 
+                if (((activeMenuContent.size() >= navigationLevel + 1) &&
+                        (activeMenuContent.get(navigationLevel).getId() == as.getId())) || 
                         (activeSection == -1)) {
                     ami.setSubSections(buildSubMenu(navigationLevel + 1, as.getId()));
                 } else {
