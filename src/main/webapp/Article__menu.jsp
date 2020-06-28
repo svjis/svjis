@@ -13,30 +13,6 @@
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="menu" scope="request" class="cz.svjis.bean.Menu" />
 
-<%!
-    private String writeSubMenu(List<MenuItem> menu, int activeSection, boolean isTopLevel) {
-        String output = "";
-        if (!isTopLevel) {
-            output += "<ul>";
-        }
-
-        for (MenuItem ami: menu) {
-            String active = "";
-            if ((isTopLevel) && ((activeSection == ami.getSection().getId()) || (ami.getSubSections() != null))) {
-                active = " id=\"nav-active\"";
-            }
-            output = output + "<li" + active + "><a href=\"Dispatcher?page=articleList&section=" + ami.getSection().getId() + "\">" + ami.getSection().getDescription() + "</a>";
-            if (ami.getSubSections() != null)
-                output = output + writeSubMenu(ami.getSubSections(), activeSection, false);
-            output = output + "</li>" + "\n";
-        }
-
-        if (!isTopLevel) {
-            output += "</ul>";
-        }
-        return output;
-    }
-%>
 
 <!-- Aside -->
         <div id="aside">
@@ -56,11 +32,11 @@
                             active = " id=\"nav-active\"";
                         }
                 %>
-                <li <%=active %>><a href="Dispatcher?page=articleList"><%=language.getText("All articles") %></a></li>
+                        <li <%=active %>><a href="Dispatcher?page=articleList"><%=language.getText("All articles") %></a></li>
                 <%
                     }
                 %>
-                <%=writeSubMenu(menu.getMenu(), menu.getActiveSection(), true) %>
+                <%=menu.writeSubMenu(menu.getMenu(), menu.getActiveSection(), true) %>
             </ul>
                 
             <div class="padding">

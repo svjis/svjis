@@ -64,7 +64,12 @@ public class Menu {
         return menuContent;
     }
 
-    public MenuNode findActiveSection(Language l) {
+    /**
+     * 
+     * @param l language
+     * @return active MenuNode
+     */
+    public MenuNode getActiveSection(Language l) {
         MenuNode result = findSectionInBuffer(activeSection);
         if (result == null) {
             result = new MenuNode();
@@ -119,25 +124,47 @@ public class Menu {
 
         return subMenu;
     }
-
-    public  String writeMenu() {
-        return writeSubMenu(menuContent);
-    }
-
-    private String writeSubMenu(List<MenuItem> menu) {
-        StringBuilder sb = new StringBuilder(); 
-        sb.append("<ul>" + "\n");
-        for (MenuItem ami: menu) {
-            sb.append("<li>");
-            sb.append(ami.getSection().getDescription());
-            if (ami.getSubSections() != null)
-                sb.append(writeSubMenu(ami.getSubSections()));
-            sb.append("</li>" + "\n");
-        }
-        sb.append("</ul>" + "\n");
-        return sb.toString();
-    }
     
+    
+    /**
+     * 
+     * @param menu
+     * @param activeSection
+     * @param isTopLevel
+     * @return menu as string
+     */
+    public String writeSubMenu(List<MenuItem> menu, int activeSection, boolean isTopLevel) {
+        StringBuilder output = new StringBuilder();
+        if (!isTopLevel) {
+            output.append("<ul>");
+        }
+
+        for (MenuItem ami: menu) {
+            String active = "";
+            if ((isTopLevel) && ((activeSection == ami.getSection().getId()) || (ami.getSubSections() != null))) {
+                active = " id=\"nav-active\"";
+            }
+            output.append(String.format("<li %s><a href=\"Dispatcher?page=articleList&section=%d\">%s</a>", active, ami.getSection().getId(), ami.getSection().getDescription()));
+            if (ami.getSubSections() != null) {
+                output.append(writeSubMenu(ami.getSubSections(), activeSection, false));
+            }
+            output.append("</li>");
+        }
+
+        if (!isTopLevel) {
+            output.append("</ul>\n");
+        }
+        return output.toString();
+    }
+
+    
+    /**
+     * 
+     * @param menu
+     * @param level
+     * @param selected
+     * @return options as string
+     */
     public String writeOptions(List<MenuItem> menu, int level, int selected) {
         String ident = "&nbsp;&nbsp;&nbsp;";
         StringBuilder output = new StringBuilder(); 

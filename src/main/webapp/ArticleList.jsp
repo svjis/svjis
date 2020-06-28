@@ -42,7 +42,7 @@
                 <div id="content-left-in">
 
                     <!-- Recent Articles -->
-                    <h1 class="article-page-title"><%=menu.findActiveSection(language).getDescription() %></h1>
+                    <h1 class="article-page-title"><%=menu.getActiveSection(language).getDescription() %></h1>
                     
                     <%
                         Iterator articleListI = articleList.iterator();
