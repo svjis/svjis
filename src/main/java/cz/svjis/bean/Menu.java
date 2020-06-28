@@ -137,6 +137,31 @@ public class Menu {
         sb.append("</ul>" + "\n");
         return sb.toString();
     }
+    
+    public String writeOptions(List<MenuItem> menu, int level, int selected) {
+        String ident = "&nbsp;&nbsp;&nbsp;";
+        String output = "";
+
+        for (MenuItem m: menu) {
+            String idn = "";
+            for (int n = 0; n < level; n++) {
+                idn += ident;
+            }
+
+            String sel;
+            if (m.getSection().getId() == selected) {
+                sel = "SELECTED";
+            } else {
+                sel = "";
+            }
+
+            output += String.format("<option value=\"%d\" %s>%s</option>\n", m.getSection().getId(), sel, idn + m.getSection().getDescription());
+
+            if ((m.getSubSections() != null) && (!m.getSubSections().isEmpty()))
+                output += writeOptions(m.getSubSections(), level + 1, selected);
+        }
+        return output;
+    }
 
     /**
      * @return the defaultSection
