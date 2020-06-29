@@ -5,11 +5,10 @@
 --%>
 
 <%@page import="cz.svjis.bean.MenuNode"%>
-<%@page import="java.util.Iterator"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="menuNode" scope="request" class="cz.svjis.bean.MenuNode" />
-<jsp:useBean id="menuNodeList" scope="request" class="java.util.ArrayList" />
+<jsp:useBean id="menu" scope="request" class="cz.svjis.bean.Menu" />
 
 <jsp:include page="_header.jsp" />
 <jsp:include page="_tray.jsp" />
@@ -36,18 +35,7 @@
                                 <label id="common-label" for="common-input"><%=language.getText("Parent node") %></label>
                                 <select name="parent" id="common-input">
                                     <option value="0"><%=language.getText("(top level)") %></option>
-                                    <%
-                                        Iterator<MenuNode> nodeI = menuNodeList.iterator();
-                                        while (nodeI.hasNext()) {
-                                            MenuNode n = nodeI.next();
-                                            if (n.getId() == menuNode.getId()) {
-                                                continue;
-                                            }
-                                    %>
-                                        <option value="<%=n.getId() %>" <%=(n.getId() == menuNode.getParentId()) ? "SELECTED" : "" %>><%=n.getDescription() %></option>
-                                    <%
-                                        }
-                                    %>
+                                    <%=menu.writeOptions(menu.getMenu(), 0, menuNode.getParentId()) %>
                                 </select>
                             </p>
                         </fieldset>

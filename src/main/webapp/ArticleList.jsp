@@ -24,6 +24,7 @@
 <jsp:useBean id="sectionId" scope="request" class="java.lang.String" />
 <jsp:useBean id="miniNewsList" scope="request" class="java.util.ArrayList" />
 <jsp:useBean id="inquiryList" scope="request" class="java.util.ArrayList" />
+<jsp:useBean id="menu" scope="request" class="cz.svjis.bean.Menu" />
 
 <%
     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
@@ -41,7 +42,7 @@
                 <div id="content-left-in">
 
                     <!-- Recent Articles -->
-                    <h1 class="article-page-title"><%=language.getText("Recent articles") %></h1>
+                    <h1 class="article-page-title"><%=menu.getActiveSection(language).getDescription() %></h1>
                     
                     <%
                         Iterator articleListI = articleList.iterator();
