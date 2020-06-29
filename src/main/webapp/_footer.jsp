@@ -21,7 +21,7 @@
                     link = "<a href=\"https://github.com/svjis/svjis\">%s</a>";
                 }
             %>
-            System <strong><%= String.format(link, "SVJIS 1.15.0-SNAPSHOT") %></strong>, released 30.5.2020, All Rights Reserved &reg 2007-2020
+            System <strong><%= String.format(link, "SVJIS 1.16.0-SNAPSHOT") %></strong>, released 29.6.2020, All Rights Reserved &reg 2007-2020
         </p>
 
     </div> <!-- /footer -->
