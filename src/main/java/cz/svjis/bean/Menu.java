@@ -31,7 +31,7 @@ public class Menu {
     }
     
     public Menu(List<MenuNode> nodes) {
-        this.buffer = new ArrayList(nodes);
+        this.buffer = new ArrayList<MenuNode>(nodes);
         buildMenu();
     }
 
