@@ -4,6 +4,8 @@
     Author     : berk
 --%>
 
+<%@page import="java.util.List"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="java.io.File"%>
 <%@page import="cz.svjis.bean.ArticleAttachment"%>
 <%@page import="cz.svjis.bean.Role"%>
@@ -17,7 +19,8 @@
 <jsp:useBean id="article" scope="request" class="cz.svjis.bean.Article" />
 <jsp:useBean id="languageList" scope="request" class="java.util.ArrayList" />
 <jsp:useBean id="roleList" scope="request" class="java.util.ArrayList" />
-<jsp:useBean id="menuNodeList" scope="request" class="java.util.ArrayList" />
+<jsp:useBean id="menu" scope="request" class="cz.svjis.bean.Menu" />
+
 
 <jsp:include page="_header.jsp" />
 <jsp:include page="_tray.jsp" />
@@ -91,15 +94,7 @@
                             <p>
                                 <label id="common-label" for="common-input"><%=language.getText("Menu") %></label>
                                 <select name="menuId" id="common-input">
-                                    <%
-                                        Iterator menuI = menuNodeList.iterator();
-                                        while (menuI.hasNext()) {
-                                            MenuItem m = (MenuItem) menuI.next();
-                                    %>
-                                        <option value="<%=m.getSection().getId() %>" <%=(m.getSection().getId() == article.getMenuNodeId()) ? "SELECTED" : "" %>><%=m.getSection().getDescription() %></option>
-                                    <%
-                                        }
-                                    %>
+                                    <%=menu.writeOptions(menu.getMenu(), 0, article.getMenuNodeId()) %>
                                 </select>
                             </p>
                             <p>

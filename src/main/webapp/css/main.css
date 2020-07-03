@@ -147,11 +147,11 @@ h2.article-title {margin:0; padding:10px 10px 10px 0px; font-weight:normal;}
 .article-desc li {padding-left:10px; margin-left:10px;}
 
     
-.box-01-top {width:260px; height:5px; margin-top:5px; background:url("../design/box-01-top.gif") 0 0 no-repeat; font-size:0; line-height:0;}
+.box-01-top {width:260px; height:5px; background:url("../design/box-01-top.gif") 0 0 no-repeat; font-size:0; line-height:0;}
 .box-01-top-b {padding:5px 10px 15px 10px; background:url("../design/box-01-top-b.gif") 0 100% no-repeat;}
 .box-01-top-b .f-left {text-transform:uppercase;}
 .box-01-top-b .f-right {padding-top:2px; font-size:85%;}
-.box-01-bottom {width:260px; height:11px; background:url("../design/box-01-bottom.gif") 0 0 no-repeat; font-size:0; line-height:0;}
+.box-01-bottom {width:260px; height:11px; margin-bottom:10px; background:url("../design/box-01-bottom.gif") 0 0 no-repeat; font-size:0; line-height:0;}
 .box-01 {padding:5px; background:url("../design/box-01.gif") 0 0 repeat-y;}
 .box-01 .bg {margin:10px 0; padding:10px 0;}
 
@@ -160,9 +160,9 @@ h2.article-title {margin:0; padding:10px 10px 10px 0px; font-weight:normal;}
     .news dt span {font-size:140%;}
     .news dd {display:block; float:left; width:190px; font-size:85%; line-height:1.6;}
 
-.box-02-top {width:260px; height:5px; margin-top:10px; background:url("../design/box-02-top.gif") 0 0 no-repeat; font-size:0; line-height:0;}
+.box-02-top {width:260px; height:5px; background:url("../design/box-02-top.gif") 0 0 no-repeat; font-size:0; line-height:0;}
 .box-02-top-b {padding:5px 10px 15px 10px; background:url("../design/box-02-top-b.gif") 0 100% no-repeat; text-transform:uppercase;}
-.box-02-bottom {width:260px; height:11px; background:url("../design/box-02-bottom.gif") 0 0 no-repeat; font-size:0; line-height:0;}
+.box-02-bottom {width:260px; height:11px; margin-bottom:10px; background:url("../design/box-02-bottom.gif") 0 0 no-repeat; font-size:0; line-height:0;}
 .box-02 {padding:5px 15px; background:url("../design/box-02.gif") 0 0 repeat-y;}
 
     .mostreaded {margin:0; list-style:none;}

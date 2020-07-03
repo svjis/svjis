@@ -23,14 +23,15 @@ public class Menu {
 
     private int activeSection;
     private int defaultSection;
-    private ArrayList<MenuNode> navigationBar = null;
     private ArrayList<MenuNode> buffer = null;
-    private ArrayList<MenuItem> menuContent = null;    
+    private ArrayList<MenuItem> menuContent = null;
+    private ArrayList<MenuNode> activeMenuContent = null;
+    
     public Menu() {
     }
     
     public Menu(List<MenuNode> nodes) {
-        this.buffer = new ArrayList(nodes);
+        this.buffer = new ArrayList<>(nodes);
         buildMenu();
     }
 
@@ -48,12 +49,12 @@ public class Menu {
         this.activeSection = activeSection;
         buildMenu();
     }
-
+    
     /**
-     * @return the navigationBar
+     * @return the activeMenuContent
      */
-    public List<MenuNode> getNavigationBar() {
-        return navigationBar;
+    public List<MenuNode> getActiveMenuContent() {
+        return activeMenuContent;
     }
 
     /**
@@ -63,7 +64,21 @@ public class Menu {
         return menuContent;
     }
 
-    
+    /**
+     * 
+     * @param l language
+     * @return active MenuNode
+     */
+    public MenuNode getActiveSection(Language l) {
+        MenuNode result = findSectionInBuffer(activeSection);
+        if (result == null) {
+            result = new MenuNode();
+            result.setId(0);
+            result.setDescription(l.getText("All articles"));
+        }
+        
+        return result;
+    }
 
     private MenuNode findSectionInBuffer(int section) {
         if (section == 0) return null;
@@ -78,41 +93,26 @@ public class Menu {
     }
 
     private void buildMenu() {
-        navigationBar = new ArrayList<>();
+        activeMenuContent = new ArrayList<>();
         int currSection = activeSection;
         MenuNode mn;
         while ((mn = findSectionInBuffer(currSection)) != null) {
-            navigationBar.add(0, mn);
+            activeMenuContent.add(0, mn);
             currSection = mn.getParentId();
         }
 
-        menuContent = new ArrayList<>();
-        int navigationLevel = 0;
-        for (MenuNode as: buffer) {
-            if (as.getParentId() == 0) {
-                MenuItem ami = new MenuItem();
-                ami.setSection(as);
-                if (((navigationBar.size() >= navigationLevel + 1) &&
-                        (navigationBar.get(navigationLevel).getId() == as.getId())) || 
-                        (activeSection == -1)) {
-                    ami.setSubSections(buildSubMenu(navigationLevel + 1, as.getId()));
-                } else {
-                    ami.setSubSections(null);
-                }
-                menuContent.add(ami);
-            }
-        }
+        menuContent = buildSubMenu(0, 0);
     }
 
     private ArrayList<MenuItem> buildSubMenu(int navigationLevel, int parent) {
         ArrayList<MenuItem> subMenu = new ArrayList<>();
         
         for (MenuNode as: buffer) {
-            if ((as.getParentId() != 0) && (as.getParentId() == parent)) {
+            if (as.getParentId() == parent) {
                 MenuItem ami = new MenuItem();
                 ami.setSection(as);
-                if (((navigationBar.size() >= navigationLevel + 1) &&
-                        (navigationBar.get(navigationLevel).getId() == as.getId())) || 
+                if (((activeMenuContent.size() >= navigationLevel + 1) &&
+                        (activeMenuContent.get(navigationLevel).getId() == as.getId())) || 
                         (activeSection == -1)) {
                     ami.setSubSections(buildSubMenu(navigationLevel + 1, as.getId()));
                 } else {
@@ -124,23 +124,70 @@ public class Menu {
 
         return subMenu;
     }
+    
+    
+    /**
+     * 
+     * @param menu
+     * @param activeSection
+     * @param isTopLevel
+     * @return menu as string
+     */
+    public String writeSubMenu(List<MenuItem> menu, int activeSection, boolean isTopLevel) {
+        StringBuilder output = new StringBuilder();
+        if (!isTopLevel) {
+            output.append("<ul>");
+        }
 
-    public  String writeMenu() {
-        return writeSubMenu(menuContent);
+        for (MenuItem ami: menu) {
+            String active = "";
+            if ((isTopLevel) && ((activeSection == ami.getSection().getId()) || (ami.getSubSections() != null))) {
+                active = " id=\"nav-active\"";
+            }
+            output.append(String.format("<li %s><a href=\"Dispatcher?page=articleList&section=%d\">%s</a>", active, ami.getSection().getId(), ami.getSection().getDescription()));
+            if (ami.getSubSections() != null) {
+                output.append(writeSubMenu(ami.getSubSections(), activeSection, false));
+            }
+            output.append("</li>");
+        }
+
+        if (!isTopLevel) {
+            output.append("</ul>\n");
+        }
+        return output.toString();
     }
 
-    private String writeSubMenu(List<MenuItem> menu) {
-        StringBuilder sb = new StringBuilder(); 
-        sb.append("<ul>" + "\n");
-        for (MenuItem ami: menu) {
-            sb.append("<li>");
-            sb.append(ami.getSection().getDescription());
-            if (ami.getSubSections() != null)
-                sb.append(writeSubMenu(ami.getSubSections()));
-            sb.append("</li>" + "\n");
+    
+    /**
+     * 
+     * @param menu
+     * @param level
+     * @param selected
+     * @return options as string
+     */
+    public String writeOptions(List<MenuItem> menu, int level, int selected) {
+        String ident = "&nbsp;&nbsp;&nbsp;";
+        StringBuilder output = new StringBuilder(); 
+
+        for (MenuItem m: menu) {
+            StringBuilder idn = new StringBuilder(); 
+            for (int n = 0; n < level; n++) {
+                idn.append(ident);
+            }
+
+            String sel;
+            if (m.getSection().getId() == selected) {
+                sel = "SELECTED";
+            } else {
+                sel = "";
+            }
+
+            output.append(String.format("<option value=\"%d\" %s>%s</option>%n", m.getSection().getId(), sel, idn + m.getSection().getDescription()));
+
+            if ((m.getSubSections() != null) && (!m.getSubSections().isEmpty()))
+                output.append(writeOptions(m.getSubSections(), level + 1, selected));
         }
-        sb.append("</ul>" + "\n");
-        return sb.toString();
+        return output.toString();
     }
 
     /**

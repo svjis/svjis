@@ -12,12 +12,12 @@
 
 package cz.svjis.servlet.cmd;
 
+import cz.svjis.bean.Menu;
 import cz.svjis.bean.MenuDAO;
 import cz.svjis.bean.MenuNode;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
-import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 
 /**
@@ -42,8 +42,11 @@ public class RedactionArticleMenuEditCmd extends Command {
             menuNode = menuDao.getMenuNode(parId, getUser().getCompanyId());
         }
         getRequest().setAttribute("menuNode", menuNode);
-        ArrayList<MenuNode> menuNodeList = new ArrayList(menuDao.getMenuNodeList(getUser().getCompanyId()));
-        getRequest().setAttribute("menuNodeList", menuNodeList);
+        
+        Menu menu = menuDao.getMenu(getCompany().getId());
+        menu.setActiveSection(-1);
+        getRequest().setAttribute("menu", menu);
+        
         RequestDispatcher rd = getRequest().getRequestDispatcher("/Redaction_ArticleMenuEdit.jsp");
         rd.forward(getRequest(), getResponse());
     }
