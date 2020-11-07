@@ -57,11 +57,11 @@
                         </tr>
                         <tr>
                             <th class="list" scope="row"><%=language.getText("Reporter") %></th>
-                            <td class="list"><%=(report.getCreatedByUser() != null) ? (report.getCreatedByUser().getFirstName() + "&nbsp;" +report.getCreatedByUser().getLastName()) : "&nbsp;" %></td>
+                            <td class="list"><%=(report.getCreatedByUser() != null) ? (report.getCreatedByUser().getFullName()) : "&nbsp;" %></td>
                         </tr>
                         <tr>
                             <th class="list" scope="row"><%=language.getText("Resolver") %></th>
-                            <td class="list"><%=(report.getAssignedToUser() != null) ? (report.getAssignedToUser().getFirstName() + "&nbsp;" +report.getAssignedToUser().getLastName()) : "&nbsp;" %></td>
+                            <td class="list"><%=(report.getAssignedToUser() != null) ? (report.getAssignedToUser().getFullName()) : "&nbsp;" %></td>
                         </tr>
                         <tr>
                             <th class="list" scope="row"><%=language.getText("Closed") %></th>
@@ -105,7 +105,7 @@
                                 <tr>
                                     <td class="list"><img src="<%=icon%>" border="0" alt="<%=a.getFileName() %>"></td>
                                     <td class="list"><a href="Upload?page=faultReportingDownload&id=<%=a.getId() %>"><%=a.getFileName() %></a></td>
-                                    <td class="list"><%=a.getUser().getFirstName() %>&nbsp;<%=a.getUser().getLastName() %></td>
+                                    <td class="list"><%=a.getUser().getFullName() %></td>
                                     <td class="list"><%=sdf.format(a.getUploadTime()) %></td>
                                     <td class="list">
                                         <% if ((!report.isClosed()) && (user.getId() == a.getUser().getId())) { %>
@@ -143,7 +143,7 @@
                             for (FaultReportComment c : report.getFaultReportCommentList()) {
                         %>
                             <div class="article box">
-                            <strong><%=c.getUser().getFirstName() %>&nbsp;<%=c.getUser().getLastName() %> <%=sdft.format(c.getInsertionTime()) %></strong><br>
+                            <strong><%=c.getUser().getFullName() %> <%=sdft.format(c.getInsertionTime()) %></strong><br>
                             <%=HttpUtils.makeHyperlins(c.getBody().replace("\n", "<br>")) %>
                             </div>
                         <%

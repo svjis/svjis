@@ -86,9 +86,11 @@ public class FaultReportDAO extends DAO {
                         "    a.DESCRIPTION, \n" +
                         "    a.CREATION_DATE, \n" +
                         "    a.CREATED_BY_USER_ID, \n" +
+                        "    cr.SALUTATION as CR_SALUTATION, \n" +
                         "    cr.FIRST_NAME as CR_FIRST_NAME, \n" +
                         "    cr.LAST_NAME as CR_LAST_NAME, \n" +
                         "    a.ASSIGNED_TO_USER_ID, \n" +
+                        "    ass.SALUTATION as AS_SALUTATION, \n" +
                         "    ass.FIRST_NAME as AS_FIRST_NAME, \n" +
                         "    ass.LAST_NAME as AS_LAST_NAME, \n" +
                         "    a.CLOSED, \n " +
@@ -149,9 +151,11 @@ public class FaultReportDAO extends DAO {
                         "    a.DESCRIPTION, \n" +
                         "    a.CREATION_DATE, \n" +
                         "    a.CREATED_BY_USER_ID, \n" +
+                        "    cr.SALUTATION as CR_SALUTATION, \n" +
                         "    cr.FIRST_NAME as CR_FIRST_NAME, \n" +
                         "    cr.LAST_NAME as CR_LAST_NAME, \n" +
                         "    a.ASSIGNED_TO_USER_ID, \n" +
+                        "    ass.SALUTATION as AS_SALUTATION, \n" +
                         "    ass.FIRST_NAME as AS_FIRST_NAME, \n" +
                         "    ass.LAST_NAME as AS_LAST_NAME, \n" +
                         "    a.CLOSED, \n " +
@@ -198,6 +202,7 @@ public class FaultReportDAO extends DAO {
                 if (rs.getInt("CREATED_BY_USER_ID") != 0) {
                     User u = new User();
                     u.setId(rs.getInt("CREATED_BY_USER_ID"));
+                    u.setSalutation(rs.getString("CR_SALUTATION"));
                     u.setFirstName(rs.getString("CR_FIRST_NAME"));
                     u.setLastName(rs.getString("CR_LAST_NAME"));
                     f.setCreatedByUser(u);
@@ -205,6 +210,7 @@ public class FaultReportDAO extends DAO {
                 if (rs.getInt("ASSIGNED_TO_USER_ID") != 0) {
                     User u = new User();
                     u.setId(rs.getInt("ASSIGNED_TO_USER_ID"));
+                    u.setSalutation(rs.getString("AS_SALUTATION"));
                     u.setFirstName(rs.getString("AS_FIRST_NAME"));
                     u.setLastName(rs.getString("AS_LAST_NAME"));
                     f.setAssignedToUser(u);
@@ -241,9 +247,11 @@ public class FaultReportDAO extends DAO {
                         "    a.DESCRIPTION, \n" +
                         "    a.CREATION_DATE, \n" +
                         "    a.CREATED_BY_USER_ID, \n" +
+                        "    cr.SALUTATION as CR_SALUTATION, \n" +
                         "    cr.FIRST_NAME as CR_FIRST_NAME, \n" +
                         "    cr.LAST_NAME as CR_LAST_NAME, \n" +
                         "    a.ASSIGNED_TO_USER_ID, \n" +
+                        "    ass.SALUTATION as AS_SALUTATION, \n" + 
                         "    ass.FIRST_NAME as AS_FIRST_NAME, \n" +
                         "    ass.LAST_NAME as AS_LAST_NAME, \n" +
                         "    a.CLOSED, \n " +
@@ -271,6 +279,7 @@ public class FaultReportDAO extends DAO {
                     if (rs.getInt("CREATED_BY_USER_ID") != 0) {
                         User u = new User();
                         u.setId(rs.getInt("CREATED_BY_USER_ID"));
+                        u.setSalutation(rs.getString("CR_SALUTATION"));
                         u.setFirstName(rs.getString("CR_FIRST_NAME"));
                         u.setLastName(rs.getString("CR_LAST_NAME"));
                         result.setCreatedByUser(u);
@@ -278,6 +287,7 @@ public class FaultReportDAO extends DAO {
                     if (rs.getInt("ASSIGNED_TO_USER_ID") != 0) {
                         User u = new User();
                         u.setId(rs.getInt("ASSIGNED_TO_USER_ID"));
+                        u.setSalutation(rs.getString("AS_SALUTATION"));
                         u.setFirstName(rs.getString("AS_FIRST_NAME"));
                         u.setLastName(rs.getString("AS_LAST_NAME"));
                         result.setAssignedToUser(u);
@@ -310,6 +320,7 @@ public class FaultReportDAO extends DAO {
                 + "a.FAULT_REPORT_ID, "
                 + "a.USER_ID, "
                 + "b.COMPANY_ID, "
+                + "b.SALUTATION, "
                 + "b.FIRST_NAME, "
                 + "b.LAST_NAME, "
                 + "a.UPLOAD_TIME, "
@@ -331,6 +342,7 @@ public class FaultReportDAO extends DAO {
                     User u = new User();
                     u.setId(rs.getInt("USER_ID"));
                     u.setCompanyId(rs.getInt("COMPANY_ID"));
+                    u.setSalutation(rs.getString("SALUTATION"));
                     u.setFirstName(rs.getString("FIRST_NAME"));
                     u.setLastName(rs.getString("LAST_NAME"));
                     a.setUser(u);
@@ -364,6 +376,7 @@ public class FaultReportDAO extends DAO {
                 + "a.FAULT_REPORT_ID, "
                 + "a.USER_ID, "
                 + "b.COMPANY_ID, "
+                + "b.SALUTATION, "
                 + "b.FIRST_NAME, "
                 + "b.LAST_NAME, "
                 + "a.UPLOAD_TIME, "
@@ -384,6 +397,7 @@ public class FaultReportDAO extends DAO {
                     User u = new User();
                     u.setId(rs.getInt("USER_ID"));
                     u.setCompanyId(rs.getInt("COMPANY_ID"));
+                    u.setSalutation(rs.getString("SALUTATION"));
                     u.setFirstName(rs.getString("FIRST_NAME"));
                     u.setLastName(rs.getString("LAST_NAME"));
                     result.setUser(u);
@@ -507,6 +521,7 @@ public class FaultReportDAO extends DAO {
                 + "a.ID, "
                 + "a.FAULT_REPORT_ID, "
                 + "a.USER_ID, "
+                + "u.SALUTATION, "
                 + "u.FIRST_NAME, "
                 + "u.LAST_NAME, "
                 + "a.INSERTION_TIME, "
@@ -525,6 +540,7 @@ public class FaultReportDAO extends DAO {
                     a.setFaultReportId(rs.getInt("FAULT_REPORT_ID"));
                     a.setUser(new User());
                     a.getUser().setId(rs.getInt("USER_ID"));
+                    a.getUser().setSalutation(rs.getString("SALUTATION"));
                     a.getUser().setFirstName(rs.getString("FIRST_NAME"));
                     a.getUser().setLastName(rs.getString("LAST_NAME"));
                     a.setInsertionTime(rs.getTimestamp("INSERTION_TIME"));

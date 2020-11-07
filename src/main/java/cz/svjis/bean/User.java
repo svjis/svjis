@@ -389,5 +389,20 @@ public final class User implements Serializable {
     public void setInternalNote(String internalNote) {
         this.internalNote = internalNote;
     }
-    
+ 
+    public String getFullName() {
+        StringBuilder result = new StringBuilder();
+        if (!this.salutation.equals("")) {
+            result.append(this.salutation);
+            result.append("&nbsp;");
+        }
+        if (!this.firstName.equals("")) {
+            result.append(this.firstName);
+            result.append("&nbsp;");
+        }
+        if (!this.lastName.equals("")) {
+            result.append(this.lastName);
+        }
+        return result.toString();
+    }
 }

@@ -56,7 +56,7 @@
                             <p class="info">
                                 <a href="Dispatcher?page=articleList&section=<%=a.getMenuNodeId() %>"><%=a.getMenuNodeDescription() %></a>:
                                 <%=sdf.format(a.getCreationDate()) %>,
-                                <%=language.getText("by:") %> <%=a.getAuthor().getFirstName() %> <%=a.getAuthor().getLastName() %><%=(a.getNumOfComments() != 0) ? ", " + language.getText("Comments:") + " " + a.getNumOfComments() : "" %></p> 
+                                <%=language.getText("by:") %> <%=a.getAuthor().getFullName() %><%=(a.getNumOfComments() != 0) ? ", " + language.getText("Comments:") + " " + a.getNumOfComments() : "" %></p> 
                             <%=HttpUtils.highlight(a.getDescription(), request.getParameter("search")) %>
                         </div>
                     </div> <!-- /article -->

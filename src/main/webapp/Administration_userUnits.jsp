@@ -22,7 +22,7 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h1 class="page-title" id="tbl-desc"><%=cUser.getFirstName() %>&nbsp;<%=cUser.getLastName() %> - <%=language.getText("Building unit list") %></h1>
+                    <h1 class="page-title" id="tbl-desc"><%=cUser.getFullName() %> - <%=language.getText("Building unit list") %></h1>
                     
                     <table class="list" aria-describedby="tbl-desc">
                         <tr>
