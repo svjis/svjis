@@ -390,9 +390,9 @@ public final class User implements Serializable {
         this.internalNote = internalNote;
     }
  
-    public String getFullName() {
+    public String getFullName(boolean salutation) {
         StringBuilder result = new StringBuilder();
-        if (!this.salutation.equals("")) {
+        if (salutation && !this.salutation.equals("")) {
             result.append(this.salutation);
             result.append("&nbsp;");
         }

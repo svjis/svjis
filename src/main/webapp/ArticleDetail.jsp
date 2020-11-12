@@ -46,7 +46,7 @@
                     <h1 class="article-title" id="tbl-desc"><%=HttpUtils.highlight(article.getHeader(), request.getParameter("search")) %></h1>
                     <p class="info">
                         <%=language.getText("Published:") %> <strong><%=sdf.format(article.getCreationDate()) %></strong>, 
-                        <%=language.getText("by:") %> <strong><%=article.getAuthor().getFullName() %></strong><%=(article.getCommentList().size() != 0) ? ", " + language.getText("Comments:") + " <strong>" + article.getCommentList().size() + "</strong>" : "" %>
+                        <%=language.getText("by:") %> <strong><%=article.getAuthor().getFullName(false) %></strong><%=(article.getCommentList().size() != 0) ? ", " + language.getText("Comments:") + " <strong>" + article.getCommentList().size() + "</strong>" : "" %>
                     </p> 
                     <%=HttpUtils.highlight(article.getDescription(), request.getParameter("search")) %>
                     <%=HttpUtils.highlight(body, request.getParameter("search")) %>
@@ -100,7 +100,7 @@
                             for (ArticleComment c: article.getCommentList()) {
                     %>
                             <div class="article box">
-                                <strong><%=c.getUser().getFullName() %> <%=sdft.format(c.getInsertionTime()) %></strong><br>
+                                <strong><%=c.getUser().getFullName(false) %> <%=sdft.format(c.getInsertionTime()) %></strong><br>
                             <%=HttpUtils.makeHyperlins(c.getBody().replace("\n", "<br>")) %>
                             </div>
                         <%

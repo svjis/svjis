@@ -28,7 +28,7 @@
                    <form action="Dispatcher" method="post">
                         <input type="hidden" name="page" value="logout" />
                         <div id="logout" class="box">
-                            <%=user.getFullName() %><br><input id="login-submit" class="my-button" type="submit" value="<%=language.getText("Logout") %>" />
+                            <%=user.getFullName(true) %><br><input id="login-submit" class="my-button" type="submit" value="<%=language.getText("Logout") %>" />
                         </div>
                    </form>
                 <%
