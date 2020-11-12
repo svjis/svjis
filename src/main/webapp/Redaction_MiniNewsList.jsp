@@ -45,7 +45,7 @@
                             <td class="list"><a onclick="if (!confirm('<%=language.getText("Really do you want to remove news") %> ?')) return false;" href="Dispatcher?page=redactionNewsDelete&id=<%=n.getId() %>"><img src="gfx/delete.png" border="0" title="<%=language.getText("Delete") %>" alt="<%=language.getText("Delete") %>"></a></td>
                             <td class="list"><%=sdf.format(n.getTime()) %></td>
                             <td class="list"><%=n.getLanguage() %></td>
-                            <td class="list"><%=n.getCreatedBy() %></td>
+                            <td class="list"><%=n.getCreatedBy().getFullName(false) %></td>
                             <td class="list"><%=(n.isPublished()) ? language.getText("yes") : language.getText("no") %></td>
                             <td class="list"><%=n.getBody() %></td>
                         </tr>

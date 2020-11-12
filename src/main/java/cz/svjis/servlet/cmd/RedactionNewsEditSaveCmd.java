@@ -46,7 +46,7 @@ public class RedactionNewsEditSaveCmd extends Command {
         if (parId == 0) {
             n = new MiniNews();
             n.setId(parId);
-            n.setCreatedById(getUser().getId());
+            n.getCreatedBy().setId(getUser().getId());
             n.setCompanyId(getUser().getCompanyId());
         } else {
             n = newsDao.getMiniNews(getUser(), parId);
