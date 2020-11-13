@@ -47,7 +47,7 @@ public class RedactionInquirySaveCmd extends Command {
         Inquiry i = new Inquiry();
         i.setId(parId);
         i.setCompanyId(getUser().getCompanyId());
-        i.setUserId(getUser().getId());
+        i.getUser().setId(getUser().getId());
         i.setDescription(parDescription);
         i.setStartingDate(sdf.parse(parStartDate));
         i.setEndingDate(sdf.parse(parEndDate));
