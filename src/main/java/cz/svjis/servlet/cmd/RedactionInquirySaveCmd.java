@@ -44,10 +44,14 @@ public class RedactionInquirySaveCmd extends Command {
         InquiryDAO inquiryDao = new InquiryDAO(getCnn());
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-        Inquiry i = new Inquiry();
-        i.setId(parId);
-        i.setCompanyId(getUser().getCompanyId());
-        i.getUser().setId(getUser().getId());
+        Inquiry i;
+        if (parId == 0) {
+            i= new Inquiry();
+            i.getUser().setId(getUser().getId());
+            i.setCompanyId(getUser().getCompanyId());
+        } else {
+            i = inquiryDao.getInquiry(getUser(), parId);
+        }
         i.setDescription(parDescription);
         i.setStartingDate(sdf.parse(parStartDate));
         i.setEndingDate(sdf.parse(parEndDate));
