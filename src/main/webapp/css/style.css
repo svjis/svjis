@@ -59,8 +59,8 @@ h2.article-title {color:#739D13;}
 #search-submit {padding: .1em .1em;}
 
 #login, #logout  {border-top:1px solid #f2f2f2; background-color:#d0d0d0;}
-#login-input {background:#FFF;}
-#login-submit {padding: .1em 1em;}
+#login-input, #login-password {background:#FFF;}
+#login-submit, #logout-submit {padding: .1em 1em;}
 
 #comment-submit {background:#2F2F2F; color:#FFF;}
 
