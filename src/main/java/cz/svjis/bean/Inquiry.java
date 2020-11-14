@@ -23,7 +23,7 @@ import java.util.List;
 public class Inquiry {
     private int id;
     private int companyId;
-    private int userId;
+    private User user;
     private String description;
     private Date startingDate;
     private Date endingDate;
@@ -40,7 +40,7 @@ public class Inquiry {
     public void clear() {
         id = 0;
         companyId = 0;
-        userId = 0;
+        user = new User();
         description = "";
         startingDate = null;
         endingDate = null;
@@ -80,17 +80,17 @@ public class Inquiry {
     }
 
     /**
-     * @return the userId
+     * @return the user
      */
-    public int getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
     /**
-     * @param userId the userId to set
+     * @param userId the user to set
      */
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     /**

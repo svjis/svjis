@@ -25,8 +25,7 @@ public class MiniNews {
     private String language;
     private String body;
     private Date time;
-    private int createdById;
-    private String createdBy;
+    private User createdBy;
     private boolean published;
     
     public MiniNews() {
@@ -40,8 +39,7 @@ public class MiniNews {
         language = "";
         body = "";
         time = null;
-        createdById = 0;
-        createdBy = "";
+        createdBy = new User();
         published = false;
     }
 
@@ -116,20 +114,6 @@ public class MiniNews {
     }
 
     /**
-     * @return the createdBy
-     */
-    public int getCreatedById() {
-        return createdById;
-    }
-
-    /**
-     * @param createdBy the createdBy to set
-     */
-    public void setCreatedById(int createdById) {
-        this.createdById = createdById;
-    }
-
-    /**
      * @return the published
      */
     public boolean isPublished() {
@@ -160,14 +144,14 @@ public class MiniNews {
     /**
      * @return the createdBy
      */
-    public String getCreatedBy() {
+    public User getCreatedBy() {
         return createdBy;
     }
 
     /**
      * @param createdBy the createdBy to set
      */
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(User createdBy) {
         this.createdBy = createdBy;
     }
 }

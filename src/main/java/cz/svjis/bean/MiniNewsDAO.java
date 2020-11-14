@@ -46,7 +46,9 @@ public class MiniNewsDAO extends DAO {
                 + "a.BODY, "
                 + "a.NEWS_TIME, "
                 + "a.CREATED_BY_USER_ID, "
-                + "u.FIRST_NAME || ' ' || u.LAST_NAME AS CREATED_BY_USER, "
+                + "u.SALUTATION AS CREATED_BY_SALUTATION, "
+                + "u.FIRST_NAME AS CREATED_BY_FIRST_NAME, "
+                + "u.LAST_NAME AS CREATED_BY_LAST_NAME, "
                 + "a.PUBLISHED "
                 + "FROM MINI_NEWS a "
                 + "LEFT JOIN LANGUAGE l ON (l.ID = a.LANGUAGE_ID) "
@@ -64,8 +66,12 @@ public class MiniNewsDAO extends DAO {
                 mn.setLanguage(rs.getString("LANGUAGE"));
                 mn.setBody(rs.getString("BODY"));
                 mn.setTime(rs.getTimestamp("NEWS_TIME"));
-                mn.setCreatedById(rs.getInt("CREATED_BY_USER_ID"));
-                mn.setCreatedBy(rs.getString("CREATED_BY_USER"));
+                User p = new User();
+                p.setId(rs.getInt("CREATED_BY_USER_ID"));
+                p.setSalutation(rs.getString("CREATED_BY_SALUTATION"));
+                p.setFirstName(rs.getString("CREATED_BY_FIRST_NAME"));
+                p.setLastName(rs.getString("CREATED_BY_LAST_NAME"));
+                mn.setCreatedBy(p);
                 mn.setPublished(rs.getBoolean("PUBLISHED"));
                 result.add(mn);
             }
@@ -85,7 +91,9 @@ public class MiniNewsDAO extends DAO {
                 + "a.BODY, "
                 + "a.NEWS_TIME, "
                 + "a.CREATED_BY_USER_ID, "
-                + "u.FIRST_NAME || ' ' || u.LAST_NAME AS CREATED_BY_USER, "
+                + "u.SALUTATION AS CREATED_BY_SALUTATION, "
+                + "u.FIRST_NAME AS CREATED_BY_FIRST_NAME, "
+                + "u.LAST_NAME AS CREATED_BY_LAST_NAME, "
                 + "a.PUBLISHED "
                 + "FROM MINI_NEWS a "
                 + "LEFT JOIN LANGUAGE l ON (l.ID = a.LANGUAGE_ID) "
@@ -100,8 +108,12 @@ public class MiniNewsDAO extends DAO {
                 result.setLanguage(rs.getString("LANGUAGE"));
                 result.setBody(rs.getString("BODY"));
                 result.setTime(rs.getTimestamp("NEWS_TIME"));
-                result.setCreatedById(rs.getInt("CREATED_BY_USER_ID"));
-                result.setCreatedBy(rs.getString("CREATED_BY_USER"));
+                User p = new User();
+                p.setId(rs.getInt("CREATED_BY_USER_ID"));
+                p.setSalutation(rs.getString("CREATED_BY_SALUTATION"));
+                p.setFirstName(rs.getString("CREATED_BY_FIRST_NAME"));
+                p.setLastName(rs.getString("CREATED_BY_LAST_NAME"));
+                result.setCreatedBy(p);
                 result.setPublished(rs.getBoolean("PUBLISHED"));
             }
         }
@@ -127,7 +139,7 @@ public class MiniNewsDAO extends DAO {
             ps.setInt(2, n.getLanguageId());
             ps.setString(3, n.getBody());
             ps.setTimestamp(4, new java.sql.Timestamp(n.getTime().getTime()));
-            ps.setInt(5, n.getCreatedById());
+            ps.setInt(5, n.getCreatedBy().getId());
             ps.setBoolean(6, n.isPublished());
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -155,7 +167,7 @@ public class MiniNewsDAO extends DAO {
             ps.setInt(2, n.getLanguageId());
             ps.setString(3, n.getBody());
             ps.setTimestamp(4, new java.sql.Timestamp(n.getTime().getTime()));
-            ps.setInt(5, n.getCreatedById());
+            ps.setInt(5, n.getCreatedBy().getId());
             ps.setBoolean(6, n.isPublished());
             ps.setInt(7, n.getId());
             ps.execute();

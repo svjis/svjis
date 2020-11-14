@@ -68,6 +68,9 @@ public class InquiryDAO extends DAO {
                 + "a.ID, "
                 + "a.COMPANY_ID, "
                 + "a.USER_ID, "
+                + "u.SALUTATION AS CREATED_BY_SALUTATION, "
+                + "u.FIRST_NAME AS CREATED_BY_FIRST_NAME, "
+                + "u.LAST_NAME AS CREATED_BY_LAST_NAME, "
                 + "a.DESCRIPTION, "
                 + "a.STARTING_DATE, "
                 + "a.ENDING_DATE, "
@@ -75,6 +78,7 @@ public class InquiryDAO extends DAO {
                 + "(SELECT COUNT(*) FROM INQUIRY_VOTING_LOG l LEFT JOIN INQUIRY_OPTION o ON (o.ID = l.INQUIRY_OPTION_ID) WHERE (o.INQUIRY_ID = a.ID)) AS CNT, "
                 + "(SELECT MAX(CNT) FROM (SELECT COUNT(*) AS CNT FROM INQUIRY_VOTING_LOG l LEFT JOIN INQUIRY_OPTION o ON (o.ID = l.INQUIRY_OPTION_ID) WHERE (o.INQUIRY_ID = a.ID) GROUP BY o.ID)) AS \"MAX\" "
                 + "FROM INQUIRY a "
+                + "LEFT JOIN \"USER\" u ON (u.ID = USER_ID) "
                 + "WHERE (a.COMPANY_ID = " + user.getCompanyId() + ") "
                 + filter
                 + "ORDER BY a.ID DESC";
@@ -84,7 +88,12 @@ public class InquiryDAO extends DAO {
                 Inquiry i = new Inquiry();
                 i.setId(rs.getInt("ID"));
                 i.setCompanyId(rs.getInt("COMPANY_ID"));
-                i.setUserId(rs.getInt("USER_ID"));
+                User p = new User();
+                p.setId(rs.getInt("USER_ID"));
+                p.setSalutation(rs.getString("CREATED_BY_SALUTATION"));
+                p.setFirstName(rs.getString("CREATED_BY_FIRST_NAME"));
+                p.setLastName(rs.getString("CREATED_BY_LAST_NAME"));
+                i.setUser(p);
                 i.setDescription(rs.getString("DESCRIPTION"));
                 i.setStartingDate(rs.getDate("STARTING_DATE"));
                 i.setEndingDate(rs.getDate("ENDING_DATE"));
@@ -111,6 +120,9 @@ public class InquiryDAO extends DAO {
                 + "a.ID, "
                 + "a.COMPANY_ID, "
                 + "a.USER_ID, "
+                + "u.SALUTATION AS CREATED_BY_SALUTATION, "
+                + "u.FIRST_NAME AS CREATED_BY_FIRST_NAME, "
+                + "u.LAST_NAME AS CREATED_BY_LAST_NAME, "
                 + "a.DESCRIPTION, "
                 + "a.STARTING_DATE, "
                 + "a.ENDING_DATE, "
@@ -118,13 +130,19 @@ public class InquiryDAO extends DAO {
                 + "(SELECT COUNT(*) FROM INQUIRY_VOTING_LOG l LEFT JOIN INQUIRY_OPTION o ON (o.ID = l.INQUIRY_OPTION_ID) WHERE (o.INQUIRY_ID = a.ID)) AS CNT, "
                 + "(SELECT MAX(CNT) FROM (SELECT COUNT(*) AS CNT FROM INQUIRY_VOTING_LOG l LEFT JOIN INQUIRY_OPTION o ON (o.ID = l.INQUIRY_OPTION_ID) WHERE (o.INQUIRY_ID = a.ID) GROUP BY o.ID)) AS \"MAX\" "
                 + "FROM INQUIRY a "
+                + "LEFT JOIN \"USER\" u ON (u.ID = USER_ID) "
                 + "WHERE (a.COMPANY_ID = " + user.getCompanyId() + ") AND (a.ID = " + id + ")";
         
         try (Statement st = cnn.createStatement(); ResultSet rs = st.executeQuery(select)) {
             if (rs.next()) {
                 result.setId(rs.getInt("ID"));
                 result.setCompanyId(rs.getInt("COMPANY_ID"));
-                result.setUserId(rs.getInt("USER_ID"));
+                User p = new User();
+                p.setId(rs.getInt("USER_ID"));
+                p.setSalutation(rs.getString("CREATED_BY_SALUTATION"));
+                p.setFirstName(rs.getString("CREATED_BY_FIRST_NAME"));
+                p.setLastName(rs.getString("CREATED_BY_LAST_NAME"));
+                result.setUser(p);
                 result.setDescription(rs.getString("DESCRIPTION"));
                 result.setStartingDate(rs.getDate("STARTING_DATE"));
                 result.setEndingDate(rs.getDate("ENDING_DATE"));
@@ -222,7 +240,7 @@ public class InquiryDAO extends DAO {
         
         try (PreparedStatement ps = cnn.prepareStatement(update)) {
             ps.setInt(1, i.getCompanyId());
-            ps.setInt(2, i.getUserId());
+            ps.setInt(2, i.getUser().getId());
             ps.setString(3, i.getDescription());
             ps.setDate(4, new java.sql.Date(i.getStartingDate().getTime()));
             ps.setDate(5, new java.sql.Date(i.getEndingDate().getTime()));
@@ -256,7 +274,7 @@ public class InquiryDAO extends DAO {
                 + "WHERE (ID = ?) AND (COMPANY_ID = ?)";
         
         try (PreparedStatement ps = cnn.prepareStatement(update)) {
-            ps.setInt(1, i.getUserId());
+            ps.setInt(1, i.getUser().getId());
             ps.setString(2, i.getDescription());
             ps.setDate(3, new java.sql.Date(i.getStartingDate().getTime()));
             ps.setDate(4, new java.sql.Date(i.getEndingDate().getTime()));
