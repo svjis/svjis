@@ -25,24 +25,24 @@
                         <fieldset>
                             <legend class="hidden-legend"><%=language.getText("General") %></legend>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Address") %></label>
-                                <input id="common-input" type="text" name="address" maxlength="50" size="50" value="<%=building.getAddress() %>">
+                                <label class="common-label" id="address-label" for="address-input"><%=language.getText("Address") %></label>
+                                <input class="common-input" id="address-input" type="text" name="address" maxlength="50" size="50" value="<%=building.getAddress() %>">
                             </p>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("City") %></label>
-                                <input id="common-input" type="text" name="city" maxlength="50" size="50" value="<%=building.getCity() %>">
+                                <label class="common-label" id="city-label" for="city-input"><%=language.getText("City") %></label>
+                                <input class="common-input" id="city-input" type="text" name="city" maxlength="50" size="50" value="<%=building.getCity() %>">
                             </p>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Post code") %></label>
-                                <input id="common-input" type="text" name="postCode" maxlength="10" size="50" value="<%=building.getPostCode() %>">
+                                <label class="common-label" id="postcode-label" for="postcode-input"><%=language.getText("Post code") %></label>
+                                <input class="common-input" id="postcode-input" type="text" name="postCode" maxlength="10" size="50" value="<%=building.getPostCode() %>">
                             </p>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Registration Id.") %></label>
-                                <input id="common-input" type="text" name="registrationNo" maxlength="20" size="50" value="<%=building.getRegistrationNo() %>">
+                                <label class="common-label" id="regno-label" for="regno-input"><%=language.getText("Registration Id.") %></label>
+                                <input class="common-input" id="regno-input" type="text" name="registrationNo" maxlength="20" size="50" value="<%=building.getRegistrationNo() %>">
                             </p>
                         </fieldset>
                         <p>
-                            <input class="my-button" type="submit" value="<%=language.getText("Save") %>" />
+                            <input class="my-button" id="submit" type="submit" value="<%=language.getText("Save") %>" />
                         </p>
                     </form>
                             

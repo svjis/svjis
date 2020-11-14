@@ -28,8 +28,8 @@
                         <fieldset>
                             <legend class="hidden-legend"><%=language.getText("General") %></legend>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("User") %></label>
-                                <select id="common-input" name="userId">
+                                <label class="common-label" id="user-label" for="user-input"><%=language.getText("User") %></label>
+                                <select class="common-input" id="user-input" name="userId">
                                     <option value="0">&nbsp;</option>
                                     <%
                                         for (User u: (ArrayList<User>) userList) {
@@ -41,8 +41,8 @@
                                 </select>
                             </p>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Position") %></label>
-                                <select id="common-input" name="typeId">
+                                <label class="common-label" id="type-label" for="type-input"><%=language.getText("Position") %></label>
+                                <select class="common-input" id="type-input" name="typeId">
                                     <option value="0">&nbsp;</option>
                                     <%
                                         for (BoardMemberType t: (ArrayList<BoardMemberType>) boardTypes) {
@@ -55,7 +55,7 @@
                             </p>
                         </fieldset>
                         <p>
-                            <input class="my-button" type="submit" value="<%=language.getText("Save") %>" />
+                            <input class="my-button" id="submit" type="submit" value="<%=language.getText("Save") %>" />
                         </p>
                     </form>
                 </div> <!-- /content-main-in -->

@@ -22,7 +22,7 @@ function addOption() {
     let html =  '    <th scope="row" style="text-align: left">' + desc.replace(1, lastOptionNo) + '</th>\n' +
                 '    <td>\n' +
                 '        <input type="hidden" name="oid_' + lastOptionNo + '" value="0">\n' +
-                '        <input id="common-input" type="text" name="o_' + lastOptionNo + '" size="50" maxlength="250" value="">\n' +
+                '        <input class="common-input" id="o' + lastOptionNo + '-input" type="text" name="o_' + lastOptionNo + '" size="50" maxlength="250" value="">\n' +
                 '    </td>\n' +
                 '    <td>&nbsp;</td>\n';
 

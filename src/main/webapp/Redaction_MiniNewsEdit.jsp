@@ -36,8 +36,9 @@
                         <p>
                         <%=language.getText("Body") %><br>
                         <textarea
+                            class="common-textarea"
+                            id="body-textarea"
                             name="body"
-                            id="common-textarea"
                             rows=5 cols=80
                             wrap
                             ><%=miniNews.getBody() %></textarea>
@@ -46,8 +47,8 @@
                         <fieldset>
                             <legend><%=language.getText("Properties") %></legend>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Language") %></label>
-                                <select name="language" id="common-input">
+                                <label class="common-label" id="lang-label" for="lang-input"><%=language.getText("Language") %></label>
+                                <select class="common-input" id="lang-input" name="language">
                                     <%
                                         Iterator langI = languageList.iterator();
                                         while (langI.hasNext()) {
@@ -60,16 +61,16 @@
                                 </select>
                             </p>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Time") %></label>
-                                <input id="common-input" type="text" name="time" value="<%=(miniNews.getTime() != null) ? sdf.format(miniNews.getTime()) : sdf.format(new Date()) %>">
+                                <label class="common-label" id="time-label" for="time-input"><%=language.getText("Time") %></label>
+                                <input class="common-input" id="time-input" type="text" name="time" value="<%=(miniNews.getTime() != null) ? sdf.format(miniNews.getTime()) : sdf.format(new Date()) %>">
                             </p>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Publish article") %></label>
-                                <input id="common-input" type="checkbox" name="publish" <%=(miniNews.isPublished()) ? "checked" : "" %>>
+                                <label class="common-label" id="publish-label" for="publish-input"><%=language.getText("Publish article") %></label>
+                                <input class="common-input" id="publish-input" type="checkbox" name="publish" <%=(miniNews.isPublished()) ? "checked" : "" %>>
                             </p>
                         </fieldset>
                         <p>
-                            <input class="my-button" type="submit" value="<%=language.getText("Save") %>" />
+                            <input class="my-button" id="submit" type="submit" value="<%=language.getText("Save") %>" />
                         </p>
                     </form>
                 </div> <!-- /content-main-in -->

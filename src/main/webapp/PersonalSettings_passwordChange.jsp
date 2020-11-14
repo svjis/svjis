@@ -28,20 +28,20 @@
                         <fieldset>
                             <legend><%=language.getText("Password change") %></legend>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Current password") %></label>
-                                <input id="common-input" type="password" name="oldPassword" maxlength="30" size="50" value="" />
+                                <label class="common-label" id="currpass-label" for="currpass-input"><%=language.getText("Current password") %></label>
+                                <input class="common-input" id="currpass-input" type="password" name="oldPassword" maxlength="30" size="50" value="" />
                             </p>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("New password") %></label>
-                                <input id="common-input" type="password" name="newPassword" maxlength="30" size="50" value="" />
+                                <label class="common-label" id="newpass1-label" for="newpass1-input"><%=language.getText("New password") %></label>
+                                <input class="common-input" id="newpass1-input" type="password" name="newPassword" maxlength="30" size="50" value="" />
                             </p>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("New password again") %></label>
-                                <input id="common-input" type="password" name="newPassword2" maxlength="30" size="50" value="" />
+                                <label class="common-label" id="newpass2-label" for="newpass2-input"><%=language.getText("New password again") %></label>
+                                <input class="common-input" id="newpass2-input" type="password" name="newPassword2" maxlength="30" size="50" value="" />
                             </p>
                             </fieldset>
                             <p>
-                                <input class="my-button" type="submit" value="<%=language.getText("Save") %>" />
+                                <input class="my-button" id="submit" type="submit" value="<%=language.getText("Save") %>" />
                             </p>
                     </form>
                 </div> <!-- /content-main-in -->

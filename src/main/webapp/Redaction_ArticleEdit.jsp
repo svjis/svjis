@@ -68,7 +68,7 @@
 
                         <p>
                             <%=language.getText("Header") %><br>
-                            <input id="common-input" type="text" name="header" maxlength="50" size="80" value="<%=article.getHeader() %>">
+                            <input class="common-input" id="header-input" type="text" name="header" maxlength="50" size="80" value="<%=article.getHeader() %>">
                         </p>
                         
                         <p>
@@ -92,14 +92,14 @@
                         <fieldset>
                             <legend><%=language.getText("Properties") %></legend>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Menu") %></label>
-                                <select name="menuId" id="common-input">
+                                <label class="common-label" id="menu-label" for="menu-input"><%=language.getText("Menu") %></label>
+                                <select class="common-input" id="menu-input" name="menuId">
                                     <%=menu.writeOptions(menu.getMenu(), 0, article.getMenuNodeId()) %>
                                 </select>
                             </p>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Language") %></label>
-                                <select name="language" id="common-input">
+                                <label class="common-label" id="lang-label" for="lang-input"><%=language.getText("Language") %></label>
+                                <select class="common-input" id="lang-input" name="language">
                                     <%
                                         Iterator langI = languageList.iterator();
                                         while (langI.hasNext()) {
@@ -112,12 +112,12 @@
                                 </select>
                             </p>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Enable comments") %></label>
-                                <input id="common-input" type="checkbox" name="commentsAllowed" <%=(article.isCommentsAllowed()) ? "checked" : "" %>>
+                                <label class="common-label" id="comments-label" for="comments-input"><%=language.getText("Enable comments") %></label>
+                                <input class="common-input" id="comments-input" type="checkbox" name="commentsAllowed" <%=(article.isCommentsAllowed()) ? "checked" : "" %>>
                             </p>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Publish article") %></label>
-                                <input id="common-input" type="checkbox" name="publish" <%=(article.isPublished()) ? "checked" : "" %>>
+                                <label class="common-label" id="publish-label" for="publish-input"><%=language.getText("Publish article") %></label>
+                                <input class="common-input" id="publish-input" type="checkbox" name="publish" <%=(article.isPublished()) ? "checked" : "" %>>
                             </p>
                         </fieldset>
                         <fieldset>
@@ -128,15 +128,15 @@
                                     Role r = (Role) roleI.next();
                             %>
                             <p>
-                                <label id="common-label" for="common-input"><%=r.getDescription() %></label>
-                                <input id="common-input" type="checkbox" name="r_<%=r.getId() %>" <%=(article.getRoles().get(new Integer(r.getId())) != null) ? "checked" : "" %> />
+                                <label class="common-label" id="r<%=r.getId() %>-label" for="r<%=r.getId() %>-input"><%=r.getDescription() %></label>
+                                <input class="common-input" id="r<%=r.getId() %>-input" type="checkbox" name="r_<%=r.getId() %>" <%=(article.getRoles().get(new Integer(r.getId())) != null) ? "checked" : "" %> />
                             </p>
                             <%
                                 }
                             %>        
                         </fieldset>
                         <p>
-                            <input class="my-button" type="submit" value="<%=language.getText("Save") %>" />
+                            <input class="my-button" id="submit" type="submit" value="<%=language.getText("Save") %>" />
                         </p>
                     </form>
                         
@@ -178,7 +178,7 @@
                             %>
                             <p>
                                 <input type="file" name="attachment" size="40">
-                                <input type="submit" value="<%=language.getText("Insert attachment") %>">
+                                <input type="submit" id="file-submit" value="<%=language.getText("Insert attachment") %>">
                             </p>
                         </fieldset>
                     </form>

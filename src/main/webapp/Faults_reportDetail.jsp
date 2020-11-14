@@ -126,7 +126,7 @@
                             <% if (!report.isClosed()) { %>
                             <p>
                                 <input type="file" name="attachment" size="40">
-                                <input type="submit" value="<%=language.getText("Insert attachment") %>">
+                                <input type="submit" id="file-submit" value="<%=language.getText("Insert attachment") %>">
                             </p>
                             <% } %>
                         </fieldset>
@@ -162,13 +162,14 @@
                              <input type="hidden" name="id" value="<%=report.getId() %>">
                              <p>
                                  <textarea
-                                 name="body"
-                                 rows=5 cols=50
-                                 wrap
+                                    id="body"
+                                    name="body"
+                                    rows=5 cols=50
+                                    wrap
                                  ></textarea>
                              </p>
                              <p>
-                                 <input class="my-button" type="submit" value="<%=language.getText("Insert comment") %>" name="submit">
+                                 <input class="my-button" id="submit" type="submit" value="<%=language.getText("Insert comment") %>" name="submit">
                              </p>
                          </form>
                     <%

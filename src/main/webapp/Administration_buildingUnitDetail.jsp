@@ -28,11 +28,10 @@
                         <fieldset>
                             <legend class="hidden-legend"><%=language.getText("General") %></legend>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Type") %></label>
-                                <select id="common-input" name="typeId">
+                                <label class="common-label" id="type-label" for="type-input"><%=language.getText("Type") %></label>
+                                <select class="common-input" id="type-input" name="typeId">
                                     <%
-                                        int typeId = 0;
-                                        Iterator typeI = buildingUnitType.iterator();
+                                         Iterator typeI = buildingUnitType.iterator();
                                         while (typeI.hasNext()) {
                                             BuildingUnitType t = (BuildingUnitType) typeI.next();
                                     %>
@@ -43,24 +42,24 @@
                                 </select>
                             </p>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Registration Id.") %></label>
-                                <input id="common-input" type="text" name="registrationNo" maxlength="50" size="50" value="<%=buildingUnit.getRegistrationId() %>" />
+                                <label class="common-label" id="regno-label" for="regno-input"><%=language.getText("Registration Id.") %></label>
+                                <input class="common-input" id="regno-input" type="text" name="registrationNo" maxlength="50" size="50" value="<%=buildingUnit.getRegistrationId() %>" />
                             </p>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Description") %></label>
-                                <input id="common-input" type="text" name="description" maxlength="50" size="50" value="<%=buildingUnit.getDescription() %>" />
+                                <label class="common-label" id="desc-label" for="desc-input"><%=language.getText("Description") %></label>
+                                <input class="common-input" id="desc-input" type="text" name="description" maxlength="50" size="50" value="<%=buildingUnit.getDescription() %>" />
                             </p>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Numerator") %></label>
-                                <input id="common-input" type="text" name="numerator" maxlength="50" size="50" value="<%=buildingUnit.getNumerator() %>" />
+                                <label class="common-label" id="num-label" for="num-input"><%=language.getText("Numerator") %></label>
+                                <input class="common-input" id="num-input" type="text" name="numerator" maxlength="50" size="50" value="<%=buildingUnit.getNumerator() %>" />
                             </p>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Denominator") %></label>
-                                <input id="common-input" type="text" name="denominator" maxlength="50" size="50" value="<%=buildingUnit.getDenominator() %>" />
+                                <label class="common-label" id="deno-label" for="deno-input"><%=language.getText("Denominator") %></label>
+                                <input class="common-input" id="deno-input" type="text" name="denominator" maxlength="50" size="50" value="<%=buildingUnit.getDenominator() %>" />
                             </p>
                         </fieldset>
                         <p>
-                            <input class="my-button" type="submit" value="<%=language.getText("Save") %>" />
+                            <input class="my-button" id="submit" type="submit" value="<%=language.getText("Save") %>" />
                         </p>
                     </form>
                 </div> <!-- /content-main-in -->
