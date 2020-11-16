@@ -39,9 +39,13 @@ public abstract class FaultAbstractCmd  extends Command {
             getSetup().getMailPassword(),
             getSetup().getMailSender());
 
-        String subject = getCompany().getInternetDomain() + ": #" + f.getId() + " - " + f.getSubject();
-        String link = String.format("<a href=\"http://%s/Dispatcher?page=faultDetail&id=%s\">#%s - %s</a>",
-                getCompany().getInternetDomain(), String.valueOf(f.getId()), String.valueOf(f.getId()), f.getSubject());
+        String entrance = "";
+        if ((f.getBuildingEntrance() != null) && (!f.getBuildingEntrance().getDescription().equals(""))) {
+            entrance = String.format(" - %s", f.getBuildingEntrance().getDescription());
+        }
+        String subject = getCompany().getInternetDomain() + ": #" + f.getId() + " - " + f.getSubject() + entrance;
+        String link = String.format("<a href=\"http://%s/Dispatcher?page=faultDetail&id=%s\">#%s - %s%s</a>",
+                getCompany().getInternetDomain(), String.valueOf(f.getId()), String.valueOf(f.getId()), f.getSubject(), entrance);
         String tBody = template;
 
         for (User u : userList) {
