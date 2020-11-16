@@ -203,4 +203,15 @@ public class FaultReport {
         this.buildingEntrance = buildingEntrance;
     }
     
+    public String getEmailSubject() {
+        String result;
+        String entrance = "";
+        
+        if ((getBuildingEntrance() != null) && (!getBuildingEntrance().getDescription().equals(""))) {
+            entrance = String.format(" - %s", getBuildingEntrance().getDescription());
+        }
+        result = String.format("#%d - %s%s", getId(), getSubject(), entrance);
+        
+        return result;
+    }
 }
