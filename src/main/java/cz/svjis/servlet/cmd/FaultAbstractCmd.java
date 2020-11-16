@@ -26,7 +26,7 @@ import java.util.List;
  */
 public abstract class FaultAbstractCmd  extends Command {
 
-    public FaultAbstractCmd(CmdContext cmdCtx) {
+    protected FaultAbstractCmd(CmdContext cmdCtx) {
         super(cmdCtx);
     }
     
@@ -39,13 +39,10 @@ public abstract class FaultAbstractCmd  extends Command {
             getSetup().getMailPassword(),
             getSetup().getMailSender());
 
-        String entrance = "";
-        if ((f.getBuildingEntrance() != null) && (!f.getBuildingEntrance().getDescription().equals(""))) {
-            entrance = String.format(" - %s", f.getBuildingEntrance().getDescription());
-        }
-        String subject = getCompany().getInternetDomain() + ": #" + f.getId() + " - " + f.getSubject() + entrance;
-        String link = String.format("<a href=\"http://%s/Dispatcher?page=faultDetail&id=%s\">#%s - %s%s</a>",
-                getCompany().getInternetDomain(), String.valueOf(f.getId()), String.valueOf(f.getId()), f.getSubject(), entrance);
+        
+        String subject = String.format("%s: %s", getCompany().getInternetDomain(), f.getEmailSubject());
+        String link = String.format("<a href=\"http://%s/Dispatcher?page=faultDetail&id=%s\">%s</a>",
+                getCompany().getInternetDomain(), String.valueOf(f.getId()), f.getEmailSubject());
         String tBody = template;
 
         for (User u : userList) {
