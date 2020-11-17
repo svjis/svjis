@@ -36,10 +36,11 @@ public class BuildingUnitDeleteCmd extends Command {
         
         BuildingDAO buildingDao = new BuildingDAO(getCnn());
 
-        BuildingUnit u = new BuildingUnit();
-        u.setId(parId);
-        u.setBuildingId(buildingDao.getBuilding(getCompany().getId()).getId());
-        buildingDao.deleteBuildingUnit(u);
+        BuildingUnit u = buildingDao.getBuildingUnit(parId, buildingDao.getBuilding(getCompany().getId()).getId());
+        if (u != null) {
+            buildingDao.deleteBuildingUnit(u);
+        }
+        
         String url = "Dispatcher?page=buildingUnitList";
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");

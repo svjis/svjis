@@ -43,7 +43,7 @@ public class UserBuildingUnitAddCmd extends Command {
         UserDAO userDao = new UserDAO(getCnn());
 
         Building b = buildingDao.getBuilding(getCompany().getId());
-        BuildingUnit unit = buildingDao.getBuildingUnit(parUnitId);
+        BuildingUnit unit = buildingDao.getBuildingUnit(parUnitId, buildingDao.getBuilding(getCompany().getId()).getId());
         User u = userDao.getUser(getCompany().getId(), parUserId);
 
         if ((unit != null) && (unit.getBuildingId() == b.getId()) && u != null) {
