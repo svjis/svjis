@@ -39,7 +39,16 @@ public class BuildingEntranceDeleteCmd extends Command {
         BuildingEntrance be = new BuildingEntrance();
         be.setId(parId);
         be.setBuildingId(buildingDao.getBuilding(getCompany().getId()).getId());
-        buildingDao.deleteBuildingEntrance(be);
+        boolean result = buildingDao.deleteBuildingEntrance(be);
+
+        if (!result) {
+            String errorMessage = getLanguage().getText("This entrance cannot be deleted.");
+            getRequest().setAttribute("message", errorMessage);
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/_message.jsp");
+            rd.forward(getRequest(), getResponse());
+            return;
+        }
+        
         String url = "Dispatcher?page=buildingEntranceList";
         getRequest().setAttribute("url", url);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
