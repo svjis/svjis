@@ -268,7 +268,7 @@ public class BuildingDAO extends DAO {
         }
     }
     
-    public BuildingUnit getBuildingUnit(int id) throws SQLException {
+    public BuildingUnit getBuildingUnit(int id, int buildingId) throws SQLException {
         BuildingUnit result = null;
         String select = "SELECT "
                 + "a.ID, "
@@ -281,9 +281,10 @@ public class BuildingDAO extends DAO {
                 + "a.DENOMINATOR "
                 + "FROM BUILDING_UNIT a "
                 + "LEFT JOIN BUILDING_UNIT_TYPE b ON (b.ID = a.BUILDING_UNIT_TYPE_ID) "
-                + "WHERE (a.ID = ?)";
+                + "WHERE (a.ID = ? AND a.BUILDING_ID = ?)";
         try (PreparedStatement ps = cnn.prepareStatement(select)) {
             ps.setInt(1, id);
+            ps.setInt(2, buildingId);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     result = new BuildingUnit();
@@ -351,7 +352,14 @@ public class BuildingDAO extends DAO {
     }
     
     public void deleteBuildingUnit(BuildingUnit u) throws SQLException {
+        String deleteRelation = "DELETE FROM USER_HAS_BUILDING_UNIT a WHERE a.BUILDING_UNIT_ID = ?";
         String delete = "DELETE FROM BUILDING_UNIT WHERE (ID = ?) AND (BUILDING_ID = ?) ";
+        
+        try (PreparedStatement ps = cnn.prepareStatement(deleteRelation)) {
+            ps.setInt(1, u.getId());
+            ps.execute();
+        }
+        
         try (PreparedStatement ps = cnn.prepareStatement(delete)) {
             ps.setInt(1, u.getId());
             ps.setInt(2, u.getBuildingId());
