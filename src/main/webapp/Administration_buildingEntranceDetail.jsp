@@ -25,16 +25,16 @@
                         <fieldset>
                             <legend class="hidden-legend"><%=language.getText("General") %></legend>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Description") %></label>
-                                <input id="common-input" type="text" name="description" maxlength="50" size="50" value="<%=buildingEntrance.getDescription() %>" />
+                                <label class="common-label" id="desc-label" for="desc-input"><%=language.getText("Description") %></label>
+                                <input class="common-input" id="desc-input" type="text" name="description" maxlength="50" size="50" value="<%=buildingEntrance.getDescription() %>" />
                             </p>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Address") %></label>
-                                <input id="common-input" type="text" name="address" maxlength="50" size="50" value="<%=buildingEntrance.getAddress() %>" />
+                                <label class="common-label" id="address-label" for="address-input"><%=language.getText("Address") %></label>
+                                <input class="common-input" id="address-input" type="text" name="address" maxlength="50" size="50" value="<%=buildingEntrance.getAddress() %>" />
                             </p>
                         </fieldset>
                         <p>
-                            <input class="my-button" type="submit" value="<%=language.getText("Save") %>" />
+                            <input class="my-button" id="submit" type="submit" value="<%=language.getText("Save") %>" />
                         </p>
                     </form>
                 </div> <!-- /content-main-in -->

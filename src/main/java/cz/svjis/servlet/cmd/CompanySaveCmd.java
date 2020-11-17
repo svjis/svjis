@@ -59,9 +59,10 @@ public class CompanySaveCmd extends Command {
         c.setInternetDomain(parDomain);
         compDao.modifyCompany(c);
         getRequest().getSession().setAttribute("company", compDao.getCompany(getCompany().getId()));
-        String url = "Dispatcher?page=companyDetail";
-        getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
+        String message = getLanguage().getText("Saved") + "<br>";
+        getRequest().setAttribute("message", message);
+        getRequest().setAttribute("currCompany", c);
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_companyDetail.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

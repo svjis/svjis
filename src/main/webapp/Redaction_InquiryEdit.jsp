@@ -35,8 +35,9 @@
                         <p>
                         <%=language.getText("Description") %><br>
                         <textarea
+                            class="common-textarea"
+                            id="desc-textarea"
                             name="description"
-                            id="common-textarea"
                             rows=5 cols=80
                             maxlength="250"
                             wrap
@@ -45,7 +46,8 @@
                         
                         <fieldset>
                             <legend id="tbl-desc"><%=language.getText("Options") %></legend>
-                            <table id="opt_parent" border="0" aria-describedby="tbl-desc">
+                            <table border="0" aria-describedby="tbl-desc">
+                                <tbody id="opt_parent">
                             <%
                                 int i = 1;
                                 for (InquiryOption io: inquiry.getOptionList()) {
@@ -54,7 +56,7 @@
                                         <th scope="row" style="text-align: left"><%=language.getText("Option") %>&nbsp;<%=i %>:&nbsp;</th>
                                         <td>
                                             <input type="hidden" name="oid_<%=i %>" value="<%=io.getId() %>">
-                                            <input id="common-input" type="text" name="o_<%=i %>" size="50" maxlength="250" value="<%=io.getDescription() %>">
+                                            <input class="common-input" id="o<%=i %>-input" type="text" name="o_<%=i %>" size="50" maxlength="250" value="<%=io.getDescription() %>">
                                         </td>
                                         <% if (inquiry.getCount() == 0) { %>
                                         <td>&nbsp;<a href="Dispatcher?page=redactionInquiryOptionDelete&id=<%=io.getId() %>"><img src="gfx/delete.png" border="0" title="<%=language.getText("Delete") %>" alt="<%=language.getText("Delete") %>"></td>
@@ -72,7 +74,7 @@
                                         <th scope="row" style="text-align: left"><%=language.getText("Option") %>&nbsp;<%=i %>:&nbsp;</th>
                                         <td>
                                             <input type="hidden" name="oid_<%=i %>" value="0">
-                                            <input id="common-input" type="text" name="o_<%=i %>" size="50" maxlength="250" value="">
+                                            <input class="common-input" id="o<%=i %>-input" type="text" name="o_<%=i %>" size="50" maxlength="250" value="">
                                         </td>
                                         <td>&nbsp;</td>
                                     </tr>
@@ -80,6 +82,7 @@
                                     i++;
                                 }
                             %>
+                                </tbody>
                             </table>
 
                             <div class="container">
@@ -97,20 +100,20 @@
                         <fieldset>
                             <legend><%=language.getText("Properties") %></legend>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Starting date") %></label>
-                                <input id="common-input" type="text" name="startingDate" value="<%=(inquiry.getStartingDate() != null) ? sdf.format(inquiry.getStartingDate()) : sdf.format(new Date()) %>">
+                                <label class="common-label" id="start-label" for="start-input"><%=language.getText("Starting date") %></label>
+                                <input class="common-input" id="start-input" type="text" name="startingDate" value="<%=(inquiry.getStartingDate() != null) ? sdf.format(inquiry.getStartingDate()) : sdf.format(new Date()) %>">
                             </p>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Ending date") %></label>
-                                <input id="common-input" type="text" name="endingDate" value="<%=(inquiry.getEndingDate() != null) ? sdf.format(inquiry.getEndingDate()) : sdf.format(new Date()) %>">
+                                <label class="common-label" id="end-label" for="end-input"><%=language.getText("Ending date") %></label>
+                                <input class="common-input" id="end-input" type="text" name="endingDate" value="<%=(inquiry.getEndingDate() != null) ? sdf.format(inquiry.getEndingDate()) : sdf.format(new Date()) %>">
                             </p>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Publish") %></label>
-                                <input id="common-input" type="checkbox" name="publish" <%=(inquiry.isEnabled()) ? "checked" : "" %>>
+                                <label class="common-label" id="publish-label" for="publish-input"><%=language.getText("Publish") %></label>
+                                <input class="common-input" id="publish-input" type="checkbox" name="publish" <%=(inquiry.isEnabled()) ? "checked" : "" %>>
                             </p>
                         </fieldset>
                         <p>
-                            <input class="my-button" type="submit" value="<%=language.getText("Save") %>" />
+                            <input class="my-button" id="submit" type="submit" value="<%=language.getText("Save") %>" />
                         </p>
                     </form>
                 </div> <!-- /content-main-in -->

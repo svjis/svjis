@@ -45,9 +45,10 @@ public class BuildingSaveCmd extends Command {
         b.setPostCode(parPostCode);
         b.setRegistrationNo(parRegNo);
         buildingDao.modifyBuilding(b);
-        String url = "Dispatcher?page=buildingDetail";
-        getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
+        String message = getLanguage().getText("Saved") + "<br>";
+        getRequest().setAttribute("message", message);
+        getRequest().setAttribute("building", b);
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_buildingDetail.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

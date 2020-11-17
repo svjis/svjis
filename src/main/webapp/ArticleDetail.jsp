@@ -127,13 +127,14 @@
                              <input type="hidden" name="id" value="<%=article.getId() %>">
                              <p>
                                  <textarea
-                                 name="body"
-                                 rows=5 cols=50
-                                 wrap
+                                    id="body"
+                                    name="body"
+                                    rows=5 cols=50
+                                    wrap
                                  ></textarea>
                              </p>
                              <p>
-                                 <input class="my-button" type="submit" value="<%=language.getText("Insert comment") %>" name="submit">
+                                 <input class="my-button" id="submit" type="submit" value="<%=language.getText("Insert comment") %>" name="submit">
                              </p>
                          </form>
                     <%

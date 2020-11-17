@@ -26,16 +26,16 @@
                         <fieldset>
                             <legend class="hidden-legend"><%=language.getText("General") %></legend>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Key") %></label>
-                                <input id="common-input" type="text" name="key" maxlength="50" value="<%=key %>" />
+                                <label class="common-label" id="key-label" for="key-input"><%=language.getText("Key") %></label>
+                                <input class="common-input" id="key-input" type="text" name="key" maxlength="50" value="<%=key %>" />
                             </p>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Value") %></label>
-                                <input id="common-input" type="text" name="value" maxlength="1000" value="<%=(setup.getSetupProps().getProperty(key) != null) ? setup.getSetupProps().getProperty(key) : ""  %>" />
+                                <label class="common-label" id="value-label" for="value-input"><%=language.getText("Value") %></label>
+                                <input class="common-input" id="value-input" type="text" name="value" maxlength="1000" value="<%=(setup.getSetupProps().getProperty(key) != null) ? setup.getSetupProps().getProperty(key) : ""  %>" />
                             </p>
                         </fieldset>
                         <p>
-                            <input class="my-button" type="submit" value="<%=language.getText("Save") %>" />
+                            <input class="my-button" id="submit" type="submit" value="<%=language.getText("Save") %>" />
                         </p>
                     </form>
                 </div> <!-- /content-main-in -->

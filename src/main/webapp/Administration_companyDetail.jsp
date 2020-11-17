@@ -8,6 +8,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="company" scope="session" class="cz.svjis.bean.Company" />
+<jsp:useBean id="message" scope="request" class="java.lang.String" />
 
 <jsp:include page="_header.jsp" />
 <jsp:include page="_tray.jsp" />
@@ -24,58 +25,59 @@
             <div id="content-main">
                 <div id="content-main-in">
                     <h1 class="page-title"><%=language.getText("Company") %></h1>
+                    <strong class="message"><%=message %></strong>
                     <form action="Dispatcher" method="post">
                         <input type="hidden" name="page" value="companySave" />
                         <fieldset>
                             <legend class="hidden-legend"><%=language.getText("General") %></legend>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Name") %></label>
-                                <input id="common-input" type="text" name="name" maxlength="50" size="50" value="<%=company.getName() %>">
+                                <label class="common-label" id="name-label" for="name-input"><%=language.getText("Name") %></label>
+                                <input class="common-input" id="name-input" type="text" name="name" maxlength="50" size="50" value="<%=company.getName() %>">
                             </p>
 
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Address") %></label>
-                                <input id="common-input" type="text" name="address" maxlength="50" size="50" value="<%=company.getAddress() %>">
+                                <label class="common-label" id="address-label" for="address-input"><%=language.getText("Address") %></label>
+                                <input class="common-input" id="address-input" type="text" name="address" maxlength="50" size="50" value="<%=company.getAddress() %>">
                             </p>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("City") %></label>
-                                <input id="common-input" type="text" name="city" maxlength="50" size="50" value="<%=company.getCity() %>">
+                                <label class="common-label" id="city-label" for="city-input"><%=language.getText("City") %></label>
+                                <input class="common-input" id="city-input" type="text" name="city" maxlength="50" size="50" value="<%=company.getCity() %>">
                             </p>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Post code") %></label>
-                                <input id="common-input" type="text" name="postCode" maxlength="10" size="50" value="<%=company.getPostCode() %>">
+                                <label class="common-label" id="postcode-label" for="postcode-input"><%=language.getText("Post code") %></label>
+                                <input class="common-input" id="postcode-input" type="text" name="postCode" maxlength="10" size="50" value="<%=company.getPostCode() %>">
                             </p>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Phone") %></label>
-                                <input id="common-input" type="text" name="phone" maxlength="30" size="50" value="<%=company.getPhone() %>">
+                                <label class="common-label" id="phone-label" for="phone-input"><%=language.getText("Phone") %></label>
+                                <input class="common-input" id="phone-input" type="text" name="phone" maxlength="30" size="50" value="<%=company.getPhone() %>">
                             </p>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Fax") %></label>
-                                <input id="common-input" type="text" name="fax" maxlength="30" size="50" value="<%=company.getFax() %>">
+                                <label class="common-label" id="fax-label" for="fax-input"><%=language.getText("Fax") %></label>
+                                <input class="common-input" id="fax-input" type="text" name="fax" maxlength="30" size="50" value="<%=company.getFax() %>">
                             </p>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("E-Mail") %></label>
-                                <input id="common-input" type="text" name="eMail" maxlength="30" size="50" value="<%=company.geteMail() %>">
+                                <label class="common-label" id="email-label" for="email-input"><%=language.getText("E-Mail") %></label>
+                                <input class="common-input" id="email-input" type="text" name="eMail" maxlength="30" size="50" value="<%=company.geteMail() %>">
                             </p>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Registration No.") %></label>
-                                <input id="common-input" type="text" name="registrationNo" maxlength="20" size="50" value="<%=company.getRegistrationNo() %>">
+                                <label class="common-label" id="regno-label" for="regno-input"><%=language.getText("Registration No.") %></label>
+                                <input class="common-input" id="regno-input" type="text" name="registrationNo" maxlength="20" size="50" value="<%=company.getRegistrationNo() %>">
                             </p>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("VAT Registration No.") %></label>
-                                <input id="common-input" type="text" name="vatRegistrationNo" maxlength="20" size="50" value="<%=company.getVatRegistrationNo() %>">
+                                <label class="common-label" id="vatregno-label" for="vatregno-input"><%=language.getText("VAT Registration No.") %></label>
+                                <input class="common-input" id="vatregno-input" type="text" name="vatRegistrationNo" maxlength="20" size="50" value="<%=company.getVatRegistrationNo() %>">
                             </p>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Internet domain") %></label>
-                                <input id="common-input" type="text" name="internetDomain" maxlength="50" size="50" value="<%=company.getInternetDomain() %>">
+                                <label class="common-label" id="idomain-label" for="idomain-input"><%=language.getText("Internet domain") %></label>
+                                <input class="common-input" id="idomain-input" type="text" name="internetDomain" maxlength="50" size="50" value="<%=company.getInternetDomain() %>">
                             </p>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Database creation date") %></label>
-                                <input id="common-input" type="text" name="cretionDate" maxlength="50" size="50" value="<%=sdf.format(company.getDatabaseCreationDate()) %>" readonly="readonly">
+                                <label class="common-label" id="created-label" for="created-input"><%=language.getText("Database creation date") %></label>
+                                <input class="common-input" id="created-input" type="text" name="cretionDate" maxlength="50" size="50" value="<%=sdf.format(company.getDatabaseCreationDate()) %>" readonly="readonly">
                             </p>
                         </fieldset>
                         <p>
-                            <input class="my-button" type="submit" value="<%=language.getText("Save") %>" />
+                            <input class="my-button" id="submit" type="submit" value="<%=language.getText("Save") %>" />
                         </p>
                     </form>
                 </div> <!-- /content-main-in -->
