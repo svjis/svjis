@@ -456,12 +456,30 @@ public class BuildingDAO extends DAO {
         }
     }
     
-    public void deleteBuildingEntrance(BuildingEntrance be) throws SQLException {
+    public boolean deleteBuildingEntrance(BuildingEntrance be) throws SQLException {
+        int cnt = 0;
+        String select = "SELECT count(*) AS cnt FROM FAULT_REPORT a WHERE a.BUILDING_ENTRANCE_ID = ?";
         String delete = "DELETE FROM BUILDING_ENTRANCE WHERE (ID = ?) AND (BUILDING_ID = ?) ";
+        
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setInt(1, be.getId());
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    cnt = rs.getInt("cnt");
+                }
+            }
+        }
+        
+        if (cnt > 0) {
+            return false;
+        }
+        
         try (PreparedStatement ps = cnn.prepareStatement(delete)) {
             ps.setInt(1, be.getId());
             ps.setInt(2, be.getBuildingId());
             ps.execute();
         }
+        
+        return true;
     }
 }
