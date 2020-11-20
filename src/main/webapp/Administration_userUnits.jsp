@@ -53,7 +53,7 @@
                     <form action="Dispatcher" method="post">
                         <input type="hidden" name="page" value="userBuildingUnitAdd" />
                         <input type="hidden" name="userId" value="<%=cUser.getId() %>" />
-                        <select id="common-input" name="unitId">
+                        <select class="common-input" id="unit-input" name="unitId">
                             <option value="0"><%=language.getText("(choose)") %></option>
                         <%
                             Iterator<BuildingUnit> unitI = unitList.iterator();
@@ -65,7 +65,7 @@
                             }
                         %>
                         </select>
-                        <input type="submit" value="<%=language.getText("Add") %>" />
+                        <input id="submit" type="submit" value="<%=language.getText("Add") %>" />
                     </form>
                 </div> <!-- /content-main-in -->
             </div> <!-- /content-main -->
