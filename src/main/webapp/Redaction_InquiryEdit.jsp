@@ -12,6 +12,7 @@
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
 <jsp:useBean id="inquiry" scope="request" class="cz.svjis.bean.Inquiry" />
+<jsp:useBean id="message" scope="request" class="java.lang.String" />
 
 <jsp:include page="_header.jsp" />
 <jsp:include page="_tray.jsp" />
@@ -28,6 +29,7 @@
             <div id="content-main">
                 <div id="content-main-in">
                     <h1 class="page-title"><%=language.getText("Inquiry") %></h1>
+                    <strong class="message"><%=message %></strong>
                     <form action="Dispatcher" method="post">
                         <input type="hidden" name="page" value="redactionInquirySave">
                         <input type="hidden" name="id" value="<%=inquiry.getId() %>">

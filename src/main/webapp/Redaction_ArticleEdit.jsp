@@ -20,6 +20,7 @@
 <jsp:useBean id="languageList" scope="request" class="java.util.ArrayList" />
 <jsp:useBean id="roleList" scope="request" class="java.util.ArrayList" />
 <jsp:useBean id="menu" scope="request" class="cz.svjis.bean.Menu" />
+<jsp:useBean id="message" scope="request" class="java.lang.String" />
 
 
 <jsp:include page="_header.jsp" />
@@ -60,6 +61,7 @@
             <div id="content-main">
                 <div id="content-main-in">
                     <h1 class="page-title"><%=language.getText("Article") %></h1>
+                    <strong class="message"><%=message %></strong>
                     <form action="Dispatcher" method="post">
                         <input type="hidden" name="page" value="redactionArticleSave">
                         <input type="hidden" name="id" value="<%=article.getId() %>">

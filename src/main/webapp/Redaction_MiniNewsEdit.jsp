@@ -13,6 +13,7 @@
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
 <jsp:useBean id="miniNews" scope="request" class="cz.svjis.bean.MiniNews" />
 <jsp:useBean id="languageList" scope="request" class="java.util.ArrayList" />
+<jsp:useBean id="message" scope="request" class="java.lang.String" />
 
 <jsp:include page="_header.jsp" />
 <jsp:include page="_tray.jsp" />
@@ -29,6 +30,7 @@
             <div id="content-main">
                 <div id="content-main-in">
                     <h1 class="page-title"><%=language.getText("Mini news") %></h1>
+                    <strong class="message"><%=message %></strong>
                     <form action="Dispatcher" method="post">
                         <input type="hidden" name="page" value="redactionNewsEditSave">
                         <input type="hidden" name="id" value="<%=miniNews.getId() %>">

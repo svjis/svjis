@@ -14,6 +14,8 @@ package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.Article;
 import cz.svjis.bean.ArticleDAO;
+import cz.svjis.bean.Language;
+import cz.svjis.bean.LanguageDAO;
 import cz.svjis.bean.LogDAO;
 import cz.svjis.bean.Menu;
 import cz.svjis.bean.MenuDAO;
@@ -56,6 +58,7 @@ public class RedactionArticleSaveCmd extends Command {
         ArticleDAO articleDao = new ArticleDAO(getCnn());
         LogDAO logDao = new LogDAO(getCnn());
         MenuDAO menuDao = new MenuDAO(getCnn());
+        LanguageDAO languageDao = new LanguageDAO(getCnn());
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         Article a = new Article();
@@ -99,9 +102,19 @@ public class RedactionArticleSaveCmd extends Command {
             articleDao.modifyArticle(a);
             logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_MODIFY_ARTICLE, a.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
         }
-        String url = "Dispatcher?page=redactionArticleEdit&id=" + a.getId();
-        getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
+        
+        getRequest().setAttribute("article", a);
+        Menu menu = menuDao.getMenu(getCompany().getId());
+        menu.setActiveSection(-1);
+        getRequest().setAttribute("menu", menu);
+        ArrayList<Language> languageList = new ArrayList(languageDao.getLanguageList());
+        getRequest().setAttribute("languageList", languageList);
+        ArrayList<Role> roleList = new ArrayList(roleDao.getRoleList(getCompany().getId()));
+        getRequest().setAttribute("roleList", roleList);
+        String message = getLanguage().getText("Saved") + "<br>";
+        getRequest().setAttribute("message", message);
+        
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/Redaction_ArticleEdit.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

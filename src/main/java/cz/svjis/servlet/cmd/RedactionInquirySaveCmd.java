@@ -78,9 +78,11 @@ public class RedactionInquirySaveCmd extends Command {
         } else {
             inquiryDao.modifyInquiry(i);
         }
-        String url = "Dispatcher?page=redactionInquiryEdit&id=" + i.getId();
-        getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
+        
+        getRequest().setAttribute("inquiry", i);
+        String message = getLanguage().getText("Saved") + "<br>";
+        getRequest().setAttribute("message", message);
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/Redaction_InquiryEdit.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }
