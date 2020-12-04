@@ -79,6 +79,7 @@ public class RedactionInquirySaveCmd extends Command {
             inquiryDao.modifyInquiry(i);
         }
         
+        i = inquiryDao.getInquiry(getUser(), i.getId());
         getRequest().setAttribute("inquiry", i);
         String message = getLanguage().getText("Saved") + "<br>";
         getRequest().setAttribute("message", message);
