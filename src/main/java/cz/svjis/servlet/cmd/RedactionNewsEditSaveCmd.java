@@ -12,12 +12,15 @@
 
 package cz.svjis.servlet.cmd;
 
+import cz.svjis.bean.Language;
+import cz.svjis.bean.LanguageDAO;
 import cz.svjis.bean.MiniNews;
 import cz.svjis.bean.MiniNewsDAO;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 
 /**
@@ -40,13 +43,14 @@ public class RedactionNewsEditSaveCmd extends Command {
         boolean parPublished = Validator.getBoolean(getRequest(), "publish");
 
         MiniNewsDAO newsDao = new MiniNewsDAO(getCnn());
+        LanguageDAO languageDao = new LanguageDAO(getCnn());
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 
         MiniNews n = null;
         if (parId == 0) {
             n = new MiniNews();
             n.setId(parId);
-            n.setCreatedById(getUser().getId());
+            n.getCreatedBy().setId(getUser().getId());
             n.setCompanyId(getUser().getCompanyId());
         } else {
             n = newsDao.getMiniNews(getUser(), parId);
@@ -60,9 +64,13 @@ public class RedactionNewsEditSaveCmd extends Command {
         } else {
             newsDao.modifyMiniNews(n);
         }
-        String url = "Dispatcher?page=redactionNewsEdit&id=" + n.getId();
-        getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
+        
+        getRequest().setAttribute("miniNews", n);
+        ArrayList<Language> languageList = new ArrayList(languageDao.getLanguageList());
+        getRequest().setAttribute("languageList", languageList);
+        String message = getLanguage().getText("Saved") + "<br>";
+        getRequest().setAttribute("message", message);
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/Redaction_MiniNewsEdit.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

@@ -28,8 +28,8 @@
                         <fieldset>
                             <legend><%=language.getText("Role") %></legend>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Name") %></label>
-                                <input id="common-input" type="text" name="description" maxlength="50" value="<%=role.getDescription() %>" />
+                                <label class="common-label" id="name-label" for="name-input"><%=language.getText("Name") %></label>
+                                <input class="common-input" id="name-input" type="text" name="description" maxlength="50" value="<%=role.getDescription() %>" />
                             </p>
                         </fieldset>
                         <fieldset>
@@ -40,15 +40,15 @@
                                     Permission p = (Permission) permI.next();
                             %>
                             <p>
-                                <label id="common-label" for="common-input"><%=p.getDescription() %></label>
-                                <input id="common-input" type="checkbox" name="p_<%=p.getId() %>" <%=(role.getPermissions().get(new Integer(p.getId())) != null) ? "checked" : "" %> />
+                                <label class="common-label" id="p<%=p.getId() %>-label" for="p<%=p.getId() %>-input"><%=p.getDescription() %></label>
+                                <input class="common-input" id="p<%=p.getId() %>-input" type="checkbox" name="p_<%=p.getId() %>" <%=(role.getPermissions().get(new Integer(p.getId())) != null) ? "checked" : "" %> />
                             </p>
                             <%
                                 }
                             %>      
                         </fieldset>
                         <p>
-                            <input class="my-button" type="submit" value="<%=language.getText("Save") %>" />
+                            <input class="my-button" id="submit" type="submit" value="<%=language.getText("Save") %>" />
                         </p>
                     </form>
                 </div> <!-- /content-main-in -->

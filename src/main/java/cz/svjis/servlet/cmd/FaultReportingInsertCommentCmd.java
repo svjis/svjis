@@ -59,7 +59,7 @@ public class FaultReportingInsertCommentCmd extends Command {
             faultDao.setUserWatchingFaultReport(report.getId(), getUser().getId());
 
             // send notification
-            String subject = getCompany().getInternetDomain() + ": #" + report.getId() + " - " + report.getSubject() + " (New comment)";
+            String subject = String.format("%s: %s (New comment)", getCompany().getInternetDomain(), report.getEmailSubject());
             String tBody = getSetup().getMailTemplateFaultComment();
             MailDAO mailDao = new MailDAO(
                     getCnn(),
@@ -72,9 +72,11 @@ public class FaultReportingInsertCommentCmd extends Command {
                 if (u.getId() == getUser().getId()) {
                     continue;
                 }
+                String link = String.format("<a href=\"http://%s/Dispatcher?page=faultDetail&id=%s\">%s</a>",
+                        getCompany().getInternetDomain(), String.valueOf(report.getId()), report.getEmailSubject());
                 String body = String.format(tBody,
                         getUser().getFirstName() + " " + getUser().getLastName(),
-                        "<a href=\"http://" + getCompany().getInternetDomain() + "/Dispatcher?page=faultDetail&id=" + report.getId() + "\">#" + report.getId() + " - " + report.getSubject() + "</a>",
+                        link,
                         c.getBody().replace("\n", "<br>"));
                 mailDao.queueMail(getCompany().getId(), u.geteMail(), subject, body);
             }

@@ -53,8 +53,8 @@
                             <td class="list" style="<%=stl %>"><%=sdf.format(f.getCreationDate()) %></td>
                             <td class="list" style="<%=stl %>"><%=HttpUtils.highlight(f.getSubject(), request.getParameter("search")) %></td>
                             <td class="list" style="<%=stl %>"><%=(f.getBuildingEntrance() != null) ? f.getBuildingEntrance().getDescription() : "&nbsp;" %></td>
-                            <td class="list" style="<%=stl %>"><%=f.getCreatedByUser().getFirstName() %>&nbsp;<%=f.getCreatedByUser().getLastName() %></td>
-                            <td class="list" style="<%=stl %>"><%=(f.getAssignedToUser() != null) ? (f.getAssignedToUser().getFirstName() + "&nbsp;" +f.getAssignedToUser().getLastName()) : "&nbsp;" %></td>
+                            <td class="list" style="<%=stl %>"><%=f.getCreatedByUser().getFullName(false) %></td>
+                            <td class="list" style="<%=stl %>"><%=(f.getAssignedToUser() != null) ? (f.getAssignedToUser().getFullName(false)) : "&nbsp;" %></td>
                         </tr>
                         <%
                             }

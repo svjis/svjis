@@ -22,7 +22,7 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h1 class="page-title" id="tbl-desc"><%=cUser.getFirstName() %>&nbsp;<%=cUser.getLastName() %> - <%=language.getText("Building unit list") %></h1>
+                    <h1 class="page-title" id="tbl-desc"><%=cUser.getFullName(false) %> - <%=language.getText("Building unit list") %></h1>
                     
                     <table class="list" aria-describedby="tbl-desc">
                         <tr>
@@ -53,7 +53,7 @@
                     <form action="Dispatcher" method="post">
                         <input type="hidden" name="page" value="userBuildingUnitAdd" />
                         <input type="hidden" name="userId" value="<%=cUser.getId() %>" />
-                        <select id="common-input" name="unitId">
+                        <select class="common-input" id="unit-input" name="unitId">
                             <option value="0"><%=language.getText("(choose)") %></option>
                         <%
                             Iterator<BuildingUnit> unitI = unitList.iterator();
@@ -65,7 +65,7 @@
                             }
                         %>
                         </select>
-                        <input type="submit" value="<%=language.getText("Add") %>" />
+                        <input id="submit" type="submit" value="<%=language.getText("Add") %>" />
                     </form>
                 </div> <!-- /content-main-in -->
             </div> <!-- /content-main -->

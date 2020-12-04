@@ -161,6 +161,7 @@ public class ArticleDAO extends DAO {
                 + "a.CREATION_DATE, "
                 + "a.PUBLISHED, "
                 + "a.COMMENTS_ALLOWED, "
+                + "u.SALUTATION, "
                 + "u.FIRST_NAME, "
                 + "u.LAST_NAME, "
                 + "(SELECT COUNT(*) FROM ARTICLE_COMMENT c WHERE c.ARTICLE_ID = a.ID) AS COMMENT_CNT "
@@ -194,6 +195,7 @@ public class ArticleDAO extends DAO {
                     a.setPublished(rs.getBoolean("PUBLISHED"));
                     a.setCommentsAllowed(rs.getBoolean("COMMENTS_ALLOWED"));
                     a.setAuthor(new User());
+                    a.getAuthor().setSalutation(rs.getString("SALUTATION"));
                     a.getAuthor().setFirstName(rs.getString("FIRST_NAME"));
                     a.getAuthor().setLastName(rs.getString("LAST_NAME"));
                     a.setNumOfComments(rs.getInt("COMMENT_CNT"));
@@ -261,6 +263,7 @@ public class ArticleDAO extends DAO {
                 + "a.CREATION_DATE, "
                 + "a.PUBLISHED, "
                 + "a.COMMENTS_ALLOWED, "
+                + "u.SALUTATION, "
                 + "u.FIRST_NAME, "
                 + "u.LAST_NAME, "
                 + "(SELECT COUNT(*) FROM ARTICLE_COMMENT c WHERE c.ARTICLE_ID = a.ID) AS COMMENT_CNT "
@@ -299,6 +302,7 @@ public class ArticleDAO extends DAO {
                         a.setPublished(rs.getBoolean("PUBLISHED"));
                         a.setCommentsAllowed(rs.getBoolean("COMMENTS_ALLOWED"));
                         a.setAuthor(new User());
+                        a.getAuthor().setSalutation(rs.getString("SALUTATION"));
                         a.getAuthor().setFirstName(rs.getString("FIRST_NAME"));
                         a.getAuthor().setLastName(rs.getString("LAST_NAME"));
                         a.setNumOfComments(rs.getInt("COMMENT_CNT"));
@@ -334,6 +338,7 @@ public class ArticleDAO extends DAO {
                 + "a.PUBLISHED, "
                 + "a.COMMENTS_ALLOWED, "
                 + "u.ID AS UID, "
+                + "u.SALUTATION, "
                 + "u.FIRST_NAME, "
                 + "u.LAST_NAME "
                 + "FROM ARTICLE a "
@@ -361,6 +366,7 @@ public class ArticleDAO extends DAO {
                     result.setPublished(rs.getBoolean("PUBLISHED"));
                     result.setCommentsAllowed(rs.getBoolean("COMMENTS_ALLOWED"));
                     result.setAuthor(new User());
+                    result.getAuthor().setSalutation(rs.getString("SALUTATION"));
                     result.getAuthor().setId(rs.getInt("UID"));
                     result.getAuthor().setFirstName(rs.getString("FIRST_NAME"));
                     result.getAuthor().setLastName(rs.getString("LAST_NAME"));
@@ -618,6 +624,7 @@ public class ArticleDAO extends DAO {
                 + "a.ID, "
                 + "a.ARTICLE_ID, "
                 + "a.USER_ID, "
+                + "u.SALUTATION, "
                 + "u.FIRST_NAME, "
                 + "u.LAST_NAME, "
                 + "a.INSERTION_TIME, "
@@ -636,6 +643,7 @@ public class ArticleDAO extends DAO {
                     a.setArticleId(rs.getInt("ARTICLE_ID"));
                     a.setUser(new User());
                     a.getUser().setId(rs.getInt("USER_ID"));
+                    a.getUser().setSalutation(rs.getString("SALUTATION"));
                     a.getUser().setFirstName(rs.getString("FIRST_NAME"));
                     a.getUser().setLastName(rs.getString("LAST_NAME"));
                     a.setInsertionTime(rs.getTimestamp("INSERTION_TIME"));

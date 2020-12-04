@@ -21,11 +21,11 @@
                         <fieldset>
                             <legend class="hidden-legend"><%=language.getText("General") %></legend>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Your e-mail")%></label>
-                                <input id="common-input" type="text" name="email" maxlength="50" value="" />
+                                <label class="common-label" id="email-label" for="email-input"><%=language.getText("Your e-mail")%></label>
+                                <input class="common-input" id="email-input" type="text" name="email" maxlength="50" value="" />
                             </p>
                             <p id="common-submit">
-                                <input class="my-button" type="submit" value="<%=language.getText("Send") %>" />
+                                <input class="my-button" id="submit" type="submit" value="<%=language.getText("Send") %>" />
                             </p>
                         </fieldset>
                     </form>

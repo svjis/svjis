@@ -28,19 +28,19 @@
                         <fieldset>
                             <legend><%=language.getText("Article menu node") %></legend>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Description") %></label>
-                                <input id="common-input" type="text" name="description" maxlength="50" value="<%=menuNode.getDescription() %>">
+                                <label class="common-label" id="desc-label" for="desc-input"><%=language.getText("Description") %></label>
+                                <input class="common-input" id="desc-input" type="text" name="description" maxlength="50" value="<%=menuNode.getDescription() %>">
                             </p>
                             <p>
-                                <label id="common-label" for="common-input"><%=language.getText("Parent node") %></label>
-                                <select name="parent" id="common-input">
+                                <label class="common-label" id="parent-label" for="parent-input"><%=language.getText("Parent node") %></label>
+                                <select class="common-input" id="parent-input" name="parent">
                                     <option value="0"><%=language.getText("(top level)") %></option>
                                     <%=menu.writeOptions(menu.getMenu(), 0, menuNode.getParentId()) %>
                                 </select>
                             </p>
                         </fieldset>
                         <p>
-                            <input class="my-button" type="submit" value="<%=language.getText("Save") %>" />
+                            <input class="my-button" id="submit" type="submit" value="<%=language.getText("Save") %>" />
                         </p>
                     </form>
                 </div> <!-- /content-main-in -->

@@ -43,7 +43,7 @@ public class BuildingUnitOwnerCmd extends Command {
 
         Company currCompany = compDao.getCompany(getCompany().getId());
         getRequest().setAttribute("currCompany", currCompany);
-        BuildingUnit buildingUnit = buildingDao.getBuildingUnit(parId);
+        BuildingUnit buildingUnit = buildingDao.getBuildingUnit(parId, buildingDao.getBuilding(getCompany().getId()).getId());
         getRequest().setAttribute("buildingUnit", buildingUnit);
         ArrayList<User> userList = new ArrayList(buildingDao.getBuildingUnitHasUserList(parId));
         getRequest().setAttribute("userList", userList);

@@ -44,10 +44,14 @@ public class RedactionInquirySaveCmd extends Command {
         InquiryDAO inquiryDao = new InquiryDAO(getCnn());
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-        Inquiry i = new Inquiry();
-        i.setId(parId);
-        i.setCompanyId(getUser().getCompanyId());
-        i.setUserId(getUser().getId());
+        Inquiry i;
+        if (parId == 0) {
+            i= new Inquiry();
+            i.getUser().setId(getUser().getId());
+            i.setCompanyId(getUser().getCompanyId());
+        } else {
+            i = inquiryDao.getInquiry(getUser(), parId);
+        }
         i.setDescription(parDescription);
         i.setStartingDate(sdf.parse(parStartDate));
         i.setEndingDate(sdf.parse(parEndDate));
@@ -74,9 +78,12 @@ public class RedactionInquirySaveCmd extends Command {
         } else {
             inquiryDao.modifyInquiry(i);
         }
-        String url = "Dispatcher?page=redactionInquiryEdit&id=" + i.getId();
-        getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
+        
+        i = inquiryDao.getInquiry(getUser(), i.getId());
+        getRequest().setAttribute("inquiry", i);
+        String message = getLanguage().getText("Saved") + "<br>";
+        getRequest().setAttribute("message", message);
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/Redaction_InquiryEdit.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

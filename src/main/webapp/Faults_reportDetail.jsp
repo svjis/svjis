@@ -57,11 +57,11 @@
                         </tr>
                         <tr>
                             <th class="list" scope="row"><%=language.getText("Reporter") %></th>
-                            <td class="list"><%=(report.getCreatedByUser() != null) ? (report.getCreatedByUser().getFirstName() + "&nbsp;" +report.getCreatedByUser().getLastName()) : "&nbsp;" %></td>
+                            <td class="list"><%=(report.getCreatedByUser() != null) ? (report.getCreatedByUser().getFullName(false)) : "&nbsp;" %></td>
                         </tr>
                         <tr>
                             <th class="list" scope="row"><%=language.getText("Resolver") %></th>
-                            <td class="list"><%=(report.getAssignedToUser() != null) ? (report.getAssignedToUser().getFirstName() + "&nbsp;" +report.getAssignedToUser().getLastName()) : "&nbsp;" %></td>
+                            <td class="list"><%=(report.getAssignedToUser() != null) ? (report.getAssignedToUser().getFullName(false)) : "&nbsp;" %></td>
                         </tr>
                         <tr>
                             <th class="list" scope="row"><%=language.getText("Closed") %></th>
@@ -105,7 +105,7 @@
                                 <tr>
                                     <td class="list"><img src="<%=icon%>" border="0" alt="<%=a.getFileName() %>"></td>
                                     <td class="list"><a href="Upload?page=faultReportingDownload&id=<%=a.getId() %>"><%=a.getFileName() %></a></td>
-                                    <td class="list"><%=a.getUser().getFirstName() %>&nbsp;<%=a.getUser().getLastName() %></td>
+                                    <td class="list"><%=a.getUser().getFullName(false) %></td>
                                     <td class="list"><%=sdf.format(a.getUploadTime()) %></td>
                                     <td class="list">
                                         <% if ((!report.isClosed()) && (user.getId() == a.getUser().getId())) { %>
@@ -126,7 +126,7 @@
                             <% if (!report.isClosed()) { %>
                             <p>
                                 <input type="file" name="attachment" size="40">
-                                <input type="submit" value="<%=language.getText("Insert attachment") %>">
+                                <input type="submit" id="file-submit" value="<%=language.getText("Insert attachment") %>">
                             </p>
                             <% } %>
                         </fieldset>
@@ -143,7 +143,7 @@
                             for (FaultReportComment c : report.getFaultReportCommentList()) {
                         %>
                             <div class="article box">
-                            <strong><%=c.getUser().getFirstName() %>&nbsp;<%=c.getUser().getLastName() %> <%=sdft.format(c.getInsertionTime()) %></strong><br>
+                            <strong><%=c.getUser().getFullName(false) %> <%=sdft.format(c.getInsertionTime()) %></strong><br>
                             <%=HttpUtils.makeHyperlins(c.getBody().replace("\n", "<br>")) %>
                             </div>
                         <%
@@ -162,13 +162,14 @@
                              <input type="hidden" name="id" value="<%=report.getId() %>">
                              <p>
                                  <textarea
-                                 name="body"
-                                 rows=5 cols=50
-                                 wrap
+                                    id="body"
+                                    name="body"
+                                    rows=5 cols=50
+                                    wrap
                                  ></textarea>
                              </p>
                              <p>
-                                 <input class="my-button" type="submit" value="<%=language.getText("Insert comment") %>" name="submit">
+                                 <input class="my-button" id="submit" type="submit" value="<%=language.getText("Insert comment") %>" name="submit">
                              </p>
                          </form>
                     <%

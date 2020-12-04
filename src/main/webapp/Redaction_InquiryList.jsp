@@ -32,6 +32,7 @@
                             <th class="list" scope="col"><%=language.getText("Description") %></th>
                             <th class="list" scope="col"><%=language.getText("Starting date") %></th>
                             <th class="list" scope="col"><%=language.getText("Ending date") %></th>
+                            <th class="list" scope="col"><%=language.getText("Author") %></th>
                             <th class="list" scope="col"><%=language.getText("Published") %></th>
                         </tr>
                     <%
@@ -47,6 +48,7 @@
                             <td class="list"><%=i.getDescription() %></td>
                             <td class="list"><%=sdf.format(i.getStartingDate()) %></td>
                             <td class="list"><%=sdf.format(i.getEndingDate()) %></td>
+                            <td class="list"><%=i.getUser().getFullName(false) %></td>
                             <td class="list"><%=(i.isEnabled()) ? language.getText("yes") : language.getText("no") %></td>
                         </tr>
                     <%

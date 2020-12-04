@@ -33,12 +33,12 @@
                         
                         <p>
                             <%=language.getText("Subject") %><br>
-                            <input id="common-input" type="text" name="subject" maxlength="50" size="80" value="<%=report.getSubject() %>">
+                            <input class="common-input" id="subject-input" type="text" name="subject" maxlength="50" size="80" value="<%=report.getSubject() %>">
                         </p>
                         
                         <p>
                         <%=language.getText("Building entrance") %>&nbsp;(<%=language.getText("optional") %>)<br>
-                        <select name="entranceId" id="common-input">
+                        <select class="common-input"  id="entrance-input" name="entranceId">
                             <option value="0" ></option>
                             <%
                                 for (BuildingEntrance be : (ArrayList<BuildingEntrance>) entranceList) {
@@ -53,8 +53,9 @@
                         <p>
                         <%=language.getText("Description") %><br>
                         <textarea
+                            class="common-textarea"
+                            id="body-textarea"
                             name="body"
-                            id="common-textarea"
                             rows=5 cols=80
                             wrap
                             ><%=report.getDescription() %></textarea>
@@ -64,7 +65,7 @@
 
                         <p>
                         <%=language.getText("Resolver") %><br>
-                        <select name="resolverId" id="common-input">
+                        <select class="common-input" id="resolver-input" name="resolverId">
                             <option value="0" ></option>
                             <%
                                 for (User r : (ArrayList<User>) resolverList) {
@@ -78,13 +79,13 @@
                         
                         <p>
                             <%=language.getText("Closed") %><br>
-                            <input id="common-input" type="checkbox" name="closed" <%=(report.isClosed()) ? "checked" : "" %>>
+                            <input class="common-input" id="closed-input" type="checkbox" name="closed" <%=(report.isClosed()) ? "checked" : "" %>>
                         </p>
                         
                         <% } %>
 
                         <p>
-                            <input class="my-button" type="submit" value="<%=language.getText("Save") %>" />
+                            <input class="my-button" id="submit" type="submit" value="<%=language.getText("Save") %>" />
                         </p>
                     </form>
                 </div> <!-- /content-main-in -->
