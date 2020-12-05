@@ -103,6 +103,7 @@ public class RedactionArticleSaveCmd extends Command {
             logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_MODIFY_ARTICLE, a.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
         }
         
+        a = articleDao.getArticle(getUser(), a.getId());
         getRequest().setAttribute("article", a);
         Menu menu = menuDao.getMenu(getCompany().getId());
         menu.setActiveSection(-1);
