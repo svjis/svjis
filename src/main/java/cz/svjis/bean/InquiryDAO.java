@@ -17,7 +17,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -58,10 +57,9 @@ public class InquiryDAO extends DAO {
     public List<Inquiry> getInquiryList(User user, boolean publishedOnly) throws SQLException {
         ArrayList<Inquiry> result = new ArrayList<>();
         
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String filter = "";
         if (publishedOnly) {
-            filter = "AND (a.ENABLED = 1) AND ('" + sdf.format(new Date()) + "' BETWEEN a.STARTING_DATE AND a.ENDING_DATE) ";
+            filter = "AND (a.ENABLED = 1) ";
         }
         
         String select = "SELECT "
