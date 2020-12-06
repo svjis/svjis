@@ -58,7 +58,6 @@ public class InquiryDAO extends DAO {
     public List<Inquiry> getInquiryList(User user, boolean publishedOnly) throws SQLException {
         ArrayList<Inquiry> result = new ArrayList<>();
         
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String filter = "";
         if (publishedOnly) {
             filter = "AND (a.ENABLED = 1) ";

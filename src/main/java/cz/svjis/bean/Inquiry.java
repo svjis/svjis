@@ -211,6 +211,8 @@ public class Inquiry {
      * @return is valid for voting
      */
     public boolean isValidForVoting() {
+        boolean result = false;
+        
         if ((startingDate == null) || (endingDate == null)) {
             return false;
         }
@@ -222,9 +224,9 @@ public class Inquiry {
         
         Date now = new Date();
         if ((startingDate.getTime() <= now.getTime()) && (c.getTime().getTime() >= now.getTime())) {
-            return true;
+            result = true;
         }
         
-        return false;
+        return result;
     }
 }
