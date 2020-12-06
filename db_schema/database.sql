@@ -1950,3 +1950,5 @@ INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('This entrance c
 INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('This entrance cannot be deleted.', '2', 'This entrance cannot be deleted.');
 INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Saved', '1', 'Uloženo');
 INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Saved', '2', 'Saved');
+INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Voting was closed.', '1', 'Hlasování bylo ukončeno.');
+INSERT INTO LANGUAGE_DICTIONARY (ID, LANGUAGE_ID, TEXT) VALUES ('Voting was closed.', '2', 'Voting was closed.');
