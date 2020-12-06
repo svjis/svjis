@@ -61,7 +61,7 @@ public class InquiryDAO extends DAO {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String filter = "";
         if (publishedOnly) {
-            filter = "AND (a.ENABLED = 1) AND ('" + sdf.format(new Date()) + "' BETWEEN a.STARTING_DATE AND a.ENDING_DATE) ";
+            filter = "AND (a.ENABLED = 1) ";
         }
         
         String select = "SELECT "

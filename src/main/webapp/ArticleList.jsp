@@ -106,7 +106,7 @@
                 </div> <!-- /box-02-top-b -->
                 <div class="box-02 box">
                     <strong><%=inquiry.getDescription() %></strong>
-                    <% if (inquiry.isUserCanVote()) { %>
+                    <% if (inquiry.isUserCanVote() && inquiry.isValidForVoting()) { %>
                     <form action="Dispatcher" method="post">
                         <input type="hidden" name="page" value="inquiryVote">
                         <input type="hidden" name="id" value="<%=inquiry.getId() %>">
@@ -123,7 +123,7 @@
                         }
                         %>
                         <p>
-                            <input type="submit" value="<%=language.getText("Vote") %>" />
+                            <input type="submit" id="vote-submit" value="<%=language.getText("Vote") %>" />
                         </p>
                     </form>
                     <% } else { %>

@@ -40,7 +40,7 @@ public class ArticleInquiryVoteCmd extends Command {
 
         int id = parId;
         Inquiry i = inquiryDao.getInquiry(getUser(), id);
-        if ((i != null) && (i.isUserCanVote()) && (getRequest().getParameter("i_" + i.getId()) != null)) {
+        if ((i != null) && (i.isUserCanVote()) && (i.isValidForVoting()) && (getRequest().getParameter("i_" + i.getId()) != null)) {
             String value = getRequest().getParameter("i_" + i.getId());
             Iterator<InquiryOption> ioI = i.getOptionList().iterator();
             while (ioI.hasNext()) {
