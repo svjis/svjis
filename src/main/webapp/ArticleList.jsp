@@ -106,7 +106,7 @@
                 </div> <!-- /box-02-top-b -->
                 <div class="box-02 box">
                     <strong><%=inquiry.getDescription() %></strong>
-                    <% if (inquiry.isUserCanVote() && inquiry.isValidForVoting()) { %>
+                    <% if (inquiry.isUserCanVote() && inquiry.isOpenForVoting()) { %>
                     <form action="Dispatcher" method="post">
                         <input type="hidden" name="page" value="inquiryVote">
                         <input type="hidden" name="id" value="<%=inquiry.getId() %>">
@@ -140,6 +140,13 @@
                         }
                         %>
                             <p><%=inquiry.getCount() %> <%=language.getText("votes") %>
+                            <%
+                                if (!inquiry.isOpenForVoting()) {
+                            %>
+                                <p><%=language.getText("Voting was closed.") %>
+                            <%
+                                }
+                            %>
                     <% } %>
                 </div> <!-- /box-02 -->
                 <div class="box-02-bottom"></div>

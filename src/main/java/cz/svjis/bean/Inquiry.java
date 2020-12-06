@@ -208,9 +208,9 @@ public class Inquiry {
     
     /**
      * 
-     * @return is valid for voting
+     * @return is open for voting
      */
-    public boolean isValidForVoting() {
+    public boolean isOpenForVoting() {
         boolean result = false;
         
         if ((startingDate == null) || (endingDate == null)) {
