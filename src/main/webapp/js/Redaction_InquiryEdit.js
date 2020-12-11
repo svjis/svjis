@@ -6,7 +6,7 @@ let desc = document.getElementById('opt_parent').getElementsByTagName('th')[0].i
 
 function getLastOptionNo() {
     let i = 0;
-    let p = null;
+    let p;
 
     do {
         i++;
@@ -18,20 +18,21 @@ function getLastOptionNo() {
 
 function addOption() {
     let lastOptionNo = getLastOptionNo();
-    lastOptionNo++;
-    let html =  '    <th scope="row" style="text-align: left">' + desc.replace('1', lastOptionNo) + '</th>\n' +
-                '    <td>\n' +
-                '        <input type="hidden" name="oid_' + lastOptionNo + '" value="0">\n' +
-                '        <input class="common-input" id="o' + lastOptionNo + '-input" type="text" name="o_' + lastOptionNo + '" size="50" maxlength="250" value="">\n' +
-                '    </td>\n' +
-                '    <td>&nbsp;</td>\n';
-
-    let p = document.getElementById('opt_parent');
-    let newElement = document.createElement('tr');
-    newElement.setAttribute('id', 'opt_' + lastOptionNo);
-    newElement.innerHTML = html;
-    p.appendChild(newElement);
-
+    let elem = document.getElementById('opt_' + lastOptionNo);
+    
+    let clone = elem.cloneNode(true);
+    lastOptionNo ++;
+    clone.id = 'opt_' + lastOptionNo;
+    clone.getElementsByTagName('th')[0].innerHTML = desc.replace('1', lastOptionNo);
+    clone.getElementsByTagName('td')[0].getElementsByTagName('input')[0].name = 'oid_' + lastOptionNo;
+    clone.getElementsByTagName('td')[0].getElementsByTagName('input')[0].value = '0';
+    clone.getElementsByTagName('td')[0].getElementsByTagName('input')[1].id = 'o' + lastOptionNo + '-input';
+    clone.getElementsByTagName('td')[0].getElementsByTagName('input')[1].name = 'o_' + lastOptionNo;
+    clone.getElementsByTagName('td')[0].getElementsByTagName('input')[1].value = '';
+    clone.getElementsByTagName('td')[1].innerHTML = '&nbsp;';
+    
+    elem.after(clone);
+    
     let button = document.getElementById('remove-option');
     button.disabled = false;
 }
