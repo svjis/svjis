@@ -3,6 +3,12 @@
 let noDelete = getLastOptionNo();
 let desc = document.getElementById('opt_parent').getElementsByTagName('th')[0].innerHTML;
 
+/* Element.after feature detection */
+let arButtons = document.getElementById('add-remove-buttons');
+if (!arButtons.after) {
+    arButtons.style.setProperty("display", "none");
+}
+
 
 function getLastOptionNo() {
     let i = 0;

@@ -69,8 +69,6 @@
                             <%
                                     i++;
                                 }
-
-                                if (i == 1) {
                             %>
                                     <tr id="opt_<%=i %>">
                                         <th scope="row" style="text-align: left"><%=language.getText("Option") %>&nbsp;<%=i %>:&nbsp;</th>
@@ -80,14 +78,10 @@
                                         </td>
                                         <td>&nbsp;</td>
                                     </tr>
-                            <%
-                                    i++;
-                                }
-                            %>
                                 </tbody>
                             </table>
 
-                            <div class="container">
+                            <div id="add-remove-buttons" class="container">
                                 <div class="row">
                                     <div class="left">
                                         <p><input id="add-option" type="button" value="<%=language.getText("Add option") %>" onclick="addOption();" /></p>
