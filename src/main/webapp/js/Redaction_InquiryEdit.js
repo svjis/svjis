@@ -3,12 +3,9 @@
 let noDelete = getLastOptionNo();
 let desc = document.getElementById('opt_parent').getElementsByTagName('th')[0].innerHTML;
 
-/* Element.after feature detection */
+/* Show buttons if js is supported */
 let arButtons = document.getElementById('add-remove-buttons');
-if (!arButtons.after) {
-    arButtons.style.setProperty("display", "none");
-}
-
+arButtons.style.setProperty("display", "table");
 
 function getLastOptionNo() {
     let i = 0;
@@ -37,7 +34,8 @@ function addOption() {
     clone.getElementsByTagName('td')[0].getElementsByTagName('input')[1].value = '';
     clone.getElementsByTagName('td')[1].innerHTML = '&nbsp;';
     
-    elem.after(clone);
+    let p = document.getElementById('opt_parent');
+    p.appendChild(clone);
     
     let button = document.getElementById('remove-option');
     button.disabled = false;

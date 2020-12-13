@@ -81,7 +81,7 @@
                                 </tbody>
                             </table>
 
-                            <div id="add-remove-buttons" class="container">
+                            <div id="add-remove-buttons" class="container" style="display: none;">
                                 <div class="row">
                                     <div class="left">
                                         <p><input id="add-option" type="button" value="<%=language.getText("Add option") %>" onclick="addOption();" /></p>
