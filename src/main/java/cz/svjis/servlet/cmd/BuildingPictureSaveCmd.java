@@ -54,7 +54,7 @@ public class BuildingPictureSaveCmd extends Command {
         company.refreshPicture(getRequest().getServletContext().getRealPath("/"));
         String url = "Dispatcher?page=buildingDetail";
         getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

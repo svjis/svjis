@@ -50,7 +50,7 @@ public class BuildingUnitListCmd extends Command {
                 buildingDao.getBuilding(getCompany().getId()).getId(),
                 typeId));
         getRequest().setAttribute("buildingUnitList", buildingUnitList);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_buildingUnitList.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Administration_buildingUnitList.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

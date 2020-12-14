@@ -34,7 +34,7 @@ public class CompanyDetailCmd extends Command {
 
         Company currCompany = compDao.getCompany(getCompany().getId());
         getRequest().setAttribute("currCompany", currCompany);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_companyDetail.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Administration_companyDetail.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

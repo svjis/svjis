@@ -30,7 +30,7 @@ public class PersonalPasswordChangeCmd extends Command {
     public void execute() throws Exception {
         getRequest().setAttribute("message", "");
         getRequest().setAttribute("errorMessage", "");
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/PersonalSettings_passwordChange.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/PersonalSettings_passwordChange.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

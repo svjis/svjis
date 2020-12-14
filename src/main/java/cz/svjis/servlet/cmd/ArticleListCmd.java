@@ -80,7 +80,7 @@ public class ArticleListCmd extends Command {
         getRequest().setAttribute("miniNewsList", miniNewsList);
         ArrayList<Inquiry> inquiryList = new ArrayList(inquiryDao.getInquiryList(getUser(), true));
         getRequest().setAttribute("inquiryList", inquiryList);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/ArticleList.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/ArticleList.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

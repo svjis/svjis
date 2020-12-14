@@ -44,14 +44,14 @@ public class BuildingEntranceDeleteCmd extends Command {
         if (!result) {
             String errorMessage = getLanguage().getText("This entrance cannot be deleted.");
             getRequest().setAttribute("message", errorMessage);
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/_message.jsp");
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_message.jsp");
             rd.forward(getRequest(), getResponse());
             return;
         }
         
         String url = "Dispatcher?page=buildingEntranceList";
         getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

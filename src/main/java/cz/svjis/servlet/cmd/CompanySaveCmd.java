@@ -62,7 +62,7 @@ public class CompanySaveCmd extends Command {
         String message = getLanguage().getText("Saved") + "<br>";
         getRequest().setAttribute("message", message);
         getRequest().setAttribute("currCompany", c);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_companyDetail.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Administration_companyDetail.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

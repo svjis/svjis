@@ -54,7 +54,7 @@ public class ArticleSearchCmd extends Command {
             Language lang = (Language) this.getRequest().getSession().getAttribute("language");
             getRequest().setAttribute("messageHeader", lang.getText("Search"));
             getRequest().setAttribute("message", lang.getText("Text to be searched should has 3 chars at least."));
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/_message.jsp");
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_message.jsp");
             rd.forward(getRequest(), getResponse());
             return;
         }
@@ -77,7 +77,7 @@ public class ArticleSearchCmd extends Command {
             Language lang = (Language) this.getRequest().getSession().getAttribute("language");
             getRequest().setAttribute("messageHeader", lang.getText("Search"));
             getRequest().setAttribute("message", lang.getText("Nothing found."));
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/_message.jsp");
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_message.jsp");
             rd.forward(getRequest(), getResponse());
             return;
         }
@@ -99,7 +99,7 @@ public class ArticleSearchCmd extends Command {
         ArrayList<Inquiry> inquiryList = new ArrayList(inquiryDao.getInquiryList(getUser(), true));
         getRequest().setAttribute("inquiryList", inquiryList);
         getRequest().setAttribute("searchKey", parSearch);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/ArticleList.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/ArticleList.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

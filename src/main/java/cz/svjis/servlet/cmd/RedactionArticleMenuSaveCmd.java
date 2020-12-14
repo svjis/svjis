@@ -54,7 +54,7 @@ public class RedactionArticleMenuSaveCmd extends Command {
         }
         String url = "Dispatcher?page=redactionArticleMenu";
         getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

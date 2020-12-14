@@ -60,7 +60,7 @@ public class FaultReportingEditCmd extends Command {
         FaultReportMenuCounters counters = faultDao.getMenuCounters(getCompany().getId(), getUser().getId());
         getRequest().setAttribute("counters", counters);
                 
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/Faults_reportEdit.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Faults_reportEdit.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

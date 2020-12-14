@@ -35,7 +35,7 @@ public class SelectCompanyCmd extends Command {
 
         ArrayList<Company> companyList = new ArrayList(compDao.getCompanyList());
         getRequest().setAttribute("companyList", companyList);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/CompanyList.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/CompanyList.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

@@ -65,7 +65,7 @@ public class PersonalUserDetailSaveCmd extends Command {
         getRequest().getSession().setAttribute("language", language);
         String url = "Dispatcher?page=psUserDetail";
         getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

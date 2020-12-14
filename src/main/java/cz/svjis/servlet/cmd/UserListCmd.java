@@ -51,7 +51,7 @@ public class UserListCmd extends Command {
         getRequest().setAttribute("roleList", roleList);
         ArrayList<User> userList = new ArrayList(userDao.getUserList(getCompany().getId(), false, parRoleId, !parDisabledUsers));
         getRequest().setAttribute("userList", userList);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_userList.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Administration_userList.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

@@ -34,7 +34,7 @@ public class PropertyListCmd extends Command {
 
         Company currCompany = compDao.getCompany(getCompany().getId());
         getRequest().setAttribute("currCompany", currCompany);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_propertyList.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Administration_propertyList.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

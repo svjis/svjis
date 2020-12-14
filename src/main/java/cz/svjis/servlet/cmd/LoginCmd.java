@@ -54,12 +54,12 @@ public class LoginCmd extends Command {
             
             String url = "Dispatcher?page=articleList";
             getRequest().setAttribute("url", url);
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
             rd.forward(getRequest(), getResponse());
         } else {
             getRequest().setAttribute("messageHeader", getLanguage().getText("Bad login"));
             getRequest().setAttribute("message", "<p>" + getLanguage().getText("You can continue") + " <a href=\"Dispatcher\">" + getLanguage().getText("here") + "</a>.</p><p><a href=\"Dispatcher?page=lostPassword\">" + getLanguage().getText("Forgot password?") + "</a></p>");
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/_message.jsp");
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_message.jsp");
             rd.forward(getRequest(), getResponse());
         }
     }

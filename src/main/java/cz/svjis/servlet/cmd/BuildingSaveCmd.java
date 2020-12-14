@@ -48,7 +48,7 @@ public class BuildingSaveCmd extends Command {
         String message = getLanguage().getText("Saved") + "<br>";
         getRequest().setAttribute("message", message);
         getRequest().setAttribute("building", b);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_buildingDetail.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Administration_buildingDetail.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }
