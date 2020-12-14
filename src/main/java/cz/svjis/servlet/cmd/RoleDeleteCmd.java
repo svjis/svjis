@@ -42,7 +42,7 @@ public class RoleDeleteCmd extends Command {
                 String message = "Cannot delete role which is assigned to users.";
                 getRequest().setAttribute("messageHeader", "Error");
                 getRequest().setAttribute("message", message);
-                RequestDispatcher rd = getRequest().getRequestDispatcher("/_message.jsp");
+                RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_message.jsp");
                 rd.forward(getRequest(), getResponse());
                 return;
             } else {
@@ -52,7 +52,7 @@ public class RoleDeleteCmd extends Command {
         
         String url = "Dispatcher?page=roleList";
         getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

@@ -40,7 +40,7 @@ public class RoleListCmd extends Command {
         getRequest().setAttribute("currCompany", currCompany);
         ArrayList<Role> roleList = new ArrayList(roleDao.getRoleList(getCompany().getId()));
         getRequest().setAttribute("roleList", roleList);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_roleList.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Administration_roleList.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

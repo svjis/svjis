@@ -49,7 +49,7 @@ public class ArticleFastCmd extends FaultAbstractCmd {
         String url = "Dispatcher?page=articleDetail&id=" + parId;
         getRequest().setAttribute("url", url);
         
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

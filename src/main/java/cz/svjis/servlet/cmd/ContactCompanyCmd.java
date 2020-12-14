@@ -37,7 +37,7 @@ public class ContactCompanyCmd extends Command {
         ArrayList<BoardMember> boardList = new ArrayList(boardDao.getBoardMembers(getCompany().getId()));
         getRequest().setAttribute("boardList", boardList);
         
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/Contact_company.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Contact_company.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

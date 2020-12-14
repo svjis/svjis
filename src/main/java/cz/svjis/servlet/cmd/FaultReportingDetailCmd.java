@@ -52,7 +52,7 @@ public class FaultReportingDetailCmd extends Command {
         
         getRequest().setAttribute("searchKey", parSearch);
 
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/Faults_reportDetail.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Faults_reportDetail.jsp");
         rd.forward(getRequest(), getResponse());
 
         logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_READ_FAULT, report.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));

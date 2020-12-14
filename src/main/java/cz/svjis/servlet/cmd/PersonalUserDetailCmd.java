@@ -35,7 +35,7 @@ public class PersonalUserDetailCmd extends Command {
         
         ArrayList<Language> languageList = new ArrayList(languageDao.getLanguageList());
         getRequest().setAttribute("languageList", languageList);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/PersonalSettings_userDetail.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/PersonalSettings_userDetail.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

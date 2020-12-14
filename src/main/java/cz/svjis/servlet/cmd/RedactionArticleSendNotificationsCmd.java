@@ -50,7 +50,7 @@ public class RedactionArticleSendNotificationsCmd extends Command {
             if ((article.getAuthor().getId() != getUser().getId()) && !getUser().hasPermission("redaction_articles_all")) {
                 Menu menu = menuDao.getMenu(getCompany().getId());
                 getRequest().setAttribute("menu", menu);
-                RequestDispatcher rd = getRequest().getRequestDispatcher("/ArticleNotFound.jsp");
+                RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/ArticleNotFound.jsp");
                 rd.forward(getRequest(), getResponse());
                 return;
             }
@@ -64,10 +64,10 @@ public class RedactionArticleSendNotificationsCmd extends Command {
         if (userList.isEmpty()) {
             getRequest().setAttribute("messageHeader", getLanguage().getText("This article is not visible to any user"));
             getRequest().setAttribute("message", "<p>" + getLanguage().getText("You can continue") + " <a href=\"javascript:history.go(-1)\">" + getLanguage().getText("here") + "</a>.</p>");
-            rd = getRequest().getRequestDispatcher("/_message.jsp");
+            rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_message.jsp");
         } else {
             getRequest().setAttribute("userList", userList);
-            rd = getRequest().getRequestDispatcher("/Redaction_ArticleSendNotifications.jsp");
+            rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Redaction_ArticleSendNotifications.jsp");
         }
         
         rd.forward(getRequest(), getResponse());

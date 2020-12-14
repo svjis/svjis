@@ -42,7 +42,7 @@ public class BuildingEntranceListCmd extends Command {
         ArrayList<BuildingEntrance> buildingEntranceList = new ArrayList(buildingDao.getBuildingEntranceList(
                 buildingDao.getBuilding(getCompany().getId()).getId()));
         getRequest().setAttribute("buildingEntranceList", buildingEntranceList);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_buildingEntranceList.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Administration_buildingEntranceList.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

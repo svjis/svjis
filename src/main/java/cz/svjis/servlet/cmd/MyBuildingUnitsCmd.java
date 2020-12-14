@@ -35,7 +35,7 @@ public class MyBuildingUnitsCmd extends Command {
         
         ArrayList<BuildingUnit> userHasUnitList = new ArrayList(buildingDao.getUserHasBuildingUnitList(getUser().getId()));
         getRequest().setAttribute("userHasUnitList", userHasUnitList);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/Units_userUnitList.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Units_userUnitList.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

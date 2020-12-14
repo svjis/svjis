@@ -83,7 +83,7 @@ public class RedactionInquirySaveCmd extends Command {
         getRequest().setAttribute("inquiry", i);
         String message = getLanguage().getText("Saved") + "<br>";
         getRequest().setAttribute("message", message);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/Redaction_InquiryEdit.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Redaction_InquiryEdit.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

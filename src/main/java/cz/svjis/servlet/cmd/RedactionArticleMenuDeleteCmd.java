@@ -42,7 +42,7 @@ public class RedactionArticleMenuDeleteCmd extends Command {
                 String message = "Cannot delete menu which has child nodes.";
                 getRequest().setAttribute("messageHeader", "Error");
                 getRequest().setAttribute("message", message);
-                RequestDispatcher rd = getRequest().getRequestDispatcher("/_message.jsp");
+                RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_message.jsp");
                 rd.forward(getRequest(), getResponse());
                 return;
             }
@@ -50,7 +50,7 @@ public class RedactionArticleMenuDeleteCmd extends Command {
         }
         String url = "Dispatcher?page=redactionArticleMenu";
         getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

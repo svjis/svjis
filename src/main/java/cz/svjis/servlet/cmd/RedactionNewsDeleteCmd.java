@@ -42,7 +42,7 @@ public class RedactionNewsDeleteCmd extends Command {
         newsDao.deleteMiniNews(n);
         String url = "Dispatcher?page=redactionNewsList";
         getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

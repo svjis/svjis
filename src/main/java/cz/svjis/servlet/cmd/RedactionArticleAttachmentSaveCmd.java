@@ -48,7 +48,7 @@ public class RedactionArticleAttachmentSaveCmd extends Command {
         
         Article a = articleDao.getArticle(getUser(), parArticleId);
         if ((a == null) || ((a.getAuthor().getId() != getUser().getId()) && !getUser().hasPermission("redaction_articles_all"))) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/InputValidationError.jsp");
             rd.forward(getRequest(), getResponse());
             return;
         }
@@ -79,7 +79,7 @@ public class RedactionArticleAttachmentSaveCmd extends Command {
         }
         String url = "Dispatcher?page=redactionArticleEdit&id=" + parArticleId;
         getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
         logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_INSERT_ATTACHMENT, parArticleId, getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
     }

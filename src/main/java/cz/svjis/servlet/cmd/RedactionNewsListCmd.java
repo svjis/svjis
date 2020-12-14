@@ -35,7 +35,7 @@ public class RedactionNewsListCmd extends Command {
         
         ArrayList<MiniNews> miniNewsList = new ArrayList(newsDao.getMiniNews(getUser(), false));
         getRequest().setAttribute("miniNewsList", miniNewsList);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/Redaction_MiniNewsList.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Redaction_MiniNewsList.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

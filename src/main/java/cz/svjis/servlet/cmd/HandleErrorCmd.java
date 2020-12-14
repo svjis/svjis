@@ -67,9 +67,9 @@ public class HandleErrorCmd extends Command {
             RequestDispatcher rd;
             if (this.throwable instanceof InputValidationException) {
                 getRequest().setAttribute("message", this.throwable.getMessage());
-                rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
+                rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/InputValidationError.jsp");
             } else {
-                rd = getRequest().getRequestDispatcher("/Error.jsp");
+                rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Error.jsp");
             }
 
             rd.forward(getRequest(), getResponse());

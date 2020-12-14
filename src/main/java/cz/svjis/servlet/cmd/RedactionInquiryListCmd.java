@@ -34,7 +34,7 @@ public class RedactionInquiryListCmd extends Command {
         InquiryDAO inquiryDao = new InquiryDAO(getCnn());
         ArrayList<Inquiry> inquiryList = new ArrayList(inquiryDao.getInquiryList(getUser(), false));
         getRequest().setAttribute("inquiryList", inquiryList);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/Redaction_InquiryList.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Redaction_InquiryList.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

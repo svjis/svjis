@@ -41,13 +41,13 @@ public class RedactionArticleAttachmentDeleteCmd extends Command {
 
         ArticleAttachment aa = articleDao.getArticleAttachment(parId);
         if (aa == null) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/InputValidationError.jsp");
             rd.forward(getRequest(), getResponse());
             return;
         }
         Article a = articleDao.getArticle(getUser(), aa.getArticleId());
         if ((a == null) || ((a.getAuthor().getId() != getUser().getId()) && !getUser().hasPermission("redaction_articles_all"))) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/InputValidationError.jsp");
             rd.forward(getRequest(), getResponse());
             return;
         }
@@ -55,7 +55,7 @@ public class RedactionArticleAttachmentDeleteCmd extends Command {
         
         String url = "Dispatcher?page=redactionArticleEdit&id=" + aa.getArticleId();
         getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
         logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_DELETE_ATTACHMENT, aa.getArticleId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
     }

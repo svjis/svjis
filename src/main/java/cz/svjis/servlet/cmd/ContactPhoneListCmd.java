@@ -35,7 +35,7 @@ public class ContactPhoneListCmd extends Command {
         
         ArrayList<User> userList = new ArrayList(userDao.getUserList(getCompany().getId(), true, 0, true));
         getRequest().setAttribute("userList", userList);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/Contact_userList.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Contact_userList.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

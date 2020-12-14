@@ -28,7 +28,7 @@ public class BadPageCmd extends Command {
     
     @Override
     public void execute() throws Exception {
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/BadPage.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/BadPage.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

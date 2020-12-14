@@ -71,7 +71,7 @@ public class RedactionNewsEditSaveCmd extends Command {
         getRequest().setAttribute("languageList", languageList);
         String message = getLanguage().getText("Saved") + "<br>";
         getRequest().setAttribute("message", message);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/Redaction_MiniNewsEdit.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Redaction_MiniNewsEdit.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

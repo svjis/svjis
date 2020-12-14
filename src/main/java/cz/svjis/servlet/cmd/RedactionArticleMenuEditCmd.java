@@ -47,7 +47,7 @@ public class RedactionArticleMenuEditCmd extends Command {
         menu.setActiveSection(-1);
         getRequest().setAttribute("menu", menu);
         
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/Redaction_ArticleMenuEdit.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Redaction_ArticleMenuEdit.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

@@ -53,7 +53,7 @@ public class FaultReportingSaveCmd extends FaultAbstractCmd {
         if ((parSubject == null || parSubject.equals("")) && (parBody == null || parBody.equals(""))) {
             String url = "Dispatcher?page=faultReportingList";
             getRequest().setAttribute("url", url);
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
             rd.forward(getRequest(), getResponse());
             return;
         }
@@ -141,7 +141,7 @@ public class FaultReportingSaveCmd extends FaultAbstractCmd {
         String url = "Dispatcher?page=faultDetail&id=" + f.getId();
         getRequest().setAttribute("url", url);
         
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }
