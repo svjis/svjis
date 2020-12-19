@@ -47,7 +47,7 @@ public class BuildingUnitOwnerCmd extends Command {
         getRequest().setAttribute("buildingUnit", buildingUnit);
         ArrayList<User> userList = new ArrayList(buildingDao.getBuildingUnitHasUserList(parId));
         getRequest().setAttribute("userList", userList);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_buildingUnitOwner.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Administration_buildingUnitOwner.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

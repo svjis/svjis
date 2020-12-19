@@ -59,7 +59,7 @@ public class PersonalPasswordChangeSaveCmd extends Command {
         
         getRequest().setAttribute("message", message);
         getRequest().setAttribute("errorMessage", errorMessage);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/PersonalSettings_passwordChange.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/PersonalSettings_passwordChange.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

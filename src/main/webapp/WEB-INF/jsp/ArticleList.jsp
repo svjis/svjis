@@ -106,24 +106,25 @@
                 </div> <!-- /box-02-top-b -->
                 <div class="box-02 box">
                     <strong><%=inquiry.getDescription() %></strong>
-                    <% if (inquiry.isUserCanVote()) { %>
+                    <% if (inquiry.isUserCanVote() && inquiry.isOpenForVoting()) { %>
                     <form action="Dispatcher" method="post">
                         <input type="hidden" name="page" value="inquiryVote">
                         <input type="hidden" name="id" value="<%=inquiry.getId() %>">
                         <%
+                        int v = 1;
                         Iterator<InquiryOption> iIO = inquiry.getOptionList().iterator();
                         while (iIO.hasNext()) {
                             InquiryOption io = iIO.next();
                             String bar = (io.getCount() != inquiry.getMaximum()) ? "gfx/inq_0242.gif" : "gfx/inq_0212.gif";
                             String pct = (inquiry.getCount() != 0) ? df.format(100 * io.getCount() / inquiry.getCount()) : "0";
                         %>
-                            <p><input type="radio" name="i_<%=inquiry.getId() %>" value="o_<%=io.getId() %>">&nbsp;<%=io.getDescription() %>&nbsp;-&nbsp;<em><%=pct %>%</em><br>
+                            <p><input id="<%="vote-" + v++ %>" type="radio" name="i_<%=inquiry.getId() %>" value="o_<%=io.getId() %>">&nbsp;<%=io.getDescription() %>&nbsp;-&nbsp;<em><%=pct %>%</em><br>
                                 <img src="<%=bar %>" width="<%=Integer.valueOf(pct) * 2 %>" height="22" alt="Bar">
                         <%
                         }
                         %>
                         <p>
-                            <input type="submit" value="<%=language.getText("Vote") %>" />
+                            <input type="submit" id="vote-submit" value="<%=language.getText("Vote") %>" />
                         </p>
                     </form>
                     <% } else { %>
@@ -139,7 +140,14 @@
                         <%
                         }
                         %>
-                            <p><%=inquiry.getCount() %> <%=language.getText("votes") %>
+                            <p id="vote-result"><%=inquiry.getCount() %> <%=language.getText("votes") %>
+                            <%
+                                if (!inquiry.isOpenForVoting()) {
+                            %>
+                                <p><%=language.getText("Voting was closed.") %>
+                            <%
+                                }
+                            %>
                     <% } %>
                 </div> <!-- /box-02 -->
                 <div class="box-02-bottom"></div>

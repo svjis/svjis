@@ -30,8 +30,8 @@ public class MiniNewsDAO extends DAO {
         super(cnn);
     }
     
-    public List<MiniNews> getMiniNews(User u, boolean publishedOnly) throws SQLException {
-        ArrayList<MiniNews> result = new ArrayList<>();
+    public int getMiniNewsSize(User u, boolean publishedOnly) throws SQLException {
+        int result = 0;
         
         String filter = "";
         if (publishedOnly) {
@@ -39,6 +39,33 @@ public class MiniNewsDAO extends DAO {
         }
         
         String select = "SELECT "
+                + "count(*) AS CNT "
+                + "FROM MINI_NEWS a "
+                + "LEFT JOIN LANGUAGE l ON (l.ID = a.LANGUAGE_ID) "
+                + "LEFT JOIN \"USER\" u ON (u.ID = a.CREATED_BY_USER_ID) "
+                + "WHERE (a.COMPANY_ID = " + u.getCompanyId() + ") "
+                + filter;
+        
+        try (Statement st = cnn.createStatement()) {
+            try (ResultSet rs = st.executeQuery(select)) {
+                if (rs.next()) {
+                    result = rs.getInt("CNT");
+                }
+            }
+        }
+        
+        return result;
+    }
+    
+    public List<MiniNews> getMiniNewsList(int pageNo, int pageSize, User u, boolean publishedOnly) throws SQLException {
+        ArrayList<MiniNews> result = new ArrayList<>();
+        
+        String filter = "";
+        if (publishedOnly) {
+            filter = "AND (a.PUBLISHED = 1) ";
+        }
+        
+        String select = "SELECT FIRST " + (pageNo * pageSize)
                 + "a.ID, "
                 + "a.COMPANY_ID, "
                 + "a.LANGUAGE_ID, "
@@ -58,22 +85,34 @@ public class MiniNewsDAO extends DAO {
                 + "ORDER BY a.NEWS_TIME DESC";
         
         try (Statement st = cnn.createStatement(); ResultSet rs = st.executeQuery(select)) {
+            
+            int cPageNo = 1;
+            int cArtNo = 0;
+            
             while (rs.next()) {
-                MiniNews mn = new MiniNews();
-                mn.setId(rs.getInt("ID"));
-                mn.setCompanyId(rs.getInt("COMPANY_ID"));
-                mn.setLanguageId(rs.getInt("LANGUAGE_ID"));
-                mn.setLanguage(rs.getString("LANGUAGE"));
-                mn.setBody(rs.getString("BODY"));
-                mn.setTime(rs.getTimestamp("NEWS_TIME"));
-                User p = new User();
-                p.setId(rs.getInt("CREATED_BY_USER_ID"));
-                p.setSalutation(rs.getString("CREATED_BY_SALUTATION"));
-                p.setFirstName(rs.getString("CREATED_BY_FIRST_NAME"));
-                p.setLastName(rs.getString("CREATED_BY_LAST_NAME"));
-                mn.setCreatedBy(p);
-                mn.setPublished(rs.getBoolean("PUBLISHED"));
-                result.add(mn);
+                if (cPageNo == pageNo) {
+                    MiniNews mn = new MiniNews();
+                    mn.setId(rs.getInt("ID"));
+                    mn.setCompanyId(rs.getInt("COMPANY_ID"));
+                    mn.setLanguageId(rs.getInt("LANGUAGE_ID"));
+                    mn.setLanguage(rs.getString("LANGUAGE"));
+                    mn.setBody(rs.getString("BODY"));
+                    mn.setTime(rs.getTimestamp("NEWS_TIME"));
+                    User p = new User();
+                    p.setId(rs.getInt("CREATED_BY_USER_ID"));
+                    p.setSalutation(rs.getString("CREATED_BY_SALUTATION"));
+                    p.setFirstName(rs.getString("CREATED_BY_FIRST_NAME"));
+                    p.setLastName(rs.getString("CREATED_BY_LAST_NAME"));
+                    mn.setCreatedBy(p);
+                    mn.setPublished(rs.getBoolean("PUBLISHED"));
+                    result.add(mn);
+                }
+                
+                cArtNo++;
+                if (cArtNo == pageSize) {
+                    cPageNo++;
+                    cArtNo = 0;
+                }
             }
         }
         

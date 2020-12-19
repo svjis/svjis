@@ -42,7 +42,7 @@ public class FaultReportingAttachmentDeleteCmd extends Command {
         int id = parId;
         FaultReportAttachment fa = faultDao.getFaultReportAttachment(id);
         if (fa == null) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/InputValidationError.jsp");
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/InputValidationError.jsp");
             rd.forward(getRequest(), getResponse());
             return;
         }
@@ -53,7 +53,7 @@ public class FaultReportingAttachmentDeleteCmd extends Command {
         }
         String url = "Dispatcher?page=faultDetail&id=" + fa.getFaultReportId();
         getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

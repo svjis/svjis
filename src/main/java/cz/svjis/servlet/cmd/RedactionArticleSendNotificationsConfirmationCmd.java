@@ -53,7 +53,7 @@ public class RedactionArticleSendNotificationsConfirmationCmd extends Command {
             if ((article.getAuthor().getId() != getUser().getId()) && !getUser().hasPermission("redaction_articles_all")) {
                 Menu menu = menuDao.getMenu(getCompany().getId());
                 getRequest().setAttribute("menu", menu);
-                RequestDispatcher rd = getRequest().getRequestDispatcher("/ArticleNotFound.jsp");
+                RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/ArticleNotFound.jsp");
                 rd.forward(getRequest(), getResponse());
                 return;
             }
@@ -84,7 +84,7 @@ public class RedactionArticleSendNotificationsConfirmationCmd extends Command {
         logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_SEND_ARTICLE_NOTIFICATION, article.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
         article.setNumOfReads(counter);
 
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/Redaction_ArticleSendNotificationsConfirmation.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Redaction_ArticleSendNotificationsConfirmation.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

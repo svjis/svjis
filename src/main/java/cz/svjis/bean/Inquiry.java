@@ -13,6 +13,7 @@
 package cz.svjis.bean;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -203,5 +204,29 @@ public class Inquiry {
      */
     public void setMaximum(int maximum) {
         this.maximum = maximum;
+    }
+    
+    /**
+     * 
+     * @return is open for voting
+     */
+    public boolean isOpenForVoting() {
+        boolean result = false;
+        
+        if ((startingDate == null) || (endingDate == null)) {
+            return false;
+        }
+        
+        Calendar c = Calendar.getInstance();
+        c.setTime(endingDate);
+        c.add(Calendar.DAY_OF_YEAR, 1);
+        c.add(Calendar.MINUTE, -1);
+        
+        Date now = new Date();
+        if ((startingDate.getTime() <= now.getTime()) && (c.getTime().getTime() >= now.getTime())) {
+            result = true;
+        }
+        
+        return result;
     }
 }

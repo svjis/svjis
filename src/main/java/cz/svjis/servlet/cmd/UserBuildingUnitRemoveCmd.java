@@ -51,7 +51,7 @@ public class UserBuildingUnitRemoveCmd extends Command {
 
         String url = "Dispatcher?page=userBuildingUnits&id=" + parUserId;
         getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

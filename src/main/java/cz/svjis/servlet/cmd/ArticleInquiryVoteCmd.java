@@ -40,7 +40,7 @@ public class ArticleInquiryVoteCmd extends Command {
 
         int id = parId;
         Inquiry i = inquiryDao.getInquiry(getUser(), id);
-        if ((i != null) && (i.isUserCanVote()) && (getRequest().getParameter("i_" + i.getId()) != null)) {
+        if ((i != null) && (i.isUserCanVote()) && (i.isOpenForVoting()) && (getRequest().getParameter("i_" + i.getId()) != null)) {
             String value = getRequest().getParameter("i_" + i.getId());
             Iterator<InquiryOption> ioI = i.getOptionList().iterator();
             while (ioI.hasNext()) {
@@ -52,7 +52,7 @@ public class ArticleInquiryVoteCmd extends Command {
         }
         String url = "Dispatcher?page=articleList";
         getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

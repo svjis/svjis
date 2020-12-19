@@ -44,7 +44,7 @@ public class LostPasswordSubmitCmd extends Command {
         if ((parEmail == null) || (parEmail.equals(""))) {
             String url = "Dispatcher?page=lostPassword";
             getRequest().setAttribute("url", url);
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
             rd.forward(getRequest(), getResponse());
             return;
         }
@@ -73,11 +73,11 @@ public class LostPasswordSubmitCmd extends Command {
             mailDao.sendInstantMail(parEmail, getCompany().getName(), body);
             getRequest().setAttribute("messageHeader", getLanguage().getText("Password assistance"));
             getRequest().setAttribute("message", getLanguage().getText("Your login and password were sent to your mail."));
-            rd = getRequest().getRequestDispatcher("/_message.jsp");
+            rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_message.jsp");
         } else {
             getRequest().setAttribute("messageHeader", getLanguage().getText("Password assistance"));
             getRequest().setAttribute("message", getLanguage().getText("There is not user assigned to e-mail."));
-            rd = getRequest().getRequestDispatcher("/_message.jsp");
+            rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_message.jsp");
         }
         rd.forward(getRequest(), getResponse());
     }

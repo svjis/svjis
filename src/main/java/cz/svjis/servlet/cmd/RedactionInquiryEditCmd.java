@@ -41,7 +41,7 @@ public class RedactionInquiryEditCmd extends Command {
             inquiry = inquiryDao.getInquiry(getUser(), parId);
         }
         getRequest().setAttribute("inquiry", inquiry);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/Redaction_InquiryEdit.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Redaction_InquiryEdit.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

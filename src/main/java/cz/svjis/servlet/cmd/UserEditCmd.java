@@ -63,7 +63,7 @@ public class UserEditCmd extends Command {
         getRequest().setAttribute("sendCredentials", new cz.svjis.bean.Boolean(false));
         getRequest().setAttribute("message", "");
         getRequest().setAttribute("errorMessage", "");
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_userDetail.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Administration_userDetail.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

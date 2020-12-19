@@ -39,7 +39,7 @@ public class PropertyDeleteCmd extends Command {
         getRequest().getSession().setAttribute("setup", null);
         String url = "Dispatcher?page=propertyList";
         getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

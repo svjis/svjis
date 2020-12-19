@@ -56,7 +56,7 @@ public class BuildingUnitSaveCmd extends Command {
         }
         String url = "Dispatcher?page=buildingUnitList";
         getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

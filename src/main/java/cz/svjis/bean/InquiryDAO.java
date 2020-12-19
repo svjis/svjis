@@ -17,7 +17,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -55,13 +54,38 @@ public class InquiryDAO extends DAO {
         return result;
     }
     
-    public List<Inquiry> getInquiryList(User user, boolean publishedOnly) throws SQLException {
-        ArrayList<Inquiry> result = new ArrayList<>();
+    public int getInquirySize(User user, boolean publishedOnly) throws SQLException {
+        int result = 0;
         
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String filter = "";
         if (publishedOnly) {
-            filter = "AND (a.ENABLED = 1) AND ('" + sdf.format(new Date()) + "' BETWEEN a.STARTING_DATE AND a.ENDING_DATE) ";
+            filter = "AND (a.ENABLED = 1) ";
+        }
+        
+        String select = "SELECT "
+                + "count(*) AS CNT "
+                + "FROM INQUIRY a "
+                + "LEFT JOIN \"USER\" u ON (u.ID = USER_ID) "
+                + "WHERE (a.COMPANY_ID = " + user.getCompanyId() + ") "
+                + filter;
+        
+        try (Statement st = cnn.createStatement()) {
+            try (ResultSet rs = st.executeQuery(select)) {
+                if (rs.next()) {
+                    result = rs.getInt("CNT");
+                }
+            }
+        }
+        
+        return result;
+    }
+    
+    public List<Inquiry> getInquiryList(int pageNo, int pageSize, User user, boolean publishedOnly) throws SQLException {
+        ArrayList<Inquiry> result = new ArrayList<>();
+        
+        String filter = "";
+        if (publishedOnly) {
+            filter = "AND (a.ENABLED = 1) ";
         }
         
         String select = "SELECT "
@@ -84,23 +108,35 @@ public class InquiryDAO extends DAO {
                 + "ORDER BY a.ID DESC";
         
         try (Statement st = cnn.createStatement(); ResultSet rs = st.executeQuery(select)) {
+            
+            int cPageNo = 1;
+            int cArtNo = 0;
+            
             while (rs.next()) {
-                Inquiry i = new Inquiry();
-                i.setId(rs.getInt("ID"));
-                i.setCompanyId(rs.getInt("COMPANY_ID"));
-                User p = new User();
-                p.setId(rs.getInt("USER_ID"));
-                p.setSalutation(rs.getString("CREATED_BY_SALUTATION"));
-                p.setFirstName(rs.getString("CREATED_BY_FIRST_NAME"));
-                p.setLastName(rs.getString("CREATED_BY_LAST_NAME"));
-                i.setUser(p);
-                i.setDescription(rs.getString("DESCRIPTION"));
-                i.setStartingDate(rs.getDate("STARTING_DATE"));
-                i.setEndingDate(rs.getDate("ENDING_DATE"));
-                i.setEnabled(rs.getBoolean("ENABLED"));
-                i.setCount(rs.getInt("CNT"));
-                i.setMaximum(rs.getInt("MAX"));
-                result.add(i);
+                if (cPageNo == pageNo) {
+                    Inquiry i = new Inquiry();
+                    i.setId(rs.getInt("ID"));
+                    i.setCompanyId(rs.getInt("COMPANY_ID"));
+                    User p = new User();
+                    p.setId(rs.getInt("USER_ID"));
+                    p.setSalutation(rs.getString("CREATED_BY_SALUTATION"));
+                    p.setFirstName(rs.getString("CREATED_BY_FIRST_NAME"));
+                    p.setLastName(rs.getString("CREATED_BY_LAST_NAME"));
+                    i.setUser(p);
+                    i.setDescription(rs.getString("DESCRIPTION"));
+                    i.setStartingDate(rs.getDate("STARTING_DATE"));
+                    i.setEndingDate(rs.getDate("ENDING_DATE"));
+                    i.setEnabled(rs.getBoolean("ENABLED"));
+                    i.setCount(rs.getInt("CNT"));
+                    i.setMaximum(rs.getInt("MAX"));
+                    result.add(i);
+                }
+                
+                cArtNo++;
+                if (cArtNo == pageSize) {
+                    cPageNo++;
+                    cArtNo = 0;
+                }
             }
         }
         

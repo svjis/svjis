@@ -85,7 +85,7 @@ public class FaultReportingInsertCommentCmd extends Command {
         String url = "Dispatcher?page=faultDetail&id=" + parId;
         getRequest().setAttribute("url", url);
         
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/_refresh.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
         rd.forward(getRequest(), getResponse());
     }
     

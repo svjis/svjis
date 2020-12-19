@@ -54,7 +54,7 @@ public class BuildingUnitEditCmd extends Command {
             buildingUnit = buildingDao.getBuildingUnit(id, buildingDao.getBuilding(getCompany().getId()).getId());
         }
         getRequest().setAttribute("buildingUnit", buildingUnit);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_buildingUnitDetail.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Administration_buildingUnitDetail.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

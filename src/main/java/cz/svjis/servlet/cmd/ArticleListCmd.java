@@ -76,11 +76,11 @@ public class ArticleListCmd extends Command {
                 getSetup().getArticleTopMonths()));
         getRequest().setAttribute("articleTopList", articleTopList);
         getRequest().setAttribute("sectionId", String.valueOf(parSection));
-        ArrayList<MiniNews> miniNewsList = new ArrayList(newsDao.getMiniNews(getUser(), true));
+        ArrayList<MiniNews> miniNewsList = new ArrayList(newsDao.getMiniNewsList(1 ,getSetup().getArticlePageSize() ,getUser(), true));
         getRequest().setAttribute("miniNewsList", miniNewsList);
-        ArrayList<Inquiry> inquiryList = new ArrayList(inquiryDao.getInquiryList(getUser(), true));
+        ArrayList<Inquiry> inquiryList = new ArrayList(inquiryDao.getInquiryList(1, getSetup().getArticlePageSize(), getUser(), true));
         getRequest().setAttribute("inquiryList", inquiryList);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/ArticleList.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/ArticleList.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

@@ -145,7 +145,7 @@ public class UserSaveCmd extends Command {
         getRequest().setAttribute("sendCredentials", new cz.svjis.bean.Boolean(parSendCredentials));
         getRequest().setAttribute("message", message);
         getRequest().setAttribute("errorMessage", errorMessage);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_userDetail.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Administration_userDetail.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

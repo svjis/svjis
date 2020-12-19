@@ -55,7 +55,7 @@ public class RedactionArticleEditCmd extends Command {
             if ((article.getAuthor().getId() != getUser().getId()) && !getUser().hasPermission("redaction_articles_all")) {
                 Menu menu = menuDao.getMenu(getCompany().getId());
                 getRequest().setAttribute("menu", menu);
-                RequestDispatcher rd = getRequest().getRequestDispatcher("/ArticleNotFound.jsp");
+                RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/ArticleNotFound.jsp");
                 rd.forward(getRequest(), getResponse());
                 return;
             }
@@ -71,7 +71,7 @@ public class RedactionArticleEditCmd extends Command {
         ArrayList<Role> roleList = new ArrayList(roleDao.getRoleList(getCompany().getId()));
         getRequest().setAttribute("roleList", roleList);
 
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/Redaction_ArticleEdit.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Redaction_ArticleEdit.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

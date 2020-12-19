@@ -49,7 +49,7 @@ public class ArticleDetailCmd extends Command {
         if ((article == null) || (article.getId() == 0)) {
             Menu menu = menuDao.getMenu(getCompany().getId());
             getRequest().setAttribute("menu", menu);
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/ArticleNotFound.jsp");
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/ArticleNotFound.jsp");
             rd.forward(getRequest(), getResponse());
             return;
         }
@@ -65,7 +65,7 @@ public class ArticleDetailCmd extends Command {
         String watching = (articleDao.isUserWatchingArticle(article.getId(), getUser().getId())) ? "1" : "0";
         getRequest().setAttribute("watching", watching);
         
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/ArticleDetail.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/ArticleDetail.jsp");
         rd.forward(getRequest(), getResponse());
         logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_READ, article.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
     }

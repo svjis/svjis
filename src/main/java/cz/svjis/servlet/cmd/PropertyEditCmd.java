@@ -39,7 +39,7 @@ public class PropertyEditCmd extends Command {
         Company currCompany = compDao.getCompany(getCompany().getId());
         getRequest().setAttribute("currCompany", currCompany);
         getRequest().setAttribute("key", parKey);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_propertyDetail.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Administration_propertyDetail.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

@@ -39,7 +39,7 @@ public class BuildingDetailCmd extends Command {
         getRequest().setAttribute("currCompany", currCompany);
         Building building = buildingDao.getBuilding(getCompany().getId());
         getRequest().setAttribute("building", building);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_buildingDetail.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Administration_buildingDetail.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

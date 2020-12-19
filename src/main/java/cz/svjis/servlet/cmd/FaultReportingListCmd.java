@@ -73,7 +73,7 @@ public class FaultReportingListCmd extends Command {
                 Language lang = (Language) this.getRequest().getSession().getAttribute("language");
                 getRequest().setAttribute("messageHeader", lang.getText("Search"));
                 getRequest().setAttribute("message", lang.getText("Text to be searched should has 3 chars at least."));
-                RequestDispatcher rd = getRequest().getRequestDispatcher("/_message.jsp");
+                RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_message.jsp");
                 rd.forward(getRequest(), getResponse());
                 return;
             }
@@ -84,7 +84,7 @@ public class FaultReportingListCmd extends Command {
                 Language lang = (Language) this.getRequest().getSession().getAttribute("language");
                 getRequest().setAttribute("messageHeader", lang.getText("Search"));
                 getRequest().setAttribute("message", lang.getText("Nothing found."));
-                RequestDispatcher rd = getRequest().getRequestDispatcher("/_message.jsp");
+                RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_message.jsp");
                 rd.forward(getRequest(), getResponse());
                 return;
             }
@@ -99,7 +99,7 @@ public class FaultReportingListCmd extends Command {
         FaultReportMenuCounters counters = faultDao.getMenuCounters(getCompany().getId(), getUser().getId());
         getRequest().setAttribute("counters", counters);
         
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/Faults_reportList.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Faults_reportList.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

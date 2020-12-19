@@ -50,7 +50,7 @@ public class BuildingEntranceEditCmd extends Command {
             buildingEntrance = buildingDao.getBuildingEntrance(id);
         }
         getRequest().setAttribute("buildingEntrance", buildingEntrance);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_buildingEntranceDetail.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Administration_buildingEntranceDetail.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

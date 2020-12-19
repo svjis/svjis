@@ -46,7 +46,7 @@ public class RedactionInquiryLogCmd extends Command {
         }
         getRequest().setAttribute("inquiry", inquiry);
         getRequest().setAttribute("log", log);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/Redaction_InquiryLog.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Redaction_InquiryLog.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

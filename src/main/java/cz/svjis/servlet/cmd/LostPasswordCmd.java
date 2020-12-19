@@ -28,7 +28,7 @@ public class LostPasswordCmd extends Command {
     
     @Override
     public void execute() throws Exception {
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/LostPassword_form.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/LostPassword_form.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

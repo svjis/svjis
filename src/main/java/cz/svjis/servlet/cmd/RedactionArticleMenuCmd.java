@@ -35,7 +35,7 @@ public class RedactionArticleMenuCmd extends Command {
         Menu menu = menuDao.getMenu(getCompany().getId());
         menu.setActiveSection(-1);
         getRequest().setAttribute("menu", menu);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/Redaction_ArticleMenu.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Redaction_ArticleMenu.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }

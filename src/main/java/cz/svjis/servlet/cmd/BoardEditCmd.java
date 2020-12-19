@@ -49,7 +49,7 @@ public class BoardEditCmd extends Command {
         ArrayList<User> userList = new ArrayList(userDao.getUserList(getCompany().getId(), false, 0, true));
         getRequest().setAttribute("userList", userList);
 
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/Administration_boardEdit.jsp");
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Administration_boardEdit.jsp");
         rd.forward(getRequest(), getResponse());
     }
 }
