@@ -43,9 +43,7 @@ public class LostPasswordSubmitCmd extends Command {
 
         if ((parEmail == null) || (parEmail.equals(""))) {
             String url = "Dispatcher?page=lostPassword";
-            getRequest().setAttribute("url", url);
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
-            rd.forward(getRequest(), getResponse());
+            getResponse().sendRedirect(url);
             return;
         }
         RequestDispatcher rd;

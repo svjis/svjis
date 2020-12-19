@@ -49,8 +49,6 @@ public class RedactionArticleMenuDeleteCmd extends Command {
             menuDao.deleteMenuNode(n, getUser().getCompanyId());
         }
         String url = "Dispatcher?page=redactionArticleMenu";
-        getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
-        rd.forward(getRequest(), getResponse());
+        getResponse().sendRedirect(url);
     }
 }

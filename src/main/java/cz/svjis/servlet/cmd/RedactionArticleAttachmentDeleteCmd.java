@@ -54,9 +54,7 @@ public class RedactionArticleAttachmentDeleteCmd extends Command {
         articleDao.deleteArticleAttachment(parId);
         
         String url = "Dispatcher?page=redactionArticleEdit&id=" + aa.getArticleId();
-        getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
-        rd.forward(getRequest(), getResponse());
+        getResponse().sendRedirect(url);
         logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_DELETE_ATTACHMENT, aa.getArticleId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
     }
 }

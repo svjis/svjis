@@ -22,7 +22,6 @@ import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
 import java.util.ArrayList;
 import java.util.Date;
-import javax.servlet.RequestDispatcher;
 
 /**
  *
@@ -85,8 +84,6 @@ public class ArticleInsertCommentCmd extends Command {
         }
 
         String url = "Dispatcher?page=articleDetail&id=" + articleId;
-        getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
-        rd.forward(getRequest(), getResponse());
+        getResponse().sendRedirect(url);
     }
 }

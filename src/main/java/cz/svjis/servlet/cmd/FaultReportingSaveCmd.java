@@ -23,7 +23,6 @@ import cz.svjis.validator.InputValidationException;
 import cz.svjis.validator.Validator;
 import java.util.ArrayList;
 import java.util.Date;
-import javax.servlet.RequestDispatcher;
 
 /**
  *
@@ -52,9 +51,7 @@ public class FaultReportingSaveCmd extends FaultAbstractCmd {
 
         if ((parSubject == null || parSubject.equals("")) && (parBody == null || parBody.equals(""))) {
             String url = "Dispatcher?page=faultReportingList";
-            getRequest().setAttribute("url", url);
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
-            rd.forward(getRequest(), getResponse());
+            getResponse().sendRedirect(url);
             return;
         }
 
@@ -139,9 +136,6 @@ public class FaultReportingSaveCmd extends FaultAbstractCmd {
         }
         
         String url = "Dispatcher?page=faultDetail&id=" + f.getId();
-        getRequest().setAttribute("url", url);
-        
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
-        rd.forward(getRequest(), getResponse());
+        getResponse().sendRedirect(url);
     }
 }

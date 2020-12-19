@@ -52,8 +52,6 @@ public class FaultReportingAttachmentDeleteCmd extends Command {
             logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_DELETE_FAULT_ATTACHMENT, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
         }
         String url = "Dispatcher?page=faultDetail&id=" + fa.getFaultReportId();
-        getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
-        rd.forward(getRequest(), getResponse());
+        getResponse().sendRedirect(url);
     }
 }

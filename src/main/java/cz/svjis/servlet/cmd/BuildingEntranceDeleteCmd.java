@@ -50,8 +50,6 @@ public class BuildingEntranceDeleteCmd extends Command {
         }
         
         String url = "Dispatcher?page=buildingEntranceList";
-        getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
-        rd.forward(getRequest(), getResponse());
+        getResponse().sendRedirect(url);
     }
 }

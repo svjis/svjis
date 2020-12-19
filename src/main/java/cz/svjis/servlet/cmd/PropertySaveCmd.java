@@ -16,7 +16,6 @@ import cz.svjis.bean.ApplicationSetupDAO;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
-import javax.servlet.RequestDispatcher;
 
 /**
  *
@@ -40,8 +39,6 @@ public class PropertySaveCmd extends Command {
         setupDao.insertProperty(getCompany().getId(), parKey, parValue);
         getRequest().getSession().setAttribute("setup", null);
         String url = "Dispatcher?page=propertyList";
-        getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
-        rd.forward(getRequest(), getResponse());
+        getResponse().sendRedirect(url);
     }
 }

@@ -16,7 +16,6 @@ import cz.svjis.bean.BoardMemberDAO;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
-import javax.servlet.RequestDispatcher;
 
 /**
  *
@@ -41,8 +40,6 @@ public class BoardSaveCmd extends Command {
         }
 
         String url = "Dispatcher?page=boardMemberList";
-        getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
-        rd.forward(getRequest(), getResponse());
+        getResponse().sendRedirect(url);
     }
 }
