@@ -12,8 +12,12 @@
 
 package cz.svjis.common;
 
+import cz.svjis.bean.Language;
+import cz.svjis.bean.SliderImpl;
+import cz.svjis.bean.SliderItem;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -84,6 +88,42 @@ public class HttpUtils {
     
     public static String highlight(String html, String textToFind) {
         return envelStrInHtml(html, textToFind, "<b style=\"color:black;background-color:#ffff66\">", "</b>");
+    }
+    
+    public static String nbsp(String text) {
+        return ((text != null) && (!text.equals(""))) ? text : "&nbsp;";
+    }
+    
+    public static String printSlider(SliderImpl slider, String searchKey, Language language) throws UnsupportedEncodingException {
+        StringBuilder result = new StringBuilder();
+        
+        if (slider.getTotalNumOfPages() > 1) {
+            result.append("<strong>").append(language.getText("Pages:")).append("</strong>&nbsp;");
+            String search = "";
+            String pageId = "page=" + slider.getPageId() + "&";
+            
+            if ((searchKey != null) && (!searchKey.equals(""))) {
+                search = "search=" + URLEncoder.encode(searchKey, "UTF-8") + "&";
+            }
+            
+            for (SliderItem item : slider.getItemList()) {
+                if (item.isCurrent()) {
+                    result.append("<b>").append(item.getLabel()).append("</b>&nbsp;");
+                } else {
+                    result.append("<a href=\"Dispatcher?").append(pageId).append(search).append("pageNo=").append(item.getPage()).append("\">").append(item.getLabel()).append("</a>&nbsp;");
+                }
+            }
+        }
+        
+        return result.toString();
+    }
+    
+    public static String tr(String text, Language language) {
+        return language.getText(text);
+    }
+    
+    public static String UrlEncode(String text, String charset) throws UnsupportedEncodingException {
+        return URLEncoder.encode(text, charset);
     }
     
     protected static String envelStrInHtml(String html, String textToFind, String atBegin, String atEnd) {

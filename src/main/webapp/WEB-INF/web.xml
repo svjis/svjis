@@ -32,6 +32,13 @@
         <location>/BadPage.jsp</location>
     </error-page>
     
+    <jsp-config>
+        <taglib>
+            <taglib-uri>/WEB-INF/tld/customTagLibrary</taglib-uri>
+            <taglib-location>/WEB-INF/tld/customTagLibrary.tld</taglib-location>
+        </taglib>
+    </jsp-config>
+    
     <!-- HTTPS only -->
     <!--
     <security-constraint>

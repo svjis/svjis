@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<taglib version="2.0" xmlns="http://java.sun.com/xml/ns/j2ee" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-jsptaglibrary_2_0.xsd">
+        <display-name>Custom EL Functions</display-name>    
+        <tlib-version>1.0</tlib-version>
+        <short-name>cg</short-name>
+        <uri>/WEB-INF/tld/customTagLibrary</uri>
+        <function>
+            <name>highlight</name>
+            <function-class>cz.svjis.common.HttpUtils</function-class>
+            <function-signature>
+                java.lang.String highlight(java.lang.String, java.lang.String)
+            </function-signature>
+        </function> 
+        <function>
+            <name>nbsp</name>
+            <function-class>cz.svjis.common.HttpUtils</function-class>
+            <function-signature>
+                java.lang.String nbsp(java.lang.String)
+            </function-signature>
+        </function> 
+        <function>
+            <name>printSlider</name>
+            <function-class>cz.svjis.common.HttpUtils</function-class>
+            <function-signature>
+                java.lang.String printSlider(cz.svjis.bean.SliderImpl, java.lang.String, cz.svjis.bean.Language)
+            </function-signature>
+        </function>
+        <function>
+            <name>tr</name>
+            <function-class>cz.svjis.common.HttpUtils</function-class>
+            <function-signature>
+                java.lang.String tr(java.lang.String, cz.svjis.bean.Language)
+            </function-signature>
+        </function>
+        <function>
+            <name>UrlEncode</name>
+            <function-class>cz.svjis.common.HttpUtils</function-class>
+            <function-signature>
+                java.lang.String UrlEncode(java.lang.String, java.lang.String)
+            </function-signature>
+        </function>
+</taglib>
