@@ -21,7 +21,6 @@ import cz.svjis.validator.Validator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import javax.servlet.RequestDispatcher;
 
 /**
  *
@@ -61,8 +60,6 @@ public class RoleSaveCmd extends Command {
             roleDao.modifyRole(role);
         }
         String url = "Dispatcher?page=roleList";
-        getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
-        rd.forward(getRequest(), getResponse());
+        getResponse().sendRedirect(url);
     }
 }

@@ -22,7 +22,6 @@ import cz.svjis.validator.Validator;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
-import javax.servlet.RequestDispatcher;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -73,8 +72,6 @@ public class FaultReportingAttachmentSaveCmd extends Command {
             }
         }
         String url = "Dispatcher?page=faultDetail&id=" + reportId;
-        getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
-        rd.forward(getRequest(), getResponse());
+        getResponse().sendRedirect(url);
     }
 }

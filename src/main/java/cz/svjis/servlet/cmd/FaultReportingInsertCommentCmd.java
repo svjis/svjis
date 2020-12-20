@@ -22,7 +22,6 @@ import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
 import java.util.Date;
 import java.util.List;
-import javax.servlet.RequestDispatcher;
 
 /**
  *
@@ -83,10 +82,7 @@ public class FaultReportingInsertCommentCmd extends Command {
         }
         
         String url = "Dispatcher?page=faultDetail&id=" + parId;
-        getRequest().setAttribute("url", url);
-        
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
-        rd.forward(getRequest(), getResponse());
+        getResponse().sendRedirect(url);
     }
     
 }

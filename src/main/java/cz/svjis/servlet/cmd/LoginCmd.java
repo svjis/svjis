@@ -53,9 +53,7 @@ public class LoginCmd extends Command {
             PermanentLoginUtils.savePermanentLogin(getResponse(), user, userDao, getSetup());
             
             String url = "Dispatcher?page=articleList";
-            getRequest().setAttribute("url", url);
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
-            rd.forward(getRequest(), getResponse());
+            getResponse().sendRedirect(url);
         } else {
             getRequest().setAttribute("messageHeader", getLanguage().getText("Bad login"));
             getRequest().setAttribute("message", "<p>" + getLanguage().getText("You can continue") + " <a href=\"Dispatcher\">" + getLanguage().getText("here") + "</a>.</p><p><a href=\"Dispatcher?page=lostPassword\">" + getLanguage().getText("Forgot password?") + "</a></p>");

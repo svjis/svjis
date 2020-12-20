@@ -20,7 +20,6 @@ import cz.svjis.bean.UserDAO;
 import cz.svjis.common.PermanentLoginUtils;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
-import javax.servlet.RequestDispatcher;
 
 /**
  *
@@ -54,8 +53,6 @@ public class LogoutCmd extends Command {
         getRequest().getSession().setAttribute("language", language);
 
         String url = "Dispatcher?page=articleList";
-        getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
-        rd.forward(getRequest(), getResponse());
+        getResponse().sendRedirect(url);
     }
 }

@@ -17,7 +17,6 @@ import cz.svjis.bean.FaultReportDAO;
 import cz.svjis.bean.LogDAO;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.validator.Validator;
-import javax.servlet.RequestDispatcher;
 
 /**
  *
@@ -64,9 +63,6 @@ public class FaultReportingFastCmd extends FaultAbstractCmd {
         }
 
         String url = "Dispatcher?page=faultDetail&id=" + parId;
-        getRequest().setAttribute("url", url);
-        
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
-        rd.forward(getRequest(), getResponse());
+        getResponse().sendRedirect(url);
     }
 }

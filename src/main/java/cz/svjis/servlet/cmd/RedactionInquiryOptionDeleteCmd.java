@@ -17,7 +17,6 @@ import cz.svjis.bean.InquiryOption;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
-import javax.servlet.RequestDispatcher;
 
 /**
  *
@@ -39,8 +38,6 @@ public class RedactionInquiryOptionDeleteCmd extends Command {
         InquiryOption io = inquiryDao.getInquiryOption(getUser().getCompanyId(), parId);
         inquiryDao.deleteInquiryOption(io);
         String url = "Dispatcher?page=redactionInquiryEdit&id=" + io.getInquiryId();
-        getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
-        rd.forward(getRequest(), getResponse());
+        getResponse().sendRedirect(url);
     }
 }
