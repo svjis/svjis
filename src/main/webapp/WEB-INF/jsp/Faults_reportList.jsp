@@ -21,7 +21,7 @@
             <div id="content-main">
                 <div id="content-main-in">
                     <h1 class="page-title" id="tbl-desc">${cg:tr("Fault reporting", language)}</h1>
-                    <c:if test="${user.hasPermission(\"fault_reporting_reporter\")}">
+                    <c:if test='${user.hasPermission("fault_reporting_reporter")}'>
                         <a href="Dispatcher?page=faultReportingEdit&id=0" class="create-button">${cg:tr("Report new fault", language)}</a>
                     </c:if>
                     <table width="100%" class="list" aria-describedby="tbl-desc">
