@@ -29,7 +29,6 @@
                     <table class="list" width="100%" aria-describedby="tbl-desc">
                         <tr>
                             <th class="list" scope="col">&nbsp;</th>
-                            <th class="list" scope="col">&nbsp;</th>
                             <th class="list" scope="col"><%=language.getText("Time") %></th>
                             <th class="list" scope="col"><%=language.getText("Language") %></th>
                             <th class="list" scope="col"><%=language.getText("Author") %></th>
@@ -44,7 +43,6 @@
                     %>
                         <tr>
                             <td class="list"><a href="Dispatcher?page=redactionNewsEdit&id=<%=n.getId() %>"><img src="gfx/pencil.png" border="0" title="<%=language.getText("Edit") %>" alt="<%=language.getText("Edit") %>"></a></td>
-                            <td class="list"><a onclick="if (!confirm('<%=language.getText("Really do you want to remove news") %> ?')) return false;" href="Dispatcher?page=redactionNewsDelete&id=<%=n.getId() %>"><img src="gfx/delete.png" border="0" title="<%=language.getText("Delete") %>" alt="<%=language.getText("Delete") %>"></a></td>
                             <td class="list"><%=sdf.format(n.getTime()) %></td>
                             <td class="list"><%=n.getLanguage() %></td>
                             <td class="list"><%=n.getCreatedBy().getFullName(false) %></td>

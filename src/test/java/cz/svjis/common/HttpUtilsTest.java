@@ -37,33 +37,33 @@ public class HttpUtilsTest {
     
     @Test
     @DisplayName("Make hyperlinks")
-    public void testMakeHyperlins() {
-        assertEquals("Ahoj jak se máš?", HttpUtils.makeHyperlins("Ahoj jak se máš?"), "Negative test");
+    public void testMakeHyperlinks() {
+        assertEquals("Ahoj jak se máš?", HttpUtils.makeHyperlinks("Ahoj jak se máš?"), "Negative test");
         
-        assertEquals("<a href=\"http://www.seznam.cz\" target=\"_blank\">http://www.seznam.cz</a>", HttpUtils.makeHyperlins("http://www.seznam.cz"), "http alone");
-        assertEquals("<a href=\"http://www.seznam.cz\" target=\"_blank\">http://www.seznam.cz</a> bla.", HttpUtils.makeHyperlins("http://www.seznam.cz bla."), "http begin");
-        assertEquals("Bla <a href=\"http://www.seznam.cz\" target=\"_blank\">http://www.seznam.cz</a>", HttpUtils.makeHyperlins("Bla http://www.seznam.cz"), "http end");
-        assertEquals("Bla <a href=\"http://www.seznam.cz\" target=\"_blank\">http://www.seznam.cz</a>.", HttpUtils.makeHyperlins("Bla http://www.seznam.cz."), "http end dot");
-        assertEquals("Bla <a href=\"http://www.seznam.cz\" target=\"_blank\">http://www.seznam.cz</a>,", HttpUtils.makeHyperlins("Bla http://www.seznam.cz,"), "http end comma");
-        assertEquals("vím: <a href=\"http://www.vybor.cz/Dispatcher?page=articleDetail&id=563\" target=\"_blank\">http://www.vybor.cz/Dispatcher?page=articleDetail&id=563</a>", HttpUtils.makeHyperlins("vím: http://www.vybor.cz/Dispatcher?page=articleDetail&id=563"), "https query string");
+        assertEquals("<a href=\"http://www.seznam.cz\" target=\"_blank\">http://www.seznam.cz</a>", HttpUtils.makeHyperlinks("http://www.seznam.cz"), "http alone");
+        assertEquals("<a href=\"http://www.seznam.cz\" target=\"_blank\">http://www.seznam.cz</a> bla.", HttpUtils.makeHyperlinks("http://www.seznam.cz bla."), "http begin");
+        assertEquals("Bla <a href=\"http://www.seznam.cz\" target=\"_blank\">http://www.seznam.cz</a>", HttpUtils.makeHyperlinks("Bla http://www.seznam.cz"), "http end");
+        assertEquals("Bla <a href=\"http://www.seznam.cz\" target=\"_blank\">http://www.seznam.cz</a>.", HttpUtils.makeHyperlinks("Bla http://www.seznam.cz."), "http end dot");
+        assertEquals("Bla <a href=\"http://www.seznam.cz\" target=\"_blank\">http://www.seznam.cz</a>,", HttpUtils.makeHyperlinks("Bla http://www.seznam.cz,"), "http end comma");
+        assertEquals("vím: <a href=\"http://www.vybor.cz/Dispatcher?page=articleDetail&id=563\" target=\"_blank\">http://www.vybor.cz/Dispatcher?page=articleDetail&id=563</a>", HttpUtils.makeHyperlinks("vím: http://www.vybor.cz/Dispatcher?page=articleDetail&id=563"), "https query string");
         
-        assertEquals("<a href=\"https://www.seznam.cz\" target=\"_blank\">https://www.seznam.cz</a>", HttpUtils.makeHyperlins("https://www.seznam.cz"), "https alone");
-        assertEquals("<a href=\"https://www.seznam.cz\" target=\"_blank\">https://www.seznam.cz</a> bla.", HttpUtils.makeHyperlins("https://www.seznam.cz bla."), "https begin");
-        assertEquals("Bla <a href=\"https://www.seznam.cz\" target=\"_blank\">https://www.seznam.cz</a>", HttpUtils.makeHyperlins("Bla https://www.seznam.cz"), "https end");
-        assertEquals("Bla <a href=\"https://www.seznam.cz\" target=\"_blank\">https://www.seznam.cz</a>.", HttpUtils.makeHyperlins("Bla https://www.seznam.cz."), "https end dot");
-        assertEquals("Bla <a href=\"https://www.seznam.cz\" target=\"_blank\">https://www.seznam.cz</a>,", HttpUtils.makeHyperlins("Bla https://www.seznam.cz,"), "https end comma");
-        assertEquals("vím: <a href=\"https://www.vybor.cz/Dispatcher?page=articleDetail&id=563\" target=\"_blank\">https://www.vybor.cz/Dispatcher?page=articleDetail&id=563</a>,", HttpUtils.makeHyperlins("vím: https://www.vybor.cz/Dispatcher?page=articleDetail&id=563,"), "https query string");
+        assertEquals("<a href=\"https://www.seznam.cz\" target=\"_blank\">https://www.seznam.cz</a>", HttpUtils.makeHyperlinks("https://www.seznam.cz"), "https alone");
+        assertEquals("<a href=\"https://www.seznam.cz\" target=\"_blank\">https://www.seznam.cz</a> bla.", HttpUtils.makeHyperlinks("https://www.seznam.cz bla."), "https begin");
+        assertEquals("Bla <a href=\"https://www.seznam.cz\" target=\"_blank\">https://www.seznam.cz</a>", HttpUtils.makeHyperlinks("Bla https://www.seznam.cz"), "https end");
+        assertEquals("Bla <a href=\"https://www.seznam.cz\" target=\"_blank\">https://www.seznam.cz</a>.", HttpUtils.makeHyperlinks("Bla https://www.seznam.cz."), "https end dot");
+        assertEquals("Bla <a href=\"https://www.seznam.cz\" target=\"_blank\">https://www.seznam.cz</a>,", HttpUtils.makeHyperlinks("Bla https://www.seznam.cz,"), "https end comma");
+        assertEquals("vím: <a href=\"https://www.vybor.cz/Dispatcher?page=articleDetail&id=563\" target=\"_blank\">https://www.vybor.cz/Dispatcher?page=articleDetail&id=563</a>,", HttpUtils.makeHyperlinks("vím: https://www.vybor.cz/Dispatcher?page=articleDetail&id=563,"), "https query string");
         
-        assertEquals("<a href=\"https://www.seznam.cz\" target=\"_blank\">https://www.seznam.cz</a>", HttpUtils.makeHyperlins("<a href=\"https://www.seznam.cz\" target=\"_blank\">https://www.seznam.cz</a>"), "https link alone");
+        assertEquals("<a href=\"https://www.seznam.cz\" target=\"_blank\">https://www.seznam.cz</a>", HttpUtils.makeHyperlinks("<a href=\"https://www.seznam.cz\" target=\"_blank\">https://www.seznam.cz</a>"), "https link alone");
         
-        assertEquals("Ahoj @Jarda", HttpUtils.makeHyperlins("Ahoj @Jarda"), "Negative test");
-        assertEquals("<a href=\"mailto:test@test.edu\">test@test.edu</a>", HttpUtils.makeHyperlins("test@test.edu"), "email alone");
-        assertEquals("<a href=\"mailto:test@test.edu\">test@test.edu</a>  bla.", HttpUtils.makeHyperlins("test@test.edu  bla."), "email begin");
-        assertEquals("Bla <a href=\"mailto:test@test.edu\">test@test.edu</a>", HttpUtils.makeHyperlins("Bla test@test.edu"), "email end");
-        assertEquals("Bla <a href=\"mailto:test@test.edu\">test@test.edu</a>.", HttpUtils.makeHyperlins("Bla test@test.edu."), "email dot");
-        assertEquals("Bla <a href=\"mailto:test@test.edu\">test@test.edu</a>,", HttpUtils.makeHyperlins("Bla test@test.edu,"), "email comma");
+        assertEquals("Ahoj @Jarda", HttpUtils.makeHyperlinks("Ahoj @Jarda"), "Negative test");
+        assertEquals("<a href=\"mailto:test@test.edu\">test@test.edu</a>", HttpUtils.makeHyperlinks("test@test.edu"), "email alone");
+        assertEquals("<a href=\"mailto:test@test.edu\">test@test.edu</a>  bla.", HttpUtils.makeHyperlinks("test@test.edu  bla."), "email begin");
+        assertEquals("Bla <a href=\"mailto:test@test.edu\">test@test.edu</a>", HttpUtils.makeHyperlinks("Bla test@test.edu"), "email end");
+        assertEquals("Bla <a href=\"mailto:test@test.edu\">test@test.edu</a>.", HttpUtils.makeHyperlinks("Bla test@test.edu."), "email dot");
+        assertEquals("Bla <a href=\"mailto:test@test.edu\">test@test.edu</a>,", HttpUtils.makeHyperlinks("Bla test@test.edu,"), "email comma");
         
-        assertEquals("<a href=\"mailto:test@test.edu\">test@test.edu</a>", HttpUtils.makeHyperlins("<a href=\"mailto:test@test.edu\">test@test.edu</a>"), "email link alone");
+        assertEquals("<a href=\"mailto:test@test.edu\">test@test.edu</a>", HttpUtils.makeHyperlinks("<a href=\"mailto:test@test.edu\">test@test.edu</a>"), "email link alone");
         
     }
     
