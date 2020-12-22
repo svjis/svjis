@@ -55,20 +55,20 @@ public class HttpUtils {
     }
     
     
-    public static String makeHyperlins(String s) {
+    public static String makeHyperlinks(String s) {
         String result = s;
         String httpUrlRegex = "\\b(?![^<]*<\\/)(((http:\\/\\/|https:\\/\\/))[^,\"\\s<)]*)\\b";
         String httpUrlReplacement = "<a href=\"%s\" target=\"_blank\">%s</a>";
         String emailUrlRegex = "\\b(?![^<]*<\\/)([a-zA-Z_0-9.-]+\\@[a-zA-Z_0-9.-]+\\.\\w+)\\b";
         String emailUrlReplacement = "<a href=\"mailto:%s\">%s</a>";
 
-        result = makeHyperlnks(result, httpUrlRegex, httpUrlReplacement);
-        result = makeHyperlnks(result, emailUrlRegex, emailUrlReplacement);
+        result = makeHyperlinks(result, httpUrlRegex, httpUrlReplacement);
+        result = makeHyperlinks(result, emailUrlRegex, emailUrlReplacement);
 
         return result;
     }
     
-    protected static String makeHyperlnks(String s, String regex, String replacement) {
+    protected static String makeHyperlinks(String s, String regex, String replacement) {
         String result = s;
 
         java.util.regex.Pattern p = java.util.regex.Pattern.compile(regex, java.util.regex.Pattern.CASE_INSENSITIVE);
