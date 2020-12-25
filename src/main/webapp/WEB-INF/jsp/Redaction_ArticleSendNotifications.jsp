@@ -53,7 +53,7 @@
                     </table>
                     
                         <p>
-                            <input class="my-button" type="submit" value="<%=language.getText("Send") %>" />
+                            <input id="submit" class="my-button" type="submit" value="<%=language.getText("Send") %>" />
                         </p>
                     </form>
                     
