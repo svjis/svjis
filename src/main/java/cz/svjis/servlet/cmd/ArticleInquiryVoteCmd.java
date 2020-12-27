@@ -19,7 +19,6 @@ import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
 import java.util.Iterator;
-import javax.servlet.RequestDispatcher;
 
 /**
  *
@@ -51,8 +50,6 @@ public class ArticleInquiryVoteCmd extends Command {
             }
         }
         String url = "Dispatcher?page=articleList";
-        getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
-        rd.forward(getRequest(), getResponse());
+        getResponse().sendRedirect(url);
     }
 }

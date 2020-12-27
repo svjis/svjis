@@ -21,7 +21,6 @@ import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
 import java.util.ArrayList;
-import javax.servlet.RequestDispatcher;
 
 /**
  *
@@ -62,8 +61,6 @@ public class UserBuildingUnitAddCmd extends Command {
         }
 
         String url = "Dispatcher?page=userBuildingUnits&id=" + parUserId;
-        getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
-        rd.forward(getRequest(), getResponse());
+        getResponse().sendRedirect(url);
     }
 }

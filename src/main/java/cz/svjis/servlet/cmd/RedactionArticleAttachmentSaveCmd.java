@@ -78,9 +78,7 @@ public class RedactionArticleAttachmentSaveCmd extends Command {
             }
         }
         String url = "Dispatcher?page=redactionArticleEdit&id=" + parArticleId;
-        getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
-        rd.forward(getRequest(), getResponse());
+        getResponse().sendRedirect(url);
         logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_INSERT_ATTACHMENT, parArticleId, getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
     }
 }

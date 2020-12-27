@@ -18,7 +18,6 @@ import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import java.io.File;
 import java.util.List;
-import javax.servlet.RequestDispatcher;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -53,8 +52,6 @@ public class BuildingPictureSaveCmd extends Command {
         getRequest().getSession().setAttribute("company", company);
         company.refreshPicture(getRequest().getServletContext().getRealPath("/"));
         String url = "Dispatcher?page=buildingDetail";
-        getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
-        rd.forward(getRequest(), getResponse());
+        getResponse().sendRedirect(url);
     }
 }

@@ -17,12 +17,12 @@ import cz.svjis.bean.FaultReportComment;
 import cz.svjis.bean.FaultReportDAO;
 import cz.svjis.bean.MailDAO;
 import cz.svjis.bean.User;
+import cz.svjis.bean.UserDAO;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
 import java.util.Date;
 import java.util.List;
-import javax.servlet.RequestDispatcher;
 
 /**
  *
@@ -41,6 +41,7 @@ public class FaultReportingInsertCommentCmd extends Command {
         String parBody = Validator.getString(getRequest(), "body", 0, Validator.MAX_STRING_LEN_ALLOWED, false, getUser().hasPermission("can_write_html"));
         
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
+        UserDAO userDao = new UserDAO(getCnn());
 
         FaultReport report = faultDao.getFault(getCompany().getId(), parId);
         
@@ -68,6 +69,23 @@ public class FaultReportingInsertCommentCmd extends Command {
                     getSetup().getMailPassword(),
                     getSetup().getMailSender());
             List<User> userList = faultDao.getUserListWatchingFaultReport(report.getId());
+            
+            if (report.getAssignedToUser() == null) {
+                List<User> resolvers = userDao.getUserListWithPermission(getCompany().getId(), "fault_reporting_resolver");
+                for(User r: resolvers) {
+                    boolean add = true;
+                    for (User u: userList) {
+                        if (r.getId() == u.getId()) {
+                            add = false;
+                            break;
+                        }
+                    }
+                    if (add) {
+                        userList.add(r);
+                    }
+                }
+            }
+            
             for (User u : userList) {
                 if (u.getId() == getUser().getId()) {
                     continue;
@@ -83,10 +101,7 @@ public class FaultReportingInsertCommentCmd extends Command {
         }
         
         String url = "Dispatcher?page=faultDetail&id=" + parId;
-        getRequest().setAttribute("url", url);
-        
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
-        rd.forward(getRequest(), getResponse());
+        getResponse().sendRedirect(url);
     }
     
 }

@@ -51,8 +51,6 @@ public class RoleDeleteCmd extends Command {
         }
         
         String url = "Dispatcher?page=roleList";
-        getRequest().setAttribute("url", url);
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
-        rd.forward(getRequest(), getResponse());
+        getResponse().sendRedirect(url);
     }
 }

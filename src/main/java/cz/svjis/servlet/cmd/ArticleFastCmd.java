@@ -16,7 +16,6 @@ import cz.svjis.bean.Article;
 import cz.svjis.bean.ArticleDAO;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.validator.Validator;
-import javax.servlet.RequestDispatcher;
 
 /**
  *
@@ -47,9 +46,6 @@ public class ArticleFastCmd extends FaultAbstractCmd {
         }
 
         String url = "Dispatcher?page=articleDetail&id=" + parId;
-        getRequest().setAttribute("url", url);
-        
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_refresh.jsp");
-        rd.forward(getRequest(), getResponse());
+        getResponse().sendRedirect(url);
     }
 }

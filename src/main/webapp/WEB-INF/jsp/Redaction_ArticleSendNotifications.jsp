@@ -29,9 +29,9 @@
                         <input type="hidden" name="page" value="redactionArticleSendNotificationsConfirmation">
                         <input type="hidden" name="id" value="<%=article.getId() %>">
                             
-                    <table class="list" width="100%" aria-describedby="tbl-desc">
+                    <table id="recipient-list" class="list" width="100%" aria-describedby="tbl-desc">
                         <tr>
-                            <th class="list" scope="col">&nbsp;</th>
+                            <th class="list" scope="col"><input id="check-all" type="checkbox" checked onchange="checkAll();"/></th>
                             <th class="list" scope="col"><%=language.getText("Last name") %></th>
                             <th class="list" scope="col"><%=language.getText("First name") %></th>
                             <th class="list" scope="col"><%=language.getText("E-Mail") %></th>
@@ -53,7 +53,7 @@
                     </table>
                     
                         <p>
-                            <input class="my-button" type="submit" value="<%=language.getText("Send") %>" />
+                            <input id="submit" class="my-button" type="submit" value="<%=language.getText("Send") %>" />
                         </p>
                     </form>
                     
@@ -65,5 +65,6 @@
         <jsp:include page="Redaction__menu.jsp" />
     
     </div> <!-- /cols -->
-
+    
+    <script src="js/Redaction_ArticleSendNotifications.js"></script>
 <jsp:include page="_footer.jsp" />
