@@ -17,6 +17,7 @@ import cz.svjis.bean.ArticleDAO;
 import cz.svjis.bean.Language;
 import cz.svjis.bean.Menu;
 import cz.svjis.bean.MenuDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.bean.Role;
 import cz.svjis.bean.RoleDAO;
 import cz.svjis.bean.SliderImpl;
@@ -62,14 +63,14 @@ public class RedactionArticleListCmd extends Command {
 
         ArrayList<Article> articleList = new ArrayList<>();
         if (parPage.equals("redactionArticleList")) {
-            sl.setTotalNumOfItems(articleDao.getNumOfArticles(getUser(), parSection, false, !getUser().hasPermission("redaction_articles_all"), parRoleId));
+            sl.setTotalNumOfItems(articleDao.getNumOfArticles(getUser(), parSection, false, !getUser().hasPermission(Permission.REDACTION_ARTICLES_ALL), parRoleId));
             articleList = new ArrayList(articleDao.getArticleList(
                 getUser(),
                 parSection,
                 parPageNo,
                 getSetup().getArticlePageSize(),
                 false,
-                !getUser().hasPermission("redaction_articles_all"),
+                !getUser().hasPermission(Permission.REDACTION_ARTICLES_ALL),
                 parRoleId));
         }
 
@@ -83,7 +84,7 @@ public class RedactionArticleListCmd extends Command {
                 return;
             }
 
-            sl.setTotalNumOfItems(articleDao.getNumOfArticlesFromSearch(parSearch, getUser(), parSection, false, !getUser().hasPermission("redaction_articles_all")));
+            sl.setTotalNumOfItems(articleDao.getNumOfArticlesFromSearch(parSearch, getUser(), parSection, false, !getUser().hasPermission(Permission.REDACTION_ARTICLES_ALL)));
 
             if (sl.getTotalNumOfItems() == 0) {
                 Language lang = (Language) this.getRequest().getSession().getAttribute("language");
@@ -99,7 +100,7 @@ public class RedactionArticleListCmd extends Command {
                 parPageNo,
                 getSetup().getArticlePageSize(),
                 false,
-                !getUser().hasPermission("redaction_articles_all")));
+                !getUser().hasPermission(Permission.REDACTION_ARTICLES_ALL)));
         }
 
         getRequest().setAttribute("searchKey", parSearch);

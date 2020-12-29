@@ -17,6 +17,7 @@ import cz.svjis.bean.BuildingEntrance;
 import cz.svjis.bean.FaultReport;
 import cz.svjis.bean.FaultReportDAO;
 import cz.svjis.bean.FaultReportMenuCounters;
+import cz.svjis.bean.Permission;
 import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
 import cz.svjis.servlet.CmdContext;
@@ -46,12 +47,12 @@ public class FaultReportingEditCmd extends Command {
         
         FaultReport report = new FaultReport();
         int id = parId;
-        if ((id != 0) && getUser().hasPermission("fault_reporting_resolver")) {
+        if ((id != 0) && getUser().hasPermission(Permission.FAULT_REPORTING_RESOLVER)) {
             report = faultDao.getFault(getCompany().getId(), id);
         }
         getRequest().setAttribute("report", report);
         
-        ArrayList<User> resolverList = new ArrayList(userDao.getUserListWithPermission(getCompany().getId(), "fault_reporting_resolver"));
+        ArrayList<User> resolverList = new ArrayList(userDao.getUserListWithPermission(getCompany().getId(), Permission.FAULT_REPORTING_RESOLVER));
         getRequest().setAttribute("resolverList", resolverList);
         
         ArrayList<BuildingEntrance> entranceList = new ArrayList(buildingDao.getBuildingEntranceList(buildingDao.getBuilding(getCompany().getId()).getId()));

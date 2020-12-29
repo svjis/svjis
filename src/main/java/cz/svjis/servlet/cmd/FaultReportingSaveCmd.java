@@ -16,6 +16,7 @@ import cz.svjis.bean.BuildingDAO;
 import cz.svjis.bean.FaultReport;
 import cz.svjis.bean.FaultReportDAO;
 import cz.svjis.bean.LogDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
 import cz.svjis.servlet.CmdContext;
@@ -39,7 +40,7 @@ public class FaultReportingSaveCmd extends FaultAbstractCmd {
         
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
         String parSubject = Validator.getString(getRequest(), "subject", 0, 50, false, false);
-        String parBody = Validator.getString(getRequest(), "body", 0, Validator.MAX_STRING_LEN_ALLOWED, false, getUser().hasPermission("can_write_html"));
+        String parBody = Validator.getString(getRequest(), "body", 0, Validator.MAX_STRING_LEN_ALLOWED, false, getUser().hasPermission(Permission.CAN_WRITE_HTML));
         int parResolver = Validator.getInt(getRequest(), "resolverId", 0, Validator.MAX_INT_ALLOWED, true);
         int parEntrance = Validator.getInt(getRequest(), "entranceId", 0, Validator.MAX_INT_ALLOWED, true);
         boolean parClosed = Validator.getBoolean(getRequest(), "closed");
@@ -64,7 +65,7 @@ public class FaultReportingSaveCmd extends FaultAbstractCmd {
             f.setCreatedByUser(getUser());
             f.setCreationDate(new Date());
         }
-        if (getUser().hasPermission("fault_reporting_resolver")) {
+        if (getUser().hasPermission(Permission.FAULT_REPORTING_RESOLVER)) {
             int resolver = parResolver;
             f.setAssignedToUser((resolver != 0) ? userDao.getUser(getCompany().getId(), resolver) : null);
             f.setClosed(parClosed);
@@ -76,7 +77,7 @@ public class FaultReportingSaveCmd extends FaultAbstractCmd {
         
         if (f.getId() == 0) {
             isNew = true;
-            if (getUser().hasPermission("fault_reporting_reporter")) {
+            if (getUser().hasPermission(Permission.FAULT_REPORTING_REPORTER)) {
                 int newId = faultDao.insertFault(f);
                 f.setId(newId);
                 faultDao.setUserWatchingFaultReport(f.getId(), getUser().getId());
@@ -97,7 +98,7 @@ public class FaultReportingSaveCmd extends FaultAbstractCmd {
             }
             origAssignedTo = origFault.getAssignedToUser();
             
-            if (getUser().hasPermission("fault_reporting_resolver")) {
+            if (getUser().hasPermission(Permission.FAULT_REPORTING_RESOLVER)) {
                 faultDao.modifyFault(f);
                 if (f.getAssignedToUser() != null) {
                     faultDao.setUserWatchingFaultReport(f.getId(), f.getAssignedToUser().getId());
@@ -116,7 +117,7 @@ public class FaultReportingSaveCmd extends FaultAbstractCmd {
 
         // send new fault notification
         if (isNew && (f.getAssignedToUser() == null)) {
-            sendNotification(f, getSetup().getMailTemplateFaultNotification(), userDao.getUserListWithPermission(getCompany().getId(), "fault_reporting_resolver"));
+            sendNotification(f, getSetup().getMailTemplateFaultNotification(), userDao.getUserListWithPermission(getCompany().getId(), Permission.FAULT_REPORTING_RESOLVER));
         }
         
         // send fault assignment notification

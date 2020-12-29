@@ -15,6 +15,7 @@ package cz.svjis.servlet.cmd;
 import cz.svjis.bean.FaultReport;
 import cz.svjis.bean.FaultReportDAO;
 import cz.svjis.bean.LogDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.validator.Validator;
 
@@ -38,7 +39,7 @@ public class FaultReportingFastCmd extends FaultAbstractCmd {
         LogDAO logDao = new LogDAO(getCnn());
 
         FaultReport f = faultDao.getFault(getCompany().getId(), parId);
-        if (getUser().hasPermission("fault_reporting_resolver") && (f != null)) {
+        if (getUser().hasPermission(Permission.FAULT_REPORTING_RESOLVER) && (f != null)) {
             
             if (getRequest().getParameter("takeTicket") != null) {
                 f.setAssignedToUser(getUser());

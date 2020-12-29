@@ -35,7 +35,7 @@ public class InquiryDAO extends DAO {
     public boolean canUserVoteInquiry(User user, int inquiryId) throws SQLException {
         boolean result = true;
         
-        if (!user.hasPermission("can_vote_inquiry")) {
+        if (!user.hasPermission(Permission.CAN_VOTE_INQUIRY)) {
             result = false;
         }
         
