@@ -4,6 +4,7 @@
     Author     : jarberan
 --%>
 
+<%@page import="cz.svjis.bean.Permission"%>
 <%@page import="cz.svjis.bean.BuildingEntrance"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="cz.svjis.bean.Language"%>
@@ -61,7 +62,7 @@
                             ><%=report.getDescription() %></textarea>
                         </p>
                         
-                        <% if (user.hasPermission("fault_reporting_resolver")) { %>
+                        <% if (user.hasPermission(Permission.FAULT_REPORTING_RESOLVER)) { %>
 
                         <p>
                         <%=language.getText("Resolver") %><br>

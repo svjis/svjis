@@ -16,6 +16,7 @@ import cz.svjis.bean.Language;
 import cz.svjis.bean.LanguageDAO;
 import cz.svjis.bean.MiniNews;
 import cz.svjis.bean.MiniNewsDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -39,7 +40,7 @@ public class RedactionNewsEditSaveCmd extends Command {
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
         String parTime = Validator.getString(getRequest(), "time", 0, 30, false, false);
         int parLangId = Validator.getInt(getRequest(), "language", 0, Validator.MAX_INT_ALLOWED, false);
-        String parBody = Validator.getString(getRequest(), "body", 0, Validator.MAX_STRING_LEN_ALLOWED, false, getUser().hasPermission("can_write_html"));
+        String parBody = Validator.getString(getRequest(), "body", 0, Validator.MAX_STRING_LEN_ALLOWED, false, getUser().hasPermission(Permission.CAN_WRITE_HTML));
         boolean parPublished = Validator.getBoolean(getRequest(), "publish");
 
         MiniNewsDAO newsDao = new MiniNewsDAO(getCnn());

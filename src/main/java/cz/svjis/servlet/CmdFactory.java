@@ -12,6 +12,7 @@
 
 package cz.svjis.servlet;
 
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.cmd.ArticleDetailCmd;
 import cz.svjis.servlet.cmd.ArticleFastCmd;
 import cz.svjis.servlet.cmd.ArticleInquiryVoteCmd;
@@ -128,7 +129,7 @@ public class CmdFactory {
         // *****************
         // * Article       *
         // *****************
-        if (ctx.getUser().hasPermission("menu_articles")) {
+        if (ctx.getUser().hasPermission(Permission.MENU_ARTICLES)) {
 
             if (page.equals("articleList")) {
                 return new ArticleListCmd(ctx);
@@ -158,7 +159,7 @@ public class CmdFactory {
         // *****************
         // * Contact       *
         // *****************
-        if (ctx.getUser().hasPermission("menu_contact")) {
+        if (ctx.getUser().hasPermission(Permission.MENU_CONTACT)) {
 
             if (page.equals("contact")) {
                 return new ContactCompanyCmd(ctx);
@@ -172,7 +173,7 @@ public class CmdFactory {
         // ***********************
         // * My bulilding units  *
         // ***********************
-        if (ctx.getUser().hasPermission("menu_building_units")) {
+        if (ctx.getUser().hasPermission(Permission.MENU_BUILDING_UNITS)) {
             if (page.equals("myBuildingUnitList")) {
                 return new MyBuildingUnitsCmd(ctx);
             }
@@ -181,7 +182,7 @@ public class CmdFactory {
         // **********************
         // * Personal settings  *
         // **********************
-        if (ctx.getUser().hasPermission("menu_personal_settings")) {
+        if (ctx.getUser().hasPermission(Permission.MENU_PERSONAL_SETTINGS)) {
             if (page.equals("psUserDetail")) {
                 return new PersonalUserDetailCmd(ctx);
             }
@@ -201,7 +202,7 @@ public class CmdFactory {
         // *****************
         // * Redaction     *
         // *****************
-        if (ctx.getUser().hasPermission("menu_redaction")) {
+        if (ctx.getUser().hasPermission(Permission.MENU_REDACTION)) {
             if (page.equals("redactionArticleList") || page.equals("redactionArticleSearch")) {
                 return new RedactionArticleListCmd(ctx);
             }
@@ -275,7 +276,7 @@ public class CmdFactory {
         // *******************
         // * Fault reporting *
         // *******************
-        if (ctx.getUser().hasPermission("menu_fault_reporting")) {
+        if (ctx.getUser().hasPermission(Permission.MENU_FAULT_REPORTING)) {
             if (page.startsWith("faultReportingList")) {
                 return new FaultReportingListCmd(ctx);
             }
@@ -312,7 +313,7 @@ public class CmdFactory {
         // ******************
         // * Administration *
         // ******************
-        if (ctx.getUser().hasPermission("menu_administration")) {
+        if (ctx.getUser().hasPermission(Permission.MENU_ADMINISTRATION)) {
             if (page.equals("companyDetail")) {
                 return new CompanyDetailCmd(ctx);
             }

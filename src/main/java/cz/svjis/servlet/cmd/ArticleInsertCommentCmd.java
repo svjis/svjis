@@ -16,6 +16,7 @@ import cz.svjis.bean.Article;
 import cz.svjis.bean.ArticleComment;
 import cz.svjis.bean.ArticleDAO;
 import cz.svjis.bean.MailDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.bean.User;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
@@ -37,7 +38,7 @@ public class ArticleInsertCommentCmd extends Command {
     public void execute() throws Exception {
         
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
-        String parBody = Validator.getString(getRequest(), "body", 0, 10000, true, getUser().hasPermission("can_write_html"));
+        String parBody = Validator.getString(getRequest(), "body", 0, 10000, true, getUser().hasPermission(Permission.CAN_WRITE_HTML));
 
         ArticleDAO articleDao = new ArticleDAO(getCnn());
 
@@ -47,7 +48,7 @@ public class ArticleInsertCommentCmd extends Command {
 
         if ((article != null)
                 && article.isCommentsAllowed()
-                && getUser().hasPermission("can_insert_article_comment")
+                && getUser().hasPermission(Permission.CAN_INSERT_ARTICLE_COMMENT)
                 && (parBody != null)
                 && (!parBody.equals(""))) {
 
