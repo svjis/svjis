@@ -4,6 +4,7 @@
     Author     : berk
 --%>
 
+<%@page import="cz.svjis.bean.Permission"%>
 <%@page import="cz.svjis.bean.ArticleAttachment"%>
 <%@page import="cz.svjis.common.HttpUtils"%>
 <%@page import="cz.svjis.bean.ArticleComment"%>
@@ -112,7 +113,7 @@
                 
 
                     <%
-                        if ((article.isCommentsAllowed()) && (user.hasPermission("can_insert_article_comment"))) {
+                        if ((article.isCommentsAllowed()) && (user.hasPermission(Permission.CAN_INSERT_ARTICLE_COMMENT))) {
                     %>
                         <p>
                             <% if (watching.equals("0")) { %>

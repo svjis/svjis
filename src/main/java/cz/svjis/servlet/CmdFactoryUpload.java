@@ -12,6 +12,7 @@
 
 package cz.svjis.servlet;
 
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.cmd.BuildingPictureCmd;
 import cz.svjis.servlet.cmd.DownloadCmd;
 import cz.svjis.servlet.cmd.ExportBuildingUnitListToXlsCmd;
@@ -40,7 +41,7 @@ public class CmdFactoryUpload {
         // ******************
         // * Administration *
         // ******************
-        if (ctx.getUser().hasPermission("menu_administration")) {
+        if (ctx.getUser().hasPermission(Permission.MENU_ADMINISTRATION)) {
             
             if (page.equals("exportBuildingUnitListToXls")) {
                 return new ExportBuildingUnitListToXlsCmd(ctx);
@@ -54,7 +55,7 @@ public class CmdFactoryUpload {
         // *******************
         // * Fault reporting *
         // *******************
-        if (ctx.getUser().hasPermission("menu_fault_reporting")) {
+        if (ctx.getUser().hasPermission(Permission.MENU_FAULT_REPORTING)) {
             if (page.equals("faultReportingDownload")) {
                 return new FaultReportingDownloadCmd(ctx);
             }
@@ -63,7 +64,7 @@ public class CmdFactoryUpload {
         // *****************
         // * Redaction     *
         // *****************
-        if (ctx.getUser().hasPermission("menu_redaction")) {
+        if (ctx.getUser().hasPermission(Permission.MENU_REDACTION)) {
             if (page.equals("exportInquiryLogToXls")) {
                 return new ExportInquiryLogToXlsCmd(ctx);
             }

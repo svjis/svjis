@@ -16,6 +16,7 @@ import cz.svjis.bean.FaultReport;
 import cz.svjis.bean.FaultReportComment;
 import cz.svjis.bean.FaultReportDAO;
 import cz.svjis.bean.MailDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
 import cz.svjis.servlet.CmdContext;
@@ -38,7 +39,7 @@ public class FaultReportingInsertCommentCmd extends Command {
     public void execute() throws Exception {
         
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
-        String parBody = Validator.getString(getRequest(), "body", 0, Validator.MAX_STRING_LEN_ALLOWED, false, getUser().hasPermission("can_write_html"));
+        String parBody = Validator.getString(getRequest(), "body", 0, Validator.MAX_STRING_LEN_ALLOWED, false, getUser().hasPermission(Permission.CAN_WRITE_HTML));
         
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
         UserDAO userDao = new UserDAO(getCnn());
@@ -47,7 +48,7 @@ public class FaultReportingInsertCommentCmd extends Command {
         
         if ((report.getId() != 0) 
                 && (!report.isClosed()) 
-                && getUser().hasPermission("fault_reporting_comment")
+                && getUser().hasPermission(Permission.FAULT_REPORTING_COMMENT)
                 && (parBody != null)
                 && (!parBody.equals(""))) {
             FaultReportComment c = new FaultReportComment();
@@ -71,7 +72,7 @@ public class FaultReportingInsertCommentCmd extends Command {
             List<User> userList = faultDao.getUserListWatchingFaultReport(report.getId());
             
             if (report.getAssignedToUser() == null) {
-                List<User> resolvers = userDao.getUserListWithPermission(getCompany().getId(), "fault_reporting_resolver");
+                List<User> resolvers = userDao.getUserListWithPermission(getCompany().getId(), Permission.FAULT_REPORTING_RESOLVER);
                 for(User r: resolvers) {
                     boolean add = true;
                     for (User u: userList) {

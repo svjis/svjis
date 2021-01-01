@@ -4,6 +4,7 @@
     Author     : jarberan
 --%>
 
+<%@page import="cz.svjis.bean.Permission"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%@page import="java.io.File"%>
@@ -34,7 +35,7 @@
                 <div id="content-main-in">
                     <h1 class="page-title" style="<%=stl %>" id="tbl-desc">#<%=report.getId() %>&nbsp;-&nbsp;<%=HttpUtils.highlight(report.getSubject(), request.getParameter("search")) %></h1>
 
-                    <% if (user.hasPermission("fault_reporting_resolver")) { %>
+                    <% if (user.hasPermission(Permission.FAULT_REPORTING_RESOLVER)) { %>
                     [<a href="Dispatcher?page=faultReportingEdit&id=<%=report.getId() %>"><%=language.getText("Edit") %></a>]&nbsp;
                         <% if (report.getAssignedToUser() == null) { %>
                         [<a href="Dispatcher?page=faultReportingFast&id=<%=report.getId() %>&takeTicket=1"><%=language.getText("Take this ticket") %></a>]&nbsp;
@@ -155,7 +156,7 @@
                       
                     
                     <%
-                        if (user.hasPermission("fault_reporting_comment") && (!report.isClosed())) {
+                        if (user.hasPermission(Permission.FAULT_REPORTING_COMMENT) && (!report.isClosed())) {
                     %>
                         <form action="Dispatcher" method="post">
                              <input type="hidden" name="page" value="faultInsertComment">

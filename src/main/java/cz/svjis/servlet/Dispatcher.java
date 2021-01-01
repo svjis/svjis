@@ -19,6 +19,7 @@ import cz.svjis.bean.CompanyDAO;
 import cz.svjis.bean.Language;
 import cz.svjis.bean.LanguageDAO;
 import cz.svjis.bean.LogDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.bean.Setup;
 import cz.svjis.bean.SystemMenuEntry;
 import cz.svjis.bean.User;
@@ -211,13 +212,13 @@ public class Dispatcher extends HttpServlet {
     
     private ArrayList<SystemMenuEntry> createSystemMenu(User u) {
         ArrayList<SystemMenuEntry> result = new ArrayList<>();
-        if (u.hasPermission("menu_articles")) result.add(new SystemMenuEntry("Articles", "Dispatcher?page=articleList"));
-        if (u.hasPermission("menu_contact")) result.add(new SystemMenuEntry("Contact", "Dispatcher?page=contact"));
-        if (u.hasPermission("menu_building_units")) result.add(new SystemMenuEntry("Units", "Dispatcher?page=myBuildingUnitList"));
-        if (u.hasPermission("menu_personal_settings")) result.add(new SystemMenuEntry("Personal settings", "Dispatcher?page=psUserDetail"));
-        if (u.hasPermission("menu_redaction")) result.add(new SystemMenuEntry("Redaction", "Dispatcher?page=redactionArticleList"));
-        if (u.hasPermission("menu_fault_reporting")) result.add(new SystemMenuEntry("Fault reporting", "Dispatcher?page=faultReportingList"));
-        if (u.hasPermission("menu_administration")) result.add(new SystemMenuEntry("Administration", "Dispatcher?page=companyDetail"));
+        if (u.hasPermission(Permission.MENU_ARTICLES)) result.add(new SystemMenuEntry("Articles", "Dispatcher?page=articleList"));
+        if (u.hasPermission(Permission.MENU_CONTACT)) result.add(new SystemMenuEntry("Contact", "Dispatcher?page=contact"));
+        if (u.hasPermission(Permission.MENU_BUILDING_UNITS)) result.add(new SystemMenuEntry("Units", "Dispatcher?page=myBuildingUnitList"));
+        if (u.hasPermission(Permission.MENU_PERSONAL_SETTINGS)) result.add(new SystemMenuEntry("Personal settings", "Dispatcher?page=psUserDetail"));
+        if (u.hasPermission(Permission.MENU_REDACTION)) result.add(new SystemMenuEntry("Redaction", "Dispatcher?page=redactionArticleList"));
+        if (u.hasPermission(Permission.MENU_FAULT_REPORTING)) result.add(new SystemMenuEntry("Fault reporting", "Dispatcher?page=faultReportingList"));
+        if (u.hasPermission(Permission.MENU_ADMINISTRATION)) result.add(new SystemMenuEntry("Administration", "Dispatcher?page=companyDetail"));
         
         return result;
     }

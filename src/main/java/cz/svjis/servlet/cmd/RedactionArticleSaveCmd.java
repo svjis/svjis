@@ -19,6 +19,7 @@ import cz.svjis.bean.LanguageDAO;
 import cz.svjis.bean.LogDAO;
 import cz.svjis.bean.Menu;
 import cz.svjis.bean.MenuDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.bean.Role;
 import cz.svjis.bean.RoleDAO;
 import cz.svjis.servlet.CmdContext;
@@ -91,7 +92,7 @@ public class RedactionArticleSaveCmd extends Command {
         } else {
             //-- check permission
             Article article = articleDao.getArticle(getUser(), a.getId());
-            if ((article.getAuthor().getId() != getUser().getId()) && !getUser().hasPermission("redaction_articles_all")) {
+            if ((article.getAuthor().getId() != getUser().getId()) && !getUser().hasPermission(Permission.REDACTION_ARTICLES_ALL)) {
                 Menu menu = menuDao.getMenu(getCompany().getId());
                 getRequest().setAttribute("menu", menu);
                 RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/ArticleNotFound.jsp");

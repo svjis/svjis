@@ -4,6 +4,7 @@
     Author     : jarberan
 --%>
 
+<%@page import="cz.svjis.bean.Permission"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.net.URLEncoder"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -29,7 +30,7 @@
             <div id="content-main">
                 <div id="content-main-in">
                     <h1 class="page-title" id="tbl-desc"><%=language.getText("Fault reporting") %></h1>
-                    <% if (user.hasPermission("fault_reporting_reporter")) { %>
+                    <% if (user.hasPermission(Permission.FAULT_REPORTING_REPORTER)) { %>
                     <a href="Dispatcher?page=faultReportingEdit&id=0" class="create-button"><%=language.getText("Report new fault") %></a>
                     <% } %>
                     <table width="100%" class="list" aria-describedby="tbl-desc">

@@ -15,6 +15,7 @@ package cz.svjis.servlet.cmd;
 import cz.svjis.bean.Inquiry;
 import cz.svjis.bean.InquiryDAO;
 import cz.svjis.bean.InquiryOption;
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -36,7 +37,7 @@ public class RedactionInquirySaveCmd extends Command {
     public void execute() throws Exception {
 
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
-        String parDescription = Validator.getString(getRequest(), "description", 0, 250, false, getUser().hasPermission("can_write_html"));
+        String parDescription = Validator.getString(getRequest(), "description", 0, 250, false, getUser().hasPermission(Permission.CAN_WRITE_HTML));
         String parStartDate = Validator.getString(getRequest(), "startingDate", 0, 30, false, false);
         String parEndDate = Validator.getString(getRequest(), "endingDate", 0, 30, false, false);
         boolean parEnabled = Validator.getBoolean(getRequest(), "publish");

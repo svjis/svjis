@@ -4,6 +4,7 @@
     Author     : jarberan
 --%>
 
+<%@page import="cz.svjis.bean.Permission"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
@@ -28,10 +29,10 @@
             
             <ul class="nav">
                 <li <%=(p.equals("faultReportingList") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=faultReportingList"><%=language.getText("All open") %>&nbsp;(<%=counters.getAllOpenCnt() %>)</a></li>
-                <% if (user.hasPermission("fault_reporting_reporter")) { %>
+                <% if (user.hasPermission(Permission.FAULT_REPORTING_REPORTER)) { %>
                 <li <%=(p.equals("faultReportingListCreatedByMe") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=faultReportingListCreatedByMe"><%=language.getText("Reported by me") %>&nbsp;(<%=counters.getAllCreatedByMeCnt() %>)</a></li>
                 <% } %>
-                <% if (user.hasPermission("fault_reporting_resolver")) { %>
+                <% if (user.hasPermission(Permission.FAULT_REPORTING_RESOLVER)) { %>
                 <li <%=(p.equals("faultReportingListAssignedToMe") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=faultReportingListAssignedToMe"><%=language.getText("Assigned to me") %>&nbsp;(<%=counters.getAllAssignedToMeCnt() %>)</a></li>
                 <% } %>
                 <li <%=(p.equals("faultReportingListClosed") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=faultReportingListClosed"><%=language.getText("All closed") %>&nbsp;(<%=counters.getAllClosedCnt() %>)</a></li>
