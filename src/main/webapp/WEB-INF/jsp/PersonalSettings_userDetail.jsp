@@ -96,7 +96,7 @@
                             <legend><%=language.getText("Login") %></legend>
                             <p>
                                 <label class="common-label" id="lname-label" for="lname-input"><%=language.getText("Login") %></label>
-                                <input class="common-input" id="lname-input" type="text" name="login" maxlength="50" size="30" value="<%=user.getLogin() %>" />
+                                <input class="common-input" id="lname-input" type="text" name="login" maxlength="50" size="50" value="<%=user.getLogin() %>" />
                             </p>
                         </fieldset>
                         <p>
