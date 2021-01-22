@@ -14,10 +14,13 @@ package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.Language;
 import cz.svjis.bean.LanguageDAO;
+import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
+import java.util.ArrayList;
+import javax.servlet.RequestDispatcher;
 
 /**
  *
@@ -36,6 +39,7 @@ public class PersonalUserDetailSaveCmd extends Command {
         String parFirstName = Validator.getString(getRequest(), "firstName", 0, 30, false, false);
         String parLastName = Validator.getString(getRequest(), "lastName", 0, 30, false, false);
         int parLangId = Validator.getInt(getRequest(), "language", 0, Validator.MAX_INT_ALLOWED, false);
+        String parLogin = Validator.getString(getRequest(), "login", 0, 50, false, false);
         String parAddress = Validator.getString(getRequest(), "address", 0, 50, false, false);
         String parCity = Validator.getString(getRequest(), "city", 0, 50, false, false);
         String parPostCode = Validator.getString(getRequest(), "postCode", 0, 10, false, false);
@@ -47,22 +51,43 @@ public class PersonalUserDetailSaveCmd extends Command {
         LanguageDAO languageDao = new LanguageDAO(getCnn());
         UserDAO userDao = new UserDAO(getCnn());
         
-        getUser().setSalutation(parSalutation);
-        getUser().setFirstName(parFirstName);
-        getUser().setLastName(parLastName);
-        getUser().setLanguageId(parLangId);
-        getUser().setAddress(parAddress);
-        getUser().setCity(parCity);
-        getUser().setPostCode(parPostCode);
-        getUser().setCountry(parCountry);
-        getUser().setFixedPhone(parFixedPhone);
-        getUser().setCellPhone(parCellPhone);
-        getUser().seteMail(parEMail);
-        getUser().setShowInPhoneList(getRequest().getParameter("phoneList") != null);
-        userDao.modifyUser(getUser());
-        Language language = languageDao.getDictionary(getUser().getLanguageId());
-        getRequest().getSession().setAttribute("language", language);
-        String url = "Dispatcher?page=psUserDetail";
-        getResponse().sendRedirect(url);
+        User u = userDao.getUser(getCompany().getId(), getUser().getId());
+        u.setSalutation(parSalutation);
+        u.setFirstName(parFirstName);
+        u.setLastName(parLastName);
+        u.setLanguageId(parLangId);
+        u.setLogin(parLogin);
+        u.setAddress(parAddress);
+        u.setCity(parCity);
+        u.setPostCode(parPostCode);
+        u.setCountry(parCountry);
+        u.setFixedPhone(parFixedPhone);
+        u.setCellPhone(parCellPhone);
+        u.seteMail(parEMail);
+        u.setShowInPhoneList(getRequest().getParameter("phoneList") != null);
+
+        String message = "";
+        String errorMessage = "";
+        if (!userDao.testLoginValidity(u.getLogin())) {
+            errorMessage += getLanguage().getText("Login is not valid.") + " (" + u.getLogin() + ")<br>";
+        }
+        if (!userDao.testLoginDuplicity(u.getLogin(), u.getId(), u.getCompanyId())) {
+            errorMessage += getLanguage().getText("Login already exists.") + " (" + u.getLogin() + ")<br>";
+        }
+        if (errorMessage.equals("")) {
+            userDao.modifyUser(u);
+            Language language = languageDao.getDictionary(u.getLanguageId());
+            getRequest().getSession().setAttribute("language", language);
+            getRequest().getSession().setAttribute("user", u);
+            u.setUserLogged(true);
+            message = getLanguage().getText("User has been saved.") + "<br>";
+        }
+
+        getRequest().setAttribute("message", message);
+        getRequest().setAttribute("errorMessage", errorMessage);
+        ArrayList<Language> languageList = new ArrayList(languageDao.getLanguageList());
+        getRequest().setAttribute("languageList", languageList);
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/PersonalSettings_userDetail.jsp");
+        rd.forward(getRequest(), getResponse());
     }
 }

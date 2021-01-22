@@ -617,15 +617,22 @@ public class UserDAO extends DAO {
     
     public boolean testLoginValidity(String login) {
         boolean result = true;
+
+        if (login == null) {
+            return false;
+        }
+
         String s = login;
         for (int i = 0; i < s.length(); i++) {
             if ((s.charAt(i) < 32) || (s.charAt(i) > 126)) {
                 result = false;
             }
         }
-        if (login.isEmpty()) {
+
+        if (login.trim().isEmpty()) {
             result = false;
         }
+
         return result;
     }
     
