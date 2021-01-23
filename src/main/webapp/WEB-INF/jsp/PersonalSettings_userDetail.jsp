@@ -8,7 +8,7 @@
 <%@page import="java.util.Iterator"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
-<jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
+<jsp:useBean id="user" scope="request" class="cz.svjis.bean.User" />
 <jsp:useBean id="languageList" scope="request" class="java.util.ArrayList" />
 <jsp:useBean id="message" scope="request" class="java.lang.String" />
 <jsp:useBean id="errorMessage" scope="request" class="java.lang.String" />
