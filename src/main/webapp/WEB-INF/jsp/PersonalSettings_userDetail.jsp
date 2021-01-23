@@ -8,8 +8,10 @@
 <%@page import="java.util.Iterator"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
-<jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
+<jsp:useBean id="user" scope="request" class="cz.svjis.bean.User" />
 <jsp:useBean id="languageList" scope="request" class="java.util.ArrayList" />
+<jsp:useBean id="message" scope="request" class="java.lang.String" />
+<jsp:useBean id="errorMessage" scope="request" class="java.lang.String" />
 
 <jsp:include page="_header.jsp" />
 <jsp:include page="_tray.jsp" />
@@ -22,6 +24,8 @@
             <div id="content-main">
                 <div id="content-main-in">
                     <h1 class="page-title"><%=user.getSalutation() %> <%=user.getFirstName() %> <%=user.getLastName() %></h1>
+                    <strong class="message"><%=message %></strong>
+                    <strong class="error-message"><%=errorMessage %></strong>
                     <form action="Dispatcher" method="post">
                         <input type="hidden" name="page" value="psUserDetailSave" />
                         <fieldset>
@@ -86,6 +90,13 @@
                             <p>
                                 <label class="common-label" id="show-label" for="show-input"><%=language.getText("Show in contact list") %></label>
                                 <input class="common-input" id="show-input" type="checkbox" name="phoneList" <%=(user.isShowInPhoneList()) ? "checked" : "" %> />
+                            </p>
+                        </fieldset>
+                        <fieldset>
+                            <legend><%=language.getText("Login") %></legend>
+                            <p>
+                                <label class="common-label" id="lname-label" for="lname-input"><%=language.getText("Login") %></label>
+                                <input class="common-input" id="lname-input" type="text" name="login" maxlength="50" size="50" value="<%=user.getLogin() %>" />
                             </p>
                         </fieldset>
                         <p>
