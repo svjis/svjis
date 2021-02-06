@@ -5,7 +5,7 @@
 
     <groupId>cz.svjis</groupId>
     <artifactId>SVJIS</artifactId>
-    <version>1.18.0-RELEASE</version>
+    <version>1.19.0-RELEASE</version>
     <packaging>war</packaging>
 
     <name>SVJIS</name>
