@@ -3,8 +3,9 @@ name: "Code scanning - action"
 on:
   push:
   pull_request:
-  schedule:
-    - cron: '0 10 * * 6'
+  workflow_dispatch:
+  # schedule:
+  #   - cron: '0 10 * * 6'
 
 jobs:
   CodeQL-Build:
@@ -37,7 +38,7 @@ jobs:
       uses: github/codeql-action/autobuild@v1
 
     # ‚ÑπÔ∏è Command-line programs to run using the OS shell.
-    # Ì†ΩÌ≥ö https://git.io/JvXDl
+    # ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ https://git.io/JvXDl
 
     # ‚úèÔ∏è If the Autobuild fails above, remove it and uncomment the following three lines
     #    and modify them (or add more) to build your code if your project
