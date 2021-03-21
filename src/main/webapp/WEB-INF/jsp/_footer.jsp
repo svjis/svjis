@@ -18,7 +18,7 @@
             <%
                 String link = "%s";
                 if (user.isUserLogged()) {
-                    link = "<a href=\"https://github.com/svjis/svjis\">%s</a>";
+                    link = "<a href=\"https://svjis.github.io\">%s</a>";
                 }
             %>
             System <strong><%= String.format(link, "SVJIS 1.20.0-SNAPSHOT") %></strong>, released 6.12.2020, All Rights Reserved &reg; 2007-2020
