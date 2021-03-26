@@ -57,8 +57,8 @@
                             </p>
                             <% } %>
                             <p>
-                                <input type="file" name="attachment" size="40">
-                                <input type="submit" value="<%=language.getText("Insert picture") %>">
+                                <input id="picture-upload" type="file" name="attachment" size="40">
+                                <input id="picture-submit" type="submit" value="<%=language.getText("Insert picture") %>">
                             </p>
                         </fieldset>
                     </form>
