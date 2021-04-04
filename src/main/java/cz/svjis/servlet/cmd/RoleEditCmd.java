@@ -51,7 +51,7 @@ public class RoleEditCmd extends Command {
             role = roleDao.getRole(getCompany().getId(), parId);
         }
         getRequest().setAttribute("role", role);
-        ArrayList<Permission> permissionList = new ArrayList(roleDao.getPermissionList());
+        ArrayList<Permission> permissionList = new ArrayList<>(roleDao.getPermissionList());
         getRequest().setAttribute("permissionList", permissionList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Administration_roleDetail.jsp");
         rd.forward(getRequest(), getResponse());

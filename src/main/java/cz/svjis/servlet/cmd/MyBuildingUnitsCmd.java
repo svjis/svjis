@@ -33,7 +33,7 @@ public class MyBuildingUnitsCmd extends Command {
     public void execute() throws Exception {
         BuildingDAO buildingDao = new BuildingDAO(getCnn());
         
-        ArrayList<BuildingUnit> userHasUnitList = new ArrayList(buildingDao.getUserHasBuildingUnitList(getUser().getId()));
+        ArrayList<BuildingUnit> userHasUnitList = new ArrayList<>(buildingDao.getUserHasBuildingUnitList(getUser().getId()));
         getRequest().setAttribute("userHasUnitList", userHasUnitList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Units_userUnitList.jsp");
         rd.forward(getRequest(), getResponse());

@@ -23,6 +23,7 @@ import java.util.logging.Logger;
  */
 public class Setup implements Serializable {
     
+    private static final long serialVersionUID = 3626374526742634517L;
     private static final Logger LOGGER = Logger.getLogger(Setup.class.getName());
     
     private static final String ANONIMOUS_USER_ID_KEY = "anonymous.user.id";

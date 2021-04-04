@@ -20,6 +20,9 @@ import java.util.Properties;
  * @author berk
  */
 public class Language implements Serializable {
+
+    private static final long serialVersionUID = -4665070584674500953L;
+    
     private int id;
     private String description;
     private Properties phrases = new Properties();

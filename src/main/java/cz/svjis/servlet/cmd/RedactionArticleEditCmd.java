@@ -67,9 +67,9 @@ public class RedactionArticleEditCmd extends Command {
         Menu menu = menuDao.getMenu(getCompany().getId());
         menu.setActiveSection(-1);
         getRequest().setAttribute("menu", menu);
-        ArrayList<Language> languageList = new ArrayList(languageDao.getLanguageList());
+        ArrayList<Language> languageList = new ArrayList<>(languageDao.getLanguageList());
         getRequest().setAttribute("languageList", languageList);
-        ArrayList<Role> roleList = new ArrayList(roleDao.getRoleList(getCompany().getId()));
+        ArrayList<Role> roleList = new ArrayList<>(roleDao.getRoleList(getCompany().getId()));
         getRequest().setAttribute("roleList", roleList);
 
         RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Redaction_ArticleEdit.jsp");

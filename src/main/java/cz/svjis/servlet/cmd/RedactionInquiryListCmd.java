@@ -49,7 +49,7 @@ public class RedactionInquiryListCmd extends Command {
         sl.setTotalNumOfItems(inquiryDao.getInquirySize(getUser(), false));
         getRequest().setAttribute("slider", sl);
         
-        ArrayList<Inquiry> inquiryList = new ArrayList(inquiryDao.getInquiryList(pageNo, pageSize, getUser(), false));
+        ArrayList<Inquiry> inquiryList = new ArrayList<>(inquiryDao.getInquiryList(pageNo, pageSize, getUser(), false));
         getRequest().setAttribute("inquiryList", inquiryList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Redaction_InquiryList.jsp");
         rd.forward(getRequest(), getResponse());

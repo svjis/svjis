@@ -52,10 +52,10 @@ public class FaultReportingEditCmd extends Command {
         }
         getRequest().setAttribute("report", report);
         
-        ArrayList<User> resolverList = new ArrayList(userDao.getUserListWithPermission(getCompany().getId(), Permission.FAULT_REPORTING_RESOLVER));
+        ArrayList<User> resolverList = new ArrayList<>(userDao.getUserListWithPermission(getCompany().getId(), Permission.FAULT_REPORTING_RESOLVER));
         getRequest().setAttribute("resolverList", resolverList);
         
-        ArrayList<BuildingEntrance> entranceList = new ArrayList(buildingDao.getBuildingEntranceList(buildingDao.getBuilding(getCompany().getId()).getId()));
+        ArrayList<BuildingEntrance> entranceList = new ArrayList<>(buildingDao.getBuildingEntranceList(buildingDao.getBuilding(getCompany().getId()).getId()));
         getRequest().setAttribute("entranceList", entranceList);
         
         FaultReportMenuCounters counters = faultDao.getMenuCounters(getCompany().getId(), getUser().getId());

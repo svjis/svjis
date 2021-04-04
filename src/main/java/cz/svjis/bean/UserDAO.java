@@ -266,8 +266,8 @@ public class UserDAO extends DAO {
         return result;
     }
     
-    private HashMap getUserRoles(int userId) throws SQLException {
-        HashMap result = new HashMap();
+    private HashMap<Integer, String> getUserRoles(int userId) throws SQLException {
+        HashMap<Integer, String> result = new HashMap<>();
         String select = "SELECT "
                 + "a.ROLE_ID, "
                 + "r.DESCRIPTION "
@@ -285,8 +285,8 @@ public class UserDAO extends DAO {
         return result;
     }
     
-    private HashMap getUserPermissions(int userId) throws SQLException {
-        HashMap result = new HashMap();
+    private HashMap<String, String> getUserPermissions(int userId) throws SQLException {
+        HashMap<String, String> result = new HashMap<>();
         String select = "SELECT "
                 + "a.ROLE_ID, "
                 + "p.DESCRIPTION "

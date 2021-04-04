@@ -48,7 +48,7 @@ public class ExportBuildingUnitListToXlsCmd extends Command {
             LanguageDAO languageDao = new LanguageDAO(getCnn());
             Language lang = languageDao.getDictionary(getUser().getLanguageId());
             BuildingDAO buildingDao = new BuildingDAO(getCnn());
-            ArrayList<BuildingUnit> buildingUnitList = new ArrayList(buildingDao.getBuildingUnitList(
+            ArrayList<BuildingUnit> buildingUnitList = new ArrayList<>(buildingDao.getBuildingUnitList(
                     buildingDao.getBuilding(getUser().getCompanyId()).getId(),
                     0));
 
@@ -79,7 +79,7 @@ public class ExportBuildingUnitListToXlsCmd extends Command {
                 line.add(String.valueOf(u.getDenominator()));
                 ec.addLine(line, ec.getNormalStyle());
                 
-                ArrayList<User> userList = new ArrayList(buildingDao.getBuildingUnitHasUserList(u.getId()));
+                ArrayList<User> userList = new ArrayList<>(buildingDao.getBuildingUnitHasUserList(u.getId()));
                 for (User owner: userList) {
                     line = new ArrayList<>();
                     line.add("");

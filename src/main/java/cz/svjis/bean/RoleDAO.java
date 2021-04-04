@@ -59,8 +59,8 @@ public class RoleDAO extends DAO {
         return result;
     }
     
-    private HashMap getRolePermissions(int roleId) throws SQLException  {
-        HashMap result = new HashMap();
+    private HashMap<Integer, String> getRolePermissions(int roleId) throws SQLException  {
+        HashMap<Integer, String> result = new HashMap<>();
         String select  = "SELECT a.PERMISSION_ID, p.DESCRIPTION FROM ROLE_HAS_PERMISSION a LEFT JOIN PERMISSION p ON (p.ID = a.PERMISSION_ID) WHERE (a.ROLE_ID = ?)";
         try (PreparedStatement ps = cnn.prepareStatement(select)) {
             ps.setInt(1, roleId);

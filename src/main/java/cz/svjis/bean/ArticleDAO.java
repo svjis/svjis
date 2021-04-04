@@ -494,8 +494,8 @@ public class ArticleDAO extends DAO {
         return result;
     }    
     
-    private HashMap getArticleRoles(int articleId) throws SQLException {
-        HashMap result = new HashMap();
+    private HashMap<Integer, String> getArticleRoles(int articleId) throws SQLException {
+        HashMap<Integer, String> result = new HashMap<>();
         String select = "SELECT "
                 + "a.ROLE_ID, "
                 + "r.DESCRIPTION "

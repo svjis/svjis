@@ -18,6 +18,8 @@ package cz.svjis.validator;
  */
 public class InputValidationException extends Exception {
 
+    private static final long serialVersionUID = -5489466695905327131L;
+
     /**
      * Creates a new instance of <code>InputValidationException</code> without
      * detail message.

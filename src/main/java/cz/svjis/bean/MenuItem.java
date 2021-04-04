@@ -50,7 +50,7 @@ public class MenuItem {
      */
     public void setSubSections(List<MenuItem> subSections) {
         if (subSections != null) {
-            this.subSections = new ArrayList(subSections);
+            this.subSections = new ArrayList<>(subSections);
         } else {
             this.subSections = null;
         }

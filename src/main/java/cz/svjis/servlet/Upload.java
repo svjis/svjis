@@ -34,6 +34,7 @@ import javax.sql.DataSource;
  */
 public class Upload extends HttpServlet {
     
+    private static final long serialVersionUID = 4288299484779224542L;
     private static final Logger LOGGER = Logger.getLogger(Upload.class.getName());
 
     /**

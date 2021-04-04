@@ -40,7 +40,7 @@ public class Article {
     private int numOfReads;
     private ArrayList<ArticleAttachment> attachmentList;
     private ArrayList<ArticleComment> commentList;
-    private HashMap roles;
+    private HashMap<Integer, String> roles;
     
     public Article() {
         clear();
@@ -64,7 +64,7 @@ public class Article {
         numOfReads = 0;
         attachmentList = new ArrayList<>();
         commentList = null;
-        roles = new HashMap();
+        roles = new HashMap<>();
     }
     
     /**
@@ -246,7 +246,7 @@ public class Article {
      * @param attachmentList the attachmentList to set
      */
     public void setAttachmentList(List<ArticleAttachment> attachmentList) {
-        this.attachmentList = new ArrayList(attachmentList);
+        this.attachmentList = new ArrayList<>(attachmentList);
     }
 
     /**
@@ -260,7 +260,7 @@ public class Article {
      * @param commentList the commentList to set
      */
     public void setCommentList(List<ArticleComment> commentList) {
-        this.commentList = new ArrayList(commentList);
+        this.commentList = new ArrayList<>(commentList);
     }
 
     /**
@@ -280,15 +280,15 @@ public class Article {
     /**
      * @return the roleList
      */
-    public Map getRoles() {
+    public Map<Integer, String> getRoles() {
         return roles;
     }
 
     /**
      * @param roleList the roleList to set
      */
-    public void setRoles(Map roleList) {
-        this.roles = new HashMap(roleList);
+    public void setRoles(Map<Integer, String> roleList) {
+        this.roles = new HashMap<>(roleList);
     }
 
     /**

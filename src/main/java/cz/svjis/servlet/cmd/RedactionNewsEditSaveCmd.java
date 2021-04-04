@@ -68,7 +68,7 @@ public class RedactionNewsEditSaveCmd extends Command {
         
         n = newsDao.getMiniNews(getUser(), n.getId());
         getRequest().setAttribute("miniNews", n);
-        ArrayList<Language> languageList = new ArrayList(languageDao.getLanguageList());
+        ArrayList<Language> languageList = new ArrayList<>(languageDao.getLanguageList());
         getRequest().setAttribute("languageList", languageList);
         String message = getLanguage().getText("Saved") + "<br>";
         getRequest().setAttribute("message", message);

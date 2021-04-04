@@ -56,9 +56,9 @@ public class UserEditCmd extends Command {
             cUser = userDao.getUser(getCompany().getId(), parId);
         }
         getRequest().setAttribute("cUser", cUser);
-        ArrayList<Language> languageList = new ArrayList(languageDao.getLanguageList());
+        ArrayList<Language> languageList = new ArrayList<>(languageDao.getLanguageList());
         getRequest().setAttribute("languageList", languageList);
-        ArrayList<Role> roleList = new ArrayList(roleDao.getRoleList(getCompany().getId()));
+        ArrayList<Role> roleList = new ArrayList<>(roleDao.getRoleList(getCompany().getId()));
         getRequest().setAttribute("roleList", roleList);
         getRequest().setAttribute("sendCredentials", new cz.svjis.bean.Boolean(false));
         getRequest().setAttribute("message", "");

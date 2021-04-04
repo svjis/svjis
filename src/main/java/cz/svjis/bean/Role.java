@@ -24,7 +24,7 @@ public class Role {
     private int companyId;
     private String description;
     private int numOfUsers;
-    private HashMap permissions;
+    private HashMap<Integer, String> permissions;
     
     public Role() {
         clear();
@@ -34,7 +34,7 @@ public class Role {
         id = 0;
         companyId = 0;
         description = "";
-        permissions = new HashMap();
+        permissions = new HashMap<>();
     }
 
     /**
@@ -82,15 +82,15 @@ public class Role {
     /**
      * @return the permissions
      */
-    public Map getPermissions() {
+    public Map<Integer, String> getPermissions() {
         return permissions;
     }
 
     /**
      * @param permissions the permissions to set
      */
-    public void setPermissions(Map permissions) {
-        this.permissions = new HashMap(permissions);
+    public void setPermissions(Map<Integer, String> permissions) {
+        this.permissions = new HashMap<>(permissions);
     }
 
     /**
