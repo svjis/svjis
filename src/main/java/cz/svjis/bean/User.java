@@ -22,6 +22,9 @@ import java.util.Map;
  * @author berk
  */
 public final class User implements Serializable {
+    
+    private static final long serialVersionUID = 1983885918888351558L;
+    
     private int id;
     private int companyId;
     private String firstName;
@@ -41,8 +44,8 @@ public final class User implements Serializable {
     private boolean userLogged;
     private int languageId;
     private Date lastLogin;
-    private HashMap roles;
-    private HashMap permissions;
+    private HashMap<Integer, String> roles;
+    private HashMap<String, String> permissions;
     private String internalNote;
 
     public User() {
@@ -69,8 +72,8 @@ public final class User implements Serializable {
         userLogged = false;
         languageId = 0;
         lastLogin = null;
-        roles = new HashMap();
-        permissions = new HashMap();
+        roles = new HashMap<>();
+        permissions = new HashMap<>();
         internalNote = "";
     }
     
@@ -315,18 +318,18 @@ public final class User implements Serializable {
     /**
      * @return the roles
      */
-    public Map getRoles() {
+    public Map<Integer, String> getRoles() {
         return roles;
     }
 
     /**
      * @param roles the roles to set
      */
-    public void setRoles(Map roles) {
-        this.roles = new HashMap(roles);
+    public void setRoles(Map<Integer, String> roles) {
+        this.roles = new HashMap<>(roles);
     }
     
-    public boolean hasRole(String r) {
+    public boolean hasRole(int r) {
         return getRoles().get(r) != null;
     }
 
@@ -347,15 +350,15 @@ public final class User implements Serializable {
     /**
      * @return the permissions
      */
-    public Map getPermissions() {
+    public Map<String, String> getPermissions() {
         return permissions;
     }
 
     /**
      * @param permissions the permissions to set
      */
-    public void setPermissions(Map permissions) {
-        this.permissions = new HashMap(permissions);
+    public void setPermissions(Map<String, String> permissions) {
+        this.permissions = new HashMap<>(permissions);
     }
     
     public boolean hasPermission(String p) {

@@ -23,6 +23,9 @@ import java.util.logging.Logger;
  * @author berk
  */
 public class Company implements Serializable {
+
+    private static final long serialVersionUID = 7557691488314296277L;
+    
     private int id;
     private String name;
     private String address;

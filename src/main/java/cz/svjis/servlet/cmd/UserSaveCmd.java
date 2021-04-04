@@ -87,7 +87,7 @@ public class UserSaveCmd extends Command {
         u.setPassword(parPassword);
         u.setEnabled(parEnabled);
         u.setInternalNote(parInternalNote);
-        HashMap uRoles = new HashMap();
+        HashMap<Integer, String> uRoles = new HashMap<>();
         List<Role> roles = roleDao.getRoleList(getCompany().getId());
         Iterator<Role> roleI = roles.iterator();
         while (roleI.hasNext()) {
@@ -138,9 +138,9 @@ public class UserSaveCmd extends Command {
         Company currCompany = compDao.getCompany(getCompany().getId());
         getRequest().setAttribute("currCompany", currCompany);
         getRequest().setAttribute("cUser", u);
-        ArrayList<Language> languageList = new ArrayList(languageDao.getLanguageList());
+        ArrayList<Language> languageList = new ArrayList<>(languageDao.getLanguageList());
         getRequest().setAttribute("languageList", languageList);
-        ArrayList<Role> roleList = new ArrayList(roleDao.getRoleList(getCompany().getId()));
+        ArrayList<Role> roleList = new ArrayList<>(roleDao.getRoleList(getCompany().getId()));
         getRequest().setAttribute("roleList", roleList);
         getRequest().setAttribute("sendCredentials", new cz.svjis.bean.Boolean(parSendCredentials));
         getRequest().setAttribute("message", message);

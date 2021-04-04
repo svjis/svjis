@@ -47,9 +47,9 @@ public class UserBuildingUnitsCmd extends Command {
         getRequest().setAttribute("currCompany", currCompany);
         User cUser = userDao.getUser(getCompany().getId(), parId);
         getRequest().setAttribute("cUser", cUser);
-        ArrayList<BuildingUnit> userHasUnitList = new ArrayList(buildingDao.getUserHasBuildingUnitList(cUser.getId()));
+        ArrayList<BuildingUnit> userHasUnitList = new ArrayList<>(buildingDao.getUserHasBuildingUnitList(cUser.getId()));
         getRequest().setAttribute("userHasUnitList", userHasUnitList);
-        ArrayList<BuildingUnit> unitList = new ArrayList(buildingDao.getBuildingUnitList(getCompany().getId(), 0));
+        ArrayList<BuildingUnit> unitList = new ArrayList<>(buildingDao.getBuildingUnitList(getCompany().getId(), 0));
         getRequest().setAttribute("unitList", unitList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Administration_userUnits.jsp");
         rd.forward(getRequest(), getResponse());

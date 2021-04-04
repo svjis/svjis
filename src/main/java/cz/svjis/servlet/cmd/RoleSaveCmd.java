@@ -44,8 +44,8 @@ public class RoleSaveCmd extends Command {
         role.setId(parId);
         role.setCompanyId(getCompany().getId());
         role.setDescription(parDescription);
-        HashMap props = new HashMap();
-        ArrayList<Permission> perms = new ArrayList(roleDao.getPermissionList());
+        HashMap<Integer, String> props = new HashMap<>();
+        ArrayList<Permission> perms = new ArrayList<>(roleDao.getPermissionList());
         Iterator<Permission> permsI = perms.iterator();
         while (permsI.hasNext()) {
             Permission p = permsI.next();

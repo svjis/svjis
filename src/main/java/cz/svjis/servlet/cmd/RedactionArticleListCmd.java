@@ -64,7 +64,7 @@ public class RedactionArticleListCmd extends Command {
         ArrayList<Article> articleList = new ArrayList<>();
         if (parPage.equals("redactionArticleList")) {
             sl.setTotalNumOfItems(articleDao.getNumOfArticles(getUser(), parSection, false, !getUser().hasPermission(Permission.REDACTION_ARTICLES_ALL), parRoleId));
-            articleList = new ArrayList(articleDao.getArticleList(
+            articleList = new ArrayList<>(articleDao.getArticleList(
                 getUser(),
                 parSection,
                 parPageNo,
@@ -95,7 +95,7 @@ public class RedactionArticleListCmd extends Command {
                 return;
             }
 
-            articleList = new ArrayList(articleDao.getArticleListFromSearch(parSearch, getUser(),
+            articleList = new ArrayList<>(articleDao.getArticleListFromSearch(parSearch, getUser(),
                 parSection,
                 parPageNo,
                 getSetup().getArticlePageSize(),
@@ -107,7 +107,7 @@ public class RedactionArticleListCmd extends Command {
         getRequest().setAttribute("slider", sl);
         getRequest().setAttribute("articleList", articleList);
 
-        ArrayList<Role> roleList = new ArrayList(roleDao.getRoleList(getCompany().getId()));
+        ArrayList<Role> roleList = new ArrayList<>(roleDao.getRoleList(getCompany().getId()));
         getRequest().setAttribute("roleList", roleList);
         getRequest().setAttribute("roleIds", String.valueOf(parRoleId));
 

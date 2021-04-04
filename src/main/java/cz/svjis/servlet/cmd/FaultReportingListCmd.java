@@ -54,19 +54,19 @@ public class FaultReportingListCmd extends Command {
         ArrayList<FaultReport> reportList = new ArrayList<>();
         if (parPage.equals("faultReportingList")) {
             sl.setTotalNumOfItems(faultDao.getNumOfFaults(getCompany().getId(), 0));
-            reportList = new ArrayList(faultDao.getFaultList(getCompany().getId(), pageNo, pageSize, 0));
+            reportList = new ArrayList<>(faultDao.getFaultList(getCompany().getId(), pageNo, pageSize, 0));
         }
         if (parPage.equals("faultReportingListCreatedByMe")) {
             sl.setTotalNumOfItems(faultDao.getNumOfFaultsByCreator(getCompany().getId(), getUser().getId()));
-            reportList = new ArrayList(faultDao.getFaultListByCreator(getCompany().getId(), pageNo, pageSize, getUser().getId()));
+            reportList = new ArrayList<>(faultDao.getFaultListByCreator(getCompany().getId(), pageNo, pageSize, getUser().getId()));
         }
         if (parPage.equals("faultReportingListAssignedToMe")) {
             sl.setTotalNumOfItems(faultDao.getNumOfFaultsByResolver(getCompany().getId(), getUser().getId()));
-            reportList = new ArrayList(faultDao.getFaultListByResolver(getCompany().getId(), pageNo, pageSize, getUser().getId()));
+            reportList = new ArrayList<>(faultDao.getFaultListByResolver(getCompany().getId(), pageNo, pageSize, getUser().getId()));
         }
         if (parPage.equals("faultReportingListClosed")) {
             sl.setTotalNumOfItems(faultDao.getNumOfFaults(getCompany().getId(), 1));
-            reportList = new ArrayList(faultDao.getFaultList(getCompany().getId(), pageNo, pageSize, 1));
+            reportList = new ArrayList<>(faultDao.getFaultList(getCompany().getId(), pageNo, pageSize, 1));
         }
         if (parPage.equals("faultReportingListSearch")) {
             if (parSearch.length() < 3) {
@@ -89,7 +89,7 @@ public class FaultReportingListCmd extends Command {
                 return;
             }
 
-            reportList = new ArrayList(faultDao.getFaultListFromSearch(getCompany().getId(), pageNo, pageSize, parSearch));
+            reportList = new ArrayList<>(faultDao.getFaultListFromSearch(getCompany().getId(), pageNo, pageSize, parSearch));
         }
 
         getRequest().setAttribute("searchKey", parSearch);

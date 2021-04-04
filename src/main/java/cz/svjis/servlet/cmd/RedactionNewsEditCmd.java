@@ -45,7 +45,7 @@ public class RedactionNewsEditCmd extends Command {
             miniNews = newsDao.getMiniNews(getUser(), parId);
         }
         getRequest().setAttribute("miniNews", miniNews);
-        ArrayList<Language> languageList = new ArrayList(languageDao.getLanguageList());
+        ArrayList<Language> languageList = new ArrayList<>(languageDao.getLanguageList());
         getRequest().setAttribute("languageList", languageList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Redaction_MiniNewsEdit.jsp");
         rd.forward(getRequest(), getResponse());

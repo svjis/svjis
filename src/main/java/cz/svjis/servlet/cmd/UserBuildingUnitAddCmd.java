@@ -47,7 +47,7 @@ public class UserBuildingUnitAddCmd extends Command {
 
         if ((unit != null) && (unit.getBuildingId() == b.getId()) && u != null) {
             boolean alreadyHas = false;
-            ArrayList<User> usrList = new ArrayList(buildingDao.getBuildingUnitHasUserList(parUnitId));
+            ArrayList<User> usrList = new ArrayList<>(buildingDao.getBuildingUnitHasUserList(parUnitId));
             for (User usr: usrList) {
                 if (usr.getId() == u.getId()) {
                     alreadyHas = true;

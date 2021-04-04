@@ -71,7 +71,7 @@ public class ArticleInsertCommentCmd extends Command {
                     getSetup().getMailPassword(),
                     getSetup().getMailSender());
 
-            ArrayList<User> userList = new ArrayList(articleDao.getUserListWatchingArticle(article.getId()));
+            ArrayList<User> userList = new ArrayList<>(articleDao.getUserListWatchingArticle(article.getId()));
             for (User u : userList) {
                 if (u.getId() == getUser().getId()) {
                     continue;

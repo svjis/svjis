@@ -39,7 +39,7 @@ public class BuildingEntranceListCmd extends Command {
         
         Company currCompany = compDao.getCompany(getCompany().getId());
         getRequest().setAttribute("currCompany", currCompany);
-        ArrayList<BuildingEntrance> buildingEntranceList = new ArrayList(buildingDao.getBuildingEntranceList(
+        ArrayList<BuildingEntrance> buildingEntranceList = new ArrayList<>(buildingDao.getBuildingEntranceList(
                 buildingDao.getBuilding(getCompany().getId()).getId()));
         getRequest().setAttribute("buildingEntranceList", buildingEntranceList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Administration_buildingEntranceList.jsp");

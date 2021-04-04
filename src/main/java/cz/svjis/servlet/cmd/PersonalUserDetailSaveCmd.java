@@ -86,7 +86,7 @@ public class PersonalUserDetailSaveCmd extends Command {
         getRequest().setAttribute("message", message);
         getRequest().setAttribute("errorMessage", errorMessage);
         getRequest().setAttribute("user", u);
-        ArrayList<Language> languageList = new ArrayList(languageDao.getLanguageList());
+        ArrayList<Language> languageList = new ArrayList<>(languageDao.getLanguageList());
         getRequest().setAttribute("languageList", languageList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/PersonalSettings_userDetail.jsp");
         rd.forward(getRequest(), getResponse());

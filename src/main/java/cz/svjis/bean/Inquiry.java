@@ -161,7 +161,7 @@ public class Inquiry {
      * @param optionList the optionList to set
      */
     public void setOptionList(List<InquiryOption> optionList) {
-        this.optionList = new ArrayList(optionList);
+        this.optionList = new ArrayList<>(optionList);
     }
 
     /**

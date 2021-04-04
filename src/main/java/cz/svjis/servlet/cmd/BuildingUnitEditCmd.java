@@ -43,7 +43,7 @@ public class BuildingUnitEditCmd extends Command {
 
         Company currCompany = compDao.getCompany(getCompany().getId());
         getRequest().setAttribute("currCompany", currCompany);
-        ArrayList<BuildingUnitType> buildingUnitType = new ArrayList(buildingDao.getBuildingUnitTypeList());
+        ArrayList<BuildingUnitType> buildingUnitType = new ArrayList<>(buildingDao.getBuildingUnitTypeList());
         getRequest().setAttribute("buildingUnitType", buildingUnitType);
         BuildingUnit buildingUnit = null;
         int id = parId;

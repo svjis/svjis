@@ -47,6 +47,7 @@ import javax.sql.DataSource;
  */
 public class Dispatcher extends HttpServlet {
 
+    private static final long serialVersionUID = 1462376190610692513L;
     private static final Logger LOGGER = Logger.getLogger(Dispatcher.class.getName());
     
     /** 

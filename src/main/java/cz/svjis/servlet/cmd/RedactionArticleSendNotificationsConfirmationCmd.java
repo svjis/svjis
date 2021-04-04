@@ -72,7 +72,7 @@ public class RedactionArticleSendNotificationsConfirmationCmd extends Command {
                 getSetup().getMailSender());
 
         int counter = 0;
-        ArrayList<User> userList = new ArrayList(articleDao.getUserListForNotificationAboutNewArticle(parId));
+        ArrayList<User> userList = new ArrayList<>(articleDao.getUserListForNotificationAboutNewArticle(parId));
         Iterator<User> it = userList.iterator();
         while (it.hasNext()) {
             User u = it.next();

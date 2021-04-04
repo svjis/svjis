@@ -49,7 +49,7 @@ public class RedactionNewsListCmd extends Command {
         sl.setTotalNumOfItems(newsDao.getMiniNewsSize(getUser(), false));
         getRequest().setAttribute("slider", sl);
         
-        ArrayList<MiniNews> miniNewsList = new ArrayList(newsDao.getMiniNewsList(pageNo, pageSize, getUser(), false));
+        ArrayList<MiniNews> miniNewsList = new ArrayList<>(newsDao.getMiniNewsList(pageNo, pageSize, getUser(), false));
         getRequest().setAttribute("miniNewsList", miniNewsList);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Redaction_MiniNewsList.jsp");
         rd.forward(getRequest(), getResponse());

@@ -39,10 +39,10 @@ public class BuildingPictureSaveCmd extends Command {
 
         FileItemFactory factory = new DiskFileItemFactory();
         ServletFileUpload upload = new ServletFileUpload(factory);
-        List items = upload.parseRequest(getRequest());
-        java.util.Iterator iterator = items.iterator();
+        List<FileItem> items = upload.parseRequest(getRequest());
+        java.util.Iterator<FileItem> iterator = items.iterator();
         while (iterator.hasNext()) {
-            FileItem item = (FileItem) iterator.next();
+            FileItem item = iterator.next();
             File f = new File(item.getName());
             if (!item.isFormField()) {
                 compDao.savePicture(getCompany().getId(), item.getContentType(), f.getName(), item.get());

@@ -172,7 +172,7 @@ public class FaultReport {
      * @param faultReportCommentList the faultReportCommentList to set
      */
     public void setFaultReportCommentList(List<FaultReportComment> faultReportCommentList) {
-        this.faultReportCommentList = new ArrayList(faultReportCommentList);
+        this.faultReportCommentList = new ArrayList<>(faultReportCommentList);
     }
 
     /**
@@ -186,7 +186,7 @@ public class FaultReport {
      * @param attachmentList the attachmentList to set
      */
     public void setAttachmentList(List<FaultReportAttachment> attachmentList) {
-        this.attachmentList = new ArrayList(attachmentList);
+        this.attachmentList = new ArrayList<>(attachmentList);
     }
 
     /**

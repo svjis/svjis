@@ -75,8 +75,8 @@ public class RedactionArticleSaveCmd extends Command {
         a.setCreationDate(sdf.parse(parCreationDate));
         a.setMenuNodeId(parMenuId);
 
-        HashMap uRoles = new HashMap();
-        ArrayList<Role> roles = new ArrayList(roleDao.getRoleList(getCompany().getId()));
+        HashMap<Integer, String> uRoles = new HashMap<>();
+        ArrayList<Role> roles = new ArrayList<>(roleDao.getRoleList(getCompany().getId()));
         Iterator<Role> roleI = roles.iterator();
         while (roleI.hasNext()) {
             Role r = roleI.next();
@@ -109,9 +109,9 @@ public class RedactionArticleSaveCmd extends Command {
         Menu menu = menuDao.getMenu(getCompany().getId());
         menu.setActiveSection(-1);
         getRequest().setAttribute("menu", menu);
-        ArrayList<Language> languageList = new ArrayList(languageDao.getLanguageList());
+        ArrayList<Language> languageList = new ArrayList<>(languageDao.getLanguageList());
         getRequest().setAttribute("languageList", languageList);
-        ArrayList<Role> roleList = new ArrayList(roleDao.getRoleList(getCompany().getId()));
+        ArrayList<Role> roleList = new ArrayList<>(roleDao.getRoleList(getCompany().getId()));
         getRequest().setAttribute("roleList", roleList);
         String message = getLanguage().getText("Saved") + "<br>";
         getRequest().setAttribute("message", message);
