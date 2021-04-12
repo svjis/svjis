@@ -17,7 +17,6 @@ import cz.svjis.bean.User;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.InputValidationException;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -47,17 +46,18 @@ public class HandleErrorCmd extends Command {
             String userId = user.getFirstName() + " " + user.getLastName() + " (" + user.getId() + ")";
             String userAgent = getRequest().getHeader("User-Agent");
 
-            Properties setup = (Properties) session.getAttribute("setup");
-            if ((setup != null) && (setup.getProperty("error.report.recipient") != null)) {
+            if (!getSetup().getErrorReportRecipient().equals("")) {
                 MailDAO mailDao = new MailDAO(
                         getCnn(),
-                        setup.getProperty("mail.smtp"),
-                        setup.getProperty("mail.login"),
-                        setup.getProperty("mail.password"),
-                        setup.getProperty("mail.sender"));
+                        getSetup().getMailSmtp(),
+                        getSetup().getMailSmtpPort(),
+                        getSetup().getMailSmtpSSL(),
+                        getSetup().getMailLogin(),
+                        getSetup().getMailPassword(),
+                        getSetup().getMailSender());
 
                 mailDao.sendErrorReport(
-                        setup.getProperty("error.report.recipient"), 
+                        getSetup().getErrorReportRecipient(), 
                         getRequest().getRequestURL().toString() + "/" + getRequest().getQueryString(), 
                         userId,
                         userAgent,

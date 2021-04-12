@@ -65,6 +65,8 @@ public class LostPasswordSubmitCmd extends Command {
             MailDAO mailDao = new MailDAO(
                     getCnn(),
                     getSetup().getMailSmtp(),
+                    getSetup().getMailSmtpPort(),
+                    getSetup().getMailSmtpSSL(),
                     getSetup().getMailLogin(),
                     getSetup().getMailPassword(),
                     getSetup().getMailSender());

@@ -54,6 +54,10 @@ public class Setup implements Serializable {
     private static final String MAIL_SENDER_DEFAULT = "";
     private static final String MAIL_SMTP_KEY = "mail.smtp";
     private static final String MAIL_SMTP_DEFAULT = "";
+    private static final String MAIL_SMTP_SSL_KEY = "mail.smtp.ssl";
+    private static final boolean MAIL_SMTP_SSL_DEFAULT = false;
+    private static final String MAIL_SMTP_PORT_KEY = "mail.smtp.port";
+    private static final int MAIL_SMTP_PORT_DEFAULT = 25;
     private static final String MAIL_TEMPLATE_ARTICLE_NOTIFICATION_KEY = "mail.template.article.notification";
     private static final String MAIL_TEMPLATE_ARTICLE_NOTIFICATION_DEFAULT = "";
     private static final String MAIL_TEMPLATE_COMMENT_NOTIFICATION_KEY = "mail.template.comment.notification";
@@ -197,6 +201,22 @@ public class Setup implements Serializable {
     
     /**
      * 
+     * @return smtpSSL option
+     */
+    public boolean getMailSmtpSSL() {
+        return getBooleanValue(Setup.MAIL_SMTP_SSL_KEY, Setup.MAIL_SMTP_SSL_DEFAULT);
+    }
+    
+    /**
+     * 
+     * @return port of smtp server
+     */
+    public int getMailSmtpPort() {
+        return getIntValue(Setup.MAIL_SMTP_PORT_KEY, Setup.MAIL_SMTP_PORT_DEFAULT);
+    }
+    
+    /**
+     * 
      * @return new article notification template
      */
     public String getMailTemplateArticleNotification() {
@@ -272,6 +292,20 @@ public class Setup implements Serializable {
      */
     public Properties getSetupProps() {
         return props;
+    }
+    
+    private boolean getBooleanValue(String key, boolean defaultValue) {
+        boolean result = defaultValue;
+        
+        if (props.getProperty(key) != null) {
+            if (props.getProperty(key).equals("true")) {
+                result = true;
+            } else {
+                result = false;
+            }
+        }
+        
+        return result;
     }
     
     private int getIntValue(String key, int defaultValue) {
