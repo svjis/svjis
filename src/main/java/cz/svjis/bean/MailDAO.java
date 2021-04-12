@@ -57,10 +57,10 @@ public class MailDAO extends DAO {
         email.setCharset("UTF-8");
         email.setHostName(smtp);
         if (smtpTLS) {
-            email.setTLS(true);
+            email.setStartTLSEnabled(true);
             email.setSmtpPort(smtpPort);
         } else {
-            email.setTLS(false);
+            email.setStartTLSEnabled(false);
             email.setSmtpPort(smtpPort);
         }
         email.setAuthentication(login, password);
