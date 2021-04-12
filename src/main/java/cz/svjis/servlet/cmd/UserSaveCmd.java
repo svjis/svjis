@@ -129,7 +129,7 @@ public class UserSaveCmd extends Command {
                         getCnn(),
                         getSetup().getMailSmtp(),
                         getSetup().getMailSmtpPort(),
-                        getSetup().getMailSmtpTLS(),
+                        getSetup().getMailSmtpSSL(),
                         getSetup().getMailLogin(),
                         getSetup().getMailPassword(),
                         getSetup().getMailSender());

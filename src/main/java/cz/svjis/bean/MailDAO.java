@@ -37,16 +37,16 @@ public class MailDAO extends DAO {
     
     private String smtp;
     private int smtpPort;
-    private boolean smtpTLS;
+    private boolean smtpSSL;
     private String login;
     private String password;
     private String sender;
 
-    public MailDAO(Connection cnn, String smtp, int smtpPort, boolean smtpTLS, String login, String password, String sender) {
+    public MailDAO(Connection cnn, String smtp, int smtpPort, boolean smtpSSL, String login, String password, String sender) {
         super(cnn);
         this.smtp = smtp;
         this.smtpPort = smtpPort;
-        this.smtpTLS = smtpTLS;
+        this.smtpSSL = smtpSSL;
         this.login = login;
         this.password = password;
         this.sender = sender;
@@ -56,9 +56,10 @@ public class MailDAO extends DAO {
         HtmlEmail email = new HtmlEmail();
         email.setCharset("UTF-8");
         email.setHostName(smtp);
-        if (smtpTLS) {
-            email.setStartTLSEnabled(true);
-            email.setSmtpPort(smtpPort);
+        if (smtpSSL) {
+            email.setSSLOnConnect(true);
+            email.setSSLCheckServerIdentity(true);
+            email.setSslSmtpPort(Integer.toString(smtpPort));
         } else {
             email.setStartTLSEnabled(false);
             email.setSmtpPort(smtpPort);

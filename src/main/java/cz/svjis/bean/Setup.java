@@ -54,8 +54,8 @@ public class Setup implements Serializable {
     private static final String MAIL_SENDER_DEFAULT = "";
     private static final String MAIL_SMTP_KEY = "mail.smtp";
     private static final String MAIL_SMTP_DEFAULT = "";
-    private static final String MAIL_SMTP_TLS_KEY = "mail.smtp.tls";
-    private static final boolean MAIL_SMTP_TLS_DEFAULT = false;
+    private static final String MAIL_SMTP_SSL_KEY = "mail.smtp.ssl";
+    private static final boolean MAIL_SMTP_SSL_DEFAULT = false;
     private static final String MAIL_SMTP_PORT_KEY = "mail.smtp.port";
     private static final int MAIL_SMTP_PORT_DEFAULT = 25;
     private static final String MAIL_TEMPLATE_ARTICLE_NOTIFICATION_KEY = "mail.template.article.notification";
@@ -203,8 +203,8 @@ public class Setup implements Serializable {
      * 
      * @return smtpSSL option
      */
-    public boolean getMailSmtpTLS() {
-        return getBooleanValue(Setup.MAIL_SMTP_TLS_KEY, Setup.MAIL_SMTP_TLS_DEFAULT);
+    public boolean getMailSmtpSSL() {
+        return getBooleanValue(Setup.MAIL_SMTP_SSL_KEY, Setup.MAIL_SMTP_SSL_DEFAULT);
     }
     
     /**

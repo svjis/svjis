@@ -64,7 +64,7 @@ public class MailSenderJob implements Runnable {
                     cnn,
                     s.getMailSmtp(),
                     s.getMailSmtpPort(),
-                    s.getMailSmtpTLS(),
+                    s.getMailSmtpSSL(),
                     s.getMailLogin(),
                     s.getMailPassword(),
                     s.getMailSender());

@@ -951,7 +951,7 @@ BEGIN
   INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('mail.sender', :COMPANY_ID, 'noreply@mycompany.com');
   INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('mail.smtp', :COMPANY_ID, 'smtp.mycompany.com');
   INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('mail.smtp.port', :COMPANY_ID, '25');
-  INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('mail.smtp.tls', :COMPANY_ID, 'false');
+  INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('mail.smtp.ssl', :COMPANY_ID, 'false');
   INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('mail.template.article.notification', :COMPANY_ID, 'Dobrý den,<br><br>rádi bychom Vás upozornili na následující článek na stránkách SVJ. <br><br>%s<br><br>S pozdravem,<br>Výbor SVJ');
   INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('mail.template.comment.notification', :COMPANY_ID, 'Uživatel %s přidal nový komentář k článku %s: <br><br><br>%s');
   INSERT INTO APPLICATION_SETUP (ID, COMPANY_ID, "VALUE") VALUES ('mail.template.fault.assigned', :COMPANY_ID, 'Uživatel %s vám přiřadil tiket %s: <br><br><br>%s');
