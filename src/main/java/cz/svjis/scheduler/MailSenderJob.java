@@ -63,6 +63,8 @@ public class MailSenderJob implements Runnable {
             MailDAO mailDao = new MailDAO(
                     cnn,
                     s.getMailSmtp(),
+                    s.getMailSmtpPort(),
+                    s.getMailSmtpTLS(),
                     s.getMailLogin(),
                     s.getMailPassword(),
                     s.getMailSender());
