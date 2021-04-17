@@ -19,6 +19,12 @@ package cz.svjis.bean;
 public class BoardMember {
     private User user;
     private BoardMemberType boardMemberType;
+    
+    public BoardMember() {
+        super();
+        user = new User();
+        boardMemberType = new BoardMemberType();
+    }
 
     /**
      * @return the user

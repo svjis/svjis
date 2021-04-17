@@ -11,6 +11,7 @@
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="boardTypes" scope="request" class="java.util.ArrayList" />
 <jsp:useBean id="userList" scope="request" class="java.util.ArrayList" />
+<jsp:useBean id="boardMember" scope="request" class="cz.svjis.bean.BoardMember" />
 
 <jsp:include page="_header.jsp" />
 <jsp:include page="_tray.jsp" />
@@ -25,6 +26,8 @@
                     <h1 class="page-title"><%=language.getText("Board") %></h1>
                     <form action="Dispatcher" method="post">
                         <input type="hidden" name="page" value="boardMemberSave" />
+                        <input type="hidden" name="origTypeId" value="<%=boardMember.getBoardMemberType().getId()  %>" />
+                        <input type="hidden" name="origUserId" value="<%=boardMember.getUser().getId()  %>" />
                         <fieldset>
                             <legend class="hidden-legend"><%=language.getText("General") %></legend>
                             <p>
@@ -34,7 +37,7 @@
                                     <%
                                         for (User u: (ArrayList<User>) userList) {
                                     %>
-                                    <option value="<%=u.getId() %>"><%=u.getLastName() %>&nbsp;<%=u.getFirstName() %></option>
+                                    <option value="<%=u.getId() %>" <%=(u.getId() == boardMember.getUser().getId()) ? "SELECTED" : "" %>><%=u.getLastName() %>&nbsp;<%=u.getFirstName() %></option>
                                     <%
                                         }
                                     %>
@@ -47,7 +50,7 @@
                                     <%
                                         for (BoardMemberType t: (ArrayList<BoardMemberType>) boardTypes) {
                                     %>
-                                        <option value="<%=t.getId() %>"><%=t.getDescription() %></option>
+                                        <option value="<%=t.getId() %>" <%=(t.getId() == boardMember.getBoardMemberType().getId()) ? "SELECTED" : "" %>><%=t.getDescription() %></option>
                                     <%
                                         }
                                     %>
