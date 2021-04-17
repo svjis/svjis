@@ -32,9 +32,15 @@ public class BoardSaveCmd extends Command {
 
         int parTypeId = Validator.getInt(getRequest(), "typeId", 0, Validator.MAX_INT_ALLOWED, false);
         int parUserId = Validator.getInt(getRequest(), "userId", 0, Validator.MAX_INT_ALLOWED, false);
+        int parOrigTypeId = Validator.getInt(getRequest(), "origTypeId", 0, Validator.MAX_INT_ALLOWED, false);
+        int parOrigUserId = Validator.getInt(getRequest(), "origUserId", 0, Validator.MAX_INT_ALLOWED, false);
 
         BoardMemberDAO boardDao = new BoardMemberDAO(getCnn());
 
+        if ((parOrigUserId != 0) && (parOrigTypeId != 0)) {
+            boardDao.deleteBoardMember(getCompany().getId(), parOrigUserId, parOrigTypeId);
+        }
+        
         if ((parUserId != 0) && (parTypeId != 0)) {
             boardDao.addBoardMember(getCompany().getId(), parUserId, parTypeId);
         }

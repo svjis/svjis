@@ -22,13 +22,14 @@
                 <div id="content-main-in">
                     <h1 class="page-title" id="tbl-desc"><%=language.getText("Board") %></h1>
 
-                    [<a href="Dispatcher?page=boardMemberEdit&id=0"><%=language.getText("Add new member") %></a>]
+                    [<a href="Dispatcher?page=boardMemberEdit&typeId=0&userId=0"><%=language.getText("Add new member") %></a>]
                     
                     <table class="list" aria-describedby="tbl-desc">
                         <tr>
                             <th class="list" scope="col">&nbsp;</th>
                             <th class="list" scope="col"><%=language.getText("Name") %></th>
                             <th class="list" scope="col"><%=language.getText("Position") %></th>
+                            <th class="list" scope="col">&nbsp;</th>
                             <th class="list" scope="col">&nbsp;</th>
                         </tr>
                     <%
@@ -40,6 +41,7 @@
                             <td class="list" style="text-align: right"><%=++i %></td>
                             <td class="list"><%=bm.getUser().getFullName(true) %></td>
                             <td class="list"><%=bm.getBoardMemberType().getDescription() %></td>
+                            <td class="list"><a href="Dispatcher?page=boardMemberEdit&typeId=<%=bm.getBoardMemberType().getId() %>&userId=<%=bm.getUser().getId() %>"><img src="gfx/pencil.png" border="0" title="<%=language.getText("Edit") %>" alt="<%=language.getText("Edit") %>"></a></td>
                             <td class="list"><a onclick="if (!confirm('<%=language.getText("Really do you want to remove board member") %>&nbsp;<%=bm.getUser().getFirstName() %>&nbsp;<%=bm.getUser().getLastName() %> ?')) return false;" href="Dispatcher?page=boardMemberDelete&typeId=<%=bm.getBoardMemberType().getId() %>&userId=<%=bm.getUser().getId() %>"><img src="gfx/delete.png" border="0" title="<%=language.getText("Delete") %>" alt="<%=language.getText("Delete") %>"></a></td>
                         </tr>
                     <%

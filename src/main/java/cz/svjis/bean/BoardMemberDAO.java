@@ -90,6 +90,45 @@ public class BoardMemberDAO extends DAO {
     }
     
     
+    public BoardMember getBoardMember(int companyId, int userId, int typeId) throws SQLException {
+        BoardMember result = new BoardMember();
+        String select = "SELECT a.USER_ID,\n" +
+                "       c.FIRST_NAME,\n" +
+                "       c.LAST_NAME,\n" +
+                "       c.SALUTATION,\n" +
+                "       a.BOARD_MEMBER_TYPE_ID,\n" +
+                "       b.DESCRIPTION AS BOARD_MEMBER_TYPE\n" +
+                "FROM BOARD_MEMBER a\n" +
+                "LEFT JOIN BOARD_MEMBER_TYPE b ON b.ID = a.BOARD_MEMBER_TYPE_ID\n" +
+                "LEFT JOIN \"USER\" c ON c.ID = a.USER_ID\n" +
+                "WHERE c.COMPANY_ID = ? AND a.USER_ID = ? AND a.BOARD_MEMBER_TYPE_ID = ?\n" +
+                "ORDER BY a.BOARD_MEMBER_TYPE_ID, c.LAST_NAME collate UNICODE_CI_AI";
+        
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setInt(1, companyId);
+            ps.setInt(2, userId);
+            ps.setInt(3, typeId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    BoardMemberType bmt = new BoardMemberType();
+                    bmt.setId(rs.getInt("BOARD_MEMBER_TYPE_ID"));
+                    bmt.setDescription(rs.getString("BOARD_MEMBER_TYPE"));
+                    User u = new User();
+                    u.setId(rs.getInt("USER_ID"));
+                    u.setFirstName(rs.getString("FIRST_NAME"));
+                    u.setLastName(rs.getString("LAST_NAME"));
+                    u.setSalutation(rs.getString("SALUTATION"));
+                    result = new BoardMember();
+                    result.setBoardMemberType(bmt);
+                    result.setUser(u);
+                }
+            }
+        }
+        
+        return result;
+    }
+    
+    
     public void addBoardMember(int companyId, int userId, int typeId) throws SQLException {
         String selectUser = "SELECT a.ID FROM \"USER\" a WHERE a.COMPANY_ID = ? AND a.ID = ? AND a.ENABLED = 1";
         String selectType = "SELECT a.ID FROM BOARD_MEMBER_TYPE a WHERE a.ID = ?";
