@@ -10,31 +10,16 @@ Děkuji, že zvažujete přispívat do projektu SVJIS. Níže uvádím několik 
 
 ## Jak přidávat nový kód
 
-Nejlepším způsobem pro nové přispěvovatele je použití GitHub pull requestů. To znamená vytvoření privátního forku projektu, zapracování změn do větve ve vašem forku a nakonec vytvoření pull requestu prostřednistvím GitHub UI (je to jednodušší než se zdá). Pull request je jednak způsob jak převzít kód z vaší větve do hlavního repozitáře a jednak je to framework pro code review.  
+Tento repozitář používá [GitHub flow](https://guides.github.com/introduction/flow/).
 
-Tento projekt používá [Gitflow Workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow). Pojmenování větví ve vašem projektu by mělo respektovat konvenci používanou v hlavním projektu.  
-
-*Pro přidání nové vlastnosti systému:*
-
-* **feature/**meaningful-feature-name
-  * např. `feature/component-error-handler`
-
-*Pro opravu chyby:*
-
-* **fix/**feature-name/short-name-of-problem-being-fixed
-  * např. `fix/error-page-handler/parent-page-lookup`
-
-Než začnete věnovat váš čas vlastnímu programování, je někdy lepší zamýšlenou úpravu nejprve prodiskutovat s komunitou. V tom případě vytvořte GitHub issue s popisem problému nebo vlastnosti kterou zamýšlíte řešit.  
-
-Pokud už máte práva provádět commity, pak byste opravy a malé úpravy měli dělat přímo ve sdíleném repozitáři.  
-
-Existuje hezký návod jak pracovat s pull requesty: [https://help.github.com/articles/using-pull-requests](https://help.github.com/articles/using-pull-requests). Tak jak je uvedeno v článku, používáme obojí **Fork & Pull** a **Shared Repository Model**.
+1. Udělejte si fork repozitáře.
+1. Proveďte úpravy a vyzkoušejte funkčnost. Nezapomeňte přidat JUnit test pro váš kód. 
+1. Pro otestování můžete spustit a případně i doplnit [automatický test](https://github.com/svjis/svjis-selenium).
+1. Vytvořte Pull-Request a popište vaše změny v komentáři.
 
 ### Než začnete programovat
 
 Nejlepší pull requesty jsou ty malé a zaměřené na jeden konkrétní problém. Nepokoušejte se v jednom pull requestu "předělat svět"
-
-* Nezapomeňte přidat JUnit test pro váš kód.
 
 ## Spolupráce na Code Review
 
