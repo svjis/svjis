@@ -13,6 +13,7 @@
 package cz.svjis.servlet;
 
 import cz.svjis.bean.Permission;
+import cz.svjis.servlet.cmd.AdvertListCmd;
 import cz.svjis.servlet.cmd.ArticleDetailCmd;
 import cz.svjis.servlet.cmd.ArticleFastCmd;
 import cz.svjis.servlet.cmd.ArticleInquiryVoteCmd;
@@ -309,7 +310,16 @@ public class CmdFactory {
                 return new FaultReportingAttachmentDeleteCmd(ctx);
             }
         }
-
+        
+        // *******************
+        // * Adverts         *
+        // *******************
+        if (ctx.getUser().hasPermission(Permission.MENU_ADVERTS)) {
+            if (page.equals("advertList")) {
+                return new AdvertListCmd(ctx);
+            }
+        }
+        
         // ******************
         // * Administration *
         // ******************
