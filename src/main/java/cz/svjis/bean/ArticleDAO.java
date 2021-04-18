@@ -16,8 +16,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -38,26 +36,25 @@ public class ArticleDAO extends DAO {
     public List<Article> getArticleTopList(User u, int top, int cntLastMonths) throws SQLException {
         ArrayList<Article> result = new ArrayList<>();
         
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date d = new Date();
         Calendar c = Calendar.getInstance();
         c.setTime(d);
         c.add(Calendar.MONTH, -1 * cntLastMonths);
         d = c.getTime();
 
-        String select = "SELECT FIRST " + top + " " +
+        String select = "SELECT FIRST ? " +
                         "    a.ID, " +
                         "    a.HEADER, " +
                         "    l.CNT " +
                         "FROM ARTICLE a " +
-                        "LEFT JOIN (SELECT l.ARTICLE_ID, count(*) as CNT FROM LOG l WHERE l.OPERATION_ID = 3 AND l.\"TIME\" > '" + sdf.format(d) + "' GROUP BY l.ARTICLE_ID) l " +
+                        "LEFT JOIN (SELECT l.ARTICLE_ID, count(*) as CNT FROM LOG l WHERE l.OPERATION_ID = 3 AND l.\"TIME\" > ? GROUP BY l.ARTICLE_ID) l " +
                         "    ON (l.ARTICLE_ID = a.ID) " +
                         "LEFT JOIN ARTICLE_IS_VISIBLE_TO_ROLE b " +
                         "    ON (b.ARTICLE_ID = a.ID) " +
                         "LEFT JOIN USER_HAS_ROLE c " +
-                        "    ON (c.USER_ID = " + u.getId() + ") AND (c.ROLE_ID = b.ROLE_ID) " +
+                        "    ON (c.USER_ID = ?) AND (c.ROLE_ID = b.ROLE_ID) " +
                         "WHERE " +
-                        "    (a.COMPANY_ID = " + u.getCompanyId() + ") AND " +
+                        "    (a.COMPANY_ID = ?) AND " +
                         "    (l.CNT is not null) AND " +
                         "    (a.PUBLISHED = 1)  AND " +
                         "    (c.ROLE_ID is not null) " +
@@ -67,13 +64,22 @@ public class ArticleDAO extends DAO {
                         "    l.CNT " +
                         "ORDER BY " +
                         "    l.CNT DESC ";
-        try (Statement st = cnn.createStatement(); ResultSet rs = st.executeQuery(select)) {
-            while (rs.next()) {
-                Article a = new Article();
-                a.setId(rs.getInt("ID"));
-                a.setHeader(rs.getString("HEADER"));
-                a.setNumOfReads(rs.getInt("CNT"));
-                result.add(a);
+        
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            
+            ps.setInt(1, top);
+            ps.setDate(2, new java.sql.Date(d.getTime()));
+            ps.setInt(3, u.getId());
+            ps.setInt(4, u.getCompanyId());
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Article a = new Article();
+                    a.setId(rs.getInt("ID"));
+                    a.setHeader(rs.getString("HEADER"));
+                    a.setNumOfReads(rs.getInt("CNT"));
+                    result.add(a);
+                }
             }
         }
         
@@ -107,14 +113,18 @@ public class ArticleDAO extends DAO {
         }
         
         String select = "SELECT COUNT(*) AS CNT FROM ARTICLE a "
-                + "LEFT JOIN ARTICLE_IS_VISIBLE_TO_ROLE b ON b.ARTICLE_ID = a.ID and b.ROLE_ID = " + role + " "
+                + "LEFT JOIN ARTICLE_IS_VISIBLE_TO_ROLE b ON b.ARTICLE_ID = a.ID and b.ROLE_ID = ? "
                 + "WHERE "
                 + createFilter(u ,publishedOnly, ownedOnly)
                 + menuNodeFilter
                 + roleFilter;
-        try (Statement st = cnn.createStatement(); ResultSet rs = st.executeQuery(select)) {
-            if (rs.next()) {
-                result = rs.getInt("CNT");
+        
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setInt(1, role);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    result = rs.getInt("CNT");
+                }
             }
         }
         return result;
@@ -168,44 +178,47 @@ public class ArticleDAO extends DAO {
                 + "FROM ARTICLE a "
                 + "LEFT JOIN \"USER\" u ON (u.ID = a.CREATED_BY_USER_ID) "
                 + "LEFT JOIN MENU_TREE m ON (m.ID = a.MENU_NODE_ID) "
-                + "LEFT JOIN ARTICLE_IS_VISIBLE_TO_ROLE b ON b.ARTICLE_ID = a.ID and b.ROLE_ID = " + role + " "
+                + "LEFT JOIN ARTICLE_IS_VISIBLE_TO_ROLE b ON b.ARTICLE_ID = a.ID and b.ROLE_ID = ? "
                 + "WHERE "
                 + createFilter(u ,publishedOnly, ownedOnly)
                 + menuNodeFilter
                 + roleFilter
                 + "ORDER BY a.CREATION_DATE desc, a.ID desc ";
         
-        try (Statement st = cnn.createStatement(); ResultSet rs = st.executeQuery(select)) {
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setInt(1, role);
+            try (ResultSet rs = ps.executeQuery()) {
             
-            int cPageNo = 1;
-            int cArtNo = 0;
-            
-            while (rs.next()) {
-                if (cPageNo == pageNo) {
-                    Article a = new Article();
-                    a.setId(rs.getInt("ID"));
-                    a.setCompanyId(rs.getInt("COMPANY_ID"));
-                    a.setMenuNodeId(rs.getInt("MENU_NODE_ID"));
-                    a.setMenuNodeDescription(rs.getString("MENU_NODE"));
-                    a.setLanguageId(rs.getInt("LANGUAGE_ID"));
-                    a.setHeader(rs.getString("HEADER"));
-                    a.setDescription(rs.getString("DESCRIPTION"));
-                    a.setAuthorId(rs.getInt("CREATED_BY_USER_ID"));
-                    a.setCreationDate(rs.getTimestamp("CREATION_DATE"));
-                    a.setPublished(rs.getBoolean("PUBLISHED"));
-                    a.setCommentsAllowed(rs.getBoolean("COMMENTS_ALLOWED"));
-                    a.setAuthor(new User());
-                    a.getAuthor().setSalutation(rs.getString("SALUTATION"));
-                    a.getAuthor().setFirstName(rs.getString("FIRST_NAME"));
-                    a.getAuthor().setLastName(rs.getString("LAST_NAME"));
-                    a.setNumOfComments(rs.getInt("COMMENT_CNT"));
-                    result.add(a);
-                }
+                int cPageNo = 1;
+                int cArtNo = 0;
                 
-                cArtNo++;
-                if (cArtNo == pageSize) {
-                    cPageNo++;
-                    cArtNo = 0;
+                while (rs.next()) {
+                    if (cPageNo == pageNo) {
+                        Article a = new Article();
+                        a.setId(rs.getInt("ID"));
+                        a.setCompanyId(rs.getInt("COMPANY_ID"));
+                        a.setMenuNodeId(rs.getInt("MENU_NODE_ID"));
+                        a.setMenuNodeDescription(rs.getString("MENU_NODE"));
+                        a.setLanguageId(rs.getInt("LANGUAGE_ID"));
+                        a.setHeader(rs.getString("HEADER"));
+                        a.setDescription(rs.getString("DESCRIPTION"));
+                        a.setAuthorId(rs.getInt("CREATED_BY_USER_ID"));
+                        a.setCreationDate(rs.getTimestamp("CREATION_DATE"));
+                        a.setPublished(rs.getBoolean("PUBLISHED"));
+                        a.setCommentsAllowed(rs.getBoolean("COMMENTS_ALLOWED"));
+                        a.setAuthor(new User());
+                        a.getAuthor().setSalutation(rs.getString("SALUTATION"));
+                        a.getAuthor().setFirstName(rs.getString("FIRST_NAME"));
+                        a.getAuthor().setLastName(rs.getString("LAST_NAME"));
+                        a.setNumOfComments(rs.getInt("COMMENT_CNT"));
+                        result.add(a);
+                    }
+                    
+                    cArtNo++;
+                    if (cArtNo == pageSize) {
+                        cPageNo++;
+                        cArtNo = 0;
+                    }
                 }
             }
         }

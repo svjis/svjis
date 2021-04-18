@@ -254,17 +254,21 @@ public class BuildingDAO extends DAO {
     
     public void addUserHasBuildingUnitConnection(int userId, int buildingUnitId) throws SQLException {
         String insert = "INSERT INTO USER_HAS_BUILDING_UNIT "
-                + "(USER_ID, BUILDING_UNIT_ID) VALUES (" + userId + ", " + buildingUnitId + ")";
-        try (Statement st = cnn.createStatement()) {
-            st.execute(insert);
+                + "(USER_ID, BUILDING_UNIT_ID) VALUES (?, ?)";
+        try (PreparedStatement ps = cnn.prepareStatement(insert)) {
+            ps.setInt(1, userId);
+            ps.setInt(2, buildingUnitId);
+            ps.execute();
         }
     }
     
     public void deleteUserHasBuildingUnitConnection(int userId, int buildingUnitId) throws SQLException {
-        String insert = "DELETE FROM USER_HAS_BUILDING_UNIT "
-                + "WHERE (USER_ID = " + userId + ") AND (BUILDING_UNIT_ID = " + buildingUnitId + ")";
-        try (Statement st = cnn.createStatement()) {
-            st.execute(insert);
+        String delete = "DELETE FROM USER_HAS_BUILDING_UNIT "
+                + "WHERE (USER_ID = ?) AND (BUILDING_UNIT_ID = ?)";
+        try (PreparedStatement ps = cnn.prepareStatement(delete)) {
+            ps.setInt(1, userId);
+            ps.setInt(2, buildingUnitId);
+            ps.execute();
         }
     }
     
