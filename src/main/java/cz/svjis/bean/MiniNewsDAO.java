@@ -16,7 +16,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,11 +42,12 @@ public class MiniNewsDAO extends DAO {
                 + "FROM MINI_NEWS a "
                 + "LEFT JOIN LANGUAGE l ON (l.ID = a.LANGUAGE_ID) "
                 + "LEFT JOIN \"USER\" u ON (u.ID = a.CREATED_BY_USER_ID) "
-                + "WHERE (a.COMPANY_ID = " + u.getCompanyId() + ") "
+                + "WHERE (a.COMPANY_ID = ?) "
                 + filter;
         
-        try (Statement st = cnn.createStatement()) {
-            try (ResultSet rs = st.executeQuery(select)) {
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setInt(1, u.getCompanyId());
+            try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     result = rs.getInt("CNT");
                 }
@@ -80,38 +80,42 @@ public class MiniNewsDAO extends DAO {
                 + "FROM MINI_NEWS a "
                 + "LEFT JOIN LANGUAGE l ON (l.ID = a.LANGUAGE_ID) "
                 + "LEFT JOIN \"USER\" u ON (u.ID = a.CREATED_BY_USER_ID) "
-                + "WHERE (a.COMPANY_ID = " + u.getCompanyId() + ") "
+                + "WHERE (a.COMPANY_ID = ?) "
                 + filter
                 + "ORDER BY a.NEWS_TIME DESC";
         
-        try (Statement st = cnn.createStatement(); ResultSet rs = st.executeQuery(select)) {
+        try (PreparedStatement ps= cnn.prepareStatement(select)) {
+            ps.setInt(1, u.getCompanyId());
+            
+            try (ResultSet rs = ps.executeQuery()) {
             
             int cPageNo = 1;
             int cArtNo = 0;
             
-            while (rs.next()) {
-                if (cPageNo == pageNo) {
-                    MiniNews mn = new MiniNews();
-                    mn.setId(rs.getInt("ID"));
-                    mn.setCompanyId(rs.getInt("COMPANY_ID"));
-                    mn.setLanguageId(rs.getInt("LANGUAGE_ID"));
-                    mn.setLanguage(rs.getString("LANGUAGE"));
-                    mn.setBody(rs.getString("BODY"));
-                    mn.setTime(rs.getTimestamp("NEWS_TIME"));
-                    User p = new User();
-                    p.setId(rs.getInt("CREATED_BY_USER_ID"));
-                    p.setSalutation(rs.getString("CREATED_BY_SALUTATION"));
-                    p.setFirstName(rs.getString("CREATED_BY_FIRST_NAME"));
-                    p.setLastName(rs.getString("CREATED_BY_LAST_NAME"));
-                    mn.setCreatedBy(p);
-                    mn.setPublished(rs.getBoolean("PUBLISHED"));
-                    result.add(mn);
-                }
-                
-                cArtNo++;
-                if (cArtNo == pageSize) {
-                    cPageNo++;
-                    cArtNo = 0;
+                while (rs.next()) {
+                    if (cPageNo == pageNo) {
+                        MiniNews mn = new MiniNews();
+                        mn.setId(rs.getInt("ID"));
+                        mn.setCompanyId(rs.getInt("COMPANY_ID"));
+                        mn.setLanguageId(rs.getInt("LANGUAGE_ID"));
+                        mn.setLanguage(rs.getString("LANGUAGE"));
+                        mn.setBody(rs.getString("BODY"));
+                        mn.setTime(rs.getTimestamp("NEWS_TIME"));
+                        User p = new User();
+                        p.setId(rs.getInt("CREATED_BY_USER_ID"));
+                        p.setSalutation(rs.getString("CREATED_BY_SALUTATION"));
+                        p.setFirstName(rs.getString("CREATED_BY_FIRST_NAME"));
+                        p.setLastName(rs.getString("CREATED_BY_LAST_NAME"));
+                        mn.setCreatedBy(p);
+                        mn.setPublished(rs.getBoolean("PUBLISHED"));
+                        result.add(mn);
+                    }
+                    
+                    cArtNo++;
+                    if (cArtNo == pageSize) {
+                        cPageNo++;
+                        cArtNo = 0;
+                    }
                 }
             }
         }
@@ -137,23 +141,27 @@ public class MiniNewsDAO extends DAO {
                 + "FROM MINI_NEWS a "
                 + "LEFT JOIN LANGUAGE l ON (l.ID = a.LANGUAGE_ID) "
                 + "LEFT JOIN \"USER\" u ON (u.ID = a.CREATED_BY_USER_ID) "
-                + "WHERE (a.ID = " + id + ") AND (a.COMPANY_ID = " + u.getCompanyId() + ") ";
+                + "WHERE (a.ID = ?) AND (a.COMPANY_ID = ?) ";
         
-        try (Statement st = cnn.createStatement(); ResultSet rs = st.executeQuery(select)) {
-            if (rs.next()) {
-                result.setId(rs.getInt("ID"));
-                result.setCompanyId(rs.getInt("COMPANY_ID"));
-                result.setLanguageId(rs.getInt("LANGUAGE_ID"));
-                result.setLanguage(rs.getString("LANGUAGE"));
-                result.setBody(rs.getString("BODY"));
-                result.setTime(rs.getTimestamp("NEWS_TIME"));
-                User p = new User();
-                p.setId(rs.getInt("CREATED_BY_USER_ID"));
-                p.setSalutation(rs.getString("CREATED_BY_SALUTATION"));
-                p.setFirstName(rs.getString("CREATED_BY_FIRST_NAME"));
-                p.setLastName(rs.getString("CREATED_BY_LAST_NAME"));
-                result.setCreatedBy(p);
-                result.setPublished(rs.getBoolean("PUBLISHED"));
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setInt(1, id);
+            ps.setInt(2, u.getCompanyId());
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    result.setId(rs.getInt("ID"));
+                    result.setCompanyId(rs.getInt("COMPANY_ID"));
+                    result.setLanguageId(rs.getInt("LANGUAGE_ID"));
+                    result.setLanguage(rs.getString("LANGUAGE"));
+                    result.setBody(rs.getString("BODY"));
+                    result.setTime(rs.getTimestamp("NEWS_TIME"));
+                    User p = new User();
+                    p.setId(rs.getInt("CREATED_BY_USER_ID"));
+                    p.setSalutation(rs.getString("CREATED_BY_SALUTATION"));
+                    p.setFirstName(rs.getString("CREATED_BY_FIRST_NAME"));
+                    p.setLastName(rs.getString("CREATED_BY_LAST_NAME"));
+                    result.setCreatedBy(p);
+                    result.setPublished(rs.getBoolean("PUBLISHED"));
+                }
             }
         }
         

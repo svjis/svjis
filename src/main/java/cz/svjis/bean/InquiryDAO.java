@@ -43,11 +43,15 @@ public class InquiryDAO extends DAO {
                 + "a.INQUIRY_OPTION_ID "
                 + "FROM INQUIRY_VOTING_LOG a "
                 + "LEFT JOIN INQUIRY_OPTION o ON (o.ID = a.INQUIRY_OPTION_ID) "
-                + "WHERE (a.USER_ID = " + user.getId() + ") AND (o.INQUIRY_ID = " + inquiryId + ")";
+                + "WHERE (a.USER_ID = ?) AND (o.INQUIRY_ID = ?)";
         
-        try (Statement st = cnn.createStatement(); ResultSet rs = st.executeQuery(select)) {
-            if (rs.next()) {
-                result = false;
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setInt(1, user.getId());
+            ps.setInt(2, inquiryId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    result = false;
+                }
             }
         }
         
@@ -103,39 +107,43 @@ public class InquiryDAO extends DAO {
                 + "(SELECT MAX(CNT) FROM (SELECT COUNT(*) AS CNT FROM INQUIRY_VOTING_LOG l LEFT JOIN INQUIRY_OPTION o ON (o.ID = l.INQUIRY_OPTION_ID) WHERE (o.INQUIRY_ID = a.ID) GROUP BY o.ID)) AS \"MAX\" "
                 + "FROM INQUIRY a "
                 + "LEFT JOIN \"USER\" u ON (u.ID = USER_ID) "
-                + "WHERE (a.COMPANY_ID = " + user.getCompanyId() + ") "
+                + "WHERE (a.COMPANY_ID = ?) "
                 + filter
                 + "ORDER BY a.ID DESC";
         
-        try (Statement st = cnn.createStatement(); ResultSet rs = st.executeQuery(select)) {
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setInt(1, user.getCompanyId());
             
-            int cPageNo = 1;
-            int cArtNo = 0;
+            try (ResultSet rs = ps.executeQuery()) {
             
-            while (rs.next()) {
-                if (cPageNo == pageNo) {
-                    Inquiry i = new Inquiry();
-                    i.setId(rs.getInt("ID"));
-                    i.setCompanyId(rs.getInt("COMPANY_ID"));
-                    User p = new User();
-                    p.setId(rs.getInt("USER_ID"));
-                    p.setSalutation(rs.getString("CREATED_BY_SALUTATION"));
-                    p.setFirstName(rs.getString("CREATED_BY_FIRST_NAME"));
-                    p.setLastName(rs.getString("CREATED_BY_LAST_NAME"));
-                    i.setUser(p);
-                    i.setDescription(rs.getString("DESCRIPTION"));
-                    i.setStartingDate(rs.getDate("STARTING_DATE"));
-                    i.setEndingDate(rs.getDate("ENDING_DATE"));
-                    i.setEnabled(rs.getBoolean("ENABLED"));
-                    i.setCount(rs.getInt("CNT"));
-                    i.setMaximum(rs.getInt("MAX"));
-                    result.add(i);
-                }
+                int cPageNo = 1;
+                int cArtNo = 0;
                 
-                cArtNo++;
-                if (cArtNo == pageSize) {
-                    cPageNo++;
-                    cArtNo = 0;
+                while (rs.next()) {
+                    if (cPageNo == pageNo) {
+                        Inquiry i = new Inquiry();
+                        i.setId(rs.getInt("ID"));
+                        i.setCompanyId(rs.getInt("COMPANY_ID"));
+                        User p = new User();
+                        p.setId(rs.getInt("USER_ID"));
+                        p.setSalutation(rs.getString("CREATED_BY_SALUTATION"));
+                        p.setFirstName(rs.getString("CREATED_BY_FIRST_NAME"));
+                        p.setLastName(rs.getString("CREATED_BY_LAST_NAME"));
+                        i.setUser(p);
+                        i.setDescription(rs.getString("DESCRIPTION"));
+                        i.setStartingDate(rs.getDate("STARTING_DATE"));
+                        i.setEndingDate(rs.getDate("ENDING_DATE"));
+                        i.setEnabled(rs.getBoolean("ENABLED"));
+                        i.setCount(rs.getInt("CNT"));
+                        i.setMaximum(rs.getInt("MAX"));
+                        result.add(i);
+                    }
+                    
+                    cArtNo++;
+                    if (cArtNo == pageSize) {
+                        cPageNo++;
+                        cArtNo = 0;
+                    }
                 }
             }
         }
@@ -167,24 +175,28 @@ public class InquiryDAO extends DAO {
                 + "(SELECT MAX(CNT) FROM (SELECT COUNT(*) AS CNT FROM INQUIRY_VOTING_LOG l LEFT JOIN INQUIRY_OPTION o ON (o.ID = l.INQUIRY_OPTION_ID) WHERE (o.INQUIRY_ID = a.ID) GROUP BY o.ID)) AS \"MAX\" "
                 + "FROM INQUIRY a "
                 + "LEFT JOIN \"USER\" u ON (u.ID = USER_ID) "
-                + "WHERE (a.COMPANY_ID = " + user.getCompanyId() + ") AND (a.ID = " + id + ")";
+                + "WHERE (a.COMPANY_ID = ?) AND (a.ID = ?)";
         
-        try (Statement st = cnn.createStatement(); ResultSet rs = st.executeQuery(select)) {
-            if (rs.next()) {
-                result.setId(rs.getInt("ID"));
-                result.setCompanyId(rs.getInt("COMPANY_ID"));
-                User p = new User();
-                p.setId(rs.getInt("USER_ID"));
-                p.setSalutation(rs.getString("CREATED_BY_SALUTATION"));
-                p.setFirstName(rs.getString("CREATED_BY_FIRST_NAME"));
-                p.setLastName(rs.getString("CREATED_BY_LAST_NAME"));
-                result.setUser(p);
-                result.setDescription(rs.getString("DESCRIPTION"));
-                result.setStartingDate(rs.getDate("STARTING_DATE"));
-                result.setEndingDate(rs.getDate("ENDING_DATE"));
-                result.setEnabled(rs.getBoolean("ENABLED"));
-                result.setCount(rs.getInt("CNT"));
-                result.setMaximum(rs.getInt("MAX"));
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setInt(1, user.getCompanyId());
+            ps.setInt(2, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    result.setId(rs.getInt("ID"));
+                    result.setCompanyId(rs.getInt("COMPANY_ID"));
+                    User p = new User();
+                    p.setId(rs.getInt("USER_ID"));
+                    p.setSalutation(rs.getString("CREATED_BY_SALUTATION"));
+                    p.setFirstName(rs.getString("CREATED_BY_FIRST_NAME"));
+                    p.setLastName(rs.getString("CREATED_BY_LAST_NAME"));
+                    result.setUser(p);
+                    result.setDescription(rs.getString("DESCRIPTION"));
+                    result.setStartingDate(rs.getDate("STARTING_DATE"));
+                    result.setEndingDate(rs.getDate("ENDING_DATE"));
+                    result.setEnabled(rs.getBoolean("ENABLED"));
+                    result.setCount(rs.getInt("CNT"));
+                    result.setMaximum(rs.getInt("MAX"));
+                }
             }
         }
         result.setOptionList(getInquiryOptionList(result.getId()));
@@ -203,15 +215,19 @@ public class InquiryDAO extends DAO {
                         "left join INQUIRY_OPTION b on b.ID = a.INQUIRY_OPTION_ID " +
                         "left join INQUIRY c on c.ID = b.INQUIRY_ID " +
                         "left join \"USER\" u on u.ID = a.USER_ID " +
-                        "where c.COMPANY_ID = " + user.getCompanyId() + " and c.ID = " + id + " " +
+                        "where c.COMPANY_ID = ? and c.ID = ? " +
                         "order by a.ID;";
-        try (Statement st = cnn.createStatement(); ResultSet rs = st.executeQuery(select)) {
-            while (rs.next()) {
-                InquiryLog l = new InquiryLog();
-                l.setTime(rs.getTimestamp("VOTING_TIME"));
-                l.setUser(rs.getString("FIRST_NAME") + " " + rs.getString("LAST_NAME"));
-                l.setOptionDescription(rs.getString("DESCRIPTION"));
-                result.add(l);
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setInt(1, user.getCompanyId());
+            ps.setInt(2, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    InquiryLog l = new InquiryLog();
+                    l.setTime(rs.getTimestamp("VOTING_TIME"));
+                    l.setUser(rs.getString("FIRST_NAME") + " " + rs.getString("LAST_NAME"));
+                    l.setOptionDescription(rs.getString("DESCRIPTION"));
+                    result.add(l);
+                }
             }
         }
         return result;
@@ -225,17 +241,20 @@ public class InquiryDAO extends DAO {
                 + "a.DESCRIPTION, "
                 + "(SELECT count(*) FROM INQUIRY_VOTING_LOG l WHERE (l.INQUIRY_OPTION_ID = a.ID)) AS CNT "
                 + "FROM INQUIRY_OPTION a "
-                + "WHERE a.INQUIRY_ID = " + inquiryId + " "
+                + "WHERE a.INQUIRY_ID = ? "
                 + "ORDER BY a.ID";
         
-        try (Statement st = cnn.createStatement(); ResultSet rs = st.executeQuery(select)) {
-            while (rs.next()) {
-                InquiryOption o = new InquiryOption();
-                o.setId(rs.getInt("ID"));
-                o.setInquiryId(rs.getInt("INQUIRY_ID"));
-                o.setDescription(rs.getString("DESCRIPTION"));
-                o.setCount(rs.getInt("CNT"));
-                result.add(o);
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setInt(1, inquiryId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    InquiryOption o = new InquiryOption();
+                    o.setId(rs.getInt("ID"));
+                    o.setInquiryId(rs.getInt("INQUIRY_ID"));
+                    o.setDescription(rs.getString("DESCRIPTION"));
+                    o.setCount(rs.getInt("CNT"));
+                    result.add(o);
+                }
             }
         }
         return result;
@@ -249,14 +268,18 @@ public class InquiryDAO extends DAO {
                 + "a.DESCRIPTION "
                 + "FROM INQUIRY_OPTION a "
                 + "LEFT JOIN INQUIRY i ON (i.ID = a.INQUIRY_ID) "
-                + "WHERE (a.ID = " + id + ") AND (i.COMPANY_ID = " + companyId + ")";
+                + "WHERE (a.ID = ?) AND (i.COMPANY_ID = ?)";
         
-        try (Statement st = cnn.createStatement(); ResultSet rs = st.executeQuery(select)) {
-            if (rs.next()) {
-                result = new InquiryOption();
-                result.setId(rs.getInt("ID"));
-                result.setInquiryId(rs.getInt("INQUIRY_ID"));
-                result.setDescription(rs.getString("DESCRIPTION"));
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setInt(1, id);
+            ps.setInt(2, companyId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    result = new InquiryOption();
+                    result.setId(rs.getInt("ID"));
+                    result.setInquiryId(rs.getInt("INQUIRY_ID"));
+                    result.setDescription(rs.getString("DESCRIPTION"));
+                }
             }
         }
         return result;
