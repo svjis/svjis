@@ -38,6 +38,7 @@ public class Permission {
     public static final String FAULT_REPORTING_RESOLVER = "fault_reporting_resolver";
     public static final String FAULT_REPORTING_COMMENT = "fault_reporting_comment";
     public static final String MENU_ADVERTS = "menu_adverts";
+    public static final String CAN_INSERT_ADVERT = "can_insert_advert";
     
     private int id;
     private String description;
