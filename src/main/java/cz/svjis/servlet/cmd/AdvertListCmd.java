@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 
+import cz.svjis.bean.Advert;
 import cz.svjis.bean.AdvertDAO;
 import cz.svjis.bean.AdvertType;
 import cz.svjis.servlet.CmdContext;
@@ -33,6 +34,9 @@ public class AdvertListCmd extends Command {
         
         ArrayList<AdvertType> advertTypeList = new ArrayList<>(advertDao.getAdvertTypeList());
         getRequest().setAttribute("advertTypeList", advertTypeList);
+        
+        ArrayList<Advert> advertList = new ArrayList<>(advertDao.getAdvertList(getCompany().getId()));
+        getRequest().setAttribute("advertList", advertList);
         
         RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/AdvertList.jsp");
         rd.forward(getRequest(), getResponse());
