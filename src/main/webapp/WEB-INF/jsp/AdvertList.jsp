@@ -36,6 +36,7 @@
                     <table width="100%" class="list" aria-describedby="tbl-desc">
                         <tr>
                             <th class="list" scope="col">&nbsp;</th>
+                            <th class="list" scope="col">&nbsp;</th>
                             <th class="list" scope="col"><%=language.getText("Date") %></th>
                             <th class="list" scope="col"><%=language.getText("Header") %></th>
                         </tr>
@@ -44,7 +45,8 @@
 		                for (Advert a: (ArrayList<Advert>) advertList) {
 		                %>
 		                <tr>
-		                  <td class="list"><a href="Dispatcher?page=advertDetail&id=<%=a.getId() %>"><img src="gfx/find.png" border="0" title="View" alt="View"></a></td>
+		                  <td class="list"><a href="Dispatcher?page=<%=CmdFactory.ADVERT_DETAIL %>&id=<%=a.getId() %>"><img src="gfx/find.png" border="0" title="View" alt="View"></a></td>
+		                  <td class="list"><a href="Dispatcher?page=<%=CmdFactory.ADVERT_EDIT %>&id=<%=a.getId() %>"><img src="gfx/pencil.png" border="0" title="Edit" alt="Edit"></a></td>
 		                  <td class="list"><%=sdf.format(a.getCreationDate()) %></td>
 		                  <td class="list"><%=a.getHeader() %></td>
 		                </tr>
