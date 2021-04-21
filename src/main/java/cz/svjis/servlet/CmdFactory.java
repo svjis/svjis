@@ -13,7 +13,9 @@
 package cz.svjis.servlet;
 
 import cz.svjis.bean.Permission;
+import cz.svjis.servlet.cmd.AdvertEditCmd;
 import cz.svjis.servlet.cmd.AdvertListCmd;
+import cz.svjis.servlet.cmd.AdvertSaveCmd;
 import cz.svjis.servlet.cmd.ArticleDetailCmd;
 import cz.svjis.servlet.cmd.ArticleFastCmd;
 import cz.svjis.servlet.cmd.ArticleInquiryVoteCmd;
@@ -102,7 +104,9 @@ import cz.svjis.servlet.cmd.UserSaveCmd;
 public class CmdFactory {
     
     public static final String ADVERT_LIST = "advertList";
+    public static final String ADVERT_DETAIL = "advertDetail";
     public static final String ADVERT_EDIT = "advertEdit";
+    public static final String ADVERT_SAVE = "advertSave";
 
     private CmdFactory() {}
     
@@ -320,6 +324,14 @@ public class CmdFactory {
         if (ctx.getUser().hasPermission(Permission.MENU_ADVERTS)) {
             if (page.equals(ADVERT_LIST)) {
                 return new AdvertListCmd(ctx);
+            }
+            
+            if (page.equals(ADVERT_EDIT)) {
+                return new AdvertEditCmd(ctx);
+            }
+            
+            if (page.equals(ADVERT_SAVE)) {
+                return new AdvertSaveCmd(ctx);
             }
         }
         
