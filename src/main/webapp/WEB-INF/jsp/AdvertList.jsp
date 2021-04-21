@@ -9,6 +9,7 @@
 <%@page import="cz.svjis.bean.Advert"%>
 <%@page import="cz.svjis.bean.AdvertType"%>
 <%@page import="cz.svjis.bean.Permission"%>
+<%@page import="cz.svjis.servlet.CmdFactory"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.ArrayList"%>
 
@@ -29,7 +30,7 @@
                     <h1 class="page-title" id="tbl-desc"><%=language.getText("Adverts") %></h1>
                     
                     <% if (user.hasPermission(Permission.CAN_INSERT_ADVERT)) { %>
-                    [<a href="Dispatcher?page=advertEdit&id=0"><%=language.getText("Create new advert") %></a>]
+                    [<a href="Dispatcher?page=<%=CmdFactory.ADVERT_EDIT %>&id=0"><%=language.getText("Create new advert") %></a>]
                     <% } %>
                     
                     <table width="100%" class="list" aria-describedby="tbl-desc">
