@@ -4,9 +4,12 @@
     Author     : jarberan
 --%>
 
-<%@page import="cz.svjis.bean.AdvertType"%>
-<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<%@page import="cz.svjis.bean.AdvertType"%>
+<%@page import="cz.svjis.servlet.CmdFactory"%>
+<%@page import="java.util.ArrayList"%>
+
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
 <jsp:useBean id="advertTypeList" scope="request" class="java.util.ArrayList" />
@@ -32,7 +35,7 @@
                 <%
                 for (AdvertType t: (ArrayList<AdvertType>) advertTypeList) {
                 %>
-                    <li <%=(p.equals(Integer.toString(t.getId())) ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=advertList&section=<%=t.getId() %>"><%=language.getText(t.getDescription()) %>)</a></li>
+                    <li <%=(p.equals(Integer.toString(t.getId())) ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=<%=CmdFactory.ADVERT_LIST %>&section=<%=t.getId() %>"><%=language.getText(t.getDescription()) %>)</a></li>
                 <%    
                 }
                 %>

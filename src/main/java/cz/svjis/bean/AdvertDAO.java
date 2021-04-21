@@ -22,7 +22,7 @@ import java.util.List;
 
 public class AdvertDAO extends DAO {
     
-    private static final String generalSelect = "SELECT \n" +
+    private static final String ADVERT_SELECT = "SELECT \n" +
             "r.ID, \n" +
             "r.COMPANY_ID, \n" +
             "r.TYPE_ID, \n" +
@@ -70,7 +70,7 @@ public class AdvertDAO extends DAO {
     
     public Advert getAdvert(int companyId, int id) throws SQLException {
         Advert result = null;
-        String select = generalSelect + "and r.ID = ?";
+        String select = ADVERT_SELECT + "and r.ID = ?";
         
         try (PreparedStatement ps = cnn.prepareStatement(select)) {
             ps.setInt(1, companyId);
@@ -88,7 +88,7 @@ public class AdvertDAO extends DAO {
     
     public List<Advert> getAdvertList(int companyId) throws SQLException {
         ArrayList<Advert> result = new ArrayList<>();
-        String select = generalSelect + "ORDER BY r.CREATION_DATE DESC";
+        String select = ADVERT_SELECT + "ORDER BY r.CREATION_DATE DESC";
         
         try (PreparedStatement ps = cnn.prepareStatement(select)) {
             ps.setInt(1, companyId);

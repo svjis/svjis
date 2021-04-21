@@ -100,6 +100,9 @@ import cz.svjis.servlet.cmd.UserSaveCmd;
  * @author jaroslav_b
  */
 public class CmdFactory {
+    
+    public static final String ADVERT_LIST = "advertList";
+    public static final String ADVERT_EDIT = "advertEdit";
 
     private CmdFactory() {}
     
@@ -315,7 +318,7 @@ public class CmdFactory {
         // * Adverts         *
         // *******************
         if (ctx.getUser().hasPermission(Permission.MENU_ADVERTS)) {
-            if (page.equals("advertList")) {
+            if (page.equals(ADVERT_LIST)) {
                 return new AdvertListCmd(ctx);
             }
         }
