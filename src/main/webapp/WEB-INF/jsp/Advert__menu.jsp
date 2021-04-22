@@ -15,9 +15,9 @@
 <jsp:useBean id="advertTypeList" scope="request" class="java.util.ArrayList" />
 
 <%
-    String p = request.getParameter("section");
-    if (p == null) {
-        p = "0";
+    String typeId = request.getParameter("typeId");
+    if (typeId == null) {
+        typeId = "0";
     }
 %>
 
@@ -35,7 +35,7 @@
                 <%
                 for (AdvertType t: (ArrayList<AdvertType>) advertTypeList) {
                 %>
-                    <li <%=(p.equals(Integer.toString(t.getId())) ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=<%=CmdFactory.ADVERT_LIST %>&section=<%=t.getId() %>"><%=language.getText(t.getDescription()) %>)</a></li>
+                    <li <%=(typeId.equals(Integer.toString(t.getId())) ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=<%=CmdFactory.ADVERT_LIST %>&typeId=<%=t.getId() %>"><%=language.getText(t.getDescription()) %>&nbsp;(<%=t.getCnt() %>)</a></li>
                 <%    
                 }
                 %>

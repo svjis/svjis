@@ -16,6 +16,8 @@ package cz.svjis.bean;
 public class AdvertType {
     private int id;
     private String description;
+    private int cnt;
+
     
     public AdvertType() {
         super();
@@ -53,5 +55,19 @@ public class AdvertType {
      */
     public void setDescription(String description) {
         this.description = description;
+    }
+    
+    /**
+     * @return the cnt
+     */
+    public int getCnt() {
+        return cnt;
+    }
+
+    /**
+     * @param cnt the cnt to set
+     */
+    public void setCnt(int cnt) {
+        this.cnt = cnt;
     }
 }

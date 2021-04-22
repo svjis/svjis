@@ -219,7 +219,7 @@ public class Dispatcher extends HttpServlet {
         if (u.hasPermission(Permission.MENU_PERSONAL_SETTINGS)) result.add(new SystemMenuEntry("Personal settings", "Dispatcher?page=psUserDetail"));
         if (u.hasPermission(Permission.MENU_REDACTION)) result.add(new SystemMenuEntry("Redaction", "Dispatcher?page=redactionArticleList"));
         if (u.hasPermission(Permission.MENU_FAULT_REPORTING)) result.add(new SystemMenuEntry("Fault reporting", "Dispatcher?page=faultReportingList"));
-        if (u.hasPermission(Permission.MENU_ADVERTS)) result.add(new SystemMenuEntry("Adverts", "Dispatcher?page=advertList"));
+        if (u.hasPermission(Permission.MENU_ADVERTS)) result.add(new SystemMenuEntry("Adverts", "Dispatcher?page=advertList&typeId=10"));
         if (u.hasPermission(Permission.MENU_ADMINISTRATION)) result.add(new SystemMenuEntry("Administration", "Dispatcher?page=companyDetail"));
         
         return result;
