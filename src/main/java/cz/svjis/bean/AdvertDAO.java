@@ -16,7 +16,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,12 +85,13 @@ public class AdvertDAO extends DAO {
     }
     
     
-    public List<Advert> getAdvertList(int companyId) throws SQLException {
+    public List<Advert> getAdvertList(int companyId, int typeId) throws SQLException {
         ArrayList<Advert> result = new ArrayList<>();
-        String select = ADVERT_SELECT + "ORDER BY r.CREATION_DATE DESC";
+        String select = ADVERT_SELECT + "and r.TYPE_ID = ? ORDER BY r.CREATION_DATE DESC";
         
         try (PreparedStatement ps = cnn.prepareStatement(select)) {
             ps.setInt(1, companyId);
+            ps.setInt(2, typeId);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Advert a = mapRsToAdvert(rs);
@@ -157,17 +157,25 @@ public class AdvertDAO extends DAO {
     }
     
     
-    public List<AdvertType> getAdvertTypeList() throws SQLException {
+    public List<AdvertType> getAdvertTypeList(int companyId) throws SQLException {
         ArrayList<AdvertType> result = new ArrayList<>();
-        String select = "SELECT r.ID, r.DESCRIPTION FROM ADVERT_TYPE r ORDER BY r.ID";
+        String select = "SELECT r.ID, r.DESCRIPTION, count(*) AS \"CNT\"\r\n" + 
+                "FROM ADVERT_TYPE r\r\n" + 
+                "LEFT JOIN ADVERT a ON a.TYPE_ID = r.ID\r\n" +
+                "WHERE a.COMPANY_ID = ?\n" +
+                "GROUP BY r.ID, r.DESCRIPTION\r\n" + 
+                "ORDER BY r.ID";
         
-        try (Statement st = cnn.createStatement(); ResultSet rs = st.executeQuery(select)) {
-            
-            while (rs.next()) {
-                AdvertType t = new AdvertType();
-                t.setId(rs.getInt("ID"));
-                t.setDescription(rs.getString("DESCRIPTION"));
-                result.add(t);
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setInt(1, companyId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    AdvertType t = new AdvertType();
+                    t.setId(rs.getInt("ID"));
+                    t.setDescription(rs.getString("DESCRIPTION"));
+                    t.setCnt(rs.getInt("CNT"));
+                    result.add(t);
+                }
             }
         }
         

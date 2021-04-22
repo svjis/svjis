@@ -21,6 +21,7 @@ import cz.svjis.bean.AdvertDAO;
 import cz.svjis.bean.AdvertType;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
+import cz.svjis.validator.Validator;
 
 public class AdvertListCmd extends Command {
     
@@ -30,12 +31,15 @@ public class AdvertListCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        int parTypeId = Validator.getInt(getRequest(), "typeId", 0, Validator.MAX_INT_ALLOWED, false);
+        
         AdvertDAO advertDao = new AdvertDAO(getCnn());
         
-        ArrayList<AdvertType> advertTypeList = new ArrayList<>(advertDao.getAdvertTypeList());
+        ArrayList<AdvertType> advertTypeList = new ArrayList<>(advertDao.getAdvertTypeList(getCompany().getId()));
         getRequest().setAttribute("advertTypeList", advertTypeList);
         
-        ArrayList<Advert> advertList = new ArrayList<>(advertDao.getAdvertList(getCompany().getId()));
+        ArrayList<Advert> advertList = new ArrayList<>(advertDao.getAdvertList(getCompany().getId(), parTypeId));
         getRequest().setAttribute("advertList", advertList);
         
         RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/AdvertList.jsp");

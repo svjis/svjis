@@ -37,7 +37,7 @@ public class AdvertSaveCmd extends Command {
         
         AdvertDAO advertDao = new AdvertDAO(getCnn());
         
-        Advert a;
+        Advert a = null;
         
         if (getUser().hasPermission(Permission.CAN_INSERT_ADVERT)) {
             if (parId == 0) {
@@ -60,7 +60,7 @@ public class AdvertSaveCmd extends Command {
             }
         }
         
-        String url = "Dispatcher?page=" + CmdFactory.ADVERT_LIST;
+        String url = String.format("Dispatcher?page=%s&typeId=%d", CmdFactory.ADVERT_LIST, (a != null) ? a.getType().getId() : 10);
         getResponse().sendRedirect(url);
     }
 
