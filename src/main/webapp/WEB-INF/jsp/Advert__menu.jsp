@@ -13,13 +13,8 @@
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
 <jsp:useBean id="advertTypeList" scope="request" class="java.util.ArrayList" />
+<jsp:useBean id="menuId" scope="request" class="java.lang.String" />
 
-<%
-    String typeId = request.getParameter("typeId");
-    if (typeId == null) {
-        typeId = "0";
-    }
-%>
 
 <!-- Aside -->
         <div id="aside">
@@ -35,7 +30,7 @@
                 <%
                 for (AdvertType t: (ArrayList<AdvertType>) advertTypeList) {
                 %>
-                    <li <%=(typeId.equals(Integer.toString(t.getId())) ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=<%=CmdFactory.ADVERT_LIST %>&typeId=<%=t.getId() %>"><%=language.getText(t.getDescription()) %>&nbsp;(<%=t.getCnt() %>)</a></li>
+                    <li <%=(Integer.valueOf(menuId) == t.getId() ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=<%=CmdFactory.ADVERT_LIST %>&typeId=<%=t.getId() %>"><%=t.getDescription() %>&nbsp;(<%=t.getCnt() %>)</a></li>
                 <%    
                 }
                 %>
