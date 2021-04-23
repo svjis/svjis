@@ -19,6 +19,7 @@ import javax.servlet.RequestDispatcher;
 import cz.svjis.bean.Advert;
 import cz.svjis.bean.AdvertDAO;
 import cz.svjis.bean.AdvertType;
+import cz.svjis.bean.SliderImpl;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -32,19 +33,33 @@ public class AdvertListCmd extends Command {
     @Override
     public void execute() throws Exception {
         
+        String parPage = Validator.getString(getRequest(), "page", 0, Validator.MAX_STRING_LEN_ALLOWED, false, false);
         int parTypeId = Validator.getInt(getRequest(), "typeId", 0, Validator.MAX_INT_ALLOWED, true);
+        int parPageNo = Validator.getInt(getRequest(), "pageNo", 0, Validator.MAX_INT_ALLOWED, true);
+        
+        AdvertDAO advertDao = new AdvertDAO(getCnn());
+        
         if (parTypeId == 0) {
             parTypeId = getSetup().getAdvertMenuDefault();
         }
         
-        AdvertDAO advertDao = new AdvertDAO(getCnn());
+        int pageNo = (parPageNo == 0) ? 1 : parPageNo;
+        int pageSize = getSetup().getAdvertPageSize();
+        
+        SliderImpl sl = new SliderImpl();
+        sl.setPageId(parPage);
+        sl.setSliderWide(10);
+        sl.setCurrentPage(pageNo);
+        sl.setNumOfItemsAtPage(pageSize);
+        sl.setTotalNumOfItems(advertDao.getAdverListSize(getCompany().getId(), parTypeId));
+        getRequest().setAttribute("slider", sl);
         
         getRequest().setAttribute("menuId", Integer.toString(parTypeId));
         
         ArrayList<AdvertType> advertTypeList = new ArrayList<>(advertDao.getAdvertTypeList(getCompany().getId()));
         getRequest().setAttribute("advertTypeList", advertTypeList);
         
-        ArrayList<Advert> advertList = new ArrayList<>(advertDao.getAdvertList(getCompany().getId(), parTypeId));
+        ArrayList<Advert> advertList = new ArrayList<>(advertDao.getAdvertList(pageNo, pageSize, getCompany().getId(), parTypeId));
         getRequest().setAttribute("advertList", advertList);
         
         RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/AdvertList.jsp");

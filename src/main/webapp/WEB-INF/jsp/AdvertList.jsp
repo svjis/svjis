@@ -9,6 +9,7 @@
 <%@page import="cz.svjis.bean.Advert"%>
 <%@page import="cz.svjis.bean.AdvertType"%>
 <%@page import="cz.svjis.bean.Permission"%>
+<%@page import="cz.svjis.bean.SliderItem"%>
 <%@page import="cz.svjis.servlet.CmdFactory"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.ArrayList"%>
@@ -16,6 +17,8 @@
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
 <jsp:useBean id="advertList" scope="request" class="java.util.ArrayList" />
+<jsp:useBean id="menuId" scope="request" class="java.lang.String" />
+<jsp:useBean id="slider" scope="request" class="cz.svjis.bean.SliderImpl" />
 
 <jsp:include page="_header.jsp" />
 <jsp:include page="_tray.jsp" />
@@ -54,6 +57,23 @@
 		                }
 		                %>
                     </table>
+                    
+                    <p class="t-left">
+                        <% if (slider.getTotalNumOfPages() > 1) { %>
+                        <strong><%=language.getText("Pages:") %></strong>&nbsp;
+                        <%
+                        String pageId = "page=" + slider.getPageId() + "&typeId=" + menuId + "&";
+                        for (SliderItem item : slider.getItemList()) {
+                            if (item.isCurrent()) {
+                                out.println("<b>" + item.getLabel() + "</b>&nbsp;");
+                            } else {
+                                out.println("<a href=\"Dispatcher?" + pageId + "pageNo=" + item.getPage() + "\">" + item.getLabel() + "</a>&nbsp;");
+                            }
+                        }
+                        %>
+                        
+                        <% } %>
+                    </p>
                     
                 </div> <!-- /content-main-in -->
             </div> <!-- /content-main -->
