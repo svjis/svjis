@@ -21,7 +21,7 @@ import java.util.List;
 
 public class AdvertDAO extends DAO {
     
-    private static final String ADVERT_SELECT = "SELECT \n" +
+    private static final String ADVERT_SELECT = "SELECT %s \n" +
             "r.ID, \n" +
             "r.COMPANY_ID, \n" +
             "r.TYPE_ID, \n" +
@@ -39,7 +39,7 @@ public class AdvertDAO extends DAO {
             "FROM ADVERT r \n" + 
             "LEFT JOIN \"USER\" u ON u.ID = r.USER_ID \n" + 
             "LEFT JOIN ADVERT_TYPE t ON t.ID = r.TYPE_ID \n" + 
-            "WHERE r.COMPANY_ID = ? \n";
+            "WHERE r.COMPANY_ID = ? %s\n";
 
     
     public AdvertDAO(Connection cnn) {
@@ -69,7 +69,7 @@ public class AdvertDAO extends DAO {
     
     public Advert getAdvert(int companyId, int id) throws SQLException {
         Advert result = null;
-        String select = ADVERT_SELECT + "and r.ID = ?";
+        String select = String.format(ADVERT_SELECT, "", "and r.ID = ?");
         
         try (PreparedStatement ps = cnn.prepareStatement(select)) {
             ps.setInt(1, companyId);
@@ -85,17 +85,47 @@ public class AdvertDAO extends DAO {
     }
     
     
-    public List<Advert> getAdvertList(int companyId, int typeId) throws SQLException {
-        ArrayList<Advert> result = new ArrayList<>();
-        String select = ADVERT_SELECT + "and r.TYPE_ID = ? ORDER BY r.CREATION_DATE DESC";
+    public int getAdverListSize(int companyId, int typeId) throws SQLException {
+        int result = 0;
+        String select = "SELECT count(*) AS \"CNT\" FROM ADVERT r WHERE r.COMPANY_ID = ? AND r.TYPE_ID = ?";
         
         try (PreparedStatement ps = cnn.prepareStatement(select)) {
             ps.setInt(1, companyId);
             ps.setInt(2, typeId);
             try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    result = rs.getInt("CNT");
+                }
+            }
+        }
+        
+        return result;
+    }
+    
+    
+    public List<Advert> getAdvertList(int pageNo, int pageSize, int companyId, int typeId) throws SQLException {
+        ArrayList<Advert> result = new ArrayList<>();
+        String select = String.format(ADVERT_SELECT, "FIRST " + (pageNo * pageSize), "AND r.TYPE_ID = ? ORDER BY r.CREATION_DATE DESC");
+        
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setInt(1, companyId);
+            ps.setInt(2, typeId);
+            try (ResultSet rs = ps.executeQuery()) {
+                
+                int cPageNo = 1;
+                int cArtNo = 0;
+                
                 while (rs.next()) {
-                    Advert a = mapRsToAdvert(rs);
-                    result.add(a);
+                    if (cPageNo == pageNo) {
+                        Advert a = mapRsToAdvert(rs);
+                        result.add(a);
+                    }
+                    
+                    cArtNo++;
+                    if (cArtNo == pageSize) {
+                        cPageNo++;
+                        cArtNo = 0;
+                    }
                 }
             }
         }
