@@ -36,6 +36,8 @@ public class AdvertEditCmd extends Command {
         
         AdvertDAO advertDao = new AdvertDAO(getCnn());
         
+        getRequest().setAttribute("menuId", "0");
+        
         ArrayList<AdvertType> advertTypeList = new ArrayList<>(advertDao.getAdvertTypeList(getCompany().getId()));
         getRequest().setAttribute("advertTypeList", advertTypeList);
         

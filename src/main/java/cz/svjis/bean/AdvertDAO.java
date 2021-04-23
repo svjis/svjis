@@ -159,11 +159,8 @@ public class AdvertDAO extends DAO {
     
     public List<AdvertType> getAdvertTypeList(int companyId) throws SQLException {
         ArrayList<AdvertType> result = new ArrayList<>();
-        String select = "SELECT r.ID, r.DESCRIPTION, count(*) AS \"CNT\"\r\n" + 
-                "FROM ADVERT_TYPE r\r\n" + 
-                "LEFT JOIN ADVERT a ON a.TYPE_ID = r.ID\r\n" +
-                "WHERE a.COMPANY_ID = ?\n" +
-                "GROUP BY r.ID, r.DESCRIPTION\r\n" + 
+        String select = "SELECT r.ID, r.DESCRIPTION, (SELECT count(*) FROM ADVERT a WHERE a.TYPE_ID = r.ID AND a.COMPANY_ID = ?) AS \"CNT\" \n" + 
+                "FROM ADVERT_TYPE r \n" + 
                 "ORDER BY r.ID";
         
         try (PreparedStatement ps = cnn.prepareStatement(select)) {

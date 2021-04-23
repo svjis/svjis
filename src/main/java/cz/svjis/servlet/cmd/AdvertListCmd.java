@@ -32,9 +32,14 @@ public class AdvertListCmd extends Command {
     @Override
     public void execute() throws Exception {
         
-        int parTypeId = Validator.getInt(getRequest(), "typeId", 0, Validator.MAX_INT_ALLOWED, false);
+        int parTypeId = Validator.getInt(getRequest(), "typeId", 0, Validator.MAX_INT_ALLOWED, true);
+        if (parTypeId == 0) {
+            parTypeId = getSetup().getAdvertMenuDefault();
+        }
         
         AdvertDAO advertDao = new AdvertDAO(getCnn());
+        
+        getRequest().setAttribute("menuId", Integer.toString(parTypeId));
         
         ArrayList<AdvertType> advertTypeList = new ArrayList<>(advertDao.getAdvertTypeList(getCompany().getId()));
         getRequest().setAttribute("advertTypeList", advertTypeList);
