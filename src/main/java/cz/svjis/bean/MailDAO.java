@@ -23,6 +23,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 
@@ -31,6 +34,8 @@ import org.apache.commons.mail.HtmlEmail;
  * @author berk
  */
 public class MailDAO extends DAO {
+    
+    private static final Logger LOGGER = Logger.getLogger(MailDAO.class.getName());
     
     public static final int MAIL = 1;
     public static final int SMS = 2;
@@ -53,6 +58,12 @@ public class MailDAO extends DAO {
     }
 
     public void sendInstantMail(String recipient, String subject, String body) throws EmailException {
+        
+        if ((smtp == null) || smtp.equals("")) {
+            LOGGER.log(Level.WARNING, "SMTP Server is not set.");
+            return;
+        }
+        
         HtmlEmail email = new HtmlEmail();
         email.setCharset("UTF-8");
         email.setHostName(smtp);
