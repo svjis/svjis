@@ -51,6 +51,12 @@ public class AdvertEditCmd extends Command {
         Advert advert = new Advert();
         if (parId != 0) {
             advert = advertDao.getAdvert(getCompany().getId(), parId);
+            if (getUser().getId() != advert.getUser().getId()) {
+                RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/404_NotFound.jsp");
+                getResponse().setStatus(404);
+                rd.forward(getRequest(), getResponse());
+                return;
+            }
         }
         getRequest().setAttribute("advert", advert);
         

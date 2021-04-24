@@ -12,6 +12,8 @@
 
 package cz.svjis.servlet.cmd;
 
+import javax.servlet.RequestDispatcher;
+
 import cz.svjis.bean.Advert;
 import cz.svjis.bean.AdvertDAO;
 import cz.svjis.bean.Permission;
@@ -37,26 +39,38 @@ public class AdvertSaveCmd extends Command {
         
         AdvertDAO advertDao = new AdvertDAO(getCnn());
         
-        Advert a = null;
+        if (!getUser().hasPermission(Permission.CAN_INSERT_ADVERT)) {
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/404_NotFound.jsp");
+            getResponse().setStatus(404);
+            rd.forward(getRequest(), getResponse());
+            return;
+        }
         
-        if (getUser().hasPermission(Permission.CAN_INSERT_ADVERT)) {
-            if (parId == 0) {
-                a = new Advert();
-                a.setCompanyId(getCompany().getId());
-                a.getUser().setId(getUser().getId());
-            } else {
-                a = advertDao.getAdvert(getCompany().getId(), parId);
-            }
+        Advert a = null;
             
-            a.setHeader(parHeader);
-            a.setBody(parBody);
-            a.getType().setId(parType);
-            a.setPublished(parPublished);
-            
-            if (a.getId() == 0) {
-                advertDao.insertAdvert(a);
-            } else {
+        if (parId == 0) {
+            a = new Advert();
+            a.setCompanyId(getCompany().getId());
+            a.getUser().setId(getUser().getId());
+        } else {
+            a = advertDao.getAdvert(getCompany().getId(), parId);
+        }
+        
+        a.setHeader(parHeader);
+        a.setBody(parBody);
+        a.getType().setId(parType);
+        a.setPublished(parPublished);
+        
+        if (a.getId() == 0) {
+            advertDao.insertAdvert(a);
+        } else {
+            if (getUser().getId() == a.getUser().getId()) {
                 advertDao.modifyAdvert(a);
+            } else {
+                RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/404_NotFound.jsp");
+                getResponse().setStatus(404);
+                rd.forward(getRequest(), getResponse());
+                return;
             }
         }
         
