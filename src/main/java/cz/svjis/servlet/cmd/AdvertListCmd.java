@@ -71,9 +71,11 @@ public class AdvertListCmd extends Command {
         getRequest().setAttribute("menuId", Integer.toString(parTypeId));
         
         ArrayList<AdvertType> advertMenuList = new ArrayList<>(advertDao.getAdvertTypeList(getCompany().getId()));
-        AdvertType at = advertDao.getMyAdvertType(getCompany().getId(), getUser().getId());
-        at.setDescription(getLanguage().getText(at.getDescription()));
-        advertMenuList.add(at);
+        if (getUser().hasPermission(Permission.CAN_INSERT_ADVERT)) {
+            AdvertType at = advertDao.getMyAdvertType(getCompany().getId(), getUser().getId());
+            at.setDescription(getLanguage().getText(at.getDescription()));
+            advertMenuList.add(at);
+        }
         getRequest().setAttribute("advertMenuList", advertMenuList);
         
         ArrayList<AdvertType> advertTypeList = new ArrayList<>(advertDao.getAdvertTypeList(getCompany().getId()));
