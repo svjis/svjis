@@ -68,8 +68,6 @@ public class AdvertListCmd extends Command {
         sl.setTotalNumOfItems(listSize);
         getRequest().setAttribute("slider", sl);
         
-        getRequest().setAttribute("menuId", Integer.toString(parTypeId));
-        
         ArrayList<AdvertType> advertMenuList = new ArrayList<>(advertDao.getAdvertTypeList(getCompany().getId()));
         if (getUser().hasPermission(Permission.CAN_INSERT_ADVERT)) {
             AdvertType at = advertDao.getMyAdvertType(getCompany().getId(), getUser().getId());
@@ -78,6 +76,15 @@ public class AdvertListCmd extends Command {
         }
         getRequest().setAttribute("advertMenuList", advertMenuList);
         
+        AdvertType currMenu = new AdvertType(); 
+        for (AdvertType at: advertMenuList) {
+            if (at.getId() == parTypeId) {
+                currMenu = at;
+                break;
+            }
+        }
+        getRequest().setAttribute("currMenu", currMenu);
+        
         ArrayList<AdvertType> advertTypeList = new ArrayList<>(advertDao.getAdvertTypeList(getCompany().getId()));
         getRequest().setAttribute("advertTypeList", advertTypeList);
         
@@ -85,13 +92,12 @@ public class AdvertListCmd extends Command {
         RequestDispatcher rd;
         if (parTypeId == AdvertDAO.MY_ADVERTS_TYPE_ID) {
             advertList = new ArrayList<>(advertDao.getAdvertList(pageNo, pageSize, AdvertDAO.AdvertListType.USER, getCompany().getId(), getUser().getId()));
-            rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/AdvertMyList.jsp");
         } else {
             advertList = new ArrayList<>(advertDao.getAdvertList(pageNo, pageSize, AdvertDAO.AdvertListType.ADVERT_TYPE, getCompany().getId(), parTypeId));
-            rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/AdvertList.jsp");
         }
         getRequest().setAttribute("advertList", advertList);
-            
+        
+        rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/AdvertList.jsp");    
         rd.forward(getRequest(), getResponse());
     }
 
