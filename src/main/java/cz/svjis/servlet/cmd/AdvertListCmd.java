@@ -51,15 +51,20 @@ public class AdvertListCmd extends Command {
         sl.setSliderWide(10);
         sl.setCurrentPage(pageNo);
         sl.setNumOfItemsAtPage(pageSize);
-        sl.setTotalNumOfItems(advertDao.getAdverListSize(getCompany().getId(), parTypeId));
+        sl.setTotalNumOfItems(advertDao.getAdverListSize(AdvertDAO.AdvertListType.ADVERT_TYPE, getCompany().getId(), parTypeId));
         getRequest().setAttribute("slider", sl);
         
         getRequest().setAttribute("menuId", Integer.toString(parTypeId));
         
+        ArrayList<AdvertType> advertMenuList = new ArrayList<>(advertDao.getAdvertTypeList(getCompany().getId()));
+        AdvertType at = advertDao.getMyAdvertType(getCompany().getId(), getUser().getId());
+        advertMenuList.add(at);
+        getRequest().setAttribute("advertMenuList", advertMenuList);
+        
         ArrayList<AdvertType> advertTypeList = new ArrayList<>(advertDao.getAdvertTypeList(getCompany().getId()));
         getRequest().setAttribute("advertTypeList", advertTypeList);
         
-        ArrayList<Advert> advertList = new ArrayList<>(advertDao.getAdvertList(pageNo, pageSize, getCompany().getId(), parTypeId));
+        ArrayList<Advert> advertList = new ArrayList<>(advertDao.getAdvertList(pageNo, pageSize, AdvertDAO.AdvertListType.ADVERT_TYPE, getCompany().getId(), parTypeId));
         getRequest().setAttribute("advertList", advertList);
         
         RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/AdvertList.jsp");
