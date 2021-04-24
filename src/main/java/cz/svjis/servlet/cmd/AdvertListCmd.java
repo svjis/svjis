@@ -19,6 +19,7 @@ import javax.servlet.RequestDispatcher;
 import cz.svjis.bean.Advert;
 import cz.svjis.bean.AdvertDAO;
 import cz.svjis.bean.AdvertType;
+import cz.svjis.bean.Permission;
 import cz.svjis.bean.SliderImpl;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
@@ -38,6 +39,13 @@ public class AdvertListCmd extends Command {
         int parPageNo = Validator.getInt(getRequest(), "pageNo", 0, Validator.MAX_INT_ALLOWED, true);
         
         AdvertDAO advertDao = new AdvertDAO(getCnn());
+        
+        if (!getUser().hasPermission(Permission.MENU_ADVERTS)) {
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/404_NotFound.jsp");
+            getResponse().setStatus(404);
+            rd.forward(getRequest(), getResponse());
+            return;
+        }
         
         if (parTypeId == 0) {
             parTypeId = getSetup().getAdvertMenuDefault();
