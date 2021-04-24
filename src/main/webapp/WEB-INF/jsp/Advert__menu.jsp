@@ -12,7 +12,7 @@
 
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
-<jsp:useBean id="advertTypeList" scope="request" class="java.util.ArrayList" />
+<jsp:useBean id="advertMenuList" scope="request" class="java.util.ArrayList" />
 <jsp:useBean id="menuId" scope="request" class="java.lang.String" />
 
 
@@ -28,7 +28,7 @@
             
             <ul class="nav">
                 <%
-                for (AdvertType t: (ArrayList<AdvertType>) advertTypeList) {
+                for (AdvertType t: (ArrayList<AdvertType>) advertMenuList) {
                 %>
                     <li <%=(Integer.valueOf(menuId) == t.getId() ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=<%=CmdFactory.ADVERT_LIST %>&typeId=<%=t.getId() %>"><%=t.getDescription() %>&nbsp;(<%=t.getCnt() %>)</a></li>
                 <%    

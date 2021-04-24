@@ -21,6 +21,11 @@ import java.util.List;
 
 public class AdvertDAO extends DAO {
     
+    public static enum AdvertListType {
+        ADVERT_TYPE,
+        USER
+    }
+    
     private static final String ADVERT_SELECT = "SELECT %s \n" +
             "r.ID, \n" +
             "r.COMPANY_ID, \n" +
@@ -85,9 +90,15 @@ public class AdvertDAO extends DAO {
     }
     
     
-    public int getAdverListSize(int companyId, int typeId) throws SQLException {
+    public int getAdverListSize(AdvertListType listType, int companyId, int typeId) throws SQLException {
         int result = 0;
-        String select = "SELECT count(*) AS \"CNT\" FROM ADVERT r WHERE r.COMPANY_ID = ? AND r.TYPE_ID = ?";
+        String whereType = "TYPE_ID";
+        
+        if (listType == AdvertListType.USER) {
+            whereType = "USER_ID";
+        }
+        
+        String select = "SELECT count(*) AS \"CNT\" FROM ADVERT r WHERE r.COMPANY_ID = ? AND r." + whereType + " = ?";
         
         try (PreparedStatement ps = cnn.prepareStatement(select)) {
             ps.setInt(1, companyId);
@@ -103,9 +114,16 @@ public class AdvertDAO extends DAO {
     }
     
     
-    public List<Advert> getAdvertList(int pageNo, int pageSize, int companyId, int typeId) throws SQLException {
+    public List<Advert> getAdvertList(int pageNo, int pageSize, AdvertListType listType, int companyId, int typeId) throws SQLException {
         ArrayList<Advert> result = new ArrayList<>();
-        String select = String.format(ADVERT_SELECT, "FIRST " + (pageNo * pageSize), "AND r.TYPE_ID = ? ORDER BY r.CREATION_DATE DESC");
+        
+        String whereType = "TYPE_ID";
+        
+        if (listType == AdvertListType.USER) {
+            whereType = "USER_ID";
+        }
+        
+        String select = String.format(ADVERT_SELECT, "FIRST " + (pageNo * pageSize), "AND r." + whereType + " = ? ORDER BY r.CREATION_DATE DESC");
         
         try (PreparedStatement ps = cnn.prepareStatement(select)) {
             ps.setInt(1, companyId);
@@ -202,6 +220,27 @@ public class AdvertDAO extends DAO {
                     t.setDescription(rs.getString("DESCRIPTION"));
                     t.setCnt(rs.getInt("CNT"));
                     result.add(t);
+                }
+            }
+        }
+        
+        return result;
+    }
+    
+    public AdvertType getMyAdvertType(int companyId, int userId) throws SQLException {
+        AdvertType result = new AdvertType();
+        String select = "SELECT '0' AS \"ID\", 'My adverts' AS \"DESCRIPTION\", (SELECT count(*) FROM ADVERT a WHERE a.USER_ID = ? AND a.COMPANY_ID = ?) AS \"CNT\" \n" + 
+                "FROM ADVERT_TYPE r \n" + 
+                "ORDER BY r.ID";
+        
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setInt(1, userId);
+            ps.setInt(2, companyId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    result.setId(rs.getInt("ID"));
+                    result.setDescription(rs.getString("DESCRIPTION"));
+                    result.setCnt(rs.getInt("CNT"));
                 }
             }
         }
