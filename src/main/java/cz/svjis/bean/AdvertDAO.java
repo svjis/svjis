@@ -95,12 +95,12 @@ public class AdvertDAO extends DAO {
     public int getAdverListSize(AdvertListType listType, int companyId, int typeId) throws SQLException {
         int result = 0;
         
-        String whereType = "r.TYPE_ID = ? AND PUBLISHED = 1";
+        String whereType = "r.TYPE_ID = ? AND PUBLISHED = 1 AND u.ENABLED = 1";
         if (listType == AdvertListType.USER) {
             whereType = "r.USER_ID = ?";
         }
         
-        String select = "SELECT count(*) AS \"CNT\" FROM ADVERT r WHERE r.COMPANY_ID = ? AND " + whereType;
+        String select = "SELECT count(*) AS \"CNT\" FROM ADVERT r LEFT JOIN \"USER\" u ON u.ID = r.USER_ID WHERE r.COMPANY_ID = ? AND " + whereType;
         
         try (PreparedStatement ps = cnn.prepareStatement(select)) {
             ps.setInt(1, companyId);
@@ -119,7 +119,7 @@ public class AdvertDAO extends DAO {
     public List<Advert> getAdvertList(int pageNo, int pageSize, AdvertListType listType, int companyId, int typeId) throws SQLException {
         ArrayList<Advert> result = new ArrayList<>();
         
-        String whereType = "r.TYPE_ID = ? AND PUBLISHED = 1";
+        String whereType = "r.TYPE_ID = ? AND PUBLISHED = 1 AND u.ENABLED = 1";
         if (listType == AdvertListType.USER) {
             whereType = "r.USER_ID = ?";
         }
@@ -208,7 +208,7 @@ public class AdvertDAO extends DAO {
     
     public List<AdvertType> getAdvertTypeList(int companyId) throws SQLException {
         ArrayList<AdvertType> result = new ArrayList<>();
-        String select = "SELECT r.ID, r.DESCRIPTION, (SELECT count(*) FROM ADVERT a WHERE a.TYPE_ID = r.ID AND a.COMPANY_ID = ? AND a.PUBLISHED = 1) AS \"CNT\" \n" + 
+        String select = "SELECT r.ID, r.DESCRIPTION, (SELECT count(*) FROM ADVERT a LEFT JOIN \"USER\" u ON u.ID = a.USER_ID WHERE a.TYPE_ID = r.ID AND a.COMPANY_ID = ? AND a.PUBLISHED = 1 AND u.ENABLED = 1) AS \"CNT\" \n" + 
                 "FROM ADVERT_TYPE r \n" + 
                 "ORDER BY r.ID";
         
