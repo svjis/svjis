@@ -26,6 +26,8 @@ public class AdvertDAO extends DAO {
         USER
     }
     
+    public static int MY_ADVERTS_TYPE_ID = 99;
+    
     private static final String ADVERT_SELECT = "SELECT %s \n" +
             "r.ID, \n" +
             "r.COMPANY_ID, \n" +
@@ -229,9 +231,9 @@ public class AdvertDAO extends DAO {
     
     public AdvertType getMyAdvertType(int companyId, int userId) throws SQLException {
         AdvertType result = new AdvertType();
-        String select = "SELECT '0' AS \"ID\", 'My adverts' AS \"DESCRIPTION\", (SELECT count(*) FROM ADVERT a WHERE a.USER_ID = ? AND a.COMPANY_ID = ?) AS \"CNT\" \n" + 
+        String select = String.format("SELECT '%d' AS \"ID\", 'My adverts' AS \"DESCRIPTION\", (SELECT count(*) FROM ADVERT a WHERE a.USER_ID = ? AND a.COMPANY_ID = ?) AS \"CNT\" \n" + 
                 "FROM ADVERT_TYPE r \n" + 
-                "ORDER BY r.ID";
+                "ORDER BY r.ID", MY_ADVERTS_TYPE_ID);
         
         try (PreparedStatement ps = cnn.prepareStatement(select)) {
             ps.setInt(1, userId);
