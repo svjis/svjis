@@ -51,7 +51,13 @@ public class AdvertListCmd extends Command {
         sl.setSliderWide(10);
         sl.setCurrentPage(pageNo);
         sl.setNumOfItemsAtPage(pageSize);
-        sl.setTotalNumOfItems(advertDao.getAdverListSize(AdvertDAO.AdvertListType.ADVERT_TYPE, getCompany().getId(), parTypeId));
+        int listSize;
+        if (parTypeId == AdvertDAO.MY_ADVERTS_TYPE_ID) {
+            listSize = advertDao.getAdverListSize(AdvertDAO.AdvertListType.USER, getCompany().getId(), getUser().getId());
+        } else {
+            listSize = advertDao.getAdverListSize(AdvertDAO.AdvertListType.ADVERT_TYPE, getCompany().getId(), parTypeId);
+        }
+        sl.setTotalNumOfItems(listSize);
         getRequest().setAttribute("slider", sl);
         
         getRequest().setAttribute("menuId", Integer.toString(parTypeId));
@@ -64,7 +70,12 @@ public class AdvertListCmd extends Command {
         ArrayList<AdvertType> advertTypeList = new ArrayList<>(advertDao.getAdvertTypeList(getCompany().getId()));
         getRequest().setAttribute("advertTypeList", advertTypeList);
         
-        ArrayList<Advert> advertList = new ArrayList<>(advertDao.getAdvertList(pageNo, pageSize, AdvertDAO.AdvertListType.ADVERT_TYPE, getCompany().getId(), parTypeId));
+        ArrayList<Advert> advertList;
+        if (parTypeId == AdvertDAO.MY_ADVERTS_TYPE_ID) {
+            advertList = new ArrayList<>(advertDao.getAdvertList(pageNo, pageSize, AdvertDAO.AdvertListType.USER, getCompany().getId(), getUser().getId()));
+        } else {
+            advertList = new ArrayList<>(advertDao.getAdvertList(pageNo, pageSize, AdvertDAO.AdvertListType.ADVERT_TYPE, getCompany().getId(), parTypeId));
+        }
         getRequest().setAttribute("advertList", advertList);
         
         RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/AdvertList.jsp");
