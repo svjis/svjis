@@ -59,7 +59,7 @@ public class AdvertDAO extends DAO {
         result.setId(rs.getInt("ID"));
         result.setCompanyId(rs.getInt("COMPANY_ID"));
         result.getType().setId(rs.getInt("TYPE_ID"));
-        result.getType().setDescription("TYPE_DESCRIPTION");
+        result.getType().setDescription(rs.getString("TYPE_DESCRIPTION"));
         result.setHeader(rs.getString("HEADER"));
         result.setBody(rs.getString("BODY"));
         result.getUser().setId(rs.getInt("USER_ID"));
@@ -94,13 +94,13 @@ public class AdvertDAO extends DAO {
     
     public int getAdverListSize(AdvertListType listType, int companyId, int typeId) throws SQLException {
         int result = 0;
-        String whereType = "TYPE_ID";
         
+        String whereType = "r.TYPE_ID = ? AND PUBLISHED = 1";
         if (listType == AdvertListType.USER) {
-            whereType = "USER_ID";
+            whereType = "r.USER_ID = ?";
         }
         
-        String select = "SELECT count(*) AS \"CNT\" FROM ADVERT r WHERE r.COMPANY_ID = ? AND r." + whereType + " = ?";
+        String select = "SELECT count(*) AS \"CNT\" FROM ADVERT r WHERE r.COMPANY_ID = ? AND " + whereType;
         
         try (PreparedStatement ps = cnn.prepareStatement(select)) {
             ps.setInt(1, companyId);
@@ -119,13 +119,12 @@ public class AdvertDAO extends DAO {
     public List<Advert> getAdvertList(int pageNo, int pageSize, AdvertListType listType, int companyId, int typeId) throws SQLException {
         ArrayList<Advert> result = new ArrayList<>();
         
-        String whereType = "TYPE_ID";
-        
+        String whereType = "r.TYPE_ID = ? AND PUBLISHED = 1";
         if (listType == AdvertListType.USER) {
-            whereType = "USER_ID";
+            whereType = "r.USER_ID = ?";
         }
         
-        String select = String.format(ADVERT_SELECT, "FIRST " + (pageNo * pageSize), "AND r." + whereType + " = ? ORDER BY r.CREATION_DATE DESC");
+        String select = String.format(ADVERT_SELECT, "FIRST " + (pageNo * pageSize), "AND " + whereType + " ORDER BY r.CREATION_DATE DESC");
         
         try (PreparedStatement ps = cnn.prepareStatement(select)) {
             ps.setInt(1, companyId);
@@ -209,7 +208,7 @@ public class AdvertDAO extends DAO {
     
     public List<AdvertType> getAdvertTypeList(int companyId) throws SQLException {
         ArrayList<AdvertType> result = new ArrayList<>();
-        String select = "SELECT r.ID, r.DESCRIPTION, (SELECT count(*) FROM ADVERT a WHERE a.TYPE_ID = r.ID AND a.COMPANY_ID = ?) AS \"CNT\" \n" + 
+        String select = "SELECT r.ID, r.DESCRIPTION, (SELECT count(*) FROM ADVERT a WHERE a.TYPE_ID = r.ID AND a.COMPANY_ID = ? AND a.PUBLISHED = 1) AS \"CNT\" \n" + 
                 "FROM ADVERT_TYPE r \n" + 
                 "ORDER BY r.ID";
         
@@ -231,7 +230,7 @@ public class AdvertDAO extends DAO {
     
     public AdvertType getMyAdvertType(int companyId, int userId) throws SQLException {
         AdvertType result = new AdvertType();
-        String select = String.format("SELECT '%d' AS \"ID\", 'My adverts' AS \"DESCRIPTION\", (SELECT count(*) FROM ADVERT a WHERE a.USER_ID = ? AND a.COMPANY_ID = ?) AS \"CNT\" \n" + 
+        String select = String.format("SELECT '%d' AS \"ID\", 'My adverts' AS \"DESCRIPTION\", (SELECT count(*) FROM ADVERT a WHERE a.USER_ID = ? AND a.COMPANY_ID = ?  AND a.PUBLISHED = 1) AS \"CNT\" \n" + 
                 "FROM ADVERT_TYPE r \n" + 
                 "ORDER BY r.ID", MY_ADVERTS_TYPE_ID);
         
