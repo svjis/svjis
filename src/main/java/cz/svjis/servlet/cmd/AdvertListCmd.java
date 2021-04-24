@@ -72,14 +72,16 @@ public class AdvertListCmd extends Command {
         getRequest().setAttribute("advertTypeList", advertTypeList);
         
         ArrayList<Advert> advertList;
+        RequestDispatcher rd;
         if (parTypeId == AdvertDAO.MY_ADVERTS_TYPE_ID) {
             advertList = new ArrayList<>(advertDao.getAdvertList(pageNo, pageSize, AdvertDAO.AdvertListType.USER, getCompany().getId(), getUser().getId()));
+            rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/AdvertMyList.jsp");
         } else {
             advertList = new ArrayList<>(advertDao.getAdvertList(pageNo, pageSize, AdvertDAO.AdvertListType.ADVERT_TYPE, getCompany().getId(), parTypeId));
+            rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/AdvertList.jsp");
         }
         getRequest().setAttribute("advertList", advertList);
-        
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/AdvertList.jsp");
+            
         rd.forward(getRequest(), getResponse());
     }
 
