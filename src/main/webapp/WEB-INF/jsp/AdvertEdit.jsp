@@ -17,6 +17,7 @@
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
 <jsp:useBean id="advert" scope="request" class="cz.svjis.bean.Advert" />
 <jsp:useBean id="advertTypeList" scope="request" class="java.util.ArrayList" />
+<jsp:useBean id="currMenu" scope="request" class="cz.svjis.bean.AdvertType" />
 
 <jsp:include page="_header.jsp" />
 <jsp:include page="_tray.jsp" />
@@ -28,7 +29,7 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h1 class="page-title" id="tbl-desc"><%=language.getText("Adverts") %></h1>
+                    <h1 class="page-title" id="tbl-desc"><%=language.getText("Adverts") %>: <%=currMenu.getDescription() %></h1>
                                         
                     <form action="Dispatcher" method="post">
                         <input type="hidden" name="page" value="<%=CmdFactory.ADVERT_SAVE %>">

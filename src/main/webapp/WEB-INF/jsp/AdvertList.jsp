@@ -19,6 +19,7 @@
 <jsp:useBean id="advertList" scope="request" class="java.util.ArrayList" />
 <jsp:useBean id="menuId" scope="request" class="java.lang.String" />
 <jsp:useBean id="slider" scope="request" class="cz.svjis.bean.SliderImpl" />
+<jsp:useBean id="currMenu" scope="request" class="cz.svjis.bean.AdvertType" />
 
 <jsp:include page="_header.jsp" />
 <jsp:include page="_tray.jsp" />
@@ -30,33 +31,32 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h1 class="page-title" id="tbl-desc"><%=language.getText("Adverts") %></h1>
+                    <h1 class="page-title" id="tbl-desc"><%=language.getText("Adverts") %>: <%=currMenu.getDescription() %></h1>
                     
                     <% if (user.hasPermission(Permission.CAN_INSERT_ADVERT)) { %>
-                    [<a href="Dispatcher?page=<%=CmdFactory.ADVERT_EDIT %>&id=0"><%=language.getText("Create new advert") %></a>]
+                    <a href="Dispatcher?page=<%=CmdFactory.ADVERT_EDIT %>&id=0" class="create-button"><%=language.getText("Create new advert") %></a><br>
                     <% } %>
-                    
-                    <table width="100%" class="list" aria-describedby="tbl-desc">
-                        <tr>
-                            <th class="list" scope="col">&nbsp;</th>
-                            <th class="list" scope="col">&nbsp;</th>
-                            <th class="list" scope="col"><%=language.getText("Date") %></th>
-                            <th class="list" scope="col"><%=language.getText("Header") %></th>
-                        </tr>
-                        <%
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-		                for (Advert a: (ArrayList<Advert>) advertList) {
-		                %>
-		                <tr>
-		                  <td class="list"><a href="Dispatcher?page=<%=CmdFactory.ADVERT_DETAIL %>&id=<%=a.getId() %>"><img src="gfx/find.png" border="0" title="View" alt="View"></a></td>
-		                  <td class="list"><a href="Dispatcher?page=<%=CmdFactory.ADVERT_EDIT %>&id=<%=a.getId() %>"><img src="gfx/pencil.png" border="0" title="Edit" alt="Edit"></a></td>
-		                  <td class="list"><%=sdf.format(a.getCreationDate()) %></td>
-		                  <td class="list"><%=a.getHeader() %></td>
-		                </tr>
-		                <%    
-		                }
-		                %>
-                    </table>
+
+                    <%
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+	                for (Advert a: (ArrayList<Advert>) advertList) {
+	                    String stl = (!a.isPublished()) ? "text-decoration: line-through;" : "";
+	                %>
+                    <!-- advert -->&nbsp;
+                    <div id="advert" class="box">
+                        <div id="advert-desc">
+                            <h2 style="<%=stl %>"><%=a.getHeader() %></h2>
+                            <p class="info"><%=language.getText("Date") %>: <strong><%=sdf.format(a.getCreationDate()) %></strong> <%=language.getText("Author") %>: <strong><%=a.getUser().getFullName(false) %></strong>
+                            <% if (a.getUser().getId() == user.getId()) { %>
+                                &nbsp;[<a href="Dispatcher?page=<%=CmdFactory.ADVERT_EDIT %>&id=<%=a.getId() %>"><%=language.getText("Edit") %></a>]
+                            <% } %>
+                            </p>
+                            <p class="nomb"  style="<%=stl %>"><%=a.getBody() %></p>
+                        </div> <!-- /advert-desc -->
+                    </div> <!-- /advert -->
+	                <%    
+	                }
+	                %>
                     
                     <p class="t-left">
                         <% if (slider.getTotalNumOfPages() > 1) { %>
