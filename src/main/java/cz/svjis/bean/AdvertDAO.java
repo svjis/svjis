@@ -21,12 +21,12 @@ import java.util.List;
 
 public class AdvertDAO extends DAO {
     
-    public static enum AdvertListType {
+    public enum AdvertListType {
         ADVERT_TYPE,
         USER
     }
     
-    public static int MY_ADVERTS_TYPE_ID = 99;
+    public static final int MY_ADVERTS_TYPE_ID = 99;
     
     private static final String ADVERT_SELECT = "SELECT %s \n" +
             "r.ID, \n" +
