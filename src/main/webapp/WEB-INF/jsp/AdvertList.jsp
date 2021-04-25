@@ -52,6 +52,10 @@
                             <% } %>
                             </p>
                             <p class="nomb"  style="<%=stl %>"><%=a.getBody() %></p>
+                            <p class="contact"  style="<%=stl %>">
+                                <% if ((a.getPhone() != null) && !a.getPhone().trim().equals("")) { %><%=language.getText("Phone") %>: <strong><%=a.getPhone() %></strong><% } %> 
+                                <% if ((a.geteMail() != null) && !a.geteMail().trim().equals("")) { %><%=language.getText("E-Mail") %>: <strong><a href="mailto:<%=a.geteMail() %>"><%=a.geteMail() %></a></strong><% } %>
+                            </p>
                         </div> <!-- /advert-desc -->
                     </div> <!-- /advert -->
 	                <%    

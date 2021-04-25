@@ -34,6 +34,8 @@ public class AdvertSaveCmd extends Command {
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
         String parHeader = Validator.getString(getRequest(), "header", 0, 50, false, false);
         String parBody = Validator.getString(getRequest(), "body", 0, Validator.MAX_STRING_LEN_ALLOWED, false, getUser().hasPermission(Permission.CAN_WRITE_HTML));
+        String parPhone = Validator.getString(getRequest(), "phone", 0, 30, false, false);
+        String parEmail = Validator.getString(getRequest(), "e-mail", 0, 50, false, false);
         int parType = Validator.getInt(getRequest(), "typeId", 0, Validator.MAX_INT_ALLOWED, true);
         boolean parPublished = Validator.getBoolean(getRequest(), "published");
         
@@ -58,6 +60,8 @@ public class AdvertSaveCmd extends Command {
         
         a.setHeader(parHeader);
         a.setBody(parBody);
+        a.setPhone(parPhone);
+        a.seteMail(parEmail);
         a.getType().setId(parType);
         a.setPublished(parPublished);
         

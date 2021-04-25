@@ -57,6 +57,10 @@ public class AdvertEditCmd extends Command {
                 rd.forward(getRequest(), getResponse());
                 return;
             }
+        } else {
+            advert.setPhone(getUser().getCellPhone());
+            advert.seteMail(getUser().geteMail());
+            advert.setPublished(true);
         }
         getRequest().setAttribute("advert", advert);
         

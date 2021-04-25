@@ -40,7 +40,9 @@ public class AdvertDAO extends DAO {
             "u.FIRST_NAME, \n" +
             "u.LAST_NAME, \n" +
             "u.CELL_PHONE, \n" +
-            "u.E_MAIL, \n" +
+            "u.E_MAIL AS \"UE_MAIL\", \n" +
+            "r.PHONE, \n" +
+            "r.E_MAIL, \n" +
             "r.CREATION_DATE, \n" +
             "r.PUBLISHED \n" + 
             "FROM ADVERT r \n" + 
@@ -67,7 +69,9 @@ public class AdvertDAO extends DAO {
         result.getUser().setFirstName(rs.getString("FIRST_NAME"));
         result.getUser().setLastName(rs.getString("LAST_NAME"));
         result.getUser().setCellPhone(rs.getString("CELL_PHONE"));
-        result.getUser().seteMail(rs.getString("E_MAIL"));
+        result.getUser().seteMail(rs.getString("UE_MAIL"));
+        result.setPhone(rs.getString("PHONE"));
+        result.seteMail(rs.getString("E_MAIL"));
         result.setCreationDate(rs.getTimestamp("CREATION_DATE"));
         result.setPublished(rs.getBoolean("PUBLISHED"));
         return result;
@@ -155,7 +159,7 @@ public class AdvertDAO extends DAO {
     
     public int insertAdvert(Advert a) throws SQLException {
         int result = 0;
-        String insert = "INSERT INTO ADVERT (COMPANY_ID, TYPE_ID, HEADER, \"BODY\", USER_ID, CREATION_DATE, PUBLISHED) VALUES (?,?,?,?,?,?,?) returning ID;";
+        String insert = "INSERT INTO ADVERT (COMPANY_ID, TYPE_ID, HEADER, \"BODY\", USER_ID, PHONE, E_MAIL, CREATION_DATE, PUBLISHED) VALUES (?,?,?,?,?,?,?,?,?) returning ID;";
         
         try (PreparedStatement ps = cnn.prepareStatement(insert)) {
             ps.setInt(1, a.getCompanyId());
@@ -163,8 +167,10 @@ public class AdvertDAO extends DAO {
             ps.setString(3, a.getHeader());
             ps.setString(4, a.getBody());
             ps.setInt(5, a.getUser().getId());
-            ps.setTimestamp(6, new java.sql.Timestamp(a.getCreationDate().getTime()));
-            ps.setInt(7, (a.isPublished()) ? 1 : 0);
+            ps.setString(6, a.getPhone());
+            ps.setString(7, a.geteMail());
+            ps.setTimestamp(8, new java.sql.Timestamp(a.getCreationDate().getTime()));
+            ps.setInt(9, (a.isPublished()) ? 1 : 0);
             
             
             try (ResultSet rs = ps.executeQuery()) {
@@ -179,17 +185,19 @@ public class AdvertDAO extends DAO {
     
     
     public void modifyAdvert(Advert a) throws SQLException {
-        String update = "UPDATE ADVERT a SET a.TYPE_ID = ?, a.HEADER = ?, a.\"BODY\" = ?, a.USER_ID = ?, a.CREATION_DATE = ?, a.PUBLISHED = ? WHERE a.ID = ? AND a.COMPANY_ID = ?";
+        String update = "UPDATE ADVERT a SET a.TYPE_ID = ?, a.HEADER = ?, a.\"BODY\" = ?, a.USER_ID = ?, a.PHONE = ?, a.E_MAIL = ?, a.CREATION_DATE = ?, a.PUBLISHED = ? WHERE a.ID = ? AND a.COMPANY_ID = ?";
         
         try (PreparedStatement ps = cnn.prepareStatement(update)) {
             ps.setInt(1, a.getType().getId());
             ps.setString(2, a.getHeader());
             ps.setString(3, a.getBody());
             ps.setInt(4, a.getUser().getId());
-            ps.setTimestamp(5, new java.sql.Timestamp(a.getCreationDate().getTime()));
-            ps.setInt(6, (a.isPublished()) ? 1 : 0);
-            ps.setInt(7, a.getId());
-            ps.setInt(8, a.getCompanyId());
+            ps.setString(5, a.getPhone());
+            ps.setString(6, a.geteMail());
+            ps.setTimestamp(7, new java.sql.Timestamp(a.getCreationDate().getTime()));
+            ps.setInt(8, (a.isPublished()) ? 1 : 0);
+            ps.setInt(9, a.getId());
+            ps.setInt(10, a.getCompanyId());
             ps.execute();
         }
     }

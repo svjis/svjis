@@ -141,5 +141,5 @@ h2.article-title {color:#739D13;}
 #advert {background-color:#D7ECF4;}
 #advert-desc .info, #advert-desc .info a {color:#5F5F5F;}
 #advert-desc .info a:hover {color:#2F2F2F;}
-#advert-desc h2 a {color:#3087ad;}
-#advert-desc h2 a:hover {color:#256785;}
+#advert-desc .contact, #advert-desc .contact a {color:#5F5F5F;}
+#advert-desc .contact a:hover {color:#2F2F2F;}

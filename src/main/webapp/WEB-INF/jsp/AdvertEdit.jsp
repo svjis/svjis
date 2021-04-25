@@ -65,7 +65,17 @@
                         </p>
                         
                         <p>
-                            <%=language.getText("Published") %><br>
+                            <%=language.getText("Phone") %><br>
+                            <input class="common-input" id="phone-input" type="text" name="phone" maxlength="30" size="80" value="<%=advert.getPhone() %>">
+                        </p>
+                        
+                        <p>
+                            <%=language.getText("E-Mail") %><br>
+                            <input class="common-input" id="email-input" type="text" name="e-mail" maxlength="50" size="80" value="<%=advert.geteMail() %>">
+                        </p>
+                        
+                        <p>
+                            <%=language.getText("Publish") %><br>
                             <input class="common-input" id="published-input" type="checkbox" name="published" <%=(advert.isPublished()) ? "checked" : "" %>>
                         </p>
                         
