@@ -16,12 +16,15 @@ package cz.svjis.bean;
 import java.util.Date;
 
 public class Advert {
+    
     private int id;
     private int companyId;
     private AdvertType type;
     private String header;
     private String body;
     private User user;
+    private String phone;
+    private String eMail;
     private Date creationDate;
     private boolean published;
     
@@ -37,6 +40,8 @@ public class Advert {
         header = "";
         body = "";
         user = new User();
+        phone = "";
+        eMail = "";
         creationDate = new Date();
         published = false;
     }
@@ -123,6 +128,34 @@ public class Advert {
      */
     public void setUser(User user) {
         this.user = user;
+    }
+    
+    /**
+     * @return the phone
+     */
+    public String getPhone() {
+        return phone;
+    }
+
+    /**
+     * @param phone the phone to set
+     */
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    /**
+     * @return the eMail
+     */
+    public String geteMail() {
+        return eMail;
+    }
+
+    /**
+     * @param eMail the eMail to set
+     */
+    public void seteMail(String eMail) {
+        this.eMail = eMail;
     }
     
     /**

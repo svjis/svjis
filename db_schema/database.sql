@@ -64,6 +64,8 @@ CREATE TABLE ADVERT
   HEADER Varchar(50),
   BODY Blob sub_type 1,
   USER_ID Integer,
+  PHONE Varchar(30),
+  E_MAIL Varchar(50),
   CREATION_DATE Timestamp,
   PUBLISHED Smallint,
   CONSTRAINT ADVERT_PK PRIMARY KEY (ID)
