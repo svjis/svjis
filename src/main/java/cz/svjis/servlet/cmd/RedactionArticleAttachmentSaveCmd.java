@@ -13,7 +13,7 @@
 package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.Article;
-import cz.svjis.bean.ArticleAttachment;
+import cz.svjis.bean.Attachment;
 import cz.svjis.bean.ArticleDAO;
 import cz.svjis.bean.LogDAO;
 import cz.svjis.bean.Permission;
@@ -62,7 +62,7 @@ public class RedactionArticleAttachmentSaveCmd extends Command {
             FileItem item = iterator.next();
             File f = new File(item.getName());
             if (!item.isFormField()) {
-                ArticleAttachment aa = new ArticleAttachment();
+                Attachment aa = new Attachment();
                 String fileName = f.getName().replace(" ", "_");
                 if (fileName.lastIndexOf('\\') > -1) {
                     fileName = fileName.substring(fileName.lastIndexOf('\\') + 1);
@@ -70,8 +70,8 @@ public class RedactionArticleAttachmentSaveCmd extends Command {
                 aa.setFileName(fileName);
                 aa.setContentType(item.getContentType());
                 aa.setData(item.get());
-                aa.setUserId(getUser().getId());
-                aa.setArticleId(parArticleId);
+                aa.setUser(getUser());
+                aa.setDocumentId(parArticleId);
                 aa.setUploadTime(new Date());
                 if (!aa.getFileName().equals("")) {
                     articleDao.insertArticleAttachment(aa);

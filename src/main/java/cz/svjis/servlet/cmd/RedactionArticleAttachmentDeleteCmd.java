@@ -13,7 +13,7 @@
 package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.Article;
-import cz.svjis.bean.ArticleAttachment;
+import cz.svjis.bean.Attachment;
 import cz.svjis.bean.ArticleDAO;
 import cz.svjis.bean.LogDAO;
 import cz.svjis.bean.Permission;
@@ -40,13 +40,13 @@ public class RedactionArticleAttachmentDeleteCmd extends Command {
         ArticleDAO articleDao = new ArticleDAO(getCnn());
         LogDAO logDao = new LogDAO(getCnn());
 
-        ArticleAttachment aa = articleDao.getArticleAttachment(parId);
+        Attachment aa = articleDao.getArticleAttachment(parId);
         if (aa == null) {
             RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/InputValidationError.jsp");
             rd.forward(getRequest(), getResponse());
             return;
         }
-        Article a = articleDao.getArticle(getUser(), aa.getArticleId());
+        Article a = articleDao.getArticle(getUser(), aa.getDocumentId());
         if ((a == null) || ((a.getAuthor().getId() != getUser().getId()) && !getUser().hasPermission(Permission.REDACTION_ARTICLES_ALL))) {
             RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/InputValidationError.jsp");
             rd.forward(getRequest(), getResponse());
@@ -54,8 +54,8 @@ public class RedactionArticleAttachmentDeleteCmd extends Command {
         }
         articleDao.deleteArticleAttachment(parId);
         
-        String url = "Dispatcher?page=redactionArticleEdit&id=" + aa.getArticleId();
+        String url = "Dispatcher?page=redactionArticleEdit&id=" + aa.getDocumentId();
         getResponse().sendRedirect(url);
-        logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_DELETE_ATTACHMENT, aa.getArticleId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
+        logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_DELETE_ATTACHMENT, aa.getDocumentId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
     }
 }

@@ -12,7 +12,7 @@
 
 package cz.svjis.servlet.cmd;
 
-import cz.svjis.bean.FaultReportAttachment;
+import cz.svjis.bean.Attachment;
 import cz.svjis.bean.FaultReportDAO;
 import cz.svjis.common.HttpUtils;
 import cz.svjis.servlet.CmdContext;
@@ -36,8 +36,8 @@ public class FaultReportingDownloadCmd extends Command {
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
 
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
-        FaultReportAttachment fa = faultDao.getFaultReportAttachment(parId);
-        if ((fa == null) || (faultDao.getFault(getCompany().getId(), fa.getFaultReportId()) == null)) {
+        Attachment fa = faultDao.getFaultReportAttachment(parId);
+        if ((fa == null) || (faultDao.getFault(getCompany().getId(), fa.getDocumentId()) == null)) {
             throw new InputValidationException("Bad attachment id");
         }
         HttpUtils.writeBinaryData(fa.getContentType(), fa.getFileName(), fa.getData(), getRequest(), getResponse());

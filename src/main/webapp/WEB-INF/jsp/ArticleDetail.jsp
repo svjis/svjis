@@ -5,7 +5,7 @@
 --%>
 
 <%@page import="cz.svjis.bean.Permission"%>
-<%@page import="cz.svjis.bean.ArticleAttachment"%>
+<%@page import="cz.svjis.bean.Attachment"%>
 <%@page import="cz.svjis.common.HttpUtils"%>
 <%@page import="cz.svjis.bean.ArticleComment"%>
 <%@page import="java.io.File"%>
@@ -34,9 +34,9 @@
                     <%
                         String body = article.getBody();
                         if ((article.getAttachmentList() != null) && (article.getAttachmentList().size() != 0)) {
-                            Iterator<ArticleAttachment> attachI = article.getAttachmentList().iterator();
+                            Iterator<Attachment> attachI = article.getAttachmentList().iterator();
                             while (attachI.hasNext()) {
-                                ArticleAttachment a = attachI.next();
+                                Attachment a = attachI.next();
                                 body = body.replaceAll("\\{" + a.getFileName() + "\\}", "<img src=\"Upload?page=download&id=" + a.getId() + "\" alt=\"" + a.getFileName() + "\">");
                             }
                         }
@@ -64,9 +64,9 @@
                             <th class="list" scope="col"><%=language.getText("Attachments:") %></th>
                         </tr>
                         <%
-                        Iterator<ArticleAttachment> attachI = article.getAttachmentList().iterator();
+                        Iterator<Attachment> attachI = article.getAttachmentList().iterator();
                         while (attachI.hasNext()) {
-                            ArticleAttachment a = attachI.next();
+                            Attachment a = attachI.next();
                             String icon = "gfx/Files_unknown.gif";
                             String extension = a.getFileName().toLowerCase().substring(a.getFileName().lastIndexOf(".") + 1);
                             File f = new File(request.getServletContext().getRealPath("/gfx") + "/Files_" + extension + ".gif");
