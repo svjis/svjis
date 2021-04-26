@@ -13,6 +13,7 @@
 
 package cz.svjis.bean;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Advert {
@@ -27,6 +28,8 @@ public class Advert {
     private String eMail;
     private Date creationDate;
     private boolean published;
+    private ArrayList<Attachment> attachmentList;
+    
     
     public Advert() {
         super();
@@ -186,4 +189,17 @@ public class Advert {
         this.published = published;
     }
 
+    /**
+     * @return the attachmentList
+     */
+    public ArrayList<Attachment> getAttachmentList() {
+        return attachmentList;
+    }
+
+    /**
+     * @param attachmentList the attachmentList to set
+     */
+    public void setAttachmentList(ArrayList<Attachment> attachmentList) {
+        this.attachmentList = attachmentList;
+    }
 }

@@ -8,8 +8,10 @@
 
 <%@page import="cz.svjis.bean.Advert"%>
 <%@page import="cz.svjis.bean.AdvertType"%>
+<%@page import="cz.svjis.bean.Attachment"%>
 <%@page import="cz.svjis.bean.Permission"%>
 <%@page import="cz.svjis.servlet.CmdFactory"%>
+<%@page import="java.io.File"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.ArrayList"%>
 
@@ -84,6 +86,49 @@
                         </p>
                     </form>
                     
+                    <% if (advert.getId() != 0) { %>
+                    <h1 class="page-title" id="tbl-desc"><%=language.getText("Attachments") %></h1>
+
+                    <form action="Dispatcher?page=<%=CmdFactory.ADVERT_ATTACHMENT_SAVE %>&advertId=<%=advert.getId() %>" enctype="multipart/form-data" method="post">
+                        <fieldset>
+                            <legend class="hidden-legend"><%=language.getText("General") %></legend>
+                            <%
+                                if ((advert.getAttachmentList() != null) && (advert.getAttachmentList().size() != 0)) {
+                            %>
+                            <p>
+                            <table class="list" aria-describedby="tbl-desc">
+                                <tr>
+                                    <th class="list" colspan="3" scope="col"><%=language.getText("File") %></th>
+                                </tr>
+                                <%
+                                for (Attachment a: advert.getAttachmentList()) {
+                                    String icon = "gfx/Files_unknown.gif";
+                                    String extension = a.getFileName().toLowerCase().substring(a.getFileName().lastIndexOf(".") + 1);
+                                    File f = new File(request.getServletContext().getRealPath("/gfx") + "/Files_" + extension + ".gif");
+                                    if (f.exists()) {
+                                        icon = "gfx/Files_" + extension + ".gif";
+                                    }
+                                %>
+                                <tr>
+                                    <td class="list"><img src="<%=icon%>" border="0" alt="<%=a.getFileName() %>"></td>
+                                    <td class="list"><a href="Upload?page=download&id=<%=a.getId() %>"><%=a.getFileName() %></a></td>
+                                    <td class="list"><a onclick="if (!confirm('<%=language.getText("Really do you want to remove attachment") %> <%=a.getFileName() %> ?')) return false;" href="Dispatcher?page=<%=CmdFactory.ADVERT_ATTACHMENT_DELETE %>&id=<%=a.getId() %>"><%=language.getText("Delete") %></a></td>
+                                </tr>
+                                <%
+                                }
+                                %>
+                            </table>
+                            <p>
+                            <%
+                               }
+                            %>
+                            <p>
+                                <input id="file-upload" type="file" name="attachment" size="40">
+                                <input id="file-submit" type="submit" value="<%=language.getText("Insert attachment") %>">
+                            </p>
+                        </fieldset>
+                    </form>
+                    <% } %>
                 </div> <!-- /content-main-in -->
             </div> <!-- /content-main -->
             <hr class="noscreen" />

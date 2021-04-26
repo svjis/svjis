@@ -21,6 +21,8 @@ import java.util.List;
 
 public class AdvertDAO extends DAO {
     
+    private AttachmentDAO attDao;
+    
     public enum AdvertListType {
         ADVERT_TYPE,
         USER
@@ -53,6 +55,7 @@ public class AdvertDAO extends DAO {
     
     public AdvertDAO(Connection cnn) {
         super(cnn);
+        attDao = new AttachmentDAO(cnn, "ADVERT_ATTACHMENT", "ADVERT_ID");
     }
     
     
@@ -90,6 +93,10 @@ public class AdvertDAO extends DAO {
                     result = mapRsToAdvert(rs);
                 }
             }
+        }
+        
+        if (result != null) {
+            result.setAttachmentList(this.getAttachmentList(result.getId()));
         }
         
         return result;
@@ -255,5 +262,21 @@ public class AdvertDAO extends DAO {
         }
         
         return result;
+    }
+    
+    private ArrayList<Attachment> getAttachmentList(int advertId) throws SQLException {
+        return attDao.getAttachmentList(advertId);
+    }
+    
+    public void insertAttachment(Attachment a) throws SQLException {
+        attDao.insertAttachment(a);
+    }
+    
+    public Attachment getAttachment(int id) throws SQLException {
+        return attDao.getAttachment(id);
+    }
+    
+    public void deleteAttachment(int id) throws SQLException {
+        attDao.deleteAttachment(id);
     }
 }
