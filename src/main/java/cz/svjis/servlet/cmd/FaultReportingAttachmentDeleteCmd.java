@@ -13,7 +13,7 @@
 package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.FaultReport;
-import cz.svjis.bean.FaultReportAttachment;
+import cz.svjis.bean.Attachment;
 import cz.svjis.bean.FaultReportDAO;
 import cz.svjis.bean.LogDAO;
 import cz.svjis.servlet.CmdContext;
@@ -40,18 +40,18 @@ public class FaultReportingAttachmentDeleteCmd extends Command {
         LogDAO logDao = new LogDAO(getCnn());
 
         int id = parId;
-        FaultReportAttachment fa = faultDao.getFaultReportAttachment(id);
+        Attachment fa = faultDao.getFaultReportAttachment(id);
         if (fa == null) {
             RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/InputValidationError.jsp");
             rd.forward(getRequest(), getResponse());
             return;
         }
-        FaultReport f = faultDao.getFault(getCompany().getId(), fa.getFaultReportId());
+        FaultReport f = faultDao.getFault(getCompany().getId(), fa.getDocumentId());
         if ((f != null) && (!f.isClosed()) && (fa.getUser().getId() == getUser().getId())) {
             faultDao.deleteFaultAttachment(id);
             logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_DELETE_FAULT_ATTACHMENT, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
         }
-        String url = "Dispatcher?page=faultDetail&id=" + fa.getFaultReportId();
+        String url = "Dispatcher?page=faultDetail&id=" + fa.getDocumentId();
         getResponse().sendRedirect(url);
     }
 }

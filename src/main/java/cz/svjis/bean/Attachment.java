@@ -1,5 +1,5 @@
 /*
- *       FaultReportAttachment.java
+ *       Attachment.java
  *
  *       This file is part of SVJIS project.
  *       https://github.com/svjis/svjis
@@ -14,110 +14,123 @@ package cz.svjis.bean;
 
 import java.util.Date;
 
-/**
- *
- * @author jarberan
- */
-public class FaultReportAttachment {
+public class Attachment {
+    
     private int id;
-    private int faultReportId;
+    private int documentId;
     private User user;
     private Date uploadTime;
     private String contentType;
     private String fileName;
     private byte[] data;
-
+    
+    
+    public Attachment() {
+        super();
+        clear();
+    }
+    
+    public void clear() {
+        id = 0;
+        documentId = 0;
+        user = new User();
+        uploadTime = new Date();
+        contentType = "";
+        fileName = "";
+        data = null;
+    }
+    
     /**
      * @return the id
      */
     public int getId() {
         return id;
     }
-
+    
     /**
      * @param id the id to set
      */
     public void setId(int id) {
         this.id = id;
     }
-
+    
     /**
-     * @return the faultReportId
+     * @return the documentId
      */
-    public int getFaultReportId() {
-        return faultReportId;
+    public int getDocumentId() {
+        return documentId;
     }
-
+    
     /**
-     * @param faultReportId the faultReportId to set
+     * @param documentId the documentId to set
      */
-    public void setFaultReportId(int faultReportId) {
-        this.faultReportId = faultReportId;
+    public void setDocumentId(int documentId) {
+        this.documentId = documentId;
     }
-
+    
     /**
      * @return the user
      */
     public User getUser() {
         return user;
     }
-
+    
     /**
-     * @param user the userId to set
+     * @param user the user to set
      */
     public void setUser(User user) {
         this.user = user;
     }
-
+    
     /**
      * @return the uploadTime
      */
     public Date getUploadTime() {
         return uploadTime;
     }
-
+    
     /**
      * @param uploadTime the uploadTime to set
      */
     public void setUploadTime(Date uploadTime) {
         this.uploadTime = uploadTime;
     }
-
+    
     /**
      * @return the contentType
      */
     public String getContentType() {
         return contentType;
     }
-
+    
     /**
      * @param contentType the contentType to set
      */
     public void setContentType(String contentType) {
         this.contentType = contentType;
     }
-
+    
     /**
      * @return the fileName
      */
     public String getFileName() {
         return fileName;
     }
-
+    
     /**
      * @param fileName the fileName to set
      */
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
-
+    
     /**
      * @return the data
      */
     public byte[] getData() {
         return data;
     }
-
+    
     /**
      * @param data the data to set
      */

@@ -13,7 +13,7 @@
 package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.FaultReport;
-import cz.svjis.bean.FaultReportAttachment;
+import cz.svjis.bean.Attachment;
 import cz.svjis.bean.FaultReportDAO;
 import cz.svjis.bean.LogDAO;
 import cz.svjis.servlet.CmdContext;
@@ -52,7 +52,7 @@ public class FaultReportingAttachmentSaveCmd extends Command {
         for (FileItem item: items) {
             File f = new File(item.getName());
             if (!item.isFormField()) {
-                FaultReportAttachment fa = new FaultReportAttachment();
+                Attachment fa = new Attachment();
                 String fileName = f.getName().replace(" ", "_");
                 if (fileName.lastIndexOf('\\') > -1) {
                     fileName = fileName.substring(fileName.lastIndexOf('\\') + 1);
@@ -61,10 +61,10 @@ public class FaultReportingAttachmentSaveCmd extends Command {
                 fa.setContentType(item.getContentType());
                 fa.setData(item.get());
                 fa.setUser(getUser());
-                fa.setFaultReportId(reportId);
+                fa.setDocumentId(reportId);
                 fa.setUploadTime(new Date());
                 
-                FaultReport fr = faultDao.getFault(getCompany().getId(), fa.getFaultReportId());
+                FaultReport fr = faultDao.getFault(getCompany().getId(), fa.getDocumentId());
                 if ((fr != null) && (!fr.isClosed()) && !fa.getFileName().equals("")) {
                     faultDao.insertFaultReportAttachment(fa);
                     logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_INSERT_FAULT_ATTACHMENT, fr.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));

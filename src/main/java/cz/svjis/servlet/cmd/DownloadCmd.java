@@ -12,7 +12,7 @@
 
 package cz.svjis.servlet.cmd;
 
-import cz.svjis.bean.ArticleAttachment;
+import cz.svjis.bean.Attachment;
 import cz.svjis.bean.ArticleDAO;
 import cz.svjis.common.HttpUtils;
 import cz.svjis.servlet.CmdContext;
@@ -36,8 +36,8 @@ public class DownloadCmd extends Command {
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
 
         ArticleDAO dao = new ArticleDAO(getCnn());
-        ArticleAttachment aa = dao.getArticleAttachment(parId);
-        if ((aa == null) || (dao.getArticle(getUser(), aa.getArticleId()) == null)) {
+        Attachment aa = dao.getArticleAttachment(parId);
+        if ((aa == null) || (dao.getArticle(getUser(), aa.getDocumentId()) == null)) {
             throw new InputValidationException("Bad attachment id");
         }
         HttpUtils.writeBinaryData(aa.getContentType(), aa.getFileName(), aa.getData(), getRequest(), getResponse());

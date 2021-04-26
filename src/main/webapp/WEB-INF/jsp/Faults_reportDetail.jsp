@@ -8,7 +8,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%@page import="java.io.File"%>
-<%@page import="cz.svjis.bean.FaultReportAttachment"%>
+<%@page import="cz.svjis.bean.Attachment"%>
 <%@page import="cz.svjis.bean.FaultReportComment"%>
 <%@page import="cz.svjis.common.HttpUtils"%>
 <%@page import="cz.svjis.bean.Language"%>
@@ -95,7 +95,7 @@
                                     <th class="list" scope="col">&nbsp;</th>
                                 </tr>
                                 <%
-                                for (FaultReportAttachment a: report.getAttachmentList()) {
+                                for (Attachment a: report.getAttachmentList()) {
                                     String icon = "gfx/Files_unknown.gif";
                                     String extension = a.getFileName().toLowerCase().substring(a.getFileName().lastIndexOf(".") + 1);
                                     File f = new File(request.getServletContext().getRealPath("/gfx") + "/Files_" + extension + ".gif");

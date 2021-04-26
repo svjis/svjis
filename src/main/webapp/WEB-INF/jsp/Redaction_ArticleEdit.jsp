@@ -7,7 +7,7 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.io.File"%>
-<%@page import="cz.svjis.bean.ArticleAttachment"%>
+<%@page import="cz.svjis.bean.Attachment"%>
 <%@page import="cz.svjis.bean.Role"%>
 <%@page import="cz.svjis.bean.Language"%>
 <%@page import="cz.svjis.bean.MenuItem"%>
@@ -157,7 +157,7 @@
                                     <th class="list" colspan="3" scope="col"><%=language.getText("File") %></th>
                                 </tr>
                                 <%
-                                for (ArticleAttachment a: article.getAttachmentList()) {
+                                for (Attachment a: article.getAttachmentList()) {
                                     String icon = "gfx/Files_unknown.gif";
                                     String extension = a.getFileName().toLowerCase().substring(a.getFileName().lastIndexOf(".") + 1);
                                     File f = new File(request.getServletContext().getRealPath("/gfx") + "/Files_" + extension + ".gif");
