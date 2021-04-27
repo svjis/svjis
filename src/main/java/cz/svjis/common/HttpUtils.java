@@ -135,7 +135,7 @@ public class HttpUtils {
         Language language = (Language) request.getSession().getAttribute("language");
         User user =  (User) request.getSession().getAttribute("user");
         
-        if ((list == null) || (list.size() == 0))
+        if ((list == null) || list.isEmpty())
             return "";
         
         result.append("<p>");
@@ -173,7 +173,7 @@ public class HttpUtils {
             }
             if (showDelete || showDeleteOwnerOnly) {
                 result.append("<td class=\"list\">");
-                if (showDelete || (showDeleteOwnerOnly && (user.getId() == a.getUser().getId()))) {
+                if (showDelete || (user.getId() == a.getUser().getId())) {
                     result.append(String.format("<a onclick=\"if (!confirm('%s %s ?')) return false;\" href=\"Dispatcher?page=%s&id=%d\">%s</a>", 
                             language.getText("Really do you want to remove attachment"), a.getFileName(), delPage, a.getId(), language.getText("Delete")));
                 } else {
@@ -185,6 +185,26 @@ public class HttpUtils {
         }
         result.append("</table>");
         result.append("<p>");
+        
+        return result.toString();
+    }
+    
+    public static String renderAttachments(List<Attachment> list, HttpServletRequest request, String dwlPage) {
+        StringBuilder result = new StringBuilder();
+        
+        if ((list == null) || list.isEmpty())
+            return "";
+        
+        for (Attachment a: list) {
+            String icon = "gfx/Files_unknown.gif";
+            String extension = a.getFileName().toLowerCase().substring(a.getFileName().lastIndexOf(".") + 1);
+            File f = new File(request.getServletContext().getRealPath("/gfx") + "/Files_" + extension + ".gif");
+            if (f.exists()) {
+                icon = "gfx/Files_" + extension + ".gif";
+            }
+            result.append(String.format("<img src=\"%s\" border=\"0\" alt=\"%s\">&nbsp;", icon, a.getFileName()));
+            result.append(String.format("<a href=\"Upload?page=%s&id=%d\">%s</a>&nbsp;", dwlPage, a.getId(), a.getFileName()));
+        }
         
         return result.toString();
     }

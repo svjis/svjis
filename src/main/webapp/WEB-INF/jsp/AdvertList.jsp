@@ -10,7 +10,9 @@
 <%@page import="cz.svjis.bean.AdvertType"%>
 <%@page import="cz.svjis.bean.Permission"%>
 <%@page import="cz.svjis.bean.SliderItem"%>
+<%@page import="cz.svjis.common.HttpUtils"%>
 <%@page import="cz.svjis.servlet.CmdFactory"%>
+<%@page import="cz.svjis.servlet.CmdFactoryUpload"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.ArrayList"%>
 
@@ -52,6 +54,9 @@
                             <% } %>
                             </p>
                             <p class="nomb"  style="<%=stl %>"><%=a.getBody().replace("\n", "<br>") %></p>
+                            <% if (!a.getAttachmentList().isEmpty()) { %>
+                            <p class="nomb"><%=HttpUtils.renderAttachments(a.getAttachmentList(), request, CmdFactoryUpload.ADVERT_ATTACHMENT_DOWNLOAD) %></p>
+                            <% } %>
                             <p class="contact"  style="<%=stl %>">
                                 <% if ((a.getPhone() != null) && !a.getPhone().trim().equals("")) { %><%=language.getText("Phone") %>: <strong><%=a.getPhone() %></strong><% } %> 
                                 <% if ((a.geteMail() != null) && !a.geteMail().trim().equals("")) { %><%=language.getText("E-Mail") %>: <strong><a href="mailto:<%=a.geteMail() %>"><%=a.geteMail() %></a></strong><% } %>

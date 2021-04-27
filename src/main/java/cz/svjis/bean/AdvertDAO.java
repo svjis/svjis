@@ -160,6 +160,10 @@ public class AdvertDAO extends DAO {
             }
         }
         
+        for (Advert a: result) {
+            a.setAttachmentList(this.getAttachmentList(a.getId()));
+        }
+        
         return result;
     }
     
