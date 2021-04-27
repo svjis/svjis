@@ -11,6 +11,7 @@
 <%@page import="cz.svjis.bean.Attachment"%>
 <%@page import="cz.svjis.bean.Permission"%>
 <%@page import="cz.svjis.servlet.CmdFactory"%>
+<%@page import="cz.svjis.servlet.CmdFactoryUpload"%>
 <%@page import="java.io.File"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.ArrayList"%>
@@ -111,7 +112,7 @@
                                 %>
                                 <tr>
                                     <td class="list"><img src="<%=icon%>" border="0" alt="<%=a.getFileName() %>"></td>
-                                    <td class="list"><a href="Upload?page=download&id=<%=a.getId() %>"><%=a.getFileName() %></a></td>
+                                    <td class="list"><a href="Upload?page=<%=CmdFactoryUpload.ADVERT_ATTACHMENT_DOWNLOAD %>&id=<%=a.getId() %>"><%=a.getFileName() %></a></td>
                                     <td class="list"><a onclick="if (!confirm('<%=language.getText("Really do you want to remove attachment") %> <%=a.getFileName() %> ?')) return false;" href="Dispatcher?page=<%=CmdFactory.ADVERT_ATTACHMENT_DELETE %>&id=<%=a.getId() %>"><%=language.getText("Delete") %></a></td>
                                 </tr>
                                 <%

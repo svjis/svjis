@@ -13,6 +13,7 @@
 package cz.svjis.servlet;
 
 import cz.svjis.bean.Permission;
+import cz.svjis.servlet.cmd.AdvertAttachmentDownloadCmd;
 import cz.svjis.servlet.cmd.BuildingPictureCmd;
 import cz.svjis.servlet.cmd.DownloadCmd;
 import cz.svjis.servlet.cmd.ExportBuildingUnitListToXlsCmd;
@@ -25,6 +26,8 @@ import cz.svjis.servlet.cmd.FaultReportingDownloadCmd;
  * @author jaroslav_b
  */
 public class CmdFactoryUpload {
+
+    public static final String ADVERT_ATTACHMENT_DOWNLOAD = "advertAttachmentDownload";
     
     private CmdFactoryUpload() {}
 
@@ -58,6 +61,15 @@ public class CmdFactoryUpload {
         if (ctx.getUser().hasPermission(Permission.MENU_FAULT_REPORTING)) {
             if (page.equals("faultReportingDownload")) {
                 return new FaultReportingDownloadCmd(ctx);
+            }
+        }
+        
+        // *******************
+        // * Adverts         *
+        // *******************
+        if (ctx.getUser().hasPermission(Permission.MENU_ADVERTS)) {
+            if (page.equals(ADVERT_ATTACHMENT_DOWNLOAD)) {
+                return new AdvertAttachmentDownloadCmd(ctx);
             }
         }
         
