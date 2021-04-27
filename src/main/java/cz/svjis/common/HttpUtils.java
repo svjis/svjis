@@ -203,7 +203,7 @@ public class HttpUtils {
                 icon = "gfx/Files_" + extension + ".gif";
             }
             result.append(String.format("<img src=\"%s\" border=\"0\" alt=\"%s\">&nbsp;", icon, a.getFileName()));
-            result.append(String.format("<a href=\"Upload?page=%s&id=%d\">%s</a>&nbsp;", dwlPage, a.getId(), a.getFileName()));
+            result.append(String.format("<a href=\"Upload?page=%s&id=%d\">%s</a>&nbsp; ", dwlPage, a.getId(), a.getFileName()));
         }
         
         return result.toString();
