@@ -12,14 +12,21 @@
 
 package cz.svjis.common;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.binary.Base64;
+
+import cz.svjis.bean.Attachment;
+import cz.svjis.bean.Language;
+import cz.svjis.bean.User;
 
 /**
  *
@@ -120,5 +127,65 @@ public class HttpUtils {
             result = sb.toString();
         }
         return result;
+    }
+    
+    public static String renderAttachments(List<Attachment> list, HttpServletRequest request, String name, String dwlPage, String delPage, boolean showUser, boolean showTime, boolean showDelete, boolean showDeleteOwnerOnly, String ariaDescribedby) {
+        StringBuilder result = new StringBuilder();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        Language language = (Language) request.getSession().getAttribute("language");
+        User user =  (User) request.getSession().getAttribute("user");
+        
+        if ((list == null) || (list.size() == 0))
+            return "";
+        
+        result.append("<p>");
+        result.append(String.format("<table class=\"list\" aria-describedby=\"%s\">", ariaDescribedby));
+        result.append("<tr>");
+        result.append("<th class=\"list\" scope=\"col\">&nbsp;</th>");
+        result.append(String.format("<th class=\"list\" scope=\"col\">%s</th>", language.getText(name)));
+        if (showUser) {
+            result.append(String.format("<th class=\"list\" scope=\"col\">%s</th>", language.getText("User")));
+        }
+        if (showTime) {
+            result.append(String.format("<th class=\"list\" scope=\"col\">%s</th>", language.getText("Time")));
+        }
+        if (showDelete || showDeleteOwnerOnly) {
+            result.append("<th class=\"list\" scope=\"col\">&nbsp;</th>");
+        }
+        result.append("</tr>");
+        
+        for (Attachment a: list) {
+            String icon = "gfx/Files_unknown.gif";
+            String extension = a.getFileName().toLowerCase().substring(a.getFileName().lastIndexOf(".") + 1);
+            File f = new File(request.getServletContext().getRealPath("/gfx") + "/Files_" + extension + ".gif");
+            if (f.exists()) {
+                icon = "gfx/Files_" + extension + ".gif";
+            }
+            
+            result.append("<tr>");
+            result.append(String.format("<td class=\"list\"><img src=\"%s\" border=\"0\" alt=\"%s\"></td>", icon, a.getFileName()));
+            result.append(String.format("<td class=\"list\"><a href=\"Upload?page=%s&id=%d\">%s</a></td>", dwlPage, a.getId(), a.getFileName()));
+            if (showUser) {
+                result.append(String.format("<td class=\"list\">%s</td>", a.getUser().getFullName(false)));
+            }
+            if (showUser) {
+                result.append(String.format("<td class=\"list\">%s</td>", sdf.format(a.getUploadTime())));
+            }
+            if (showDelete || showDeleteOwnerOnly) {
+                result.append("<td class=\"list\">");
+                if (showDelete || (showDeleteOwnerOnly && (user.getId() == a.getUser().getId()))) {
+                    result.append(String.format("<a onclick=\"if (!confirm('%s %s ?')) return false;\" href=\"Dispatcher?page=%s&id=%d\">%s</a>", 
+                            language.getText("Really do you want to remove attachment"), a.getFileName(), delPage, a.getId(), language.getText("Delete")));
+                } else {
+                    result.append("&nbsp;");
+                }
+                result.append("</td>");
+            }
+            result.append("</tr>");
+        }
+        result.append("</table>");
+        result.append("<p>");
+        
+        return result.toString();
     }
 }

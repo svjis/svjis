@@ -10,9 +10,9 @@
 <%@page import="cz.svjis.bean.AdvertType"%>
 <%@page import="cz.svjis.bean.Attachment"%>
 <%@page import="cz.svjis.bean.Permission"%>
+<%@page import="cz.svjis.common.HttpUtils"%>
 <%@page import="cz.svjis.servlet.CmdFactory"%>
 <%@page import="cz.svjis.servlet.CmdFactoryUpload"%>
-<%@page import="java.io.File"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.ArrayList"%>
 
@@ -32,7 +32,7 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h1 class="page-title" id="tbl-desc"><%=language.getText("Adverts") %>: <%=currMenu.getDescription() %></h1>
+                    <h1 class="page-title"><%=language.getText("Adverts") %>: <%=currMenu.getDescription() %></h1>
                                         
                     <form action="Dispatcher" method="post">
                         <input type="hidden" name="page" value="<%=CmdFactory.ADVERT_SAVE %>">
@@ -93,36 +93,7 @@
                     <form action="Dispatcher?page=<%=CmdFactory.ADVERT_ATTACHMENT_SAVE %>&advertId=<%=advert.getId() %>" enctype="multipart/form-data" method="post">
                         <fieldset>
                             <legend class="hidden-legend"><%=language.getText("General") %></legend>
-                            <%
-                                if ((advert.getAttachmentList() != null) && (advert.getAttachmentList().size() != 0)) {
-                            %>
-                            <p>
-                            <table class="list" aria-describedby="tbl-desc">
-                                <tr>
-                                    <th class="list" colspan="3" scope="col"><%=language.getText("File") %></th>
-                                </tr>
-                                <%
-                                for (Attachment a: advert.getAttachmentList()) {
-                                    String icon = "gfx/Files_unknown.gif";
-                                    String extension = a.getFileName().toLowerCase().substring(a.getFileName().lastIndexOf(".") + 1);
-                                    File f = new File(request.getServletContext().getRealPath("/gfx") + "/Files_" + extension + ".gif");
-                                    if (f.exists()) {
-                                        icon = "gfx/Files_" + extension + ".gif";
-                                    }
-                                %>
-                                <tr>
-                                    <td class="list"><img src="<%=icon%>" border="0" alt="<%=a.getFileName() %>"></td>
-                                    <td class="list"><a href="Upload?page=<%=CmdFactoryUpload.ADVERT_ATTACHMENT_DOWNLOAD %>&id=<%=a.getId() %>"><%=a.getFileName() %></a></td>
-                                    <td class="list"><a onclick="if (!confirm('<%=language.getText("Really do you want to remove attachment") %> <%=a.getFileName() %> ?')) return false;" href="Dispatcher?page=<%=CmdFactory.ADVERT_ATTACHMENT_DELETE %>&id=<%=a.getId() %>"><%=language.getText("Delete") %></a></td>
-                                </tr>
-                                <%
-                                }
-                                %>
-                            </table>
-                            <p>
-                            <%
-                               }
-                            %>
+                            <%=HttpUtils.renderAttachments(advert.getAttachmentList(), request, "File", CmdFactoryUpload.ADVERT_ATTACHMENT_DOWNLOAD, CmdFactory.ADVERT_ATTACHMENT_DELETE, false, false, true, false, "tbl-desc") %>
                             <p>
                                 <input id="file-upload" type="file" name="attachment" size="40">
                                 <input id="file-submit" type="submit" value="<%=language.getText("Insert attachment") %>">

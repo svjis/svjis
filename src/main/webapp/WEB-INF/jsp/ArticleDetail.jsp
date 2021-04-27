@@ -8,7 +8,6 @@
 <%@page import="cz.svjis.bean.Attachment"%>
 <%@page import="cz.svjis.common.HttpUtils"%>
 <%@page import="cz.svjis.bean.ArticleComment"%>
-<%@page import="java.io.File"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -54,38 +53,7 @@
                     </div>
                     </div>
                     
-                    <%
-                        if ((article.getAttachmentList() != null) && (article.getAttachmentList().size() != 0)) {
-                    %>
-                    <p>
-                    <table class="list" aria-describedby="tbl-desc">
-                        <tr>
-                            <th class="list" scope="col">&nbsp;</th>
-                            <th class="list" scope="col"><%=language.getText("Attachments:") %></th>
-                        </tr>
-                        <%
-                        Iterator<Attachment> attachI = article.getAttachmentList().iterator();
-                        while (attachI.hasNext()) {
-                            Attachment a = attachI.next();
-                            String icon = "gfx/Files_unknown.gif";
-                            String extension = a.getFileName().toLowerCase().substring(a.getFileName().lastIndexOf(".") + 1);
-                            File f = new File(request.getServletContext().getRealPath("/gfx") + "/Files_" + extension + ".gif");
-                            if (f.exists()) {
-                                icon = "gfx/Files_" + extension + ".gif";
-                            }
-                        %>
-                        <tr>
-                            <td class="list"><img src="<%=icon%>" alt="<%=a.getFileName() %>" border="0"></td>
-                            <td class="list"><a href="Upload?page=download&id=<%=a.getId() %>"><%=a.getFileName() %></a></td>
-                        </tr>
-                        <%
-                        }
-                        %>
-                    </table>
-                    </p>
-                    <%
-                       }
-                    %>
+                    <%=HttpUtils.renderAttachments(article.getAttachmentList(), request, "Attachments:", "download", "", false, false, false, false, "tbl-desc") %>
                     
                     <%
                         if (((article.getCommentList() != null) && (article.getCommentList().size() != 0)) || (article.isCommentsAllowed())) {

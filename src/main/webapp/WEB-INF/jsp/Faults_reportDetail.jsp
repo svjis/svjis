@@ -7,7 +7,6 @@
 <%@page import="cz.svjis.bean.Permission"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
-<%@page import="java.io.File"%>
 <%@page import="cz.svjis.bean.Attachment"%>
 <%@page import="cz.svjis.bean.FaultReportComment"%>
 <%@page import="cz.svjis.common.HttpUtils"%>
@@ -82,48 +81,8 @@
                     <form action="Dispatcher?page=faultReportingAttachmentSave&reportId=<%=report.getId() %>" enctype="multipart/form-data" method="post">
                         <fieldset>
                             <legend id="tbl2-desc"><%=language.getText("Attachments") %></legend>
-                            <%
-                                if ((report.getAttachmentList() != null) && (report.getAttachmentList().size() != 0)) {
-                            %>
-                            <p>
-                            <table class="list" aria-describedby="tbl2-desc">
-                                <tr>
-                                    <th class="list" scope="col">&nbsp;</th>
-                                    <th class="list" scope="col"><%=language.getText("File") %></th>
-                                    <th class="list" scope="col"><%=language.getText("User") %></th>
-                                    <th class="list" scope="col"><%=language.getText("Time") %></th>
-                                    <th class="list" scope="col">&nbsp;</th>
-                                </tr>
-                                <%
-                                for (Attachment a: report.getAttachmentList()) {
-                                    String icon = "gfx/Files_unknown.gif";
-                                    String extension = a.getFileName().toLowerCase().substring(a.getFileName().lastIndexOf(".") + 1);
-                                    File f = new File(request.getServletContext().getRealPath("/gfx") + "/Files_" + extension + ".gif");
-                                    if (f.exists()) {
-                                        icon = "gfx/Files_" + extension + ".gif";
-                                    }
-                                %>
-                                <tr>
-                                    <td class="list"><img src="<%=icon%>" border="0" alt="<%=a.getFileName() %>"></td>
-                                    <td class="list"><a href="Upload?page=faultReportingDownload&id=<%=a.getId() %>"><%=a.getFileName() %></a></td>
-                                    <td class="list"><%=a.getUser().getFullName(false) %></td>
-                                    <td class="list"><%=sdf.format(a.getUploadTime()) %></td>
-                                    <td class="list">
-                                        <% if ((!report.isClosed()) && (user.getId() == a.getUser().getId())) { %>
-                                            <a onclick="if (!confirm('<%=language.getText("Really do you want to remove attachment") %> <%=a.getFileName() %> ?')) return false;" href="Dispatcher?page=faultReportingAttachmentDelete&id=<%=a.getId() %>"><%=language.getText("Delete") %></a>
-                                        <% } else { %>
-                                            &nbsp;
-                                        <% } %>
-                                    </td>
-                                </tr>
-                                <%
-                                }
-                                %>
-                            </table>
-                            <p>
-                            <%
-                               }
-                            %>
+                            <%=HttpUtils.renderAttachments(report.getAttachmentList(), request, "File", "faultReportingDownload", "faultReportingAttachmentDelete", true, true, false, !report.isClosed(), "tbl2-desc") %>
+                            
                             <% if (!report.isClosed()) { %>
                             <p>
                                 <input id="file-upload" type="file" name="attachment" size="40">
