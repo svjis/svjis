@@ -38,8 +38,8 @@ public class Article {
     private boolean commentsAllowed;
     private int numOfComments;
     private int numOfReads;
-    private ArrayList<ArticleAttachment> attachmentList;
-    private ArrayList<ArticleComment> commentList;
+    private List<Attachment> attachmentList;
+    private List<ArticleComment> commentList;
     private HashMap<Integer, String> roles;
     
     public Article() {
@@ -238,14 +238,14 @@ public class Article {
     /**
      * @return the attachmentList
      */
-    public List<ArticleAttachment> getAttachmentList() {
+    public List<Attachment> getAttachmentList() {
         return attachmentList;
     }
 
     /**
      * @param attachmentList the attachmentList to set
      */
-    public void setAttachmentList(List<ArticleAttachment> attachmentList) {
+    public void setAttachmentList(List<Attachment> attachmentList) {
         this.attachmentList = new ArrayList<>(attachmentList);
     }
 

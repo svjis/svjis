@@ -1,5 +1,5 @@
 /*
- *       FaultReportingAttachmentSaveCmd.java
+ *       AdvertAttachmentSaveCmd.java
  *
  *       This file is part of SVJIS project.
  *       https://github.com/svjis/svjis
@@ -12,40 +12,36 @@
 
 package cz.svjis.servlet.cmd;
 
-import cz.svjis.bean.FaultReport;
-import cz.svjis.bean.Attachment;
-import cz.svjis.bean.FaultReportDAO;
-import cz.svjis.bean.LogDAO;
-import cz.svjis.servlet.CmdContext;
-import cz.svjis.servlet.Command;
-import cz.svjis.validator.Validator;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
+
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
-/**
- *
- * @author jarberan
- */
-public class FaultReportingAttachmentSaveCmd extends Command {
-    
-    public FaultReportingAttachmentSaveCmd(CmdContext ctx) {
+import cz.svjis.bean.Advert;
+import cz.svjis.bean.AdvertDAO;
+import cz.svjis.bean.Attachment;
+import cz.svjis.servlet.CmdContext;
+import cz.svjis.servlet.CmdFactory;
+import cz.svjis.servlet.Command;
+import cz.svjis.validator.Validator;
+
+public class AdvertAttachmentSaveCmd extends Command {
+
+    public AdvertAttachmentSaveCmd(CmdContext ctx) {
         super(ctx);
     }
 
     @Override
     public void execute() throws Exception {
 
-        int parReportId = Validator.getInt(getRequest(), "reportId", 0, Validator.MAX_INT_ALLOWED, false);
+        int parAdvertId = Validator.getInt(getRequest(), "advertId", 0, Validator.MAX_INT_ALLOWED, false);
 
-        FaultReportDAO faultDao = new FaultReportDAO(getCnn());
-        LogDAO logDao = new LogDAO(getCnn());
+        AdvertDAO advertDao = new AdvertDAO(getCnn());
 
-        int reportId = parReportId;
         FileItemFactory factory = new DiskFileItemFactory();
         ServletFileUpload upload = new ServletFileUpload(factory);
         List<FileItem> items = upload.parseRequest(getRequest());
@@ -61,17 +57,16 @@ public class FaultReportingAttachmentSaveCmd extends Command {
                 fa.setContentType(item.getContentType());
                 fa.setData(item.get());
                 fa.setUser(getUser());
-                fa.setDocumentId(reportId);
+                fa.setDocumentId(parAdvertId);
                 fa.setUploadTime(new Date());
                 
-                FaultReport fr = faultDao.getFault(getCompany().getId(), fa.getDocumentId());
-                if ((fr != null) && (!fr.isClosed()) && !fa.getFileName().equals("")) {
-                    faultDao.insertFaultReportAttachment(fa);
-                    logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_INSERT_FAULT_ATTACHMENT, fr.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
+                Advert ad = advertDao.getAdvert(getCompany().getId(), fa.getDocumentId());
+                if ((ad != null) && !fa.getFileName().equals("")) {
+                    advertDao.insertAttachment(fa);
                 }
             }
         }
-        String url = "Dispatcher?page=faultDetail&id=" + reportId;
+        String url = String.format("Dispatcher?page=%s&id=%d", CmdFactory.ADVERT_EDIT, parAdvertId);
         getResponse().sendRedirect(url);
     }
 }

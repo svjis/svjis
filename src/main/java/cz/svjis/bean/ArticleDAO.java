@@ -29,8 +29,11 @@ import java.util.List;
  */
 public class ArticleDAO extends DAO {
     
+    private AttachmentDAO attDao;
+    
     public ArticleDAO (Connection cnn) {
         super(cnn);
+        attDao = new AttachmentDAO(cnn, "ARTICLE_ATTACHMENT", "ARTICLE_ID");
     }
     
     public List<Article> getArticleTopList(User u, int top, int cntLastMonths) throws SQLException {
@@ -545,90 +548,20 @@ public class ArticleDAO extends DAO {
         }
     }
     
-    private ArrayList<ArticleAttachment> getArticleAttachmentList(int articleId) throws SQLException {
-        ArrayList<ArticleAttachment> result = new ArrayList<>();
-        String select = "SELECT "
-                + "a.ID, "
-                + "a.ARTICLE_ID, "
-                + "a.USER_ID, "
-                + "a.UPLOAD_TIME, "
-                + "a.CONTENT_TYPE, "
-                + "a.FILENAME "
-                //+ "a.DATA "
-                + "FROM ARTICLE_ATTACHMENT a "
-                + "WHERE (a.ARTICLE_ID = ?) "
-                + "ORDER BY a.ID";
-        
-        try (PreparedStatement ps = cnn.prepareStatement(select)) {
-            ps.setInt(1, articleId);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    ArticleAttachment a = new ArticleAttachment();
-                    a.setId(rs.getInt("ID"));
-                    a.setArticleId(rs.getInt("ARTICLE_ID"));
-                    a.setUserId(rs.getInt("USER_ID"));
-                    a.setUploadTime(rs.getTimestamp("UPLOAD_TIME"));
-                    a.setContentType(rs.getString("CONTENT_TYPE"));
-                    a.setFileName(rs.getString("FILENAME"));
-                    result.add(a);
-                }
-            }
-        }
-        return result;
+    private List<Attachment> getArticleAttachmentList(int articleId) throws SQLException {
+        return attDao.getAttachmentList(articleId);
     }
     
-    public ArticleAttachment getArticleAttachment(int id) throws SQLException {
-        ArticleAttachment result = null;
-        String select = "SELECT "
-                + "a.ID, "
-                + "a.ARTICLE_ID, "
-                + "a.USER_ID, "
-                + "a.UPLOAD_TIME, "
-                + "a.CONTENT_TYPE, "
-                + "a.FILENAME, "
-                + "a.DATA "
-                + "FROM ARTICLE_ATTACHMENT a "
-                + "WHERE (a.ID = ?) ";
-        
-        try (PreparedStatement ps = cnn.prepareStatement(select)) {
-            ps.setInt(1, id);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    result = new ArticleAttachment();
-                    result.setId(rs.getInt("ID"));
-                    result.setArticleId(rs.getInt("ARTICLE_ID"));
-                    result.setUserId(rs.getInt("USER_ID"));
-                    result.setUploadTime(rs.getTimestamp("UPLOAD_TIME"));
-                    result.setContentType(rs.getString("CONTENT_TYPE"));
-                    result.setFileName(rs.getString("FILENAME"));
-                    java.sql.Blob blob;
-                    blob = rs.getBlob("DATA");
-                    result.setData(blob.getBytes(1, (int) blob.length()));
-                }
-            }
-        }
-        return result;
+    public Attachment getArticleAttachment(int id) throws SQLException {
+        return attDao.getAttachment(id);
     }
     
-    public void insertArticleAttachment(ArticleAttachment aa) throws SQLException {
-        String insert = "INSERT INTO ARTICLE_ATTACHMENT (ARTICLE_ID, USER_ID, UPLOAD_TIME, CONTENT_TYPE, FILENAME, DATA) VALUES (?,?,?,?,?,?)";
-        try (PreparedStatement ps = cnn.prepareStatement(insert)) {
-            ps.setInt(1, aa.getArticleId());
-            ps.setInt(2, aa.getUserId());
-            ps.setTimestamp(3, new java.sql.Timestamp(aa.getUploadTime().getTime()));
-            ps.setString(4, aa.getContentType());
-            ps.setString(5, aa.getFileName());
-            ps.setBytes(6, aa.getData());
-            ps.execute();
-        }
+    public void insertArticleAttachment(Attachment a) throws SQLException {
+        attDao.insertAttachment(a);
     }
     
     public void deleteArticleAttachment(int id) throws SQLException {
-        String delete = "DELETE FROM ARTICLE_ATTACHMENT a WHERE (a.ID = ?)";
-        try (PreparedStatement ps = cnn.prepareStatement(delete)) {
-            ps.setInt(1, id);
-            ps.execute();
-        }
+        attDao.deleteAttachment(id);
     }
     
     private ArrayList<ArticleComment> getArticleCommentList(int articleId) throws SQLException {

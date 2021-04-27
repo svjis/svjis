@@ -13,92 +13,20 @@
 package cz.svjis.servlet;
 
 import cz.svjis.bean.Permission;
-import cz.svjis.servlet.cmd.ArticleDetailCmd;
-import cz.svjis.servlet.cmd.ArticleFastCmd;
-import cz.svjis.servlet.cmd.ArticleInquiryVoteCmd;
-import cz.svjis.servlet.cmd.ArticleInsertCommentCmd;
-import cz.svjis.servlet.cmd.ArticleListCmd;
-import cz.svjis.servlet.cmd.ArticleSearchCmd;
-import cz.svjis.servlet.cmd.BadPageCmd;
-import cz.svjis.servlet.cmd.BoardDeleteCmd;
-import cz.svjis.servlet.cmd.BoardEditCmd;
-import cz.svjis.servlet.cmd.BoardListCmd;
-import cz.svjis.servlet.cmd.BoardSaveCmd;
-import cz.svjis.servlet.cmd.BuildingDetailCmd;
-import cz.svjis.servlet.cmd.BuildingEntranceDeleteCmd;
-import cz.svjis.servlet.cmd.BuildingEntranceEditCmd;
-import cz.svjis.servlet.cmd.BuildingEntranceListCmd;
-import cz.svjis.servlet.cmd.BuildingEntranceSaveCmd;
-import cz.svjis.servlet.cmd.BuildingPictureSaveCmd;
-import cz.svjis.servlet.cmd.BuildingSaveCmd;
-import cz.svjis.servlet.cmd.BuildingUnitDeleteCmd;
-import cz.svjis.servlet.cmd.BuildingUnitEditCmd;
-import cz.svjis.servlet.cmd.BuildingUnitListCmd;
-import cz.svjis.servlet.cmd.BuildingUnitOwnerCmd;
-import cz.svjis.servlet.cmd.BuildingUnitSaveCmd;
-import cz.svjis.servlet.cmd.CompanyDetailCmd;
-import cz.svjis.servlet.cmd.CompanySaveCmd;
-import cz.svjis.servlet.cmd.ContactCompanyCmd;
-import cz.svjis.servlet.cmd.ContactPhoneListCmd;
-import cz.svjis.servlet.cmd.FaultReportingAttachmentDeleteCmd;
-import cz.svjis.servlet.cmd.FaultReportingAttachmentSaveCmd;
-import cz.svjis.servlet.cmd.FaultReportingDetailCmd;
-import cz.svjis.servlet.cmd.FaultReportingEditCmd;
-import cz.svjis.servlet.cmd.FaultReportingFastCmd;
-import cz.svjis.servlet.cmd.FaultReportingInsertCommentCmd;
-import cz.svjis.servlet.cmd.FaultReportingSaveCmd;
-import cz.svjis.servlet.cmd.FaultReportingListCmd;
-import cz.svjis.servlet.cmd.LoginCmd;
-import cz.svjis.servlet.cmd.LogoutCmd;
-import cz.svjis.servlet.cmd.LostPasswordCmd;
-import cz.svjis.servlet.cmd.LostPasswordSubmitCmd;
-import cz.svjis.servlet.cmd.MessagesPendingCmd;
-import cz.svjis.servlet.cmd.MyBuildingUnitsCmd;
-import cz.svjis.servlet.cmd.PersonalPasswordChangeCmd;
-import cz.svjis.servlet.cmd.PersonalPasswordChangeSaveCmd;
-import cz.svjis.servlet.cmd.PersonalUserDetailCmd;
-import cz.svjis.servlet.cmd.PersonalUserDetailSaveCmd;
-import cz.svjis.servlet.cmd.PropertyDeleteCmd;
-import cz.svjis.servlet.cmd.PropertyEditCmd;
-import cz.svjis.servlet.cmd.PropertyListCmd;
-import cz.svjis.servlet.cmd.PropertySaveCmd;
-import cz.svjis.servlet.cmd.RedactionArticleAttachmentDeleteCmd;
-import cz.svjis.servlet.cmd.RedactionArticleAttachmentSaveCmd;
-import cz.svjis.servlet.cmd.RedactionArticleEditCmd;
-import cz.svjis.servlet.cmd.RedactionArticleListCmd;
-import cz.svjis.servlet.cmd.RedactionArticleMenuCmd;
-import cz.svjis.servlet.cmd.RedactionArticleMenuDeleteCmd;
-import cz.svjis.servlet.cmd.RedactionArticleMenuEditCmd;
-import cz.svjis.servlet.cmd.RedactionArticleMenuSaveCmd;
-import cz.svjis.servlet.cmd.RedactionArticleSaveCmd;
-import cz.svjis.servlet.cmd.RedactionArticleSendNotificationsCmd;
-import cz.svjis.servlet.cmd.RedactionArticleSendNotificationsConfirmationCmd;
-import cz.svjis.servlet.cmd.RedactionInquiryEditCmd;
-import cz.svjis.servlet.cmd.RedactionInquiryListCmd;
-import cz.svjis.servlet.cmd.RedactionInquiryLogCmd;
-import cz.svjis.servlet.cmd.RedactionInquiryOptionDeleteCmd;
-import cz.svjis.servlet.cmd.RedactionInquirySaveCmd;
-import cz.svjis.servlet.cmd.RedactionNewsDeleteCmd;
-import cz.svjis.servlet.cmd.RedactionNewsEditCmd;
-import cz.svjis.servlet.cmd.RedactionNewsEditSaveCmd;
-import cz.svjis.servlet.cmd.RedactionNewsListCmd;
-import cz.svjis.servlet.cmd.RoleDeleteCmd;
-import cz.svjis.servlet.cmd.RoleEditCmd;
-import cz.svjis.servlet.cmd.RoleListCmd;
-import cz.svjis.servlet.cmd.RoleSaveCmd;
-import cz.svjis.servlet.cmd.UserBuildingUnitAddCmd;
-import cz.svjis.servlet.cmd.UserBuildingUnitRemoveCmd;
-import cz.svjis.servlet.cmd.UserBuildingUnitsCmd;
-import cz.svjis.servlet.cmd.UserDeleteCmd;
-import cz.svjis.servlet.cmd.UserEditCmd;
-import cz.svjis.servlet.cmd.UserListCmd;
-import cz.svjis.servlet.cmd.UserSaveCmd;
+import cz.svjis.servlet.cmd.*;
+
 
 /**
  *
  * @author jaroslav_b
  */
 public class CmdFactory {
+    
+    public static final String ADVERT_LIST = "advertList";
+    public static final String ADVERT_EDIT = "advertEdit";
+    public static final String ADVERT_SAVE = "advertSave";
+    public static final String ADVERT_ATTACHMENT_SAVE = "advertAttachmentSave";
+    public static final String ADVERT_ATTACHMENT_DELETE = "advertAttachmentDelete";
 
     private CmdFactory() {}
     
@@ -309,7 +237,33 @@ public class CmdFactory {
                 return new FaultReportingAttachmentDeleteCmd(ctx);
             }
         }
-
+        
+        // *******************
+        // * Adverts         *
+        // *******************
+        if (ctx.getUser().hasPermission(Permission.MENU_ADVERTS)) {
+            if (page.equals(ADVERT_LIST)) {
+                return new AdvertListCmd(ctx);
+            }
+            
+            if (page.equals(ADVERT_EDIT)) {
+                return new AdvertEditCmd(ctx);
+            }
+            
+            if (page.equals(ADVERT_SAVE)) {
+                return new AdvertSaveCmd(ctx);
+            }
+            
+            if (page.equals(ADVERT_ATTACHMENT_SAVE)) {
+                return new AdvertAttachmentSaveCmd(ctx);
+            }
+            
+            if (page.equals(ADVERT_ATTACHMENT_DELETE)) {
+                return new AdvertAttachmentDeleteCmd(ctx);
+            }
+            
+        }
+        
         // ******************
         // * Administration *
         // ******************

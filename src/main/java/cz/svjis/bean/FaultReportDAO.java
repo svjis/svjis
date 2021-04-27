@@ -26,9 +26,12 @@ import java.util.List;
  * @author jarberan
  */
 public class FaultReportDAO extends DAO {
+
+    private AttachmentDAO attDao;
     
     public FaultReportDAO (Connection cnn) {
         super(cnn);
+        attDao = new AttachmentDAO(cnn, "FAULT_REPORT_ATTACHMENT", "FAULT_REPORT_ID");
     }
     
     public int getNumOfFaults(int companyId, int closed) throws SQLException {
@@ -313,112 +316,20 @@ public class FaultReportDAO extends DAO {
         return result;
     }
     
-    private ArrayList<FaultReportAttachment> getFaultReportAttachmentList(int reportId) throws SQLException {
-        ArrayList<FaultReportAttachment> result = new ArrayList<>();
-        String select = "SELECT "
-                + "a.ID, "
-                + "a.FAULT_REPORT_ID, "
-                + "a.USER_ID, "
-                + "b.COMPANY_ID, "
-                + "b.SALUTATION, "
-                + "b.FIRST_NAME, "
-                + "b.LAST_NAME, "
-                + "a.UPLOAD_TIME, "
-                + "a.CONTENT_TYPE, "
-                + "a.FILENAME "
-                //+ "a.DATA "
-                + "FROM FAULT_REPORT_ATTACHMENT a "
-                + "LEFT JOIN \"USER\" b on b.ID = a.USER_ID "
-                + "WHERE (a.FAULT_REPORT_ID = ?) "
-                + "ORDER BY a.ID";
-        
-        try (PreparedStatement ps = cnn.prepareStatement(select)) {
-            ps.setInt(1, reportId);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    FaultReportAttachment a = new FaultReportAttachment();
-                    a.setId(rs.getInt("ID"));
-                    a.setFaultReportId(rs.getInt("FAULT_REPORT_ID"));
-                    User u = new User();
-                    u.setId(rs.getInt("USER_ID"));
-                    u.setCompanyId(rs.getInt("COMPANY_ID"));
-                    u.setSalutation(rs.getString("SALUTATION"));
-                    u.setFirstName(rs.getString("FIRST_NAME"));
-                    u.setLastName(rs.getString("LAST_NAME"));
-                    a.setUser(u);
-                    a.setUploadTime(rs.getTimestamp("UPLOAD_TIME"));
-                    a.setContentType(rs.getString("CONTENT_TYPE"));
-                    a.setFileName(rs.getString("FILENAME"));
-                    result.add(a);
-                }
-            }
-        }
-        return result;
+    private List<Attachment> getFaultReportAttachmentList(int reportId) throws SQLException {
+        return attDao.getAttachmentList(reportId);
     }
     
-    public void insertFaultReportAttachment(FaultReportAttachment fa) throws SQLException {
-        String insert = "INSERT INTO FAULT_REPORT_ATTACHMENT (FAULT_REPORT_ID, USER_ID, UPLOAD_TIME, CONTENT_TYPE, FILENAME, DATA) VALUES (?,?,?,?,?,?)";
-        try (PreparedStatement ps = cnn.prepareStatement(insert)) {
-            ps.setInt(1, fa.getFaultReportId());
-            ps.setInt(2, fa.getUser().getId());
-            ps.setTimestamp(3, new java.sql.Timestamp(fa.getUploadTime().getTime()));
-            ps.setString(4, fa.getContentType());
-            ps.setString(5, fa.getFileName());
-            ps.setBytes(6, fa.getData());
-            ps.execute();
-        }
+    public void insertFaultReportAttachment(Attachment a) throws SQLException {
+        attDao.insertAttachment(a);
     }
     
-    public FaultReportAttachment getFaultReportAttachment(int id) throws SQLException {
-        FaultReportAttachment result = null;
-        String select = "SELECT "
-                + "a.ID, "
-                + "a.FAULT_REPORT_ID, "
-                + "a.USER_ID, "
-                + "b.COMPANY_ID, "
-                + "b.SALUTATION, "
-                + "b.FIRST_NAME, "
-                + "b.LAST_NAME, "
-                + "a.UPLOAD_TIME, "
-                + "a.CONTENT_TYPE, "
-                + "a.FILENAME, "
-                + "a.DATA "
-                + "FROM FAULT_REPORT_ATTACHMENT a "
-                + "LEFT JOIN \"USER\" b on b.ID = a.USER_ID "
-                + "WHERE (a.ID = ?) ";
-        
-        try (PreparedStatement ps = cnn.prepareStatement(select)) {
-            ps.setInt(1, id);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    result = new FaultReportAttachment();
-                    result.setId(rs.getInt("ID"));
-                    result.setFaultReportId(rs.getInt("FAULT_REPORT_ID"));
-                    User u = new User();
-                    u.setId(rs.getInt("USER_ID"));
-                    u.setCompanyId(rs.getInt("COMPANY_ID"));
-                    u.setSalutation(rs.getString("SALUTATION"));
-                    u.setFirstName(rs.getString("FIRST_NAME"));
-                    u.setLastName(rs.getString("LAST_NAME"));
-                    result.setUser(u);
-                    result.setUploadTime(rs.getTimestamp("UPLOAD_TIME"));
-                    result.setContentType(rs.getString("CONTENT_TYPE"));
-                    result.setFileName(rs.getString("FILENAME"));
-                    java.sql.Blob blob;
-                    blob = rs.getBlob("DATA");
-                    result.setData(blob.getBytes(1, (int) blob.length()));
-                }
-            }
-        }
-        return result;
+    public Attachment getFaultReportAttachment(int id) throws SQLException {
+        return attDao.getAttachment(id);
     }
     
     public void deleteFaultAttachment(int id) throws SQLException {
-        String delete = "DELETE FROM FAULT_REPORT_ATTACHMENT a WHERE (a.ID = ?)";
-        try (PreparedStatement ps = cnn.prepareStatement(delete)) {
-            ps.setInt(1, id);
-            ps.execute();
-        }
+        attDao.deleteAttachment(id);
     }
     
     public int insertFault(FaultReport f) throws SQLException {

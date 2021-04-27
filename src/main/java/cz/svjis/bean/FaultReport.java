@@ -31,8 +31,8 @@ public class FaultReport {
     private User assignedToUser;
     private boolean closed;
     private BuildingEntrance buildingEntrance;
-    private ArrayList<FaultReportAttachment> attachmentList;
-    private ArrayList<FaultReportComment> faultReportCommentList = new ArrayList<>();
+    private List<Attachment> attachmentList;
+    private List<FaultReportComment> faultReportCommentList = new ArrayList<>();
     
     public FaultReport() {
         clear();
@@ -178,14 +178,14 @@ public class FaultReport {
     /**
      * @return the attachmentList
      */
-    public List<FaultReportAttachment> getAttachmentList() {
+    public List<Attachment> getAttachmentList() {
         return attachmentList;
     }
 
     /**
      * @param attachmentList the attachmentList to set
      */
-    public void setAttachmentList(List<FaultReportAttachment> attachmentList) {
+    public void setAttachmentList(List<Attachment> attachmentList) {
         this.attachmentList = new ArrayList<>(attachmentList);
     }
 
