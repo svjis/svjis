@@ -548,7 +548,7 @@ public class ArticleDAO extends DAO {
         }
     }
     
-    private ArrayList<Attachment> getArticleAttachmentList(int articleId) throws SQLException {
+    private List<Attachment> getArticleAttachmentList(int articleId) throws SQLException {
         return attDao.getAttachmentList(articleId);
     }
     

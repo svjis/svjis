@@ -264,7 +264,7 @@ public class AdvertDAO extends DAO {
         return result;
     }
     
-    private ArrayList<Attachment> getAttachmentList(int advertId) throws SQLException {
+    private List<Attachment> getAttachmentList(int advertId) throws SQLException {
         return attDao.getAttachmentList(advertId);
     }
     

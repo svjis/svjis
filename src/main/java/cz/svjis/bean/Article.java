@@ -38,8 +38,8 @@ public class Article {
     private boolean commentsAllowed;
     private int numOfComments;
     private int numOfReads;
-    private ArrayList<Attachment> attachmentList;
-    private ArrayList<ArticleComment> commentList;
+    private List<Attachment> attachmentList;
+    private List<ArticleComment> commentList;
     private HashMap<Integer, String> roles;
     
     public Article() {

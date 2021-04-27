@@ -316,7 +316,7 @@ public class FaultReportDAO extends DAO {
         return result;
     }
     
-    private ArrayList<Attachment> getFaultReportAttachmentList(int reportId) throws SQLException {
+    private List<Attachment> getFaultReportAttachmentList(int reportId) throws SQLException {
         return attDao.getAttachmentList(reportId);
     }
     

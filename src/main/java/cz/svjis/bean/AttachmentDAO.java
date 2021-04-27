@@ -17,6 +17,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class AttachmentDAO extends DAO {
     
@@ -31,7 +32,7 @@ public class AttachmentDAO extends DAO {
     }
 
 
-    public ArrayList<Attachment> getAttachmentList(int documentId) throws SQLException {
+    public List<Attachment> getAttachmentList(int documentId) throws SQLException {
         ArrayList<Attachment> result = new ArrayList<>();
         String select = String.format("SELECT "
                 + "a.ID, "

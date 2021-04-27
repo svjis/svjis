@@ -31,8 +31,8 @@ public class FaultReport {
     private User assignedToUser;
     private boolean closed;
     private BuildingEntrance buildingEntrance;
-    private ArrayList<Attachment> attachmentList;
-    private ArrayList<FaultReportComment> faultReportCommentList = new ArrayList<>();
+    private List<Attachment> attachmentList;
+    private List<FaultReportComment> faultReportCommentList = new ArrayList<>();
     
     public FaultReport() {
         clear();

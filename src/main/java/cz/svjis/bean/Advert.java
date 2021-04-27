@@ -13,8 +13,8 @@
 
 package cz.svjis.bean;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Advert {
     
@@ -28,7 +28,7 @@ public class Advert {
     private String eMail;
     private Date creationDate;
     private boolean published;
-    private ArrayList<Attachment> attachmentList;
+    private List<Attachment> attachmentList;
     
     
     public Advert() {
@@ -192,14 +192,14 @@ public class Advert {
     /**
      * @return the attachmentList
      */
-    public ArrayList<Attachment> getAttachmentList() {
+    public List<Attachment> getAttachmentList() {
         return attachmentList;
     }
 
     /**
      * @param attachmentList the attachmentList to set
      */
-    public void setAttachmentList(ArrayList<Attachment> attachmentList) {
+    public void setAttachmentList(List<Attachment> attachmentList) {
         this.attachmentList = attachmentList;
     }
 }
