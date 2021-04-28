@@ -39,7 +39,8 @@ public class MenuDAO extends DAO {
                 + "a.ID, "
                 + "a.COMPANY_ID, "
                 + "a.PARENT_ID, "
-                + "a.DESCRIPTION "
+                + "a.DESCRIPTION, "
+                + "a.HIDE "
                 + "FROM MENU_TREE a "
                 + "WHERE (a.COMPANY_ID = ?) "
                 + "order by a.DESCRIPTION collate UNICODE_CI_AI";
@@ -52,6 +53,7 @@ public class MenuDAO extends DAO {
                     n.setId(rs.getInt("ID"));
                     n.setDescription(rs.getString("DESCRIPTION"));
                     n.setParentId(rs.getInt("PARENT_ID"));
+                    n.setHide(rs.getBoolean("HIDE"));
                     result.add(n);
                 }
             }
@@ -66,6 +68,7 @@ public class MenuDAO extends DAO {
                 + "a.COMPANY_ID, "
                 + "a.PARENT_ID, "
                 + "a.DESCRIPTION, "
+                + "a.HIDE, "
                 + "(SELECT count(*) FROM MENU_TREE m WHERE m.PARENT_ID = a.ID)  AS CNT "
                 + "FROM MENU_TREE a "
                 + "WHERE (a.ID = ?) and (a.COMPANY_ID = ?)";
@@ -78,6 +81,7 @@ public class MenuDAO extends DAO {
                     result.setId(rs.getInt("ID"));
                     result.setDescription(rs.getString("DESCRIPTION"));
                     result.setParentId(rs.getInt("PARENT_ID"));
+                    result.setHide(rs.getBoolean("HIDE"));
                     result.setNumOfChilds(rs.getInt("CNT"));
                 }
             }
@@ -87,7 +91,7 @@ public class MenuDAO extends DAO {
     
     public int insertMenuNode(MenuNode node, int companyId) throws SQLException {
         int result = 0;
-        String insert = "INSERT INTO MENU_TREE (COMPANY_ID, PARENT_ID, DESCRIPTION) VALUES (?,?,?) RETURNING ID";
+        String insert = "INSERT INTO MENU_TREE (COMPANY_ID, PARENT_ID, DESCRIPTION, HIDE) VALUES (?,?,?,?) RETURNING ID";
         try (PreparedStatement ps = cnn.prepareStatement(insert)) {
             ps.setInt(1, companyId);
             if (node.getParentId() == 0) {
@@ -96,6 +100,7 @@ public class MenuDAO extends DAO {
                 ps.setInt(2, node.getParentId());
             }
             ps.setString(3, node.getDescription());
+            ps.setInt(4, (node.isHide()) ? 1 : 0);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     result = rs.getInt("ID");
@@ -108,7 +113,8 @@ public class MenuDAO extends DAO {
     public void updateMenuNode(MenuNode node, int companyId) throws SQLException {
         String update = "UPDATE MENU_TREE SET "
                 + "PARENT_ID = ?, "
-                + "DESCRIPTION = ? "
+                + "DESCRIPTION = ?, "
+                + "HIDE = ? "
                 + "WHERE (ID = ?) AND (COMPANY_ID = ?)";
         try (PreparedStatement ps = cnn.prepareStatement(update)) {
             if (node.getParentId() == 0) {
@@ -117,8 +123,9 @@ public class MenuDAO extends DAO {
                 ps.setInt(1, node.getParentId());
             }
             ps.setString(2, node.getDescription());
-            ps.setInt(3, node.getId());
-            ps.setInt(4, companyId);
+            ps.setInt(3, (node.isHide()) ? 1 : 0);
+            ps.setInt(4, node.getId());
+            ps.setInt(5, companyId);
             ps.execute();
         }
     }

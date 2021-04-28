@@ -34,12 +34,14 @@ public class RedactionArticleMenuSaveCmd extends Command {
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
         String parDescription = Validator.getString(getRequest(), "description", 0, 50, false, false);
         int parParentId = Validator.getInt(getRequest(), "parent", 0, Validator.MAX_INT_ALLOWED, false);
+        boolean parHide = Validator.getBoolean(getRequest(), "hide");
 
         MenuDAO menuDao = new MenuDAO(getCnn());
         MenuNode n = new MenuNode();
         
         n.setId(parId);
         n.setDescription(parDescription);
+        n.setHide(parHide);
         n.setParentId(parParentId);
         //-- disable recursive join
         if ((n.getId() != 0) && (n.getId() == n.getParentId())) {

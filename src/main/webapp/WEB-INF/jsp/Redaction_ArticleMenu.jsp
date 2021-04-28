@@ -19,8 +19,9 @@
         String output = "";
 
         for (MenuItem ami: menu) {
+            String stl = (ami.getSection().isHide()) ? "text-decoration: line-through;" : "";
             output += "<tr>";
-            output += "<td class=\"list\">";
+            output += "<td class=\"list\" style=\""+ stl + "\">";
             for (int n = 0; n < level; n++) {
                 output += ident;
             }

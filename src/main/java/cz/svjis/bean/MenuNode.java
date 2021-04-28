@@ -22,7 +22,7 @@ public class MenuNode {
     private String description;
     private int parentId;
     private int numOfChilds;
-    
+    private boolean hide;
     
     
     public MenuNode() {
@@ -33,6 +33,7 @@ public class MenuNode {
         id = 0;
         description = "";
         parentId = 0;
+        hide = false;
     }
 
     /**
@@ -91,5 +92,17 @@ public class MenuNode {
         this.numOfChilds = numOfChilds;
     }
     
-    
+    /**
+     * @return the hide
+     */
+    public boolean isHide() {
+        return hide;
+    }
+
+    /**
+     * @param hide the hide to set
+     */
+    public void setHide(boolean hide) {
+        this.hide = hide;
+    }
 }
