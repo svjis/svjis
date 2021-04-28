@@ -38,6 +38,10 @@
                                     <%=menu.writeOptions(menu.getMenu(), 0, menuNode.getParentId()) %>
                                 </select>
                             </p>
+                            <p>
+                                <label class="common-label" id="hide-label" for="hide-input"><%=language.getText("Hide") %></label>
+                                <input class="common-input" id="hide-input" type="checkbox" name="hide" <%=(menuNode.isHide()) ? "checked" : "" %> />
+                            </p>
                         </fieldset>
                         <p>
                             <input class="my-button" id="submit" type="submit" value="<%=language.getText("Save") %>" />

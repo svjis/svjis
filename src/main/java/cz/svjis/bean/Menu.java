@@ -141,6 +141,10 @@ public class Menu {
 
         for (MenuItem ami: menu) {
             String active = "";
+            
+            if (ami.getSection().isHide())
+                continue;
+            
             if ((isTopLevel) && ((activeSection == ami.getSection().getId()) || (ami.getSubSections() != null))) {
                 active = " id=\"nav-active\"";
             }
