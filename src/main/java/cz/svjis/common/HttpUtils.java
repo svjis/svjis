@@ -141,8 +141,7 @@ public class HttpUtils {
         result.append("<p>");
         result.append(String.format("<table class=\"list\" aria-describedby=\"%s\">", ariaDescribedby));
         result.append("<tr>");
-        result.append("<th class=\"list\" scope=\"col\">&nbsp;</th>");
-        result.append(String.format("<th class=\"list\" scope=\"col\">%s</th>", language.getText(name)));
+        result.append(String.format("<th class=\"list\" scope=\"col\" colspan=\"2\">%s</th>", language.getText(name)));
         if (showUser) {
             result.append(String.format("<th class=\"list\" scope=\"col\">%s</th>", language.getText("User")));
         }
