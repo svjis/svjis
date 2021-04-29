@@ -1,6 +1,6 @@
 # SVJIS
 
-![build](https://github.com/svjis/svjis/workflows/build/badge.svg) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=svjis_svjis&metric=alert_status)](https://sonarcloud.io/dashboard?id=svjis_svjis)  
+[![build](https://github.com/svjis/svjis/actions/workflows/build.yml/badge.svg)](https://github.com/svjis/svjis/actions/workflows/build.yml) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=svjis_svjis&metric=alert_status)](https://sonarcloud.io/dashboard?id=svjis_svjis)  
 
 Informační systém pro SVJ :house_with_garden:
 
