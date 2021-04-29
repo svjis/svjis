@@ -58,8 +58,8 @@
                             <p class="nomb"><%=HttpUtils.renderAttachments(a.getAttachmentList(), request, CmdFactoryUpload.ADVERT_ATTACHMENT_DOWNLOAD) %></p>
                             <% } %>
                             <p class="contact"  style="<%=stl %>">
-                                <% if ((a.getPhone() != null) && !a.getPhone().trim().equals("")) { %><%=language.getText("Phone") %>: <strong><%=a.getPhone() %></strong><% } %> 
-                                <% if ((a.geteMail() != null) && !a.geteMail().trim().equals("")) { %><%=language.getText("E-Mail") %>: <strong><a href="mailto:<%=a.geteMail() %>"><%=a.geteMail() %></a></strong><% } %>
+                                <% if ((a.getPhone() != null) && !a.getPhone().trim().equals("")) { %><%=language.getText("Phone") %>:&nbsp;<strong><%=a.getPhone() %></strong>&nbsp;<% } %> 
+                                <% if ((a.geteMail() != null) && !a.geteMail().trim().equals("")) { %><%=language.getText("E-Mail") %>:&nbsp;<strong><a href="mailto:<%=a.geteMail() %>"><%=a.geteMail() %></a></strong><% } %>
                             </p>
                         </div> <!-- /advert-desc -->
                     </div> <!-- /advert -->
