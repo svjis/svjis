@@ -24,6 +24,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import cz.svjis.bean.Advert;
 import cz.svjis.bean.AdvertDAO;
 import cz.svjis.bean.Attachment;
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.CmdFactory;
 import cz.svjis.servlet.Command;
@@ -61,7 +62,7 @@ public class AdvertAttachmentSaveCmd extends Command {
                 fa.setUploadTime(new Date());
                 
                 Advert ad = advertDao.getAdvert(getCompany().getId(), fa.getDocumentId());
-                if ((ad != null) && !fa.getFileName().equals("")) {
+                if ((ad != null) && !fa.getFileName().equals("") && getUser().hasPermission(Permission.CAN_INSERT_ADVERT) && (getUser().getId() == ad.getUser().getId())) {
                     advertDao.insertAttachment(fa);
                 }
             }

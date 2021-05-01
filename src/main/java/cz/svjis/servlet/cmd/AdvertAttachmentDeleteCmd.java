@@ -17,6 +17,7 @@ import javax.servlet.RequestDispatcher;
 import cz.svjis.bean.Advert;
 import cz.svjis.bean.AdvertDAO;
 import cz.svjis.bean.Attachment;
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.CmdFactory;
 import cz.svjis.servlet.Command;
@@ -43,7 +44,7 @@ public class AdvertAttachmentDeleteCmd extends Command {
             return;
         }
         Advert a = advertDao.getAdvert(getCompany().getId(), at.getDocumentId());
-        if ((a != null) && (at.getUser().getId() == getUser().getId())) {
+        if ((a != null) && getUser().hasPermission(Permission.CAN_INSERT_ADVERT) && (at.getUser().getId() == getUser().getId()) ) {
             advertDao.deleteAttachment(id);
         }
         String url = String.format("Dispatcher?page=%s&id=%d", CmdFactory.ADVERT_EDIT, at.getDocumentId());
