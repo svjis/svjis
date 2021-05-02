@@ -4,18 +4,16 @@
     Author     : berk
 --%>
 
-<%@page import="java.text.SimpleDateFormat"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<%@page import="cz.svjis.common.JspSnippets"%>
+
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="company" scope="session" class="cz.svjis.bean.Company" />
 <jsp:useBean id="message" scope="request" class="java.lang.String" />
 
 <jsp:include page="_header.jsp" />
 <jsp:include page="_tray.jsp" />
-
-<%
-    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-%>
 
     <!-- Columns -->
     <div id="cols" class="box">
@@ -73,7 +71,7 @@
                             </p>
                             <p>
                                 <label class="common-label" id="created-label" for="created-input"><%=language.getText("Database creation date") %></label>
-                                <input class="common-input" id="created-input" type="text" name="cretionDate" maxlength="50" size="50" value="<%=sdf.format(company.getDatabaseCreationDate()) %>" readonly="readonly">
+                                <input class="common-input" id="created-input" type="text" name="cretionDate" maxlength="50" size="50" value="<%=JspSnippets.renderDate(company.getDatabaseCreationDate()) %>" readonly="readonly">
                             </p>
                         </fieldset>
                         <p>

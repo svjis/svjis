@@ -4,8 +4,10 @@
     Author     : berk
 --%>
 
-<%@page import="cz.svjis.bean.MenuNode"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<%@page import="cz.svjis.bean.MenuNode"%>
+
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="menuNode" scope="request" class="cz.svjis.bean.MenuNode" />
 <jsp:useBean id="menu" scope="request" class="cz.svjis.bean.Menu" />

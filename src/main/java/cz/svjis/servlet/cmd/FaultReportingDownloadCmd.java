@@ -14,7 +14,7 @@ package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.Attachment;
 import cz.svjis.bean.FaultReportDAO;
-import cz.svjis.common.HttpUtils;
+import cz.svjis.common.JspSnippets;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.InputValidationException;
@@ -40,6 +40,6 @@ public class FaultReportingDownloadCmd extends Command {
         if ((fa == null) || (faultDao.getFault(getCompany().getId(), fa.getDocumentId()) == null)) {
             throw new InputValidationException("Bad attachment id");
         }
-        HttpUtils.writeBinaryData(fa.getContentType(), fa.getFileName(), fa.getData(), getRequest(), getResponse());
+        JspSnippets.writeBinaryData(fa.getContentType(), fa.getFileName(), fa.getData(), getRequest(), getResponse());
     }
 }

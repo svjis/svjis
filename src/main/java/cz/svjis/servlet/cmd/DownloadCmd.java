@@ -14,7 +14,7 @@ package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.Attachment;
 import cz.svjis.bean.ArticleDAO;
-import cz.svjis.common.HttpUtils;
+import cz.svjis.common.JspSnippets;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.InputValidationException;
@@ -40,6 +40,6 @@ public class DownloadCmd extends Command {
         if ((aa == null) || (dao.getArticle(getUser(), aa.getDocumentId()) == null)) {
             throw new InputValidationException("Bad attachment id");
         }
-        HttpUtils.writeBinaryData(aa.getContentType(), aa.getFileName(), aa.getData(), getRequest(), getResponse());
+        JspSnippets.writeBinaryData(aa.getContentType(), aa.getFileName(), aa.getData(), getRequest(), getResponse());
     }
 }

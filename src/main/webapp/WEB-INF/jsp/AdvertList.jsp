@@ -9,11 +9,9 @@
 <%@page import="cz.svjis.bean.Advert"%>
 <%@page import="cz.svjis.bean.AdvertType"%>
 <%@page import="cz.svjis.bean.Permission"%>
-<%@page import="cz.svjis.bean.SliderItem"%>
-<%@page import="cz.svjis.common.HttpUtils"%>
+<%@page import="cz.svjis.common.JspSnippets"%>
 <%@page import="cz.svjis.servlet.CmdFactory"%>
 <%@page import="cz.svjis.servlet.CmdFactoryUpload"%>
-<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.ArrayList"%>
 
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
@@ -40,7 +38,6 @@
                     <% } %>
 
                     <%
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 	                for (Advert a: (ArrayList<Advert>) advertList) {
 	                    String stl = (!a.isPublished()) ? "text-decoration: line-through;" : "";
 	                %>
@@ -48,14 +45,14 @@
                     <div id="advert" class="box">
                         <div id="advert-desc">
                             <h2 style="<%=stl %>"><%=a.getHeader() %></h2>
-                            <p class="info"><%=language.getText("Date") %>: <strong><%=sdf.format(a.getCreationDate()) %></strong> <%=language.getText("Author") %>: <strong><%=a.getUser().getFullName(false) %></strong>
+                            <p class="info"><%=language.getText("Date") %>: <strong><%=JspSnippets.renderDate(a.getCreationDate()) %></strong> <%=language.getText("Author") %>: <strong><%=a.getUser().getFullName(false) %></strong>
                             <% if (a.getUser().getId() == user.getId()) { %>
                                 &nbsp;[<a href="Dispatcher?page=<%=CmdFactory.ADVERT_EDIT %>&id=<%=a.getId() %>"><%=language.getText("Edit") %></a>]
                             <% } %>
                             </p>
                             <p class="nomb"  style="<%=stl %>"><%=a.getBody().replace("\n", "<br>") %></p>
                             <% if (!a.getAttachmentList().isEmpty()) { %>
-                            <p class="nomb"><%=HttpUtils.renderAttachments(a.getAttachmentList(), request, CmdFactoryUpload.ADVERT_ATTACHMENT_DOWNLOAD) %></p>
+                            <p class="nomb"><%=JspSnippets.renderAttachments(a.getAttachmentList(), request, CmdFactoryUpload.ADVERT_ATTACHMENT_DOWNLOAD) %></p>
                             <% } %>
                             <p class="contact"  style="<%=stl %>">
                                 <% if ((a.getPhone() != null) && !a.getPhone().trim().equals("")) { %><%=language.getText("Phone") %>:&nbsp;<strong><%=a.getPhone() %></strong>&nbsp;<% } %> 
@@ -68,20 +65,7 @@
 	                %>
                     
                     <p class="t-left">
-                        <% if (slider.getTotalNumOfPages() > 1) { %>
-                        <strong><%=language.getText("Pages:") %></strong>&nbsp;
-                        <%
-                        String pageId = "page=" + slider.getPageId() + "&typeId=" + menuId + "&";
-                        for (SliderItem item : slider.getItemList()) {
-                            if (item.isCurrent()) {
-                                out.println("<b>" + item.getLabel() + "</b>&nbsp;");
-                            } else {
-                                out.println("<a href=\"Dispatcher?" + pageId + "pageNo=" + item.getPage() + "\">" + item.getLabel() + "</a>&nbsp;");
-                            }
-                        }
-                        %>
-                        
-                        <% } %>
+                        <%=JspSnippets.renderPaginator(slider, null, null, request) %>
                     </p>
                     
                 </div> <!-- /content-main-in -->

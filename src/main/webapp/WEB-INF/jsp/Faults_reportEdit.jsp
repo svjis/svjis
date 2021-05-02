@@ -4,9 +4,11 @@
     Author     : jarberan
 --%>
 
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <%@page import="cz.svjis.bean.Permission"%>
 <%@page import="cz.svjis.bean.BuildingEntrance"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <%@page import="cz.svjis.bean.Language"%>
 <%@page import="cz.svjis.bean.User"%>
 <%@page import="java.util.ArrayList"%>

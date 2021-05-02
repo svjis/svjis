@@ -4,12 +4,14 @@
     Author     : berk
 --%>
 
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <%@page import="java.util.List"%>
 <%@page import="cz.svjis.bean.Language"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="cz.svjis.bean.MenuItem"%>
 <%@page import="java.util.ArrayList"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="menu" scope="request" class="cz.svjis.bean.Menu" />
 

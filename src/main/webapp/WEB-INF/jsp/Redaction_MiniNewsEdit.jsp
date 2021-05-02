@@ -4,11 +4,13 @@
     Author     : berk
 --%>
 
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <%@page import="java.util.Date"%>
+<%@page import="cz.svjis.common.JspSnippets"%>
 <%@page import="cz.svjis.bean.Language"%>
 <%@page import="java.util.Iterator"%>
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
 <jsp:useBean id="miniNews" scope="request" class="cz.svjis.bean.MiniNews" />
@@ -17,10 +19,6 @@
 
 <jsp:include page="_header.jsp" />
 <jsp:include page="_tray.jsp" />
-
-<%
-    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-%>
 
     <!-- Columns -->
     <div id="cols" class="box">
@@ -64,7 +62,7 @@
                             </p>
                             <p>
                                 <label class="common-label" id="time-label" for="time-input"><%=language.getText("Time") %></label>
-                                <input class="common-input" id="time-input" type="text" name="time" value="<%=(miniNews.getTime() != null) ? sdf.format(miniNews.getTime()) : sdf.format(new Date()) %>">
+                                <input class="common-input" id="time-input" type="text" name="time" value="<%=(miniNews.getTime() != null) ? JspSnippets.renderDateTime(miniNews.getTime()) : JspSnippets.renderDateTime(new Date()) %>">
                             </p>
                             <p>
                                 <label class="common-label" id="publish-label" for="publish-input"><%=language.getText("Publish article") %></label>

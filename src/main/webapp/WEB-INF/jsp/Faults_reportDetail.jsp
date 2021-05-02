@@ -4,13 +4,13 @@
     Author     : jarberan
 --%>
 
-<%@page import="cz.svjis.bean.Permission"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
+<%@page import="cz.svjis.bean.Permission"%>
 <%@page import="cz.svjis.bean.Attachment"%>
-<%@page import="cz.svjis.common.HttpUtils"%>
+<%@page import="cz.svjis.common.JspSnippets"%>
 <%@page import="cz.svjis.bean.Language"%>
-<%@page import="java.text.SimpleDateFormat"%>
+
 
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
@@ -21,7 +21,6 @@
 <jsp:include page="_tray.jsp" />
 
 <%
-    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
     String stl = (report.isClosed()) ? "text-decoration: line-through;" : "";
 %>
     <!-- Columns -->
@@ -31,7 +30,7 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h1 class="page-title" style="<%=stl %>" id="tbl-desc">#<%=report.getId() %>&nbsp;-&nbsp;<%=HttpUtils.highlight(report.getSubject(), request.getParameter("search")) %></h1>
+                    <h1 class="page-title" style="<%=stl %>" id="tbl-desc">#<%=report.getId() %>&nbsp;-&nbsp;<%=JspSnippets.highlight(report.getSubject(), request.getParameter("search")) %></h1>
 
                     <% if (user.hasPermission(Permission.FAULT_REPORTING_RESOLVER)) { %>
                     [<a href="Dispatcher?page=faultReportingEdit&id=<%=report.getId() %>"><%=language.getText("Edit") %></a>]&nbsp;
@@ -52,7 +51,7 @@
                     <table class="list" width="95%" aria-describedby="tbl-desc">
                         <tr>
                             <th class="list" width="25%" scope="row"><%=language.getText("Date") %></th>
-                            <td class="list" width="75%"><%=sdf.format(report.getCreationDate()) %></td>
+                            <td class="list" width="75%"><%=JspSnippets.renderDateTime(report.getCreationDate()) %></td>
                         </tr>
                         <tr>
                             <th class="list" scope="row"><%=language.getText("Reporter") %></th>
@@ -72,7 +71,7 @@
                         </tr>
                         <tr>
                             <th class="list" scope="row"><%=language.getText("Description") %></th>
-                            <td class="list"><%=HttpUtils.highlight(HttpUtils.makeHyperlinks(report.getDescription()), request.getParameter("search")).replaceAll("\n", "<br>") %></td>
+                            <td class="list"><%=JspSnippets.highlight(JspSnippets.makeHyperlinks(report.getDescription()), request.getParameter("search")).replaceAll("\n", "<br>") %></td>
                         </tr>
                     </table>
                         
@@ -80,7 +79,7 @@
                     <form action="Dispatcher?page=faultReportingAttachmentSave&reportId=<%=report.getId() %>" enctype="multipart/form-data" method="post">
                         <fieldset>
                             <legend id="tbl2-desc"><%=language.getText("Attachments") %></legend>
-                            <%=HttpUtils.renderAttachments(report.getAttachmentList(), request, "File", "faultReportingDownload", "faultReportingAttachmentDelete", true, true, false, !report.isClosed(), "tbl2-desc") %>
+                            <%=JspSnippets.renderAttachments(report.getAttachmentList(), request, "File", "faultReportingDownload", "faultReportingAttachmentDelete", true, true, false, !report.isClosed(), "tbl2-desc") %>
                             
                             <% if (!report.isClosed()) { %>
                             <p>
@@ -92,7 +91,7 @@
                     </form>
                     <% } %>
                         
-                    <%=HttpUtils.renderComments(report.getFaultReportCommentList(), request) %>
+                    <%=JspSnippets.renderComments(report.getFaultReportCommentList(), request) %>
                       
                     <% if (user.hasPermission(Permission.FAULT_REPORTING_COMMENT) && (!report.isClosed())) { %>
                         <form action="Dispatcher" method="post">

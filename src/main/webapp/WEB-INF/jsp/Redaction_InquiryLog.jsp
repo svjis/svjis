@@ -4,13 +4,15 @@
     Author     : jaroslav_b
 --%>
 
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <%@page import="java.util.ArrayList"%>
+<%@page import="cz.svjis.common.JspSnippets"%>
 <%@page import="cz.svjis.bean.InquiryLog"%>
 <%@page import="cz.svjis.bean.InquiryOption"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.Date"%>
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
 <jsp:useBean id="inquiry" scope="request" class="cz.svjis.bean.Inquiry" />
@@ -18,10 +20,6 @@
 
 <jsp:include page="_header.jsp" />
 <jsp:include page="_tray.jsp" />
-
-<%
-    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-%>
 
     <!-- Columns -->
     <div id="cols" class="box">
@@ -73,7 +71,7 @@
                         %>
                         <tr>
                             <td><%=++i %></td>
-                            <td style="text-align: right"><%=sdf.format(il.getTime()) %></td>
+                            <td style="text-align: right"><%=JspSnippets.renderDateTime(il.getTime()) %></td>
                             <td><%=il.getUser() %></td>
                             <td><%=il.getOptionDescription() %></td>
                         </tr>

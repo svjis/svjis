@@ -4,14 +4,12 @@
     Author     : berk
 --%>
 
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <%@page import="cz.svjis.bean.Article"%>
-<%@page import="cz.svjis.bean.SliderItem"%>
-<%@page import="cz.svjis.common.HttpUtils"%>
-<%@page import="java.net.URLEncoder"%>
-<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="cz.svjis.common.JspSnippets"%>
 <%@page import="java.util.Iterator"%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
 <jsp:useBean id="menu" scope="request" class="cz.svjis.bean.Menu" />
@@ -90,7 +88,6 @@
                             search = "&search=" + searchKey;
                         }
 
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
                         Iterator articleListI = articleList.iterator();
                         while (articleListI.hasNext()) {
                             Article a = (Article) articleListI.next();
@@ -99,10 +96,10 @@
                             <td class="list"><a href="Dispatcher?page=articleDetail&id=<%=a.getId() %><%=search %>"><img src="gfx/find.png" border="0" title="View" alt="View"></a></td>
                             <td class="list"><a href="Dispatcher?page=redactionArticleEdit&id=<%=a.getId() %>"><img src="gfx/pencil.png" border="0" title="<%=language.getText("Edit") %>" alt="<%=language.getText("Edit") %>"></a></td>
                             <td class="list"><a href="Dispatcher?page=redactionArticleSendNotifications&id=<%=a.getId() %>"><img src="gfx/email_open_image.png" border="0" title="<%=language.getText("Send notifications") %>" alt="<%=language.getText("Send notifications") %>"></td>
-                            <td class="list"><%=HttpUtils.highlight(a.getHeader(), request.getParameter("search")) %></td>
+                            <td class="list"><%=JspSnippets.highlight(a.getHeader(), request.getParameter("search")) %></td>
                             <td class="list"><%=a.getMenuNodeDescription() %></td>
                             <td class="list"><%=a.getAuthor().getFullName(false) %></td>
-                            <td class="list"><%=sdf.format(a.getCreationDate()) %></td>
+                            <td class="list"><%=JspSnippets.renderDate(a.getCreationDate()) %></td>
                             <td class="list"><%=(a.isPublished()) ? language.getText("yes") : language.getText("no") %></td>
                         </tr>
                     <%
@@ -111,23 +108,13 @@
                     </table>
                     
                     <br>
-                    <% if (slider.getTotalNumOfPages() > 1) { %>
-                    <strong><%=language.getText("Pages:") %></strong>&nbsp;
                     <%
-                        String roleFilter = "";
-                        if (!roleIds.equals("0")) {
-                            roleFilter = "&roleId=" + roleIds;
-                        }
-
-                        for (SliderItem item: slider.getItemList()) {
-                            if (item.isCurrent()) {
-                                out.println("<b>" + item.getLabel() + "</b>&nbsp;");
-                            } else {
-                                out.println("<a href=\"Dispatcher?page=" + slider.getPageId() + "&section=0&pageNo=" + item.getPage() + roleFilter + search +"\">" + item.getLabel() + "</a>&nbsp;");
-                            }
-                        }
+	                    String roleFilter = "";
+	                    if (!roleIds.equals("0")) {
+	                        roleFilter = "&roleId=" + roleIds;
+	                    }
                     %>
-                    <% } %>
+                    <%=JspSnippets.renderPaginator(slider, searchKey, roleFilter, request) %>
                 </div> <!-- /content-main-in -->
             </div> <!-- /content-main -->
             <hr class="noscreen" />

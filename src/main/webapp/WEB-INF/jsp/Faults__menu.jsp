@@ -4,8 +4,10 @@
     Author     : jarberan
 --%>
 
-<%@page import="cz.svjis.bean.Permission"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<%@page import="cz.svjis.bean.Permission"%>
+
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
 <jsp:useBean id="counters" scope="request" class="cz.svjis.bean.FaultReportMenuCounters" />

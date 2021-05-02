@@ -10,10 +10,9 @@
 <%@page import="cz.svjis.bean.AdvertType"%>
 <%@page import="cz.svjis.bean.Attachment"%>
 <%@page import="cz.svjis.bean.Permission"%>
-<%@page import="cz.svjis.common.HttpUtils"%>
+<%@page import="cz.svjis.common.JspSnippets"%>
 <%@page import="cz.svjis.servlet.CmdFactory"%>
 <%@page import="cz.svjis.servlet.CmdFactoryUpload"%>
-<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.ArrayList"%>
 
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
@@ -93,7 +92,7 @@
                     <form action="Dispatcher?page=<%=CmdFactory.ADVERT_ATTACHMENT_SAVE %>&advertId=<%=advert.getId() %>" enctype="multipart/form-data" method="post">
                         <fieldset>
                             <legend class="hidden-legend"><%=language.getText("General") %></legend>
-                            <%=HttpUtils.renderAttachments(advert.getAttachmentList(), request, "File", CmdFactoryUpload.ADVERT_ATTACHMENT_DOWNLOAD, CmdFactory.ADVERT_ATTACHMENT_DELETE, false, false, true, false, "tbl-desc") %>
+                            <%=JspSnippets.renderAttachments(advert.getAttachmentList(), request, "File", CmdFactoryUpload.ADVERT_ATTACHMENT_DOWNLOAD, CmdFactory.ADVERT_ATTACHMENT_DELETE, false, false, true, false, "tbl-desc") %>
                             <p>
                                 <input id="file-upload" type="file" name="attachment" size="40">
                                 <input id="file-submit" type="submit" value="<%=language.getText("Insert attachment") %>">

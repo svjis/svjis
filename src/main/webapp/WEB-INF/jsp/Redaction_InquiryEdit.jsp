@@ -4,11 +4,13 @@
     Author     : berk
 --%>
 
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <%@page import="cz.svjis.bean.InquiryOption"%>
+<%@page import="cz.svjis.common.JspSnippets"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.Date"%>
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
 <jsp:useBean id="inquiry" scope="request" class="cz.svjis.bean.Inquiry" />
@@ -16,10 +18,6 @@
 
 <jsp:include page="_header.jsp" />
 <jsp:include page="_tray.jsp" />
-
-    <%
-        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-    %>
 
     <!-- Columns -->
     <div id="cols" class="box">
@@ -97,11 +95,11 @@
                             <legend><%=language.getText("Properties") %></legend>
                             <p>
                                 <label class="common-label" id="start-label" for="start-input"><%=language.getText("Starting date") %></label>
-                                <input class="common-input" id="start-input" type="text" name="startingDate" value="<%=(inquiry.getStartingDate() != null) ? sdf.format(inquiry.getStartingDate()) : sdf.format(new Date()) %>">
+                                <input class="common-input" id="start-input" type="text" name="startingDate" value="<%=(inquiry.getStartingDate() != null) ? JspSnippets.renderDate(inquiry.getStartingDate()) : JspSnippets.renderDate(new Date()) %>">
                             </p>
                             <p>
                                 <label class="common-label" id="end-label" for="end-input"><%=language.getText("Ending date") %></label>
-                                <input class="common-input" id="end-input" type="text" name="endingDate" value="<%=(inquiry.getEndingDate() != null) ? sdf.format(inquiry.getEndingDate()) : sdf.format(new Date()) %>">
+                                <input class="common-input" id="end-input" type="text" name="endingDate" value="<%=(inquiry.getEndingDate() != null) ? JspSnippets.renderDate(inquiry.getEndingDate()) : JspSnippets.renderDate(new Date()) %>">
                             </p>
                             <p>
                                 <label class="common-label" id="publish-label" for="publish-input"><%=language.getText("Publish") %></label>

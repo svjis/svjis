@@ -4,17 +4,17 @@
     Author     : berk
 --%>
 
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="java.io.File"%>
 <%@page import="cz.svjis.bean.Attachment"%>
 <%@page import="cz.svjis.bean.Role"%>
 <%@page import="cz.svjis.bean.Language"%>
 <%@page import="cz.svjis.bean.MenuItem"%>
-<%@page import="cz.svjis.common.HttpUtils"%>
+<%@page import="cz.svjis.common.JspSnippets"%>
 <%@page import="java.util.Iterator"%>
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
 <jsp:useBean id="article" scope="request" class="cz.svjis.bean.Article" />
@@ -50,10 +50,6 @@
 </script>
 <!-- /TinyMCE -->
 
-<%
-    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-%>
-
     <!-- Columns -->
     <div id="cols" class="box">
 
@@ -67,7 +63,7 @@
                         <input type="hidden" name="page" value="redactionArticleSave">
                         <input type="hidden" name="id" value="<%=article.getId() %>">
                         <input type="hidden" name="authorId" value="<%=article.getAuthorId() %>">
-                        <input type="hidden" name="creationDate" value="<%=sdf.format(article.getCreationDate()) %>">
+                        <input type="hidden" name="creationDate" value="<%=JspSnippets.renderDateTime(article.getCreationDate()) %>">
 
                         <p>
                             <%=language.getText("Header") %><br>
@@ -149,7 +145,7 @@
                     <form action="Dispatcher?page=redactionArticleAttachmentSave&articleId=<%=article.getId() %>" enctype="multipart/form-data" method="post">
                         <fieldset>
                             <legend class="hidden-legend"><%=language.getText("General") %></legend>
-                            <%=HttpUtils.renderAttachments(article.getAttachmentList(), request, "File", "download", "redactionArticleAttachmentDelete", false, false, true, false, "tbl-desc") %>
+                            <%=JspSnippets.renderAttachments(article.getAttachmentList(), request, "File", "download", "redactionArticleAttachmentDelete", false, false, true, false, "tbl-desc") %>
                             <p>
                                 <input id="file-upload" type="file" name="attachment" size="40">
                                 <input id="file-submit" type="submit" value="<%=language.getText("Insert attachment") %>">
