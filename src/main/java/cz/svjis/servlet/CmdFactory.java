@@ -59,12 +59,8 @@ public class CmdFactory {
         // *****************
         if (ctx.getUser().hasPermission(Permission.MENU_ARTICLES)) {
 
-            if (page.equals("articleList")) {
+            if (page.equals("articleList") || page.equals("search")) {
                 return new ArticleListCmd(ctx);
-            }
-
-            if (page.equals("search")) {
-                return new ArticleSearchCmd(ctx);
             }
 
             if (page.equals("inquiryVote")) {
