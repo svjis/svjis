@@ -17,6 +17,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CommentDAO extends DAO  {
 
@@ -31,7 +32,7 @@ public class CommentDAO extends DAO  {
     }
     
     
-    public ArrayList<Comment> getCommentList(int documentId) throws SQLException {
+    public List<Comment> getCommentList(int documentId) throws SQLException {
         ArrayList<Comment> result = new ArrayList<>();
         String select = String.format("SELECT "
                 + "a.ID, "

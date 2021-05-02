@@ -566,7 +566,7 @@ public class ArticleDAO extends DAO {
         attDao.deleteAttachment(id);
     }
     
-    private ArrayList<Comment> getArticleCommentList(int articleId) throws SQLException {
+    private List<Comment> getArticleCommentList(int articleId) throws SQLException {
         return commentDao.getCommentList(articleId);
     }
     

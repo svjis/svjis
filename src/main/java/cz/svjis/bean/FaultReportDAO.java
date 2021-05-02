@@ -428,7 +428,7 @@ public class FaultReportDAO extends DAO {
         return result;
     }
     
-    private ArrayList<Comment> getFaultReportCommentList(int faultReportId) throws SQLException {
+    private List<Comment> getFaultReportCommentList(int faultReportId) throws SQLException {
         return commentDao.getCommentList(faultReportId);
     }
     
