@@ -8,7 +8,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%@page import="cz.svjis.bean.Attachment"%>
-<%@page import="cz.svjis.bean.FaultReportComment"%>
 <%@page import="cz.svjis.common.HttpUtils"%>
 <%@page import="cz.svjis.bean.Language"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -93,30 +92,9 @@
                     </form>
                     <% } %>
                         
-                    <%
-                        if ((report.getFaultReportCommentList() != null) && (report.getFaultReportCommentList().size() != 0)) {
-                    %>
-                        <h2 class="article-title"><%=language.getText("Comments:") %></h2>
-
-                        <%
-                            SimpleDateFormat sdft = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-                            for (FaultReportComment c : report.getFaultReportCommentList()) {
-                        %>
-                            <div class="article box">
-                            <strong><%=c.getUser().getFullName(false) %> <%=sdft.format(c.getInsertionTime()) %></strong><br>
-                            <%=HttpUtils.makeHyperlinks(c.getBody().replace("\n", "<br>")) %>
-                            </div>
-                        <%
-                            }
-                        %>
-                    <%
-                       }
-                    %>
+                    <%=HttpUtils.renderComments(report.getFaultReportCommentList(), request) %>
                       
-                    
-                    <%
-                        if (user.hasPermission(Permission.FAULT_REPORTING_COMMENT) && (!report.isClosed())) {
-                    %>
+                    <% if (user.hasPermission(Permission.FAULT_REPORTING_COMMENT) && (!report.isClosed())) { %>
                         <form action="Dispatcher" method="post">
                              <input type="hidden" name="page" value="faultInsertComment">
                              <input type="hidden" name="id" value="<%=report.getId() %>">
@@ -132,9 +110,8 @@
                                  <input class="my-button" id="submit" type="submit" value="<%=language.getText("Insert comment") %>" name="submit">
                              </p>
                          </form>
-                    <%
-                       }
-                    %>
+                    <% } %>
+
                 </div> <!-- /content-main-in -->
             </div> <!-- /content-main -->
             <hr class="noscreen" />

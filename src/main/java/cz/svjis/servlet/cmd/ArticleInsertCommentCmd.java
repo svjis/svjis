@@ -13,8 +13,8 @@
 package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.Article;
-import cz.svjis.bean.ArticleComment;
 import cz.svjis.bean.ArticleDAO;
+import cz.svjis.bean.Comment;
 import cz.svjis.bean.MailDAO;
 import cz.svjis.bean.Permission;
 import cz.svjis.bean.User;
@@ -53,8 +53,8 @@ public class ArticleInsertCommentCmd extends Command {
                 && (!parBody.equals(""))) {
 
             // insert comment
-            ArticleComment ac = new ArticleComment();
-            ac.setArticleId(article.getId());
+            Comment ac = new Comment();
+            ac.setDocumentId(article.getId());
             ac.setUser(getUser());
             ac.setInsertionTime(new Date());
             ac.setBody(parBody);

@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.binary.Base64;
 
 import cz.svjis.bean.Attachment;
+import cz.svjis.bean.Comment;
 import cz.svjis.bean.Language;
 import cz.svjis.bean.User;
 
@@ -206,6 +207,26 @@ public class HttpUtils {
             result.append(String.format("<a href=\"Upload?page=%s&id=%d\">%s</a>&nbsp; ", dwlPage, a.getId(), a.getFileName()));
         }
         
+        return result.toString();
+    }
+    
+    public static String renderComments(List<Comment> list, HttpServletRequest request) {
+        StringBuilder result = new StringBuilder();
+
+        if ((list == null) || list.isEmpty())
+            return "";
+
+        Language language = (Language) request.getSession().getAttribute("language");
+        SimpleDateFormat sdft = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+
+        result.append(String.format("<h2 class=\"article-title\">%s</h2>", language.getText("Comments:")));
+        for (Comment c: list) {
+            result.append("<div class=\"article box\">");
+            result.append(String.format("<strong>%s %s</strong><br>", c.getUser().getFullName(false), sdft.format(c.getInsertionTime())));
+            result.append(HttpUtils.makeHyperlinks(c.getBody().replace("\n", "<br>")));
+            result.append("</div>");
+        }
+
         return result.toString();
     }
 }

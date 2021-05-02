@@ -30,10 +30,12 @@ import java.util.List;
 public class ArticleDAO extends DAO {
     
     private AttachmentDAO attDao;
+    private CommentDAO commentDao;
     
     public ArticleDAO (Connection cnn) {
         super(cnn);
         attDao = new AttachmentDAO(cnn, "ARTICLE_ATTACHMENT", "ARTICLE_ID");
+        commentDao = new CommentDAO(cnn,  "ARTICLE_COMMENT", "ARTICLE_ID");
     }
     
     public List<Article> getArticleTopList(User u, int top, int cntLastMonths) throws SQLException {
@@ -564,52 +566,12 @@ public class ArticleDAO extends DAO {
         attDao.deleteAttachment(id);
     }
     
-    private ArrayList<ArticleComment> getArticleCommentList(int articleId) throws SQLException {
-        ArrayList<ArticleComment> result = new ArrayList<>();
-        String select = "SELECT "
-                + "a.ID, "
-                + "a.ARTICLE_ID, "
-                + "a.USER_ID, "
-                + "u.SALUTATION, "
-                + "u.FIRST_NAME, "
-                + "u.LAST_NAME, "
-                + "a.INSERTION_TIME, "
-                + "a.BODY "
-                + "FROM ARTICLE_COMMENT a "
-                + "LEFT JOIN \"USER\" u ON (u.ID = a.USER_ID) "
-                + "WHERE a.ARTICLE_ID = ? "
-                + "ORDER BY a.ID";
-        
-        try (PreparedStatement ps = cnn.prepareStatement(select)) {
-            ps.setInt(1, articleId);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    ArticleComment a = new ArticleComment();
-                    a.setId(rs.getInt("ID"));
-                    a.setArticleId(rs.getInt("ARTICLE_ID"));
-                    a.setUser(new User());
-                    a.getUser().setId(rs.getInt("USER_ID"));
-                    a.getUser().setSalutation(rs.getString("SALUTATION"));
-                    a.getUser().setFirstName(rs.getString("FIRST_NAME"));
-                    a.getUser().setLastName(rs.getString("LAST_NAME"));
-                    a.setInsertionTime(rs.getTimestamp("INSERTION_TIME"));
-                    a.setBody(rs.getString("BODY"));
-                    result.add(a);
-                }
-            }
-        }
-        return result;
+    private ArrayList<Comment> getArticleCommentList(int articleId) throws SQLException {
+        return commentDao.getCommentList(articleId);
     }
     
-    public void insertArticleComment(ArticleComment c) throws SQLException {
-        String insert = "INSERT INTO ARTICLE_COMMENT (ARTICLE_ID, USER_ID, INSERTION_TIME, BODY) VALUES (?,?,?,?)";
-        try (PreparedStatement ps = cnn.prepareStatement(insert)) {
-            ps.setInt(1, c.getArticleId());
-            ps.setInt(2, c.getUser().getId());
-            ps.setTimestamp(3, new java.sql.Timestamp(c.getInsertionTime().getTime()));
-            ps.setString(4, c.getBody());
-            ps.execute();
-        }
+    public void insertArticleComment(Comment c) throws SQLException {
+        commentDao.insertComment(c);
     }
     
     public List<User> getUserListForNotificationAboutNewArticle(int articleId) throws SQLException {

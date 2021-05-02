@@ -1,5 +1,5 @@
 /*
- *       FaultReportComment.java
+ *       Comment.java
  *
  *       This file is part of SVJIS project.
  *       https://github.com/svjis/svjis
@@ -14,80 +14,77 @@ package cz.svjis.bean;
 
 import java.util.Date;
 
-/**
- *
- * @author jarberan
- */
-public class FaultReportComment {
+public class Comment {
+    
     private int id;
-    private int faultReportId;
+    private int documentId;
     private User user;
     private Date insertionTime;
     private String body;
-
+    
     /**
      * @return the id
      */
     public int getId() {
         return id;
     }
-
+    
     /**
      * @param id the id to set
      */
     public void setId(int id) {
         this.id = id;
     }
-
+    
     /**
-     * @return the faultReportId
+     * @return the documentId
      */
-    public int getFaultReportId() {
-        return faultReportId;
+    public int getDocumentId() {
+        return documentId;
     }
-
+    
     /**
-     * @param faultReportId the faultReportId to set
+     * @param documentId the documentId to set
      */
-    public void setFaultReportId(int faultReportId) {
-        this.faultReportId = faultReportId;
+    public void setDocumentId(int documentId) {
+        this.documentId = documentId;
     }
-
+    
     /**
      * @return the user
      */
     public User getUser() {
         return user;
     }
-
+    
     /**
      * @param user the user to set
      */
     public void setUser(User user) {
         this.user = user;
     }
-
+    
     /**
      * @return the insertionTime
      */
     public Date getInsertionTime() {
         return insertionTime;
     }
-
+    
     /**
      * @param insertionTime the insertionTime to set
      */
     public void setInsertionTime(Date insertionTime) {
         this.insertionTime = insertionTime;
     }
-
+    
     /**
      * @return the body
      */
     public String getBody() {
         return body;
     }
-
+    
     /**
      * @param body the body to set
      */

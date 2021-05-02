@@ -7,7 +7,6 @@
 <%@page import="cz.svjis.bean.Permission"%>
 <%@page import="cz.svjis.bean.Attachment"%>
 <%@page import="cz.svjis.common.HttpUtils"%>
-<%@page import="cz.svjis.bean.ArticleComment"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -55,34 +54,9 @@
                     
                     <%=HttpUtils.renderAttachments(article.getAttachmentList(), request, "Attachments:", "download", "", false, false, false, false, "tbl-desc") %>
                     
-                    <%
-                        if (((article.getCommentList() != null) && (article.getCommentList().size() != 0)) || (article.isCommentsAllowed())) {
-                    %>
-                        <h2 class="article-title"><%=language.getText("Comments:") %></h2>
-                    <%
-                       }
-                    %>
-                    
-                    <%
-                        if ((article.getCommentList() != null) && (article.getCommentList().size() != 0)) {
-                            SimpleDateFormat sdft = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-                            for (ArticleComment c: article.getCommentList()) {
-                    %>
-                            <div class="article box">
-                                <strong><%=c.getUser().getFullName(false) %> <%=sdft.format(c.getInsertionTime()) %></strong><br>
-                            <%=HttpUtils.makeHyperlinks(c.getBody().replace("\n", "<br>")) %>
-                            </div>
-                        <%
-                            }
-                        %>
-                    <%
-                       }
-                    %>
-                
+                    <%=HttpUtils.renderComments(article.getCommentList(), request) %>
 
-                    <%
-                        if ((article.isCommentsAllowed()) && (user.hasPermission(Permission.CAN_INSERT_ARTICLE_COMMENT))) {
-                    %>
+                    <% if ((article.isCommentsAllowed()) && (user.hasPermission(Permission.CAN_INSERT_ARTICLE_COMMENT))) { %>
                         <p>
                             <% if (watching.equals("0")) { %>
                                 [<a href="Dispatcher?page=articleFast&id=<%=article.getId() %>&watch=1"><%=language.getText("Start watching discussion") %></a>]&nbsp;
@@ -106,9 +80,8 @@
                                  <input class="my-button" id="submit" type="submit" value="<%=language.getText("Insert comment") %>" name="submit">
                              </p>
                          </form>
-                    <%
-                       }
-                    %>
+                    <% } %>
+                    
                 </div> <!-- /content-main-in -->
             </div> <!-- /content-main -->
             <hr class="noscreen" />
