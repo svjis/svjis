@@ -32,7 +32,7 @@ public class FaultReport {
     private boolean closed;
     private BuildingEntrance buildingEntrance;
     private List<Attachment> attachmentList;
-    private List<FaultReportComment> faultReportCommentList = new ArrayList<>();
+    private List<Comment> faultReportCommentList = new ArrayList<>();
     
     public FaultReport() {
         clear();
@@ -164,14 +164,14 @@ public class FaultReport {
     /**
      * @return the FaultReportCommentList
      */
-    public List<FaultReportComment> getFaultReportCommentList() {
+    public List<Comment> getFaultReportCommentList() {
         return faultReportCommentList;
     }
 
     /**
      * @param faultReportCommentList the faultReportCommentList to set
      */
-    public void setFaultReportCommentList(List<FaultReportComment> faultReportCommentList) {
+    public void setFaultReportCommentList(List<Comment> faultReportCommentList) {
         this.faultReportCommentList = new ArrayList<>(faultReportCommentList);
     }
 

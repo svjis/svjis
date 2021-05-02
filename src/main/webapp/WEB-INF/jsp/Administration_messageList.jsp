@@ -4,7 +4,7 @@
     Author     : berk
 --%>
 
-<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="cz.svjis.common.JspSnippets"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="messageList" scope="request" class="java.util.ArrayList" />
@@ -29,7 +29,6 @@
                             <th class="list" scope="col"><%=language.getText("Time of creation") %></th>
                         </tr>
                     <%
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyy HH:mm");
                     int i = 0;
                     java.util.Iterator<cz.svjis.bean.Message> messageI = messageList.iterator();
                     while (messageI.hasNext()) {
@@ -39,7 +38,7 @@
                             <td class="list" style="text-align: right"><%=++i %></td>
                             <td class="list"><%=m.getRecipient() %></td>
                             <td class="list"><%=m.getSubject() %></td>
-                            <td class="list" style="text-align: right"><%=sdf.format(m.getCreationTime()) %></td>
+                            <td class="list" style="text-align: right"><%=JspSnippets.renderDateTime(m.getCreationTime()) %></td>
                         </tr>
                     <%
                     }

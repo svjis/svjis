@@ -12,7 +12,7 @@
 
 package cz.svjis.servlet.cmd;
 
-import cz.svjis.common.HttpUtils;
+import cz.svjis.common.JspSnippets;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 
@@ -28,7 +28,7 @@ public class BuildingPictureCmd extends Command {
     
     @Override
     public void execute() throws Exception {
-        HttpUtils.writeBinaryData(
+        JspSnippets.writeBinaryData(
                 getCompany().getPictureContentType(), 
                 getCompany().getPictureFilename(), 
                 getCompany().getPictureData(), 

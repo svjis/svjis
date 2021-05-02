@@ -4,22 +4,18 @@
     Author     : berk
 --%>
 
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <%@page import="cz.svjis.bean.Permission"%>
 <%@page import="cz.svjis.bean.Attachment"%>
-<%@page import="cz.svjis.common.HttpUtils"%>
-<%@page import="cz.svjis.bean.ArticleComment"%>
+<%@page import="cz.svjis.common.JspSnippets"%>
 <%@page import="java.util.Iterator"%>
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="article" scope="request" class="cz.svjis.bean.Article" />
 <jsp:useBean id="watching" scope="request" class="java.lang.String" />
 
-
-<%
-    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-%>
 <jsp:include page="_header.jsp" />
 <jsp:include page="_tray.jsp" />
 
@@ -42,47 +38,22 @@
 
                     %>
                     <div class="article-detail">
-                    <div class="article-desc">
-                    <h1 class="article-title" id="tbl-desc"><%=HttpUtils.highlight(article.getHeader(), request.getParameter("search")) %></h1>
-                    <p class="info">
-                        <%=language.getText("Published:") %> <strong><%=sdf.format(article.getCreationDate()) %></strong>, 
-                        <%=language.getText("by:") %> <strong><%=article.getAuthor().getFullName(false) %></strong><%=(article.getCommentList().size() != 0) ? ", " + language.getText("Comments:") + " <strong>" + article.getCommentList().size() + "</strong>" : "" %>
-                    </p> 
-                    <%=HttpUtils.highlight(article.getDescription(), request.getParameter("search")) %>
-                    <%=HttpUtils.highlight(body, request.getParameter("search")) %>
+	                    <div class="article-desc">
+	                    <h1 class="article-title" id="tbl-desc"><%=JspSnippets.highlight(article.getHeader(), request.getParameter("search")) %></h1>
+	                    <p class="info">
+	                        <%=language.getText("Published:") %> <strong><%=JspSnippets.renderDate(article.getCreationDate()) %></strong>, 
+	                        <%=language.getText("by:") %> <strong><%=article.getAuthor().getFullName(false) %></strong><%=(article.getCommentList().size() != 0) ? ", " + language.getText("Comments:") + " <strong>" + article.getCommentList().size() + "</strong>" : "" %>
+	                    </p> 
+	                    <%=JspSnippets.highlight(article.getDescription(), request.getParameter("search")) %>
+	                    <%=JspSnippets.highlight(body, request.getParameter("search")) %>
+	                    </div>
                     </div>
-                    </div>
                     
-                    <%=HttpUtils.renderAttachments(article.getAttachmentList(), request, "Attachments:", "download", "", false, false, false, false, "tbl-desc") %>
+                    <%=JspSnippets.renderAttachments(article.getAttachmentList(), request, "Attachments:", "download", "", false, false, false, false, "tbl-desc") %>
                     
-                    <%
-                        if (((article.getCommentList() != null) && (article.getCommentList().size() != 0)) || (article.isCommentsAllowed())) {
-                    %>
-                        <h2 class="article-title"><%=language.getText("Comments:") %></h2>
-                    <%
-                       }
-                    %>
-                    
-                    <%
-                        if ((article.getCommentList() != null) && (article.getCommentList().size() != 0)) {
-                            SimpleDateFormat sdft = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-                            for (ArticleComment c: article.getCommentList()) {
-                    %>
-                            <div class="article box">
-                                <strong><%=c.getUser().getFullName(false) %> <%=sdft.format(c.getInsertionTime()) %></strong><br>
-                            <%=HttpUtils.makeHyperlinks(c.getBody().replace("\n", "<br>")) %>
-                            </div>
-                        <%
-                            }
-                        %>
-                    <%
-                       }
-                    %>
-                
+                    <%=JspSnippets.renderComments(article.getCommentList(), request) %>
 
-                    <%
-                        if ((article.isCommentsAllowed()) && (user.hasPermission(Permission.CAN_INSERT_ARTICLE_COMMENT))) {
-                    %>
+                    <% if ((article.isCommentsAllowed()) && (user.hasPermission(Permission.CAN_INSERT_ARTICLE_COMMENT))) { %>
                         <p>
                             <% if (watching.equals("0")) { %>
                                 [<a href="Dispatcher?page=articleFast&id=<%=article.getId() %>&watch=1"><%=language.getText("Start watching discussion") %></a>]&nbsp;
@@ -106,9 +77,8 @@
                                  <input class="my-button" id="submit" type="submit" value="<%=language.getText("Insert comment") %>" name="submit">
                              </p>
                          </form>
-                    <%
-                       }
-                    %>
+                    <% } %>
+                    
                 </div> <!-- /content-main-in -->
             </div> <!-- /content-main -->
             <hr class="noscreen" />

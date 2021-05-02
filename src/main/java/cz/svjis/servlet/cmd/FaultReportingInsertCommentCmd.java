@@ -12,8 +12,8 @@
 
 package cz.svjis.servlet.cmd;
 
+import cz.svjis.bean.Comment;
 import cz.svjis.bean.FaultReport;
-import cz.svjis.bean.FaultReportComment;
 import cz.svjis.bean.FaultReportDAO;
 import cz.svjis.bean.MailDAO;
 import cz.svjis.bean.Permission;
@@ -51,8 +51,8 @@ public class FaultReportingInsertCommentCmd extends Command {
                 && getUser().hasPermission(Permission.FAULT_REPORTING_COMMENT)
                 && (parBody != null)
                 && (!parBody.equals(""))) {
-            FaultReportComment c = new FaultReportComment();
-            c.setFaultReportId(report.getId());
+            Comment c = new Comment();
+            c.setDocumentId(report.getId());
             c.setInsertionTime(new Date());
             c.setUser(getUser());
             c.setBody(parBody);

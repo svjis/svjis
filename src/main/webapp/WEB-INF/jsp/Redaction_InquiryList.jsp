@@ -4,11 +4,12 @@
     Author     : berk
 --%>
 
-<%@page import="cz.svjis.bean.SliderItem"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<%@page import="cz.svjis.common.JspSnippets"%>
 <%@page import="cz.svjis.bean.Inquiry"%>
 <%@page import="java.util.Iterator"%>
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="inquiryList" scope="request" class="java.util.ArrayList" />
 <jsp:useBean id="slider" scope="request" class="cz.svjis.bean.SliderImpl" />
@@ -38,7 +39,6 @@
                             <th class="list" scope="col"><%=language.getText("Published") %></th>
                         </tr>
                     <%
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
                         Iterator inquiryListI = inquiryList.iterator();
                         while (inquiryListI.hasNext()) {
                             Inquiry i = (Inquiry) inquiryListI.next();
@@ -48,8 +48,8 @@
                             <td class="list"><a href="Dispatcher?page=redactionInquiryLog&id=<%=i.getId() %>"><img src="gfx/chart_bar.png" border="0" title="<%=language.getText("Log") %>" alt="<%=language.getText("Log") %>"></a></td>
                             <td class="list"><a href="Upload?page=exportInquiryLogToXls&id=<%=i.getId() %>"><img src="gfx/Files_xls.gif" border="0" title="<%=language.getText("Export to Excel") %>" alt="<%=language.getText("Export to Excel") %>"></a></td>
                             <td class="list"><%=i.getDescription() %></td>
-                            <td class="list"><%=sdf.format(i.getStartingDate()) %></td>
-                            <td class="list"><%=sdf.format(i.getEndingDate()) %></td>
+                            <td class="list"><%=JspSnippets.renderDate(i.getStartingDate()) %></td>
+                            <td class="list"><%=JspSnippets.renderDate(i.getEndingDate()) %></td>
                             <td class="list"><%=i.getUser().getFullName(false) %></td>
                             <td class="list"><%=(i.isEnabled()) ? language.getText("yes") : language.getText("no") %></td>
                         </tr>
@@ -59,20 +59,7 @@
                     </table>
                     
                     <p class="t-left">
-                        <% if (slider.getTotalNumOfPages() > 1) { %>
-                        <strong><%=language.getText("Pages:") %></strong>&nbsp;
-                        <%
-                        String pageId = "page=" + slider.getPageId() + "&";
-                        for (SliderItem item : slider.getItemList()) {
-                            if (item.isCurrent()) {
-                                out.println("<b>" + item.getLabel() + "</b>&nbsp;");
-                            } else {
-                                out.println("<a href=\"Dispatcher?" + pageId + "pageNo=" + item.getPage() + "\">" + item.getLabel() + "</a>&nbsp;");
-                            }
-                        }
-                        %>
-                        
-                        <% } %>
+                        <%=JspSnippets.renderPaginator(slider, null, null, request) %>
                     </p>
                     
                 </div> <!-- /content-main-in -->

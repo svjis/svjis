@@ -60,6 +60,7 @@ public class ArticleListCmd extends Command {
 
         int pageNo = (parPageNo == 0) ? 1 : parPageNo;
         SliderImpl sl = new SliderImpl();
+        sl.setPageId("articleList");
         sl.setSliderWide(10);
         sl.setCurrentPage(pageNo);
         sl.setNumOfItemsAtPage(getSetup().getArticlePageSize());

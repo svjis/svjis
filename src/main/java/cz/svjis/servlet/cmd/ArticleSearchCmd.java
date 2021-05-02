@@ -41,6 +41,7 @@ public class ArticleSearchCmd extends Command {
     @Override
     public void execute() throws Exception {
         
+        String parPage = Validator.getString(getRequest(), "page", 0, Validator.MAX_STRING_LEN_ALLOWED, false, false);
         int parSection = Validator.getInt(getRequest(), "section", 0, Validator.MAX_INT_ALLOWED, true);
         int parPageNo = Validator.getInt(getRequest(), "pageNo", 0, Validator.MAX_INT_ALLOWED, true);
         String parSearch = Validator.getString(getRequest(), "search", 0, 50, false, false);
@@ -68,6 +69,7 @@ public class ArticleSearchCmd extends Command {
 
         int pageNo = (parPageNo == 0) ? 1 : parPageNo;
         SliderImpl sl = new SliderImpl();
+        sl.setPageId(parPage);
         sl.setSliderWide(10);
         sl.setCurrentPage(pageNo);
         sl.setNumOfItemsAtPage(getSetup().getArticlePageSize());

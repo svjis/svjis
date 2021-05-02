@@ -13,11 +13,10 @@
 package cz.svjis.servlet.cmd;
 
 import javax.servlet.RequestDispatcher;
-
 import cz.svjis.bean.AdvertDAO;
 import cz.svjis.bean.Attachment;
 import cz.svjis.bean.Permission;
-import cz.svjis.common.HttpUtils;
+import cz.svjis.common.JspSnippets;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.InputValidationException;
@@ -47,6 +46,6 @@ public class AdvertAttachmentDownloadCmd extends Command {
         if ((at == null) || (advertDao.getAdvert(getCompany().getId(), at.getDocumentId()) == null)) {
             throw new InputValidationException("Bad attachment id");
         }
-        HttpUtils.writeBinaryData(at.getContentType(), at.getFileName(), at.getData(), getRequest(), getResponse());
+        JspSnippets.writeBinaryData(at.getContentType(), at.getFileName(), at.getData(), getRequest(), getResponse());
     }
 }

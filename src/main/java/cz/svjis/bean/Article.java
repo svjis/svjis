@@ -39,7 +39,7 @@ public class Article {
     private int numOfComments;
     private int numOfReads;
     private List<Attachment> attachmentList;
-    private List<ArticleComment> commentList;
+    private List<Comment> commentList;
     private HashMap<Integer, String> roles;
     
     public Article() {
@@ -252,14 +252,14 @@ public class Article {
     /**
      * @return the commentList
      */
-    public List<ArticleComment> getCommentList() {
+    public List<Comment> getCommentList() {
         return commentList;
     }
 
     /**
      * @param commentList the commentList to set
      */
-    public void setCommentList(List<ArticleComment> commentList) {
+    public void setCommentList(List<Comment> commentList) {
         this.commentList = new ArrayList<>(commentList);
     }
 

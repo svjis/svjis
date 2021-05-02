@@ -4,19 +4,17 @@
     Author     : berk
 --%>
 
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <%@page import="java.text.DecimalFormat"%>
 <%@page import="cz.svjis.bean.InquiryOption"%>
 <%@page import="cz.svjis.bean.Inquiry"%>
 <%@page import="java.util.Calendar"%>
 <%@page import="cz.svjis.bean.MiniNews"%>
-<%@page import="java.net.URLEncoder"%>
 <%@page import="cz.svjis.bean.Article"%>
-<%@page import="cz.svjis.bean.SliderItem"%>
-<%@page import="cz.svjis.common.HttpUtils"%>
+<%@page import="cz.svjis.common.JspSnippets"%>
 <%@page import="java.util.Iterator"%>
-<%@page import="java.text.SimpleDateFormat"%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="slider" scope="request" class="cz.svjis.bean.SliderImpl" />
 <jsp:useBean id="articleList" scope="request" class="java.util.ArrayList" />
@@ -26,9 +24,6 @@
 <jsp:useBean id="inquiryList" scope="request" class="java.util.ArrayList" />
 <jsp:useBean id="menu" scope="request" class="cz.svjis.bean.Menu" />
 
-<%
-    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-%>
 
 <jsp:include page="_header.jsp" />
 <jsp:include page="_tray.jsp" />
@@ -52,12 +47,12 @@
                     <!-- Article -->
                     <div class="article box">
                         <div class="article-desc">
-                            <h1 class="article-title-list"><a href="Dispatcher?page=articleDetail&id=<%=a.getId() %><%=(request.getParameter("search") != null) ? "&search=" + URLEncoder.encode(request.getParameter("search"), "UTF-8") : "" %>"><%=HttpUtils.highlight(a.getHeader(), request.getParameter("search")) %></a></h1>
+                            <h1 class="article-title-list"><a href="Dispatcher?page=articleDetail&id=<%=a.getId() %><%=(request.getParameter("search") != null) ? "&search=" + JspSnippets.encodeUrl(request.getParameter("search")) : "" %>"><%=JspSnippets.highlight(a.getHeader(), request.getParameter("search")) %></a></h1>
                             <p class="info">
                                 <a href="Dispatcher?page=articleList&section=<%=a.getMenuNodeId() %>"><%=a.getMenuNodeDescription() %></a>:
-                                <%=sdf.format(a.getCreationDate()) %>,
+                                <%=JspSnippets.renderDate(a.getCreationDate()) %>,
                                 <%=language.getText("by:") %> <%=a.getAuthor().getFullName(false) %><%=(a.getNumOfComments() != 0) ? ", " + language.getText("Comments:") + " " + a.getNumOfComments() : "" %></p> 
-                            <%=HttpUtils.highlight(a.getDescription(), request.getParameter("search")) %>
+                            <%=JspSnippets.highlight(a.getDescription(), request.getParameter("search")) %>
                         </div>
                     </div> <!-- /article -->
                     <%
@@ -65,25 +60,7 @@
                     %>
 
                     <p class="t-left">
-                        <% if (slider.getTotalNumOfPages() > 1) { %>
-                        <strong><%=language.getText("Pages:") %></strong>&nbsp;
-                        <%
-                        String search = "";
-                        String pageId = "page=articleList&";
-                        if ((request.getParameter("search") != null) && (!request.getParameter("search").equals(""))) {
-                            search = "search=" + URLEncoder.encode(request.getParameter("search"), "UTF-8") + "&";
-                            pageId = "page=search&";
-                        }
-                        for (SliderItem item: slider.getItemList()) {
-                            if (item.isCurrent()) {
-                                out.println("<b>" + item.getLabel() + "</b>&nbsp;");
-                            } else {
-                                out.println("<a href=\"Dispatcher?" + pageId + "section=" + sectionId + "&" + search + "pageNo=" + item.getPage() + "\">" + item.getLabel() + "</a>&nbsp;");
-                            }
-                        }
-                        %>
-                        <% } %>
-
+                        <%=JspSnippets.renderPaginator(slider, request.getParameter("search"), null, request) %>
                     </p>
 
                 </div> <!-- /content-left-in -->
@@ -171,7 +148,6 @@
                             MiniNews n = newsI.next();
                             Calendar c = Calendar.getInstance();
                             c.setTime(n.getTime());
-                            SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm");
                             String months[] = {"JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"};
                             if (even) {
                                 out.println("<div class=\"bg\">");
@@ -179,7 +155,7 @@
                     %>
                     <dl class="news box">
                         <dt><%=language.getText(months[c.get(Calendar.MONTH)]) %><br /><span><%=c.get(Calendar.DAY_OF_MONTH) %></span></dt>
-                        <dd><span>@ <%=sdfTime.format(n.getTime()) %></span><br /><%=n.getBody() %></dd>
+                        <dd><span>@ <%=JspSnippets.renderTime(n.getTime()) %></span><br /><%=n.getBody() %></dd>
                     </dl>        
                     <%
                             if (even) {

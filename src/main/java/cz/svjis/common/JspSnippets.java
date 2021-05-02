@@ -1,5 +1,5 @@
 /*
- *       HttpUtils.java
+ *       JspSnippets.java
  *
  *       This file is part of SVJIS project.
  *       https://github.com/svjis/svjis
@@ -15,8 +15,10 @@ package cz.svjis.common;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,42 +27,41 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.binary.Base64;
 
 import cz.svjis.bean.Attachment;
+import cz.svjis.bean.Comment;
 import cz.svjis.bean.Language;
+import cz.svjis.bean.Slider;
+import cz.svjis.bean.SliderItem;
 import cz.svjis.bean.User;
 
 /**
  *
  * @author jaroslav_b
  */
-public class HttpUtils {
+public class JspSnippets {
     
-    private static final Logger LOGGER = Logger.getLogger(HttpUtils.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(JspSnippets.class.getName());
     
-    private HttpUtils() {}
-
-    public static void writeBinaryData(String contentType, String fileName, byte[] data, HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
-        
-        String userAgent = request.getHeader("User-Agent");
-        String encodedFileName;
-        if (userAgent.contains("MSIE") || userAgent.contains("Edge") || userAgent.contains("Opera") || userAgent.contains("Trident")) {
-            encodedFileName = URLEncoder.encode(fileName.replace(" ", "_"), "UTF-8");
-        } else {
-            encodedFileName = "=?UTF-8?B?" + Base64.encodeBase64String(fileName.replace(" ", "_").getBytes("UTF-8")) + "?=";
-        }
-
-        response.setContentType(contentType);
-        response.setHeader("Content-Disposition", "attachment; filename=\"" + encodedFileName + "\"");
-        response.setDateHeader("Expires", 0);
-
-        
-        try (OutputStream outb= response.getOutputStream()) {
-            outb.write(data, 0, data.length);
-        } catch (java.io.IOException ex) {
-            LOGGER.log(Level.SEVERE, "ClientAbortException:  java.io.IOException: Roura přerušena (SIGPIPE) ", ex);
-        }
+    private JspSnippets() {}
+    
+    
+    public static String renderDateTime(Date d) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        return sdf.format(d);
     }
     
+    public static String renderDate(Date d) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+        return sdf.format(d);
+    }
+    
+    public static String renderTime(Date d) {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        return sdf.format(d);
+    }
+    
+    public static String encodeUrl(String text) throws UnsupportedEncodingException {
+        return URLEncoder.encode(text, "UTF-8");
+    }
     
     public static String makeHyperlinks(String s) {
         String result = s;
@@ -131,7 +132,6 @@ public class HttpUtils {
     
     public static String renderAttachments(List<Attachment> list, HttpServletRequest request, String name, String dwlPage, String delPage, boolean showUser, boolean showTime, boolean showDelete, boolean showDeleteOwnerOnly, String ariaDescribedby) {
         StringBuilder result = new StringBuilder();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         Language language = (Language) request.getSession().getAttribute("language");
         User user =  (User) request.getSession().getAttribute("user");
         
@@ -169,7 +169,7 @@ public class HttpUtils {
                 result.append(String.format("<td class=\"list\">%s</td>", a.getUser().getFullName(false)));
             }
             if (showUser) {
-                result.append(String.format("<td class=\"list\">%s</td>", sdf.format(a.getUploadTime())));
+                result.append(String.format("<td class=\"list\">%s</td>", renderDateTime(a.getUploadTime())));
             }
             if (showDelete || showDeleteOwnerOnly) {
                 result.append("<td class=\"list\">");
@@ -207,5 +207,73 @@ public class HttpUtils {
         }
         
         return result.toString();
+    }
+    
+    public static String renderComments(List<Comment> list, HttpServletRequest request) {
+        StringBuilder result = new StringBuilder();
+
+        if ((list == null) || list.isEmpty())
+            return "";
+
+        Language language = (Language) request.getSession().getAttribute("language");
+
+        result.append(String.format("<h2 class=\"article-title\">%s</h2>", language.getText("Comments:")));
+        for (Comment c: list) {
+            result.append("<div class=\"article box\">");
+            result.append(String.format("<strong>%s %s</strong><br>", c.getUser().getFullName(false), renderDateTime(c.getInsertionTime())));
+            result.append(JspSnippets.makeHyperlinks(c.getBody().replace("\n", "<br>")));
+            result.append("</div>");
+        }
+
+        return result.toString();
+    }
+    
+    public static String renderPaginator(Slider slider, String searchKey, String filter, HttpServletRequest request) throws UnsupportedEncodingException {
+        StringBuilder result = new StringBuilder();
+        Language language = (Language) request.getSession().getAttribute("language");
+        
+        if (filter == null)
+            filter = "";
+        
+        if (slider.getTotalNumOfPages() > 1) {
+            result.append(String.format("<strong>%s</strong>&nbsp;", language.getText("Pages:")));
+            String search = "";
+            String pageId = String.format("page=%s&", slider.getPageId());
+            if ((searchKey != null) && (!searchKey.equals(""))) {
+                search = String.format("search=%s&", URLEncoder.encode(searchKey, "UTF-8"));
+            }
+            for (SliderItem item : slider.getItemList()) {
+                if (item.isCurrent()) {
+                    result.append(String.format("<b>%s</b>&nbsp;", item.getLabel()));
+                } else {
+                    result.append(String.format("<a href=\"Dispatcher?%s%s%spageNo=%d\">%s</a>&nbsp;", pageId, search, filter, item.getPage(), item.getLabel()));
+                }
+            }
+        }
+        
+        return result.toString();
+    }
+    
+    public static void writeBinaryData(String contentType, String fileName, byte[] data, HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        
+        String userAgent = request.getHeader("User-Agent");
+        String encodedFileName;
+        if (userAgent.contains("MSIE") || userAgent.contains("Edge") || userAgent.contains("Opera") || userAgent.contains("Trident")) {
+            encodedFileName = URLEncoder.encode(fileName.replace(" ", "_"), "UTF-8");
+        } else {
+            encodedFileName = "=?UTF-8?B?" + Base64.encodeBase64String(fileName.replace(" ", "_").getBytes("UTF-8")) + "?=";
+        }
+
+        response.setContentType(contentType);
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + encodedFileName + "\"");
+        response.setDateHeader("Expires", 0);
+
+        
+        try (OutputStream outb= response.getOutputStream()) {
+            outb.write(data, 0, data.length);
+        } catch (java.io.IOException ex) {
+            LOGGER.log(Level.SEVERE, "ClientAbortException:  java.io.IOException: Roura přerušena (SIGPIPE) ", ex);
+        }
     }
 }

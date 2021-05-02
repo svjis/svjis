@@ -6,7 +6,7 @@
 
 <%@page import="java.util.List"%>
 <%@page import="cz.svjis.bean.Role"%>
-<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="cz.svjis.common.JspSnippets"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="roleList" scope="request" class="java.util.ArrayList" />
@@ -87,7 +87,6 @@
                             <th class="list" scope="col"><%=language.getText("Last login") %></th>
                         </tr>
                     <%
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
                     int i = 0;
                     java.util.Iterator<cz.svjis.bean.User> userI = userList.iterator();
                     while (userI.hasNext()) {
@@ -101,7 +100,7 @@
                             <td class="list"><%=u.getFirstName() %></td>
                             <td class="list"><%=(u.isEnabled()) ? language.getText("yes") : language.getText("no") %></td>
                             <td class="list"><a href="mailto:<%=u.geteMail() %>"><%=u.geteMail() %></a></td>
-                            <td class="list"><%=(u.getLastLogin() == null) ? "&nbsp;" : sdf.format(u.getLastLogin()) %></td>
+                            <td class="list"><%=(u.getLastLogin() == null) ? "&nbsp;" : JspSnippets.renderDateTime(u.getLastLogin()) %></td>
                         </tr>
                     <%
                     }
