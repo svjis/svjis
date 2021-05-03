@@ -404,6 +404,6 @@ public class CmdFactory {
         // ************************
         // * Page does not exists *
         // ************************
-        return new BadPageCmd(ctx);
+        return new Error404NotFoundCmd(ctx);
     }
 }

@@ -1,6 +1,6 @@
 <%-- 
-    Document   : InputValidationError
-    Created on : 7.12.2019, 17:00:47
+    Document   : 400_BadRequest
+    Created on : 3.5.2021, 23:50:47
     Author     : jarberan
 --%>
 
@@ -11,11 +11,11 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta http-equiv="refresh" content="5;url=Dispatcher">
-        <title>Input validation error.</title>
+        <title>400 Bad Request</title>
     </head>
 
     <body>
-        <h1>Input validation error.</h1>
+        <h1>400 Bad Request</h1>
         <p>
             <strong><%=message %></strong>
         </p>

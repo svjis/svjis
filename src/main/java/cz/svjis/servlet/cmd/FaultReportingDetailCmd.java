@@ -42,6 +42,10 @@ public class FaultReportingDetailCmd extends Command {
         LogDAO logDao = new LogDAO(getCnn());
 
         FaultReport report = faultDao.getFault(getCompany().getId(), parId);
+        if (report == null) {
+            new Error404NotFoundCmd(getCtx()).execute();
+            return;
+        }
         getRequest().setAttribute("report", report);
         
         FaultReportMenuCounters counters = faultDao.getMenuCounters(getCompany().getId(), getUser().getId());

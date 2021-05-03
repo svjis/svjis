@@ -19,7 +19,6 @@ import cz.svjis.bean.LogDAO;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
-import javax.servlet.RequestDispatcher;
 
 /**
  *
@@ -42,8 +41,7 @@ public class FaultReportingAttachmentDeleteCmd extends Command {
         int id = parId;
         Attachment fa = faultDao.getFaultReportAttachment(id);
         if (fa == null) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
+            new Error404NotFoundCmd(getCtx()).execute();
             return;
         }
         FaultReport f = faultDao.getFault(getCompany().getId(), fa.getDocumentId());

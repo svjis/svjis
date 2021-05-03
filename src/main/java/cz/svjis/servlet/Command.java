@@ -61,4 +61,8 @@ public abstract class Command {
     public Connection getCnn() {
         return cmdCtx.getCnn();
     }
+    
+    public CmdContext getCtx() {
+        return cmdCtx;
+    }
 }

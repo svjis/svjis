@@ -12,8 +12,6 @@
 
 package cz.svjis.servlet.cmd;
 
-import javax.servlet.RequestDispatcher;
-
 import cz.svjis.bean.Advert;
 import cz.svjis.bean.AdvertDAO;
 import cz.svjis.bean.Attachment;
@@ -39,8 +37,7 @@ public class AdvertAttachmentDeleteCmd extends Command {
         int id = parId;
         Attachment at = advertDao.getAttachment(id);
         if (at == null) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
+            new Error404NotFoundCmd(getCtx()).execute();
             return;
         }
         Advert a = advertDao.getAdvert(getCompany().getId(), at.getDocumentId());
