@@ -64,7 +64,7 @@ public class HandleErrorCmd extends Command {
             }
 
             if (this.throwable instanceof InputValidationException) {
-                new Error400BadRequestCmd(getCtx(), this.throwable.getMessage());
+                new Error400BadRequestCmd(getCtx(), this.throwable.getMessage()).execute();
             } else {
                 new Error500InternalServerErrorCmd(getCtx()).execute();
             }
