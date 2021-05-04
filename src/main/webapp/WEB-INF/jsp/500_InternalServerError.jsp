@@ -5,19 +5,20 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html lang="cs">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>500 Internal Server Error</title>
-    </head>
 
-    <body>
-        <h1>500 Internal Server Error</h1>
+<jsp:include page="_header.jsp" />
+<jsp:include page="_tray.jsp" />
+
+        <!-- Content -->
+        <div id="content-width">
+            <div id="content-width-in">
+                <h1>500 Internal Server Error</h1>
+                <p><strong>Litujeme ale v aplikaci nastala chyba.</strong></p>
         
-        <p><strong>Litujeme ale v aplikaci nastala chyba.</strong></p>
-        
-        <p>Report o chybě byl odeslán správci webu.<br>
-        Prosím pokračujte <a href="Dispatcher">zde</a>.</p>
-    </body>
-</html>
+		        <p>Report o chybě byl odeslán správci webu.<br>
+		        Prosím pokračujte <a href="Dispatcher">zde</a>.</p>
+            <hr class="noscreen" />
+            </div>
+        </div> <!-- /content -->
+
+<jsp:include page="_footer.jsp" />

@@ -5,15 +5,17 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html lang="cs">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>401 Unauthorized</title>
-    </head>
 
-    <body>
-        <h1>401 Unauthorized</h1>
-        Prosím pokračujte <a href="Dispatcher">zde</a>.
-    </body>
-</html>
+<jsp:include page="_header.jsp" />
+<jsp:include page="_tray.jsp" />
+
+        <!-- Content -->
+        <div id="content-width">
+            <div id="content-width-in">
+                <h1>401 Unauthorized</h1>
+                <p>Prosím pokračujte <a href="Dispatcher">zde</a>.</p>
+            <hr class="noscreen" />
+            </div>
+        </div> <!-- /content -->
+
+<jsp:include page="_footer.jsp" />

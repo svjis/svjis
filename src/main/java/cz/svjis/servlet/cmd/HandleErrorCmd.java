@@ -68,7 +68,6 @@ public class HandleErrorCmd extends Command {
             } else {
                 new Error500InternalServerErrorCmd(getCtx()).execute();
             }
-            return;
             
         } catch (Exception ex) {
             logger.log(Level.SEVERE, "Could not run HandleErrorCmd", throwable);
