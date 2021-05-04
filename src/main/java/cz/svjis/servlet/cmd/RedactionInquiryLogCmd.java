@@ -15,6 +15,7 @@ package cz.svjis.servlet.cmd;
 import cz.svjis.bean.Inquiry;
 import cz.svjis.bean.InquiryDAO;
 import cz.svjis.bean.InquiryLog;
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -33,6 +34,11 @@ public class RedactionInquiryLogCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.REDACTION_INQUIRY)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
 
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
         
@@ -42,6 +48,10 @@ public class RedactionInquiryLogCmd extends Command {
         ArrayList<InquiryLog> log = new ArrayList<>();
         if (parId != 0) {
             inquiry = inquiryDao.getInquiry(getUser(), parId);
+            if (inquiry == null) {
+                new Error404NotFoundCmd(getCtx()).execute();
+                return;
+            }
             log = new ArrayList<>(inquiryDao.getInquiryLog(getUser(), parId));
         }
         getRequest().setAttribute("inquiry", inquiry);

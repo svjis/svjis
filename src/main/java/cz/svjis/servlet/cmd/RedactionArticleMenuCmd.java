@@ -14,6 +14,7 @@ package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.Menu;
 import cz.svjis.bean.MenuDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import javax.servlet.RequestDispatcher;
@@ -30,6 +31,12 @@ public class RedactionArticleMenuCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.REDACTION_MENU)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
+        
         MenuDAO menuDao = new MenuDAO(getCnn());
 
         Menu menu = menuDao.getMenu(getCompany().getId());

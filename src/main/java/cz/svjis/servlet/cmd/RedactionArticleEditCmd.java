@@ -40,8 +40,13 @@ public class RedactionArticleEditCmd extends Command {
     @Override
     public void execute() throws Exception {
 
+        if (!getUser().hasPermission(Permission.REDACTION_ARTICLES) && !getUser().hasPermission(Permission.REDACTION_ARTICLES_ALL)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
+        
         int parArticleId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, true);
-
+        
         MenuDAO menuDao = new MenuDAO(getCnn());
         ArticleDAO articleDao = new ArticleDAO(getCnn());
         RoleDAO roleDao = new RoleDAO(getCnn());

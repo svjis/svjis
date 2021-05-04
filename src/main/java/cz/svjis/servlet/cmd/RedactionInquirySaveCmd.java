@@ -35,6 +35,11 @@ public class RedactionInquirySaveCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.REDACTION_INQUIRY)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
 
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
         String parDescription = Validator.getString(getRequest(), "description", 0, 250, false, getUser().hasPermission(Permission.CAN_WRITE_HTML));
@@ -52,6 +57,10 @@ public class RedactionInquirySaveCmd extends Command {
             i.setCompanyId(getUser().getCompanyId());
         } else {
             i = inquiryDao.getInquiry(getUser(), parId);
+            if (i == null) {
+                new Error404NotFoundCmd(getCtx()).execute();
+                return;
+            }
         }
         i.setDescription(parDescription);
         i.setStartingDate(sdf.parse(parStartDate));

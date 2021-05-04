@@ -124,7 +124,7 @@ public class MiniNewsDAO extends DAO {
     }
     
     public MiniNews getMiniNews(User u, int id) throws SQLException {
-        MiniNews result = new MiniNews();
+        MiniNews result = null;
         
         String select = "SELECT "
                 + "a.ID, "
@@ -148,6 +148,7 @@ public class MiniNewsDAO extends DAO {
             ps.setInt(2, u.getCompanyId());
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
+                    result = new MiniNews();
                     result.setId(rs.getInt("ID"));
                     result.setCompanyId(rs.getInt("COMPANY_ID"));
                     result.setLanguageId(rs.getInt("LANGUAGE_ID"));

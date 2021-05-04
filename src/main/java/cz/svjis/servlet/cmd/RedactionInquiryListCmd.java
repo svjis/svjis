@@ -14,6 +14,7 @@ package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.Inquiry;
 import cz.svjis.bean.InquiryDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.bean.SliderImpl;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
@@ -33,6 +34,12 @@ public class RedactionInquiryListCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.REDACTION_INQUIRY)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
+        
         String parPage = Validator.getString(getRequest(), "page", 0, Validator.MAX_STRING_LEN_ALLOWED, false, false);
         int parPageNo = Validator.getInt(getRequest(), "pageNo", 0, Validator.MAX_INT_ALLOWED, true);
         

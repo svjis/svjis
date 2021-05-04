@@ -14,6 +14,7 @@ package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.InquiryDAO;
 import cz.svjis.bean.InquiryOption;
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -31,11 +32,20 @@ public class RedactionInquiryOptionDeleteCmd extends Command {
     @Override
     public void execute() throws Exception {
         
+        if (!getUser().hasPermission(Permission.REDACTION_INQUIRY)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
+        
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
 
         InquiryDAO inquiryDao = new InquiryDAO(getCnn());
 
         InquiryOption io = inquiryDao.getInquiryOption(getUser().getCompanyId(), parId);
+        if (io == null) {
+            new Error404NotFoundCmd(getCtx()).execute();
+            return;
+        }
         inquiryDao.deleteInquiryOption(io);
         String url = "Dispatcher?page=redactionInquiryEdit&id=" + io.getInquiryId();
         getResponse().sendRedirect(url);
