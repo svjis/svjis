@@ -78,7 +78,12 @@ public class AdvertSaveCmd extends Command {
             }
         }
         
-        String url = String.format("Dispatcher?page=%s&typeId=%d", CmdFactory.ADVERT_LIST, a.getType().getId());
+        int typeId = a.getType().getId();
+        if (!a.isPublished()) {
+            typeId = AdvertDAO.MY_ADVERTS_TYPE_ID;
+        }
+
+        String url = String.format("Dispatcher?page=%s&typeId=%d", CmdFactory.ADVERT_LIST, typeId);
         getResponse().sendRedirect(url);
     }
 
