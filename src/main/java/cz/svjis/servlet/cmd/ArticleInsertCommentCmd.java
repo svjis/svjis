@@ -37,6 +37,11 @@ public class ArticleInsertCommentCmd extends Command {
     @Override
     public void execute() throws Exception {
         
+        if (!getUser().hasPermission(Permission.CAN_INSERT_ARTICLE_COMMENT)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
+        
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
         String parBody = Validator.getString(getRequest(), "body", 0, 10000, true, getUser().hasPermission(Permission.CAN_WRITE_HTML));
 
@@ -44,13 +49,13 @@ public class ArticleInsertCommentCmd extends Command {
 
         int articleId = parId;
         Article article = articleDao.getArticle(getUser(), articleId);
+        if (article == null) {
+            new Error404NotFoundCmd(getCtx()).execute();
+            return;
+        }
         getRequest().setAttribute("article", article);
 
-        if ((article != null)
-                && article.isCommentsAllowed()
-                && getUser().hasPermission(Permission.CAN_INSERT_ARTICLE_COMMENT)
-                && (parBody != null)
-                && (!parBody.equals(""))) {
+        if (article.isCommentsAllowed() && (parBody != null) && (!parBody.equals(""))) {
 
             // insert comment
             Comment ac = new Comment();

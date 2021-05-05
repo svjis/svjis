@@ -17,6 +17,7 @@ import cz.svjis.bean.ArticleDAO;
 import cz.svjis.bean.LogDAO;
 import cz.svjis.bean.Menu;
 import cz.svjis.bean.MenuDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -34,6 +35,11 @@ public class ArticleDetailCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.MENU_ARTICLES)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
         
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
         Validator.getString(getRequest(), "search", 0, 50, true, false);

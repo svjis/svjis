@@ -14,6 +14,7 @@ package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.Article;
 import cz.svjis.bean.ArticleDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.validator.Validator;
 
@@ -30,12 +31,21 @@ public class ArticleFastCmd extends FaultAbstractCmd {
     @Override
     public void execute() throws Exception {
         
+        if (!getUser().hasPermission(Permission.MENU_ARTICLES)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
+        
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
         boolean parWatch = Validator.getBoolean(getRequest(), "watch");
 
         ArticleDAO articleDao = new ArticleDAO(getCnn());
 
         Article a = articleDao.getArticle(getUser(), parId);
+        if (a == null) {
+            new Error404NotFoundCmd(getCtx()).execute();
+            return;
+        }
         
         if ((getRequest().getParameter("watch") != null) && (a != null)) {
             if (parWatch) {
