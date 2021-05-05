@@ -14,6 +14,7 @@ package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.Language;
 import cz.svjis.bean.LanguageDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
 import cz.svjis.servlet.CmdContext;
@@ -33,6 +34,12 @@ public class PersonalUserDetailCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.MENU_PERSONAL_SETTINGS)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
+        
         LanguageDAO languageDao = new LanguageDAO(getCnn());
         UserDAO userDao = new UserDAO(getCnn());
         
