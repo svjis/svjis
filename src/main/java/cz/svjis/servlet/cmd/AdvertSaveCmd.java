@@ -12,8 +12,6 @@
 
 package cz.svjis.servlet.cmd;
 
-import javax.servlet.RequestDispatcher;
-
 import cz.svjis.bean.Advert;
 import cz.svjis.bean.AdvertDAO;
 import cz.svjis.bean.Permission;
@@ -31,6 +29,11 @@ public class AdvertSaveCmd extends Command {
     @Override
     public void execute() throws Exception {
         
+        if (!getUser().hasPermission(Permission.CAN_INSERT_ADVERT)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
+        
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
         String parHeader = Validator.getString(getRequest(), "header", 0, 50, false, false);
         String parBody = Validator.getString(getRequest(), "body", 0, Validator.MAX_STRING_LEN_ALLOWED, false, getUser().hasPermission(Permission.CAN_WRITE_HTML));
@@ -41,13 +44,6 @@ public class AdvertSaveCmd extends Command {
         
         AdvertDAO advertDao = new AdvertDAO(getCnn());
         
-        if (!getUser().hasPermission(Permission.CAN_INSERT_ADVERT)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/404_NotFound.jsp");
-            getResponse().setStatus(404);
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
-        
         Advert a = null;
             
         if (parId == 0) {
@@ -56,6 +52,10 @@ public class AdvertSaveCmd extends Command {
             a.getUser().setId(getUser().getId());
         } else {
             a = advertDao.getAdvert(getCompany().getId(), parId);
+            if (a == null) {
+                new Error404NotFoundCmd(getCtx()).execute();
+                return;
+            }
         }
         
         a.setHeader(parHeader);
@@ -71,9 +71,7 @@ public class AdvertSaveCmd extends Command {
             if (getUser().getId() == a.getUser().getId()) {
                 advertDao.modifyAdvert(a);
             } else {
-                RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/404_NotFound.jsp");
-                getResponse().setStatus(404);
-                rd.forward(getRequest(), getResponse());
+                new Error401UnauthorizedCmd(getCtx()).execute();
                 return;
             }
         }

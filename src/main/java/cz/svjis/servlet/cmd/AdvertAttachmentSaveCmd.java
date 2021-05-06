@@ -38,6 +38,11 @@ public class AdvertAttachmentSaveCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.CAN_INSERT_ADVERT)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
 
         int parAdvertId = Validator.getInt(getRequest(), "advertId", 0, Validator.MAX_INT_ALLOWED, false);
 
@@ -62,7 +67,15 @@ public class AdvertAttachmentSaveCmd extends Command {
                 fa.setUploadTime(new Date());
                 
                 Advert ad = advertDao.getAdvert(getCompany().getId(), fa.getDocumentId());
-                if ((ad != null) && !fa.getFileName().equals("") && getUser().hasPermission(Permission.CAN_INSERT_ADVERT) && (getUser().getId() == ad.getUser().getId())) {
+                if (ad == null) {
+                    new Error404NotFoundCmd(getCtx()).execute();
+                    return;
+                }
+                if (getUser().getId() != ad.getUser().getId()) {
+                    new Error401UnauthorizedCmd(getCtx()).execute();
+                    return;
+                }
+                if (!fa.getFileName().equals("")) {
                     advertDao.insertAttachment(fa);
                 }
             }

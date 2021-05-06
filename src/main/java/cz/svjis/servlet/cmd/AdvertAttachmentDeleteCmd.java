@@ -29,21 +29,37 @@ public class AdvertAttachmentDeleteCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.CAN_INSERT_ADVERT)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
 
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
 
         AdvertDAO advertDao = new AdvertDAO(getCnn());
 
         int id = parId;
+        
         Attachment at = advertDao.getAttachment(id);
         if (at == null) {
             new Error404NotFoundCmd(getCtx()).execute();
             return;
         }
+        
         Advert a = advertDao.getAdvert(getCompany().getId(), at.getDocumentId());
-        if ((a != null) && getUser().hasPermission(Permission.CAN_INSERT_ADVERT) && (at.getUser().getId() == getUser().getId()) ) {
-            advertDao.deleteAttachment(id);
+        if (a == null) {
+            new Error404NotFoundCmd(getCtx()).execute();
+            return;
         }
+        
+        if (at.getUser().getId() != getUser().getId()) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
+        
+        advertDao.deleteAttachment(id);
+        
         String url = String.format("Dispatcher?page=%s&id=%d", CmdFactory.ADVERT_EDIT, at.getDocumentId());
         getResponse().sendRedirect(url);
     }
