@@ -159,7 +159,7 @@ public class InquiryDAO extends DAO {
     }
     
     public Inquiry getInquiry(User user, int id) throws SQLException {
-        Inquiry result = new Inquiry();
+        Inquiry result = null;
         String select = "SELECT "
                 + "a.ID, "
                 + "a.COMPANY_ID, "
@@ -182,6 +182,7 @@ public class InquiryDAO extends DAO {
             ps.setInt(2, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
+                    result = new Inquiry();
                     result.setId(rs.getInt("ID"));
                     result.setCompanyId(rs.getInt("COMPANY_ID"));
                     User p = new User();
@@ -199,8 +200,12 @@ public class InquiryDAO extends DAO {
                 }
             }
         }
-        result.setOptionList(getInquiryOptionList(result.getId()));
-        result.setUserCanVote(canUserVoteInquiry(user, result.getId()));
+        
+        if (result != null) {
+            result.setOptionList(getInquiryOptionList(result.getId()));
+            result.setUserCanVote(canUserVoteInquiry(user, result.getId()));
+        }
+        
         return result;
     }
     

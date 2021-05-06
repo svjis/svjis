@@ -34,18 +34,16 @@ public class AdvertListCmd extends Command {
     @Override
     public void execute() throws Exception {
         
+        if (!getUser().hasPermission(Permission.MENU_ADVERTS)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
+        
         String parPage = Validator.getString(getRequest(), "page", 0, Validator.MAX_STRING_LEN_ALLOWED, false, false);
         int parTypeId = Validator.getInt(getRequest(), "typeId", 0, Validator.MAX_INT_ALLOWED, true);
         int parPageNo = Validator.getInt(getRequest(), "pageNo", 0, Validator.MAX_INT_ALLOWED, true);
         
         AdvertDAO advertDao = new AdvertDAO(getCnn());
-        
-        if (!getUser().hasPermission(Permission.MENU_ADVERTS)) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/404_NotFound.jsp");
-            getResponse().setStatus(404);
-            rd.forward(getRequest(), getResponse());
-            return;
-        }
         
         if (parTypeId == 0) {
             parTypeId = getSetup().getAdvertMenuDefault();

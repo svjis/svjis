@@ -23,7 +23,6 @@ import cz.svjis.validator.Validator;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
-import javax.servlet.RequestDispatcher;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -49,8 +48,7 @@ public class RedactionArticleAttachmentSaveCmd extends Command {
         
         Article a = articleDao.getArticle(getUser(), parArticleId);
         if ((a == null) || ((a.getAuthor().getId() != getUser().getId()) && !getUser().hasPermission(Permission.REDACTION_ARTICLES_ALL))) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
+            new Error404NotFoundCmd(getCtx()).execute();
             return;
         }
         

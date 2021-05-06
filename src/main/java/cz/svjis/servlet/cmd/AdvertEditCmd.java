@@ -19,6 +19,7 @@ import javax.servlet.RequestDispatcher;
 import cz.svjis.bean.Advert;
 import cz.svjis.bean.AdvertDAO;
 import cz.svjis.bean.AdvertType;
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -31,6 +32,11 @@ public class AdvertEditCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.CAN_INSERT_ADVERT)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
 
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
         
@@ -51,10 +57,12 @@ public class AdvertEditCmd extends Command {
         Advert advert = new Advert();
         if (parId != 0) {
             advert = advertDao.getAdvert(getCompany().getId(), parId);
+            if (advert == null) {
+                new Error404NotFoundCmd(getCtx()).execute();
+                return;
+            }
             if (getUser().getId() != advert.getUser().getId()) {
-                RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/404_NotFound.jsp");
-                getResponse().setStatus(404);
-                rd.forward(getRequest(), getResponse());
+                new Error401UnauthorizedCmd(getCtx()).execute();
                 return;
             }
         } else {

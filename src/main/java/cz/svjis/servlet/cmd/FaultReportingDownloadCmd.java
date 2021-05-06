@@ -14,10 +14,10 @@ package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.Attachment;
 import cz.svjis.bean.FaultReportDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.common.JspSnippets;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
-import cz.svjis.validator.InputValidationException;
 import cz.svjis.validator.Validator;
 
 /**
@@ -33,12 +33,18 @@ public class FaultReportingDownloadCmd extends Command {
     @Override
     public void execute() throws Exception {
         
+        if (!getUser().hasPermission(Permission.MENU_FAULT_REPORTING)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
+        
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
 
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
         Attachment fa = faultDao.getFaultReportAttachment(parId);
         if ((fa == null) || (faultDao.getFault(getCompany().getId(), fa.getDocumentId()) == null)) {
-            throw new InputValidationException("Bad attachment id");
+            new Error404NotFoundCmd(getCtx()).execute();
+            return;
         }
         JspSnippets.writeBinaryData(fa.getContentType(), fa.getFileName(), fa.getData(), getRequest(), getResponse());
     }

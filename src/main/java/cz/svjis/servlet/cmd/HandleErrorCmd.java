@@ -19,7 +19,6 @@ import cz.svjis.servlet.Command;
 import cz.svjis.validator.InputValidationException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -64,15 +63,12 @@ public class HandleErrorCmd extends Command {
                         throwable);
             }
 
-            RequestDispatcher rd;
             if (this.throwable instanceof InputValidationException) {
-                getRequest().setAttribute("message", this.throwable.getMessage());
-                rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/InputValidationError.jsp");
+                new Error400BadRequestCmd(getCtx(), this.throwable.getMessage()).execute();
             } else {
-                rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Error.jsp");
+                new Error500InternalServerErrorCmd(getCtx()).execute();
             }
-
-            rd.forward(getRequest(), getResponse());
+            
         } catch (Exception ex) {
             logger.log(Level.SEVERE, "Could not run HandleErrorCmd", throwable);
         }

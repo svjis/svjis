@@ -15,6 +15,7 @@ package cz.svjis.servlet.cmd;
 import cz.svjis.bean.Inquiry;
 import cz.svjis.bean.InquiryDAO;
 import cz.svjis.bean.InquiryOption;
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -33,13 +34,23 @@ public class ArticleInquiryVoteCmd extends Command {
     @Override
     public void execute() throws Exception {
         
+        if (!getUser().hasPermission(Permission.CAN_VOTE_INQUIRY)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
+        
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
 
         InquiryDAO inquiryDao = new InquiryDAO(getCnn());
 
         int id = parId;
         Inquiry i = inquiryDao.getInquiry(getUser(), id);
-        if ((i != null) && (i.isUserCanVote()) && (i.isOpenForVoting()) && (getRequest().getParameter("i_" + i.getId()) != null)) {
+        if (i == null) {
+            new Error404NotFoundCmd(getCtx()).execute();
+            return;
+        }
+        
+        if ((i.isUserCanVote()) && (i.isOpenForVoting()) && (getRequest().getParameter("i_" + i.getId()) != null)) {
             String value = getRequest().getParameter("i_" + i.getId());
             Iterator<InquiryOption> ioI = i.getOptionList().iterator();
             while (ioI.hasNext()) {

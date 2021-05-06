@@ -39,7 +39,17 @@ public class FaultReportingEditCmd extends Command {
     @Override
     public void execute() throws Exception {
         
+        if (!getUser().hasPermission(Permission.MENU_FAULT_REPORTING)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
+        
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
+        
+        if ((parId != 0) && !getUser().hasPermission(Permission.FAULT_REPORTING_RESOLVER)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
         
         BuildingDAO buildingDao = new BuildingDAO(getCnn());
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
@@ -47,8 +57,12 @@ public class FaultReportingEditCmd extends Command {
         
         FaultReport report = new FaultReport();
         int id = parId;
-        if ((id != 0) && getUser().hasPermission(Permission.FAULT_REPORTING_RESOLVER)) {
+        if (id != 0) {
             report = faultDao.getFault(getCompany().getId(), id);
+            if (report == null) {
+                new Error404NotFoundCmd(getCtx()).execute();
+                return;
+            }
         }
         getRequest().setAttribute("report", report);
         

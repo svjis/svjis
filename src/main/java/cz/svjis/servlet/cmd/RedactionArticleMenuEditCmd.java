@@ -15,6 +15,7 @@ package cz.svjis.servlet.cmd;
 import cz.svjis.bean.Menu;
 import cz.svjis.bean.MenuDAO;
 import cz.svjis.bean.MenuNode;
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -32,6 +33,11 @@ public class RedactionArticleMenuEditCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.REDACTION_MENU)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
 
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
 
@@ -40,6 +46,10 @@ public class RedactionArticleMenuEditCmd extends Command {
         MenuNode menuNode = new MenuNode();
         if (parId != 0) {
             menuNode = menuDao.getMenuNode(parId, getUser().getCompanyId());
+            if (menuNode == null) {
+                new Error404NotFoundCmd(getCtx()).execute();
+                return;
+            }
         }
         getRequest().setAttribute("menuNode", menuNode);
         

@@ -12,6 +12,7 @@
 
 package cz.svjis.servlet.cmd;
 
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import javax.servlet.RequestDispatcher;
@@ -28,6 +29,12 @@ public class PersonalPasswordChangeCmd extends Command {
     
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.MENU_PERSONAL_SETTINGS)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
+        
         getRequest().setAttribute("message", "");
         getRequest().setAttribute("errorMessage", "");
         RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/PersonalSettings_passwordChange.jsp");

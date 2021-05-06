@@ -12,6 +12,7 @@
 
 package cz.svjis.servlet.cmd;
 
+import cz.svjis.bean.Permission;
 import cz.svjis.common.JspSnippets;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
@@ -28,6 +29,12 @@ public class BuildingPictureCmd extends Command {
     
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.MENU_ADMINISTRATION)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
+        
         JspSnippets.writeBinaryData(
                 getCompany().getPictureContentType(), 
                 getCompany().getPictureFilename(), 

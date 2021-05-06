@@ -14,6 +14,7 @@ package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.BuildingDAO;
 import cz.svjis.bean.BuildingUnit;
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import java.util.ArrayList;
@@ -31,6 +32,12 @@ public class MyBuildingUnitsCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.MENU_BUILDING_UNITS)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
+        
         BuildingDAO buildingDao = new BuildingDAO(getCnn());
         
         ArrayList<BuildingUnit> userHasUnitList = new ArrayList<>(buildingDao.getUserHasBuildingUnitList(getUser().getId()));

@@ -14,6 +14,7 @@ package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.MenuDAO;
 import cz.svjis.bean.MenuNode;
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -31,23 +32,32 @@ public class RedactionArticleMenuDeleteCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.REDACTION_MENU)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
 
         int parMenuId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
 
         MenuDAO menuDao = new MenuDAO(getCnn());
         
         MenuNode n = menuDao.getMenuNode(parMenuId, getCompany().getId());
-        if (n != null) {
-            if (n.getNumOfChilds() != 0) {
-                String message = "Cannot delete menu which has child nodes.";
-                getRequest().setAttribute("messageHeader", "Error");
-                getRequest().setAttribute("message", message);
-                RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_message.jsp");
-                rd.forward(getRequest(), getResponse());
-                return;
-            }
-            menuDao.deleteMenuNode(n, getUser().getCompanyId());
+        if (n == null) {
+            new Error404NotFoundCmd(getCtx()).execute();
+            return;
         }
+        
+        if (n.getNumOfChilds() != 0) {
+            String message = "Cannot delete menu which has child nodes.";
+            getRequest().setAttribute("messageHeader", "Error");
+            getRequest().setAttribute("message", message);
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_message.jsp");
+            rd.forward(getRequest(), getResponse());
+            return;
+        }
+        menuDao.deleteMenuNode(n, getUser().getCompanyId());
+
         String url = "Dispatcher?page=redactionArticleMenu";
         getResponse().sendRedirect(url);
     }

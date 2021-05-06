@@ -16,6 +16,7 @@ import cz.svjis.bean.Language;
 import cz.svjis.bean.LanguageDAO;
 import cz.svjis.bean.MiniNews;
 import cz.svjis.bean.MiniNewsDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -34,6 +35,11 @@ public class RedactionNewsEditCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.REDACTION_MINI_NEWS)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
 
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
 
@@ -43,6 +49,10 @@ public class RedactionNewsEditCmd extends Command {
         MiniNews miniNews = new MiniNews();
         if (parId != 0) {
             miniNews = newsDao.getMiniNews(getUser(), parId);
+            if (miniNews == null) {
+                new Error404NotFoundCmd(getCtx()).execute();
+                return;
+            }
         }
         getRequest().setAttribute("miniNews", miniNews);
         ArrayList<Language> languageList = new ArrayList<>(languageDao.getLanguageList());

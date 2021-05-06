@@ -16,6 +16,7 @@ import cz.svjis.bean.BoardMember;
 import cz.svjis.bean.BoardMemberDAO;
 import cz.svjis.bean.Company;
 import cz.svjis.bean.CompanyDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import java.util.ArrayList;
@@ -33,6 +34,11 @@ public class BoardListCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.MENU_ADMINISTRATION)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
 
         CompanyDAO compDao = new CompanyDAO(getCnn());
         BoardMemberDAO boardDao = new BoardMemberDAO(getCnn());

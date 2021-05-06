@@ -16,6 +16,7 @@ import cz.svjis.bean.BuildingDAO;
 import cz.svjis.bean.BuildingUnit;
 import cz.svjis.bean.Company;
 import cz.svjis.bean.CompanyDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.bean.User;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
@@ -36,6 +37,11 @@ public class BuildingUnitOwnerCmd extends Command {
     @Override
     public void execute() throws Exception {
         
+        if (!getUser().hasPermission(Permission.MENU_ADMINISTRATION)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
+        
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
 
         CompanyDAO compDao = new CompanyDAO(getCnn());
@@ -43,10 +49,17 @@ public class BuildingUnitOwnerCmd extends Command {
 
         Company currCompany = compDao.getCompany(getCompany().getId());
         getRequest().setAttribute("currCompany", currCompany);
+        
         BuildingUnit buildingUnit = buildingDao.getBuildingUnit(parId, buildingDao.getBuilding(getCompany().getId()).getId());
+        if (buildingUnit == null) {
+            new Error404NotFoundCmd(getCtx()).execute();
+            return;
+        }
         getRequest().setAttribute("buildingUnit", buildingUnit);
+        
         ArrayList<User> userList = new ArrayList<>(buildingDao.getBuildingUnitHasUserList(parId));
         getRequest().setAttribute("userList", userList);
+        
         RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Administration_buildingUnitOwner.jsp");
         rd.forward(getRequest(), getResponse());
     }

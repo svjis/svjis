@@ -62,7 +62,7 @@ public class MenuDAO extends DAO {
     }
     
     public MenuNode getMenuNode(int id, int companyId) throws SQLException {
-        MenuNode result = new MenuNode();
+        MenuNode result = null;
         String select = "SELECT "
                 + "a.ID, "
                 + "a.COMPANY_ID, "
@@ -78,6 +78,7 @@ public class MenuDAO extends DAO {
             ps.setInt(2, companyId);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
+                    result = new MenuNode();
                     result.setId(rs.getInt("ID"));
                     result.setDescription(rs.getString("DESCRIPTION"));
                     result.setParentId(rs.getInt("PARENT_ID"));

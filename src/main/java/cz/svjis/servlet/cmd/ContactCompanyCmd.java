@@ -14,6 +14,7 @@ package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.BoardMember;
 import cz.svjis.bean.BoardMemberDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import java.util.ArrayList;
@@ -31,6 +32,11 @@ public class ContactCompanyCmd extends Command {
     
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.MENU_CONTACT)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
         
         BoardMemberDAO boardDao = new BoardMemberDAO(getCnn());
         

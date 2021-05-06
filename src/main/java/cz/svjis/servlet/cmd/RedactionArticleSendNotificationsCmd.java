@@ -36,25 +36,28 @@ public class RedactionArticleSendNotificationsCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.REDACTION_ARTICLES) && !getUser().hasPermission(Permission.REDACTION_ARTICLES_ALL)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
 
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
 
         ArticleDAO articleDao = new ArticleDAO(getCnn());
         MenuDAO menuDao = new MenuDAO(getCnn());
         
-        Article article;
-        
-        if (parId == 0) {
-            article = new Article();
-        } else {
-            article = articleDao.getArticle(getUser(), parId);
-            if ((article.getAuthor().getId() != getUser().getId()) && !getUser().hasPermission(Permission.REDACTION_ARTICLES_ALL)) {
-                Menu menu = menuDao.getMenu(getCompany().getId());
-                getRequest().setAttribute("menu", menu);
-                RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/ArticleNotFound.jsp");
-                rd.forward(getRequest(), getResponse());
-                return;
-            }
+        Article article = articleDao.getArticle(getUser(), parId);
+        if (article == null) {
+            new Error404NotFoundCmd(getCtx()).execute();
+            return;
+        }
+        if ((article.getAuthor().getId() != getUser().getId()) && !getUser().hasPermission(Permission.REDACTION_ARTICLES_ALL)) {
+            Menu menu = menuDao.getMenu(getCompany().getId());
+            getRequest().setAttribute("menu", menu);
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/ArticleNotFound.jsp");
+            rd.forward(getRequest(), getResponse());
+            return;
         }
         
         getRequest().setAttribute("article", article);

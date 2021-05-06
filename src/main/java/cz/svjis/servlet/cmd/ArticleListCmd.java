@@ -21,6 +21,7 @@ import cz.svjis.bean.Menu;
 import cz.svjis.bean.MenuDAO;
 import cz.svjis.bean.MiniNews;
 import cz.svjis.bean.MiniNewsDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.bean.SliderImpl;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
@@ -40,6 +41,11 @@ public class ArticleListCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.MENU_ARTICLES)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
         
         String parPage = Validator.getString(getRequest(), "page", 0, Validator.MAX_STRING_LEN_ALLOWED, true, false);
         int parSection = Validator.getInt(getRequest(), "section", 0, Validator.MAX_INT_ALLOWED, true);

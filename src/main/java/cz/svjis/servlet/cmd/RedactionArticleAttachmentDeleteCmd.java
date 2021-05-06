@@ -20,7 +20,6 @@ import cz.svjis.bean.Permission;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
-import javax.servlet.RequestDispatcher;
 
 /**
  *
@@ -42,14 +41,12 @@ public class RedactionArticleAttachmentDeleteCmd extends Command {
 
         Attachment aa = articleDao.getArticleAttachment(parId);
         if (aa == null) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
+            new Error404NotFoundCmd(getCtx()).execute();
             return;
         }
         Article a = articleDao.getArticle(getUser(), aa.getDocumentId());
         if ((a == null) || ((a.getAuthor().getId() != getUser().getId()) && !getUser().hasPermission(Permission.REDACTION_ARTICLES_ALL))) {
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/InputValidationError.jsp");
-            rd.forward(getRequest(), getResponse());
+            new Error404NotFoundCmd(getCtx()).execute();
             return;
         }
         articleDao.deleteArticleAttachment(parId);

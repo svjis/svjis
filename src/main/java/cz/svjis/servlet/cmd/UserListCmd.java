@@ -14,6 +14,7 @@ package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.Company;
 import cz.svjis.bean.CompanyDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.bean.Role;
 import cz.svjis.bean.RoleDAO;
 import cz.svjis.bean.User;
@@ -36,6 +37,11 @@ public class UserListCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.MENU_ADMINISTRATION)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
 
         int parRoleId = Validator.getInt(getRequest(), "roleId", 0, Validator.MAX_INT_ALLOWED, true);
         boolean parDisabledUsers = Validator.getBoolean(getRequest(), "disabledUsers");
@@ -45,12 +51,16 @@ public class UserListCmd extends Command {
         UserDAO userDao = new UserDAO(getCnn());
 
         getRequest().setAttribute("disabledUsers", new cz.svjis.bean.Boolean(parDisabledUsers));
+        
         Company currCompany = compDao.getCompany(getCompany().getId());
         getRequest().setAttribute("currCompany", currCompany);
+        
         ArrayList<Role> roleList = new ArrayList<>(roleDao.getRoleList(getCompany().getId()));
         getRequest().setAttribute("roleList", roleList);
+        
         ArrayList<User> userList = new ArrayList<>(userDao.getUserList(getCompany().getId(), false, parRoleId, !parDisabledUsers));
         getRequest().setAttribute("userList", userList);
+        
         RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Administration_userList.jsp");
         rd.forward(getRequest(), getResponse());
     }

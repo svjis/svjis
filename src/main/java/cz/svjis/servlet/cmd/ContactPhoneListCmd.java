@@ -12,6 +12,7 @@
 
 package cz.svjis.servlet.cmd;
 
+import cz.svjis.bean.Permission;
 import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
 import cz.svjis.servlet.CmdContext;
@@ -31,6 +32,12 @@ public class ContactPhoneListCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.MENU_PHONE_LIST)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
+        
         UserDAO userDao = new UserDAO(getCnn());
         
         ArrayList<User> userList = new ArrayList<>(userDao.getUserList(getCompany().getId(), true, 0, true));

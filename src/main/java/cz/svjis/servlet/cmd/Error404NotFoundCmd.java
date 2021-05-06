@@ -1,5 +1,5 @@
 /*
- *       BadPageCmd.java
+ *       Error404NotFoundCmd.java
  *
  *       This file is part of SVJIS project.
  *       https://github.com/svjis/svjis
@@ -12,23 +12,22 @@
 
 package cz.svjis.servlet.cmd;
 
-import cz.svjis.servlet.CmdContext;
-import cz.svjis.servlet.Command;
 import javax.servlet.RequestDispatcher;
 
-/**
- *
- * @author jaroslav_b
- */
-public class BadPageCmd extends Command {
+import cz.svjis.servlet.CmdContext;
+import cz.svjis.servlet.Command;
+
+public class Error404NotFoundCmd extends Command {
     
-    public BadPageCmd(CmdContext ctx) {
+    public Error404NotFoundCmd(CmdContext ctx) {
         super(ctx);
     }
-    
+
     @Override
     public void execute() throws Exception {
-        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/BadPage.jsp");
+        getResponse().setStatus(404);
+        RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/404_NotFound.jsp");
         rd.forward(getRequest(), getResponse());
     }
+
 }

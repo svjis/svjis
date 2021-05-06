@@ -35,6 +35,11 @@ public class RoleEditCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.MENU_ADMINISTRATION)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
 
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
 
@@ -49,6 +54,10 @@ public class RoleEditCmd extends Command {
             role.setCompanyId(getCompany().getId());
         } else {
             role = roleDao.getRole(getCompany().getId(), parId);
+            if (role == null) {
+                new Error404NotFoundCmd(getCtx()).execute();
+                return;
+            }
         }
         getRequest().setAttribute("role", role);
         ArrayList<Permission> permissionList = new ArrayList<>(roleDao.getPermissionList());

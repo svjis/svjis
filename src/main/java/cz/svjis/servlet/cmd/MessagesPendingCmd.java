@@ -16,6 +16,7 @@ import cz.svjis.bean.Company;
 import cz.svjis.bean.CompanyDAO;
 import cz.svjis.bean.MailDAO;
 import cz.svjis.bean.Message;
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import java.util.ArrayList;
@@ -33,6 +34,12 @@ public class MessagesPendingCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.MENU_ADMINISTRATION)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
+        
         CompanyDAO compDao = new CompanyDAO(getCnn());
 
         Company currCompany = compDao.getCompany(getCompany().getId());

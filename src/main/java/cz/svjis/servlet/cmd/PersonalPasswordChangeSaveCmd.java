@@ -12,6 +12,7 @@
 
 package cz.svjis.servlet.cmd;
 
+import cz.svjis.bean.Permission;
 import cz.svjis.bean.UserDAO;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
@@ -30,6 +31,11 @@ public class PersonalPasswordChangeSaveCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.MENU_PERSONAL_SETTINGS)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
 
         String oldPass = Validator.getString(getRequest(), "oldPassword", 0, 30, false, true);
         String newPass1 = Validator.getString(getRequest(), "newPassword", 0, 30, false, true);

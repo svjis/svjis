@@ -37,6 +37,11 @@ public class RedactionNewsEditSaveCmd extends Command {
     @Override
     public void execute() throws Exception {
         
+        if (!getUser().hasPermission(Permission.REDACTION_MINI_NEWS)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
+        
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
         String parTime = Validator.getString(getRequest(), "time", 0, 30, false, false);
         int parLangId = Validator.getInt(getRequest(), "language", 0, Validator.MAX_INT_ALLOWED, false);
@@ -55,6 +60,10 @@ public class RedactionNewsEditSaveCmd extends Command {
             n.setCompanyId(getUser().getCompanyId());
         } else {
             n = newsDao.getMiniNews(getUser(), parId);
+            if (n == null) {
+                new Error404NotFoundCmd(getCtx()).execute();
+                return;
+            }
         }
         n.setTime(sdf.parse(parTime));
         n.setLanguageId(parLangId);

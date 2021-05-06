@@ -91,7 +91,7 @@ public class BoardMemberDAO extends DAO {
     
     
     public BoardMember getBoardMember(int companyId, int userId, int typeId) throws SQLException {
-        BoardMember result = new BoardMember();
+        BoardMember result = null;
         String select = "SELECT a.USER_ID,\n" +
                 "       c.FIRST_NAME,\n" +
                 "       c.LAST_NAME,\n" +

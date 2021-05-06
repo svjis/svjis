@@ -1,6 +1,6 @@
 <%-- 
-    Document   : 404_NotFound
-    Created on : 5.12.2012, 23:44:08
+    Document   : 500_InternalServerError
+    Created on : 3.5.2021, 23:53:08
     Author     : berk
 --%>
 
@@ -12,8 +12,11 @@
         <!-- Content -->
         <div id="content-width">
             <div id="content-width-in">
-                <h1>404 Not Found</h1>
-                <p>Prosím pokračujte <a href="Dispatcher">zde</a>.</p>
+                <h1>500 Internal Server Error</h1>
+                <p><strong>Litujeme ale v aplikaci nastala chyba.</strong></p>
+        
+		        <p>Report o chybě byl odeslán správci webu.<br>
+		        Prosím pokračujte <a href="Dispatcher">zde</a>.</p>
             <hr class="noscreen" />
             </div>
         </div> <!-- /content -->

@@ -15,6 +15,7 @@ package cz.svjis.servlet.cmd;
 import cz.svjis.bean.Building;
 import cz.svjis.bean.BuildingDAO;
 import cz.svjis.bean.BuildingUnit;
+import cz.svjis.bean.Permission;
 import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
 import cz.svjis.servlet.CmdContext;
@@ -34,6 +35,11 @@ public class UserBuildingUnitAddCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.MENU_ADMINISTRATION)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
 
         int parUnitId = Validator.getInt(getRequest(), "unitId", 0, Validator.MAX_INT_ALLOWED, false);
         int parUserId = Validator.getInt(getRequest(), "userId", 0, Validator.MAX_INT_ALLOWED, false);
@@ -42,10 +48,24 @@ public class UserBuildingUnitAddCmd extends Command {
         UserDAO userDao = new UserDAO(getCnn());
 
         Building b = buildingDao.getBuilding(getCompany().getId());
+        if (b == null) {
+            new Error404NotFoundCmd(getCtx()).execute();
+            return;
+        }
+        
         BuildingUnit unit = buildingDao.getBuildingUnit(parUnitId, buildingDao.getBuilding(getCompany().getId()).getId());
+        if (unit == null) {
+            new Error404NotFoundCmd(getCtx()).execute();
+            return;
+        }
+        
         User u = userDao.getUser(getCompany().getId(), parUserId);
+        if (u == null) {
+            new Error404NotFoundCmd(getCtx()).execute();
+            return;
+        }
 
-        if ((unit != null) && (unit.getBuildingId() == b.getId()) && u != null) {
+        if (unit.getBuildingId() == b.getId()) {
             boolean alreadyHas = false;
             ArrayList<User> usrList = new ArrayList<>(buildingDao.getBuildingUnitHasUserList(parUnitId));
             for (User usr: usrList) {

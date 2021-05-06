@@ -28,8 +28,20 @@
         <welcome-file>Dispatcher</welcome-file>
     </welcome-file-list>
     <error-page>
+        <error-code>400</error-code>
+        <location>/400_BadRequest.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>401</error-code>
+        <location>/401_Unauthorized.jsp</location>
+    </error-page>
+    <error-page>
         <error-code>404</error-code>
-        <location>/BadPage.jsp</location>
+        <location>/404_NotFound.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/500_InternalServerError.jsp</location>
     </error-page>
     
     <!-- HTTPS only -->

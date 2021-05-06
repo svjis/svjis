@@ -1,5 +1,5 @@
 <%-- 
-    Document   : 404_NotFound
+    Document   : 401_Unauthorized
     Created on : 5.12.2012, 23:44:08
     Author     : berk
 --%>
@@ -12,7 +12,7 @@
         <!-- Content -->
         <div id="content-width">
             <div id="content-width-in">
-                <h1>404 Not Found</h1>
+                <h1>401 Unauthorized</h1>
                 <p>Prosím pokračujte <a href="Dispatcher">zde</a>.</p>
             <hr class="noscreen" />
             </div>
