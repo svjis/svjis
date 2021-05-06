@@ -14,6 +14,7 @@ package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.BuildingDAO;
 import cz.svjis.bean.BuildingEntrance;
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -31,6 +32,11 @@ public class BuildingEntranceDeleteCmd extends Command {
     
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.MENU_ADMINISTRATION)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
         
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
         

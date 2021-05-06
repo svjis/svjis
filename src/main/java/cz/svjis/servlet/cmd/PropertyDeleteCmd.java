@@ -13,6 +13,7 @@
 package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.ApplicationSetupDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -29,6 +30,11 @@ public class PropertyDeleteCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.MENU_ADMINISTRATION)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
 
         String parKey = Validator.getString(getRequest(), "key", 0, 50, false, false);
 
@@ -36,6 +42,7 @@ public class PropertyDeleteCmd extends Command {
         
         setupDao.deleteProperty(getCompany().getId(), parKey);
         getRequest().getSession().setAttribute("setup", null);
+        
         String url = "Dispatcher?page=propertyList";
         getResponse().sendRedirect(url);
     }

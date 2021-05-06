@@ -14,6 +14,7 @@ package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.BuildingDAO;
 import cz.svjis.bean.BuildingUnit;
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -30,6 +31,11 @@ public class BuildingUnitSaveCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.MENU_ADMINISTRATION)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
 
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
         int parBuildingUnitTypeId = Validator.getInt(getRequest(), "typeId", 0, Validator.MAX_INT_ALLOWED, false);
@@ -51,6 +57,12 @@ public class BuildingUnitSaveCmd extends Command {
         if (u.getId() == 0) {
             u.setId(buildingDao.insertBuildingUnit(u));
         } else {
+            BuildingUnit buildingUnit = buildingDao.getBuildingUnit(parId, buildingDao.getBuilding(getCompany().getId()).getId());
+            if (buildingUnit == null) {
+                new Error404NotFoundCmd(getCtx()).execute();
+                return;
+            }
+            
             buildingDao.modifyBuildingUnit(u);
         }
         String url = "Dispatcher?page=buildingUnitList";

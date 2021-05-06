@@ -16,6 +16,7 @@ import cz.svjis.bean.BuildingDAO;
 import cz.svjis.bean.BuildingEntrance;
 import cz.svjis.bean.Company;
 import cz.svjis.bean.CompanyDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -34,6 +35,11 @@ public class BuildingEntranceEditCmd extends Command {
     @Override
     public void execute() throws Exception {
         
+        if (!getUser().hasPermission(Permission.MENU_ADMINISTRATION)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
+        
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
 
         CompanyDAO compDao = new CompanyDAO(getCnn());
@@ -48,8 +54,13 @@ public class BuildingEntranceEditCmd extends Command {
             buildingEntrance.setBuildingId(buildingDao.getBuilding(getCompany().getId()).getId());
         } else {
             buildingEntrance = buildingDao.getBuildingEntrance(id);
+            if (buildingEntrance == null) {
+                new Error404NotFoundCmd(getCtx()).execute();
+                return;
+            }
         }
         getRequest().setAttribute("buildingEntrance", buildingEntrance);
+        
         RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Administration_buildingEntranceDetail.jsp");
         rd.forward(getRequest(), getResponse());
     }

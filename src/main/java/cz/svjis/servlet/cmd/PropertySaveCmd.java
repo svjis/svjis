@@ -13,6 +13,7 @@
 package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.ApplicationSetupDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -29,15 +30,23 @@ public class PropertySaveCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.MENU_ADMINISTRATION)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
 
         String parOrigKey = Validator.getString(getRequest(), "origKey", 0, 50, false, false);
         String parKey = Validator.getString(getRequest(), "key", 0, 50, false, false);
         String parValue = Validator.getString(getRequest(), "value", 0, 1000, false, true);
 
         ApplicationSetupDAO setupDao = new ApplicationSetupDAO(getCnn());
+        
         setupDao.deleteProperty(getCompany().getId(), parOrigKey);
         setupDao.insertProperty(getCompany().getId(), parKey, parValue);
+        
         getRequest().getSession().setAttribute("setup", null);
+        
         String url = "Dispatcher?page=propertyList";
         getResponse().sendRedirect(url);
     }

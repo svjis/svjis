@@ -17,6 +17,7 @@ import cz.svjis.bean.BuildingUnit;
 import cz.svjis.bean.BuildingUnitType;
 import cz.svjis.bean.Company;
 import cz.svjis.bean.CompanyDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -36,6 +37,11 @@ public class BuildingUnitEditCmd extends Command {
     @Override
     public void execute() throws Exception {
         
+        if (!getUser().hasPermission(Permission.MENU_ADMINISTRATION)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
+        
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
 
         CompanyDAO compDao = new CompanyDAO(getCnn());
@@ -52,6 +58,10 @@ public class BuildingUnitEditCmd extends Command {
             buildingUnit.setBuildingId(buildingDao.getBuilding(getCompany().getId()).getId());
         } else {
             buildingUnit = buildingDao.getBuildingUnit(id, buildingDao.getBuilding(getCompany().getId()).getId());
+            if (buildingUnit == null) {
+                new Error404NotFoundCmd(getCtx()).execute();
+                return;
+            }
         }
         getRequest().setAttribute("buildingUnit", buildingUnit);
         RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Administration_buildingUnitDetail.jsp");

@@ -16,6 +16,7 @@ import cz.svjis.bean.Company;
 import cz.svjis.bean.CompanyDAO;
 import cz.svjis.bean.Language;
 import cz.svjis.bean.LanguageDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.bean.Role;
 import cz.svjis.bean.RoleDAO;
 import cz.svjis.bean.User;
@@ -38,6 +39,11 @@ public class UserEditCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.MENU_ADMINISTRATION)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
 
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
 
@@ -48,21 +54,30 @@ public class UserEditCmd extends Command {
 
         Company currCompany = compDao.getCompany(getCompany().getId());
         getRequest().setAttribute("currCompany", currCompany);
+        
         User cUser;
         if (parId == 0) {
             cUser = new User();
             cUser.setCompanyId(getCompany().getId());
         } else {
             cUser = userDao.getUser(getCompany().getId(), parId);
+            if (cUser == null) {
+                new Error404NotFoundCmd(getCtx()).execute();
+                return;
+            }
         }
         getRequest().setAttribute("cUser", cUser);
+        
         ArrayList<Language> languageList = new ArrayList<>(languageDao.getLanguageList());
         getRequest().setAttribute("languageList", languageList);
+        
         ArrayList<Role> roleList = new ArrayList<>(roleDao.getRoleList(getCompany().getId()));
         getRequest().setAttribute("roleList", roleList);
+        
         getRequest().setAttribute("sendCredentials", new cz.svjis.bean.Boolean(false));
         getRequest().setAttribute("message", "");
         getRequest().setAttribute("errorMessage", "");
+        
         RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Administration_userDetail.jsp");
         rd.forward(getRequest(), getResponse());
     }

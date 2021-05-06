@@ -17,6 +17,7 @@ import cz.svjis.bean.BuildingUnit;
 import cz.svjis.bean.BuildingUnitType;
 import cz.svjis.bean.Company;
 import cz.svjis.bean.CompanyDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -35,6 +36,11 @@ public class BuildingUnitListCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.MENU_ADMINISTRATION)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
 
         int parTypeId = Validator.getInt(getRequest(), "typeId", 0, Validator.MAX_INT_ALLOWED, true);
 

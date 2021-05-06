@@ -14,6 +14,7 @@ package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.Building;
 import cz.svjis.bean.BuildingDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -31,6 +32,11 @@ public class BuildingSaveCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.MENU_ADMINISTRATION)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
 
         String parAddress = Validator.getString(getRequest(), "address", 0, 50, false, false);
         String parCity = Validator.getString(getRequest(), "city", 0, 50, false, false);
@@ -40,6 +46,10 @@ public class BuildingSaveCmd extends Command {
         BuildingDAO buildingDao = new BuildingDAO(getCnn());
                 
         Building b = buildingDao.getBuilding(getCompany().getId());
+        if (b == null) {
+            new Error404NotFoundCmd(getCtx()).execute();
+            return;
+        }
         b.setAddress(parAddress);
         b.setCity(parCity);
         b.setPostCode(parPostCode);
@@ -48,6 +58,7 @@ public class BuildingSaveCmd extends Command {
         String message = getLanguage().getText("Saved") + "<br>";
         getRequest().setAttribute("message", message);
         getRequest().setAttribute("building", b);
+        
         RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Administration_buildingDetail.jsp");
         rd.forward(getRequest(), getResponse());
     }

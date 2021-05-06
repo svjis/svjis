@@ -14,6 +14,7 @@ package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.Company;
 import cz.svjis.bean.CompanyDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -31,6 +32,11 @@ public class CompanySaveCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.MENU_ADMINISTRATION)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
 
         String parName = Validator.getString(getRequest(), "name", 0, 50, false, false);
         String parAddress = Validator.getString(getRequest(), "address", 0, 50, false, false);

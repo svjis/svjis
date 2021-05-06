@@ -17,6 +17,7 @@ import cz.svjis.bean.BoardMemberDAO;
 import cz.svjis.bean.BoardMemberType;
 import cz.svjis.bean.Company;
 import cz.svjis.bean.CompanyDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
 import cz.svjis.servlet.CmdContext;
@@ -39,6 +40,11 @@ public class BoardEditCmd extends Command {
     @Override
     public void execute() throws Exception {
         
+        if (!getUser().hasPermission(Permission.MENU_ADMINISTRATION)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
+        
         int parTypeId = Validator.getInt(getRequest(), "typeId", 0, Validator.MAX_INT_ALLOWED, false);
         int parUserId = Validator.getInt(getRequest(), "userId", 0, Validator.MAX_INT_ALLOWED, false);
 
@@ -46,7 +52,14 @@ public class BoardEditCmd extends Command {
         UserDAO userDao = new UserDAO(getCnn());
         BoardMemberDAO boardDao = new BoardMemberDAO(getCnn());
 
-        BoardMember boardMember = boardDao.getBoardMember(getCompany().getId(), parUserId, parTypeId);
+        BoardMember boardMember = new BoardMember();  
+        if ((parTypeId != 0) && (parUserId != 0)) {
+            boardMember = boardDao.getBoardMember(getCompany().getId(), parUserId, parTypeId);
+            if (boardMember == null) {
+                new Error404NotFoundCmd(getCtx()).execute();
+                return;
+            }   
+        }
         getRequest().setAttribute("boardMember", boardMember);
         
         Company currCompany = compDao.getCompany(getCompany().getId());

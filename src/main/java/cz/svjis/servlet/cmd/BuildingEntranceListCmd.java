@@ -16,6 +16,7 @@ import cz.svjis.bean.BuildingDAO;
 import cz.svjis.bean.BuildingEntrance;
 import cz.svjis.bean.Company;
 import cz.svjis.bean.CompanyDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import java.util.ArrayList;
@@ -33,6 +34,11 @@ public class BuildingEntranceListCmd extends Command {
     
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.MENU_ADMINISTRATION)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
 
         CompanyDAO compDao = new CompanyDAO(getCnn());
         BuildingDAO buildingDao = new BuildingDAO(getCnn());
@@ -42,6 +48,7 @@ public class BuildingEntranceListCmd extends Command {
         ArrayList<BuildingEntrance> buildingEntranceList = new ArrayList<>(buildingDao.getBuildingEntranceList(
                 buildingDao.getBuilding(getCompany().getId()).getId()));
         getRequest().setAttribute("buildingEntranceList", buildingEntranceList);
+        
         RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Administration_buildingEntranceList.jsp");
         rd.forward(getRequest(), getResponse());
     }

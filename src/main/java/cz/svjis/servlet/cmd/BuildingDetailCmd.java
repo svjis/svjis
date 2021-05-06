@@ -16,6 +16,7 @@ import cz.svjis.bean.Building;
 import cz.svjis.bean.BuildingDAO;
 import cz.svjis.bean.Company;
 import cz.svjis.bean.CompanyDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import javax.servlet.RequestDispatcher;
@@ -32,13 +33,29 @@ public class BuildingDetailCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.MENU_ADMINISTRATION)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
+        
         CompanyDAO compDao = new CompanyDAO(getCnn());
         BuildingDAO buildingDao = new BuildingDAO(getCnn());
 
         Company currCompany = compDao.getCompany(getCompany().getId());
+        if (currCompany == null) {
+            new Error404NotFoundCmd(getCtx()).execute();
+            return;
+        }
         getRequest().setAttribute("currCompany", currCompany);
+        
         Building building = buildingDao.getBuilding(getCompany().getId());
+        if (building == null) {
+            new Error404NotFoundCmd(getCtx()).execute();
+            return;
+        }
         getRequest().setAttribute("building", building);
+        
         RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Administration_buildingDetail.jsp");
         rd.forward(getRequest(), getResponse());
     }

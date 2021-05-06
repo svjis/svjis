@@ -12,6 +12,7 @@
 
 package cz.svjis.servlet.cmd;
 
+import cz.svjis.bean.Permission;
 import cz.svjis.bean.Role;
 import cz.svjis.bean.RoleDAO;
 import cz.svjis.servlet.CmdContext;
@@ -31,23 +32,31 @@ public class RoleDeleteCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.MENU_ADMINISTRATION)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
 
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
 
         RoleDAO roleDao = new RoleDAO(getCnn());
 
         Role role = roleDao.getRole(getCompany().getId(), parId);
-        if ((role != null)) {
-            if (role.getNumOfUsers() != 0) {
-                String message = "Cannot delete role which is assigned to users.";
-                getRequest().setAttribute("messageHeader", "Error");
-                getRequest().setAttribute("message", message);
-                RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_message.jsp");
-                rd.forward(getRequest(), getResponse());
-                return;
-            } else {
-                roleDao.deleteRole(role);
-            }
+        if (role == null) {
+            new Error404NotFoundCmd(getCtx()).execute();
+            return;
+        }
+
+        if (role.getNumOfUsers() != 0) {
+            String message = "Cannot delete role which is assigned to users.";
+            getRequest().setAttribute("messageHeader", "Error");
+            getRequest().setAttribute("message", message);
+            RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_message.jsp");
+            rd.forward(getRequest(), getResponse());
+            return;
+        } else {
+            roleDao.deleteRole(role);
         }
         
         String url = "Dispatcher?page=roleList";
