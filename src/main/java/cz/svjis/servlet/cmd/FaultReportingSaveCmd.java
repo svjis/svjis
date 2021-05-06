@@ -20,7 +20,6 @@ import cz.svjis.bean.Permission;
 import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
 import cz.svjis.servlet.CmdContext;
-import cz.svjis.validator.InputValidationException;
 import cz.svjis.validator.Validator;
 import java.util.ArrayList;
 import java.util.Date;
@@ -38,12 +37,22 @@ public class FaultReportingSaveCmd extends FaultAbstractCmd {
     @Override
     public void execute() throws Exception {
         
+        if (!getUser().hasPermission(Permission.MENU_FAULT_REPORTING)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
+        
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
         String parSubject = Validator.getString(getRequest(), "subject", 0, 50, false, false);
         String parBody = Validator.getString(getRequest(), "body", 0, Validator.MAX_STRING_LEN_ALLOWED, false, getUser().hasPermission(Permission.CAN_WRITE_HTML));
         int parResolver = Validator.getInt(getRequest(), "resolverId", 0, Validator.MAX_INT_ALLOWED, true);
         int parEntrance = Validator.getInt(getRequest(), "entranceId", 0, Validator.MAX_INT_ALLOWED, true);
         boolean parClosed = Validator.getBoolean(getRequest(), "closed");
+        
+        if ((parId != 0) && !getUser().hasPermission(Permission.FAULT_REPORTING_RESOLVER)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
 
         BuildingDAO buildingDao = new BuildingDAO(getCnn());
         FaultReportDAO faultDao = new FaultReportDAO(getCnn());
@@ -94,7 +103,8 @@ public class FaultReportingSaveCmd extends FaultAbstractCmd {
             isNew = false;
             FaultReport origFault = faultDao.getFault(getCompany().getId(), f.getId());
             if (origFault == null) {
-                throw new InputValidationException("Fault id " + f.getId() + " doesn't exist");
+                new Error404NotFoundCmd(getCtx()).execute();
+                return;
             }
             origAssignedTo = origFault.getAssignedToUser();
             

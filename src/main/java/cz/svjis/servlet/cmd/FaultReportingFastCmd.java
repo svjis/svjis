@@ -32,6 +32,11 @@ public class FaultReportingFastCmd extends FaultAbstractCmd {
     @Override
     public void execute() throws Exception {
         
+        if (!getUser().hasPermission(Permission.MENU_FAULT_REPORTING)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
+        
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
         boolean parWatch = Validator.getBoolean(getRequest(), "watch");
 
@@ -39,8 +44,12 @@ public class FaultReportingFastCmd extends FaultAbstractCmd {
         LogDAO logDao = new LogDAO(getCnn());
 
         FaultReport f = faultDao.getFault(getCompany().getId(), parId);
-        if (getUser().hasPermission(Permission.FAULT_REPORTING_RESOLVER) && (f != null)) {
-            
+        if (f == null) {
+            new Error404NotFoundCmd(getCtx()).execute();
+            return;
+        }
+        
+        if (getUser().hasPermission(Permission.FAULT_REPORTING_RESOLVER)) {
             if (getRequest().getParameter("takeTicket") != null) {
                 f.setAssignedToUser(getUser());
                 faultDao.modifyFault(f);

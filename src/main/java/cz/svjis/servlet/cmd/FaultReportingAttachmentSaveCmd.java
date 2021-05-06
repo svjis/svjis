@@ -16,6 +16,7 @@ import cz.svjis.bean.FaultReport;
 import cz.svjis.bean.Attachment;
 import cz.svjis.bean.FaultReportDAO;
 import cz.svjis.bean.LogDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -39,6 +40,11 @@ public class FaultReportingAttachmentSaveCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.MENU_FAULT_REPORTING)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
 
         int parReportId = Validator.getInt(getRequest(), "reportId", 0, Validator.MAX_INT_ALLOWED, false);
 
@@ -65,7 +71,11 @@ public class FaultReportingAttachmentSaveCmd extends Command {
                 fa.setUploadTime(new Date());
                 
                 FaultReport fr = faultDao.getFault(getCompany().getId(), fa.getDocumentId());
-                if ((fr != null) && (!fr.isClosed()) && !fa.getFileName().equals("")) {
+                if (fr == null) {
+                    new Error404NotFoundCmd(getCtx()).execute();
+                    return;
+                }
+                if (!fr.isClosed() && !fa.getFileName().equals("")) {
                     faultDao.insertFaultReportAttachment(fa);
                     logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_INSERT_FAULT_ATTACHMENT, fr.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
                 }

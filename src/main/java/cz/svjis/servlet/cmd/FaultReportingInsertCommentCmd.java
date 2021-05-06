@@ -38,6 +38,11 @@ public class FaultReportingInsertCommentCmd extends Command {
     @Override
     public void execute() throws Exception {
         
+        if (!getUser().hasPermission(Permission.FAULT_REPORTING_COMMENT)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
+        
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
         String parBody = Validator.getString(getRequest(), "body", 0, Validator.MAX_STRING_LEN_ALLOWED, false, getUser().hasPermission(Permission.CAN_WRITE_HTML));
         
@@ -46,11 +51,12 @@ public class FaultReportingInsertCommentCmd extends Command {
 
         FaultReport report = faultDao.getFault(getCompany().getId(), parId);
         
-        if ((report.getId() != 0) 
-                && (!report.isClosed()) 
-                && getUser().hasPermission(Permission.FAULT_REPORTING_COMMENT)
-                && (parBody != null)
-                && (!parBody.equals(""))) {
+        if (report == null) {
+            new Error404NotFoundCmd(getCtx()).execute();
+            return;
+        }
+        
+        if ((!report.isClosed()) && (parBody != null) && (!parBody.equals(""))) {
             Comment c = new Comment();
             c.setDocumentId(report.getId());
             c.setInsertionTime(new Date());

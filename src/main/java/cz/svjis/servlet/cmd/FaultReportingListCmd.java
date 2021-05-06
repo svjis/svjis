@@ -16,6 +16,7 @@ import cz.svjis.bean.FaultReport;
 import cz.svjis.bean.FaultReportDAO;
 import cz.svjis.bean.FaultReportMenuCounters;
 import cz.svjis.bean.Language;
+import cz.svjis.bean.Permission;
 import cz.svjis.bean.SliderImpl;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
@@ -35,6 +36,11 @@ public class FaultReportingListCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.MENU_FAULT_REPORTING)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
         
         String parPage = Validator.getString(getRequest(), "page", 0, Validator.MAX_STRING_LEN_ALLOWED, false, false);
         int parPageNo = Validator.getInt(getRequest(), "pageNo", 0, Validator.MAX_INT_ALLOWED, true);
