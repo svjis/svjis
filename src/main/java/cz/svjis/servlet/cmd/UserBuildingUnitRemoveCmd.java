@@ -64,7 +64,7 @@ public class UserBuildingUnitRemoveCmd extends Command {
             return;
         }
 
-        if ((unit != null) && (unit.getBuildingId() == b.getId()) && u != null) {
+        if (unit.getBuildingId() == b.getId()) {
             buildingDao.deleteUserHasBuildingUnitConnection(parUserId, parUnitId);
         }
 

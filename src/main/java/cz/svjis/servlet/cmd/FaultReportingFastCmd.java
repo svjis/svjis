@@ -64,7 +64,7 @@ public class FaultReportingFastCmd extends FaultAbstractCmd {
             }
         }
         
-        if ((getRequest().getParameter("watch") != null) && (f != null)) {
+        if (getRequest().getParameter("watch") != null) {
             if (parWatch) {
                 faultDao.setUserWatchingFaultReport(f.getId(), getUser().getId());
             } else {

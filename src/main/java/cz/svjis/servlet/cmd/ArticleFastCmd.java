@@ -47,7 +47,7 @@ public class ArticleFastCmd extends FaultAbstractCmd {
             return;
         }
         
-        if ((getRequest().getParameter("watch") != null) && (a != null)) {
+        if (getRequest().getParameter("watch") != null) {
             if (parWatch) {
                 articleDao.setUserWatchingArticle(a.getId(), getUser().getId());
             } else {
