@@ -15,6 +15,7 @@
 <jsp:useBean id="articleList" scope="request" class="java.util.ArrayList" />
 <jsp:useBean id="sectionId" scope="request" class="java.lang.String" />
 <jsp:useBean id="menu" scope="request" class="cz.svjis.bean.Menu" />
+<jsp:useBean id="searchKey" scope="request" class="java.lang.String" />
 
 
 <jsp:include page="_header.jsp" />
@@ -39,12 +40,12 @@
                     <!-- Article -->
                     <div class="article box">
                         <div class="article-desc">
-                            <h1 class="article-title-list"><a href="Dispatcher?page=articleDetail&id=<%=a.getId() %><%=(request.getParameter("search") != null) ? "&search=" + JspSnippets.encodeUrl(request.getParameter("search")) : "" %>"><%=JspSnippets.highlight(a.getHeader(), request.getParameter("search")) %></a></h1>
+                            <h1 class="article-title-list"><a href="Dispatcher?page=articleDetail&id=<%=a.getId() %><%=(searchKey != null) ? "&search=" + JspSnippets.encodeUrl(searchKey) : "" %>"><%=JspSnippets.highlight(a.getHeader(), searchKey) %></a></h1>
                             <p class="info">
                                 <a href="Dispatcher?page=articleList&section=<%=a.getMenuNodeId() %>"><%=a.getMenuNodeDescription() %></a>:
                                 <%=JspSnippets.renderDate(a.getCreationDate()) %>,
                                 <%=language.getText("by:") %> <%=a.getAuthor().getFullName(false) %><%=(a.getNumOfComments() != 0) ? ", " + language.getText("Comments:") + " " + a.getNumOfComments() : "" %></p> 
-                            <%=JspSnippets.highlight(a.getDescription(), request.getParameter("search")) %>
+                            <%=JspSnippets.highlight(a.getDescription(), searchKey) %>
                         </div>
                     </div> <!-- /article -->
                     <%
@@ -52,7 +53,7 @@
                     %>
 
                     <p class="t-left">
-                        <%=JspSnippets.renderPaginator(slider, request.getParameter("search"), null, request) %>
+                        <%=JspSnippets.renderPaginator(slider, searchKey, null, request) %>
                     </p>
 
                 </div> <!-- /content-left-in -->
