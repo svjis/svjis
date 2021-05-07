@@ -53,10 +53,7 @@ public class ArticleDetailCmd extends Command {
         Article article = articleDao.getArticle(getUser(),
                 articleId);
         if ((article == null) || (article.getId() == 0)) {
-            Menu menu = menuDao.getMenu(getCompany().getId());
-            getRequest().setAttribute("menu", menu);
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/ArticleNotFound.jsp");
-            rd.forward(getRequest(), getResponse());
+            new Error404ArticleNotFoundCmd(getCtx()).execute();
             return;
         }
         getRequest().setAttribute("article", article);

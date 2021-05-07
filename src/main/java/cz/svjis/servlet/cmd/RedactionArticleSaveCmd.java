@@ -98,10 +98,7 @@ public class RedactionArticleSaveCmd extends Command {
             //-- check permission
             Article article = articleDao.getArticle(getUser(), a.getId());
             if ((article.getAuthor().getId() != getUser().getId()) && !getUser().hasPermission(Permission.REDACTION_ARTICLES_ALL)) {
-                Menu menu = menuDao.getMenu(getCompany().getId());
-                getRequest().setAttribute("menu", menu);
-                RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/ArticleNotFound.jsp");
-                rd.forward(getRequest(), getResponse());
+                new Error401UnauthorizedCmd(getCtx()).execute();
                 return;
             }
             //-- save

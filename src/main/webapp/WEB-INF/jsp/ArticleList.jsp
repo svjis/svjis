@@ -40,7 +40,7 @@
                     <!-- Article -->
                     <div class="article box">
                         <div class="article-desc">
-                            <h1 class="article-title-list"><a href="Dispatcher?page=articleDetail&id=<%=a.getId() %><%=(searchKey != null) ? "&search=" + JspSnippets.encodeUrl(searchKey) : "" %>"><%=JspSnippets.highlight(a.getHeader(), searchKey) %></a></h1>
+                            <h1 class="article-title-list"><a href="Dispatcher?page=articleDetail&id=<%=a.getId() %><%=((searchKey != null) && !searchKey.equals("")) ? "&search=" + JspSnippets.encodeUrl(searchKey) : "" %>"><%=JspSnippets.highlight(a.getHeader(), searchKey) %></a></h1>
                             <p class="info">
                                 <a href="Dispatcher?page=articleList&section=<%=a.getMenuNodeId() %>"><%=a.getMenuNodeDescription() %></a>:
                                 <%=JspSnippets.renderDate(a.getCreationDate()) %>,

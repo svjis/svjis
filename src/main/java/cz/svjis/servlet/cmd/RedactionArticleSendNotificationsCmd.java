@@ -14,8 +14,6 @@ package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.Article;
 import cz.svjis.bean.ArticleDAO;
-import cz.svjis.bean.Menu;
-import cz.svjis.bean.MenuDAO;
 import cz.svjis.bean.Permission;
 import cz.svjis.bean.User;
 import cz.svjis.servlet.CmdContext;
@@ -45,7 +43,6 @@ public class RedactionArticleSendNotificationsCmd extends Command {
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
 
         ArticleDAO articleDao = new ArticleDAO(getCnn());
-        MenuDAO menuDao = new MenuDAO(getCnn());
         
         Article article = articleDao.getArticle(getUser(), parId);
         if (article == null) {
@@ -53,10 +50,7 @@ public class RedactionArticleSendNotificationsCmd extends Command {
             return;
         }
         if ((article.getAuthor().getId() != getUser().getId()) && !getUser().hasPermission(Permission.REDACTION_ARTICLES_ALL)) {
-            Menu menu = menuDao.getMenu(getCompany().getId());
-            getRequest().setAttribute("menu", menu);
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/ArticleNotFound.jsp");
-            rd.forward(getRequest(), getResponse());
+            new Error401UnauthorizedCmd(getCtx()).execute();
             return;
         }
         

@@ -1,5 +1,5 @@
 <%-- 
-    Document   : ArticleNotFound
+    Document   : 404_ArticleNotFound
     Created on : 7.11.2012, 10:44:21
     Author     : berk
 --%>

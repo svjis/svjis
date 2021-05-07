@@ -16,8 +16,6 @@ import cz.svjis.bean.Article;
 import cz.svjis.bean.ArticleDAO;
 import cz.svjis.bean.LogDAO;
 import cz.svjis.bean.MailDAO;
-import cz.svjis.bean.Menu;
-import cz.svjis.bean.MenuDAO;
 import cz.svjis.bean.Permission;
 import cz.svjis.bean.User;
 import cz.svjis.servlet.CmdContext;
@@ -49,7 +47,6 @@ public class RedactionArticleSendNotificationsConfirmationCmd extends Command {
         
         ArticleDAO articleDao = new ArticleDAO(getCnn());
         LogDAO logDao = new LogDAO(getCnn());
-        MenuDAO menuDao = new MenuDAO(getCnn());
 
         Article article = articleDao.getArticle(getUser(), parId);
         if (article == null) {
@@ -57,10 +54,7 @@ public class RedactionArticleSendNotificationsConfirmationCmd extends Command {
             return;
         }
         if ((article.getAuthor().getId() != getUser().getId()) && !getUser().hasPermission(Permission.REDACTION_ARTICLES_ALL)) {
-            Menu menu = menuDao.getMenu(getCompany().getId());
-            getRequest().setAttribute("menu", menu);
-            RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/ArticleNotFound.jsp");
-            rd.forward(getRequest(), getResponse());
+            new Error401UnauthorizedCmd(getCtx()).execute();
             return;
         }
         getRequest().setAttribute("article", article);
