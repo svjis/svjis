@@ -16,6 +16,7 @@ import cz.svjis.bean.BuildingDAO;
 import cz.svjis.bean.BuildingUnit;
 import cz.svjis.bean.Language;
 import cz.svjis.bean.LanguageDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.bean.User;
 import cz.svjis.common.ExcelCreator;
 import cz.svjis.servlet.CmdContext;
@@ -40,6 +41,12 @@ public class ExportBuildingUnitListToXlsCmd extends Command {
         OutputStream outb = null;
 
         try {
+            
+            if (!getUser().hasPermission(Permission.MENU_ADMINISTRATION)) {
+                new Error401UnauthorizedCmd(getCtx()).execute();
+                return;
+            }
+            
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
             getResponse().setContentType(ExcelCreator.CONTENT_TYPE);
             getResponse().setHeader("Content-Disposition", "attachment; filename=BuildingUnitList_" + sdf.format(new Date()) + ".xlsx");

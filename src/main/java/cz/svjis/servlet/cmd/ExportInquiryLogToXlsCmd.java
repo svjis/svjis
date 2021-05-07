@@ -18,6 +18,7 @@ import cz.svjis.bean.InquiryLog;
 import cz.svjis.bean.InquiryOption;
 import cz.svjis.bean.Language;
 import cz.svjis.bean.LanguageDAO;
+import cz.svjis.bean.Permission;
 import cz.svjis.common.ExcelCreator;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
@@ -39,6 +40,11 @@ public class ExportInquiryLogToXlsCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.REDACTION_INQUIRY)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
         
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
         OutputStream outb = null;

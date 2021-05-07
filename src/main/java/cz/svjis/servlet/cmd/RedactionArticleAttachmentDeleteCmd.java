@@ -33,6 +33,11 @@ public class RedactionArticleAttachmentDeleteCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.REDACTION_ARTICLES) && !getUser().hasPermission(Permission.REDACTION_ARTICLES_ALL)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
 
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
 
@@ -46,7 +51,7 @@ public class RedactionArticleAttachmentDeleteCmd extends Command {
         }
         Article a = articleDao.getArticle(getUser(), aa.getDocumentId());
         if ((a == null) || ((a.getAuthor().getId() != getUser().getId()) && !getUser().hasPermission(Permission.REDACTION_ARTICLES_ALL))) {
-            new Error404NotFoundCmd(getCtx()).execute();
+            new Error401UnauthorizedCmd(getCtx()).execute();
             return;
         }
         articleDao.deleteArticleAttachment(parId);

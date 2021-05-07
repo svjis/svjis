@@ -40,6 +40,11 @@ public class RedactionArticleAttachmentSaveCmd extends Command {
 
     @Override
     public void execute() throws Exception {
+        
+        if (!getUser().hasPermission(Permission.REDACTION_ARTICLES) && !getUser().hasPermission(Permission.REDACTION_ARTICLES_ALL)) {
+            new Error401UnauthorizedCmd(getCtx()).execute();
+            return;
+        }
 
         int parArticleId = Validator.getInt(getRequest(), "articleId", 0, Validator.MAX_INT_ALLOWED, false);
 
@@ -48,7 +53,7 @@ public class RedactionArticleAttachmentSaveCmd extends Command {
         
         Article a = articleDao.getArticle(getUser(), parArticleId);
         if ((a == null) || ((a.getAuthor().getId() != getUser().getId()) && !getUser().hasPermission(Permission.REDACTION_ARTICLES_ALL))) {
-            new Error404NotFoundCmd(getCtx()).execute();
+            new Error401UnauthorizedCmd(getCtx()).execute();
             return;
         }
         
