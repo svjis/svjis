@@ -257,7 +257,7 @@ public class JspSnippets {
     public static String injectPictures(String text, List<Attachment> attachments) {
         String result = text;
 
-        if ((attachments != null) && (attachments.size() != 0)) {
+        if (attachments != null) {
             for (Attachment a: attachments) {
                 result = result.replaceAll("\\{" + a.getFileName() + "\\}", "<img src=\"Upload?page=download&id=" + a.getId() + "\" alt=\"" + a.getFileName() + "\">");
             }
