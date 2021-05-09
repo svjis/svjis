@@ -29,7 +29,7 @@
 	                    <div class="article-desc">
 	                    <h1 class="article-title" id="tbl-desc"><%=JspSnippets.highlight(article.getHeader(), request.getParameter("search")) %></h1>
 	                    <p class="info">
-	                        <%=language.getText("Published:") %> <strong><%=JspSnippets.renderDate(article.getCreationDate()) %></strong>, 
+	                        <a href="Dispatcher?page=articleList&section=<%=article.getMenuNodeId() %>"><%=article.getMenuNodeDescription() %></a>:  <strong><%=JspSnippets.renderDate(article.getCreationDate()) %></strong>, 
 	                        <%=language.getText("by:") %> <strong><%=article.getAuthor().getFullName(false) %></strong><%=(article.getCommentList().size() != 0) ? ", " + language.getText("Comments:") + " <strong>" + article.getCommentList().size() + "</strong>" : "" %>
 	                    </p> 
 	                    <%=JspSnippets.highlight(article.getDescription(), request.getParameter("search")) %>

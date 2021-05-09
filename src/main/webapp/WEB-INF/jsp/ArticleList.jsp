@@ -8,7 +8,7 @@
 
 <%@page import="cz.svjis.bean.Article"%>
 <%@page import="cz.svjis.common.JspSnippets"%>
-<%@page import="java.util.Iterator"%>
+<%@page import="java.util.ArrayList"%>
 
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="slider" scope="request" class="cz.svjis.bean.SliderImpl" />
@@ -33,9 +33,7 @@
                     <h1 class="article-page-title"><%=menu.getActiveSection(language).getDescription() %></h1>
                     
                     <%
-                        Iterator articleListI = articleList.iterator();
-                        while (articleListI.hasNext()) {
-                            Article a = (Article) articleListI.next();
+                        for (Article a: (ArrayList<Article>) articleList) {
                     %>
                     <!-- Article -->
                     <div class="article box">
@@ -43,8 +41,9 @@
                             <h1 class="article-title-list"><a href="Dispatcher?page=articleDetail&id=<%=a.getId() %><%=((searchKey != null) && !searchKey.equals("")) ? "&search=" + JspSnippets.encodeUrl(searchKey) : "" %>"><%=JspSnippets.highlight(a.getHeader(), searchKey) %></a></h1>
                             <p class="info">
                                 <a href="Dispatcher?page=articleList&section=<%=a.getMenuNodeId() %>"><%=a.getMenuNodeDescription() %></a>:
-                                <%=JspSnippets.renderDate(a.getCreationDate()) %>,
-                                <%=language.getText("by:") %> <%=a.getAuthor().getFullName(false) %><%=(a.getNumOfComments() != 0) ? ", " + language.getText("Comments:") + " " + a.getNumOfComments() : "" %></p> 
+                                <strong><%=JspSnippets.renderDate(a.getCreationDate()) %></strong>,
+                                <%=language.getText("by:") %> <strong><%=a.getAuthor().getFullName(false) %></strong>
+                                <%=(a.getNumOfComments() != 0) ? ", " + language.getText("Comments:") + " <strong>" + a.getNumOfComments() + "</strong>" : "" %></p> 
                             <%=JspSnippets.highlight(a.getDescription(), searchKey) %>
                         </div>
                     </div> <!-- /article -->
