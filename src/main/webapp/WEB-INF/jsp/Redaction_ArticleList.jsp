@@ -116,7 +116,7 @@
                     %>
                     
                     <p class="t-center">
-                        <%=JspSnippets.renderPaginator(slider, searchKey, roleFilter, request) %>
+                        <%=JspSnippets.renderPaginator(slider, searchKey, roleFilter) %>
                     </p>
                 </div> <!-- /content-main-in -->
             </div> <!-- /content-main -->

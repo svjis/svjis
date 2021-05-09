@@ -228,15 +228,13 @@ public class JspSnippets {
         return result.toString();
     }
     
-    public static String renderPaginator(Slider slider, String searchKey, String filter, HttpServletRequest request) throws UnsupportedEncodingException {
+    public static String renderPaginator(Slider slider, String searchKey, String filter) throws UnsupportedEncodingException {
         StringBuilder result = new StringBuilder();
-        //Language language = (Language) request.getSession().getAttribute("language");
         
         if (filter == null)
             filter = "";
         
         if (slider.getTotalNumOfPages() > 1) {
-            //result.append(String.format("<strong>%s</strong>&nbsp;", language.getText("Pages:")));
             String search = "";
             String pageId = String.format("page=%s&", slider.getPageId());
             if ((searchKey != null) && (!searchKey.equals(""))) {
