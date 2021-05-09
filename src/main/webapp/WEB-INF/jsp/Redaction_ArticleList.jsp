@@ -114,7 +114,10 @@
 	                        roleFilter = "&roleId=" + roleIds;
 	                    }
                     %>
-                    <%=JspSnippets.renderPaginator(slider, searchKey, roleFilter, request) %>
+                    
+                    <p class="t-center">
+                        <%=JspSnippets.renderPaginator(slider, searchKey, roleFilter, request) %>
+                    </p>
                 </div> <!-- /content-main-in -->
             </div> <!-- /content-main -->
             <hr class="noscreen" />
