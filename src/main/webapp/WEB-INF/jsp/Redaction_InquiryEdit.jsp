@@ -61,7 +61,7 @@
                                         <% if (inquiry.getCount() == 0) { %>
                                         <td>&nbsp;<a href="Dispatcher?page=redactionInquiryOptionDelete&id=<%=io.getId() %>"><img src="gfx/delete.png" border="0" title="<%=language.getText("Delete") %>" alt="<%=language.getText("Delete") %>"></td>
                                         <% } else { %>
-                                        <td style="text-align: right"><%=io.getCount() %></td>
+                                        <td>&nbsp;(<%=language.getText("Votes") %>:&nbsp;<%=io.getCount() %>)</td>
                                         <% } %>
                                     </tr>
                             <%

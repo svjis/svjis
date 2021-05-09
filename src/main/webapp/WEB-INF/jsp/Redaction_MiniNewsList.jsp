@@ -54,8 +54,8 @@
                     %>
                     </table>
                     
-                    <p class="t-left">
-                        <%=JspSnippets.renderPaginator(slider, null, null, request) %>
+                    <p class="t-center">
+                        <%=JspSnippets.renderPaginator(slider, null, null) %>
                     </p>
                     
                 </div> <!-- /content-main-in -->

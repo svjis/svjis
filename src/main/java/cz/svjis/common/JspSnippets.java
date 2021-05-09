@@ -228,15 +228,13 @@ public class JspSnippets {
         return result.toString();
     }
     
-    public static String renderPaginator(Slider slider, String searchKey, String filter, HttpServletRequest request) throws UnsupportedEncodingException {
+    public static String renderPaginator(Slider slider, String searchKey, String filter) throws UnsupportedEncodingException {
         StringBuilder result = new StringBuilder();
-        Language language = (Language) request.getSession().getAttribute("language");
         
         if (filter == null)
             filter = "";
         
         if (slider.getTotalNumOfPages() > 1) {
-            result.append(String.format("<strong>%s</strong>&nbsp;", language.getText("Pages:")));
             String search = "";
             String pageId = String.format("page=%s&", slider.getPageId());
             if ((searchKey != null) && (!searchKey.equals(""))) {
@@ -244,9 +242,9 @@ public class JspSnippets {
             }
             for (SliderItem item : slider.getItemList()) {
                 if (item.isCurrent()) {
-                    result.append(String.format("<b>%s</b>&nbsp;", item.getLabel()));
+                    result.append(String.format("<b>%s</b>&nbsp;&nbsp;", item.getLabel()));
                 } else {
-                    result.append(String.format("<a href=\"Dispatcher?%s%s%spageNo=%d\">%s</a>&nbsp;", pageId, search, filter, item.getPage(), item.getLabel()));
+                    result.append(String.format("<a href=\"Dispatcher?%s%s%spageNo=%d\">%s</a>&nbsp;&nbsp;", pageId, search, filter, item.getPage(), item.getLabel()));
                 }
             }
         }

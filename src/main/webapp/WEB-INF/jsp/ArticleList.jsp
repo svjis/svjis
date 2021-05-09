@@ -51,8 +51,8 @@
                         }
                     %>
 
-                    <p class="t-left">
-                        <%=JspSnippets.renderPaginator(slider, searchKey, null, request) %>
+                    <p class="t-center">
+                        <%=JspSnippets.renderPaginator(slider, searchKey, null) %>
                     </p>
 
                 </div> <!-- /content-left-in -->
