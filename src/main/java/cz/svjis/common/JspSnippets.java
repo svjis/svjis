@@ -254,6 +254,18 @@ public class JspSnippets {
         return result.toString();
     }
     
+    public static String injectPictures(String text, List<Attachment> attachments) {
+        String result = text;
+
+        if ((attachments != null) && (attachments.size() != 0)) {
+            for (Attachment a: attachments) {
+                result = result.replaceAll("\\{" + a.getFileName() + "\\}", "<img src=\"Upload?page=download&id=" + a.getId() + "\" alt=\"" + a.getFileName() + "\">");
+            }
+        }
+
+        return result;
+    }
+
     public static void writeBinaryData(String contentType, String fileName, byte[] data, HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         

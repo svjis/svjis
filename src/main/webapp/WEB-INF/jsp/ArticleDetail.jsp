@@ -7,9 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%@page import="cz.svjis.bean.Permission"%>
-<%@page import="cz.svjis.bean.Attachment"%>
 <%@page import="cz.svjis.common.JspSnippets"%>
-<%@page import="java.util.Iterator"%>
 
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
@@ -26,17 +24,7 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <%
-                        String body = article.getBody();
-                        if ((article.getAttachmentList() != null) && (article.getAttachmentList().size() != 0)) {
-                            Iterator<Attachment> attachI = article.getAttachmentList().iterator();
-                            while (attachI.hasNext()) {
-                                Attachment a = attachI.next();
-                                body = body.replaceAll("\\{" + a.getFileName() + "\\}", "<img src=\"Upload?page=download&id=" + a.getId() + "\" alt=\"" + a.getFileName() + "\">");
-                            }
-                        }
 
-                    %>
                     <div class="article-detail">
 	                    <div class="article-desc">
 	                    <h1 class="article-title" id="tbl-desc"><%=JspSnippets.highlight(article.getHeader(), request.getParameter("search")) %></h1>
@@ -45,7 +33,7 @@
 	                        <%=language.getText("by:") %> <strong><%=article.getAuthor().getFullName(false) %></strong><%=(article.getCommentList().size() != 0) ? ", " + language.getText("Comments:") + " <strong>" + article.getCommentList().size() + "</strong>" : "" %>
 	                    </p> 
 	                    <%=JspSnippets.highlight(article.getDescription(), request.getParameter("search")) %>
-	                    <%=JspSnippets.highlight(body, request.getParameter("search")) %>
+	                    <%=JspSnippets.highlight(JspSnippets.injectPictures(article.getBody(), article.getAttachmentList()), request.getParameter("search")) %>
 	                    </div>
                     </div>
                     
