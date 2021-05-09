@@ -107,15 +107,13 @@
                     %>
                     </table>
                     
-                    <br>
-                    <%
-	                    String roleFilter = "";
-	                    if (!roleIds.equals("0")) {
-	                        roleFilter = "&roleId=" + roleIds;
-	                    }
-                    %>
-                    
                     <p class="t-center">
+	                    <%
+		                    String roleFilter = "";
+		                    if (!roleIds.equals("0")) {
+		                        roleFilter = "&roleId=" + roleIds;
+		                    }
+	                    %>
                         <%=JspSnippets.renderPaginator(slider, searchKey, roleFilter) %>
                     </p>
                 </div> <!-- /content-main-in -->
