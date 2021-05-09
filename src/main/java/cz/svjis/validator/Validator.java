@@ -33,11 +33,13 @@ public class Validator {
             return val;
         }
         
+        val = Validator.fixTextInput(val, canContainHtmlTags);
+        
         if (!Validator.validateString(val, minLen, maxLen)) {
             throw new InputValidationException(String.format(msg, parName, String.valueOf(minLen), String.valueOf(maxLen), val));
         }
         
-        return Validator.fixTextInput(val, canContainHtmlTags);
+        return val;
     }
     
     

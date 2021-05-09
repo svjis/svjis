@@ -92,7 +92,14 @@ public class ValidatorTest {
         });
 
         assertEquals("<b>Hello</b>", Validator.getString(request, "testHtml", 0, 20, false, true), "HTML enabled");
-        assertEquals("&lt;b&gt;Hello&lt;/b&gt;", Validator.getString(request, "testHtml", 0, 20, false, false), "HTML disabled");
+        
+        assertThrows(InputValidationException.class, new Executable() {
+            public void execute() throws Exception {
+                Validator.getString(request, "testHtml", 0, 20, false, false);
+            }
+        });
+        
+        assertEquals("&lt;b&gt;Hello&lt;/b&gt;", Validator.getString(request, "testHtml", 0, 50, false, false), "HTML disabled");
     }
 
     @Test
