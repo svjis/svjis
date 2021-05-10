@@ -65,7 +65,7 @@
 	                %>
                     
                     <p class="t-center">
-                        <%=JspSnippets.renderPaginator(slider, null, null) %>
+                        <%=JspSnippets.renderPaginator(slider, null, "&typeId=" + currMenu.getId()) %>
                     </p>
                     
                 </div> <!-- /content-main-in -->

@@ -52,7 +52,7 @@
                     %>
 
                     <p class="t-center">
-                        <%=JspSnippets.renderPaginator(slider, searchKey, null) %>
+                        <%=JspSnippets.renderPaginator(slider, searchKey, "&section=" + sectionId) %>
                     </p>
 
                 </div> <!-- /content-left-in -->

@@ -236,15 +236,15 @@ public class JspSnippets {
         
         if (slider.getTotalNumOfPages() > 1) {
             String search = "";
-            String pageId = String.format("page=%s&", slider.getPageId());
+            String pageId = String.format("page=%s", slider.getPageId());
             if ((searchKey != null) && (!searchKey.equals(""))) {
-                search = String.format("search=%s&", URLEncoder.encode(searchKey, "UTF-8"));
+                search = String.format("&search=%s", URLEncoder.encode(searchKey, "UTF-8"));
             }
             for (SliderItem item : slider.getItemList()) {
                 if (item.isCurrent()) {
                     result.append(String.format("<b>%s</b>&nbsp;&nbsp;", item.getLabel()));
                 } else {
-                    result.append(String.format("<a href=\"Dispatcher?%s%s%spageNo=%d\">%s</a>&nbsp;&nbsp;", pageId, search, filter, item.getPage(), item.getLabel()));
+                    result.append(String.format("<a href=\"Dispatcher?%s%s%s&pageNo=%d\">%s</a>&nbsp;&nbsp;", pageId, search, filter, item.getPage(), item.getLabel()));
                 }
             }
         }
