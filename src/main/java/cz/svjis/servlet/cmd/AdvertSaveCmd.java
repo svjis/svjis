@@ -15,8 +15,8 @@ package cz.svjis.servlet.cmd;
 import cz.svjis.bean.Advert;
 import cz.svjis.bean.AdvertDAO;
 import cz.svjis.bean.Permission;
+import cz.svjis.servlet.Cmd;
 import cz.svjis.servlet.CmdContext;
-import cz.svjis.servlet.CmdFactory;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
 
@@ -81,7 +81,7 @@ public class AdvertSaveCmd extends Command {
             typeId = AdvertDAO.MY_ADVERTS_TYPE_ID;
         }
 
-        String url = String.format("Dispatcher?page=%s&typeId=%d", CmdFactory.ADVERT_LIST, typeId);
+        String url = String.format("Dispatcher?page=%s&typeId=%d", Cmd.ADVERT_LIST, typeId);
         getResponse().sendRedirect(url);
     }
 

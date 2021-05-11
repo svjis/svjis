@@ -161,7 +161,7 @@ public class Dispatcher extends HttpServlet {
             String page = parPage;
             
             if (page == null) {
-                page = "articleList";
+                page = Cmd.ARTICLE_LIST;
             }
             
             Command cmd = CmdFactory.create(page, ctx);
@@ -213,14 +213,14 @@ public class Dispatcher extends HttpServlet {
     
     private ArrayList<SystemMenuEntry> createSystemMenu(User u) {
         ArrayList<SystemMenuEntry> result = new ArrayList<>();
-        if (u.hasPermission(Permission.MENU_ARTICLES)) result.add(new SystemMenuEntry("Articles", "Dispatcher?page=articleList"));
-        if (u.hasPermission(Permission.MENU_CONTACT)) result.add(new SystemMenuEntry("Contact", "Dispatcher?page=contact"));
-        if (u.hasPermission(Permission.MENU_BUILDING_UNITS)) result.add(new SystemMenuEntry("Units", "Dispatcher?page=myBuildingUnitList"));
-        if (u.hasPermission(Permission.MENU_PERSONAL_SETTINGS)) result.add(new SystemMenuEntry("Personal settings", "Dispatcher?page=psUserDetail"));
-        if (u.hasPermission(Permission.MENU_REDACTION)) result.add(new SystemMenuEntry("Redaction", "Dispatcher?page=redactionArticleList"));
-        if (u.hasPermission(Permission.MENU_FAULT_REPORTING)) result.add(new SystemMenuEntry("Fault reporting", "Dispatcher?page=faultReportingList"));
-        if (u.hasPermission(Permission.MENU_ADVERTS)) result.add(new SystemMenuEntry("Adverts", "Dispatcher?page=advertList"));
-        if (u.hasPermission(Permission.MENU_ADMINISTRATION)) result.add(new SystemMenuEntry("Administration", "Dispatcher?page=companyDetail"));
+        if (u.hasPermission(Permission.MENU_ARTICLES)) result.add(new SystemMenuEntry("Articles", "Dispatcher?page=" + Cmd.ARTICLE_LIST));
+        if (u.hasPermission(Permission.MENU_CONTACT)) result.add(new SystemMenuEntry("Contact", "Dispatcher?page=" + Cmd.CONTACT));
+        if (u.hasPermission(Permission.MENU_BUILDING_UNITS)) result.add(new SystemMenuEntry("Units", "Dispatcher?page=" + Cmd.MY_BUILDING_UNITS));
+        if (u.hasPermission(Permission.MENU_PERSONAL_SETTINGS)) result.add(new SystemMenuEntry("Personal settings", "Dispatcher?page=" + Cmd.PERSONAL_DETAIL));
+        if (u.hasPermission(Permission.MENU_REDACTION)) result.add(new SystemMenuEntry("Redaction", "Dispatcher?page=" + Cmd.REDACTION_ARTICLE_LIST));
+        if (u.hasPermission(Permission.MENU_FAULT_REPORTING)) result.add(new SystemMenuEntry("Fault reporting", "Dispatcher?page=" + Cmd.FAULT_LIST));
+        if (u.hasPermission(Permission.MENU_ADVERTS)) result.add(new SystemMenuEntry("Adverts", "Dispatcher?page=" + Cmd.ADVERT_LIST));
+        if (u.hasPermission(Permission.MENU_ADMINISTRATION)) result.add(new SystemMenuEntry("Administration", "Dispatcher?page=" + Cmd.COMPANY_DETAIL));
         
         return result;
     }
