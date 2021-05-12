@@ -212,15 +212,16 @@ public class Dispatcher extends HttpServlet {
     }// </editor-fold>
     
     private ArrayList<SystemMenuEntry> createSystemMenu(User u) {
+        String d = "Dispatcher?page=%s";
         ArrayList<SystemMenuEntry> result = new ArrayList<>();
-        if (u.hasPermission(Permission.MENU_ARTICLES)) result.add(new SystemMenuEntry("Articles", "Dispatcher?page=" + Cmd.ARTICLE_LIST));
-        if (u.hasPermission(Permission.MENU_CONTACT)) result.add(new SystemMenuEntry("Contact", "Dispatcher?page=" + Cmd.CONTACT));
-        if (u.hasPermission(Permission.MENU_BUILDING_UNITS)) result.add(new SystemMenuEntry("Units", "Dispatcher?page=" + Cmd.MY_BUILDING_UNITS));
-        if (u.hasPermission(Permission.MENU_PERSONAL_SETTINGS)) result.add(new SystemMenuEntry("Personal settings", "Dispatcher?page=" + Cmd.PERSONAL_DETAIL));
-        if (u.hasPermission(Permission.MENU_REDACTION)) result.add(new SystemMenuEntry("Redaction", "Dispatcher?page=" + Cmd.REDACTION_ARTICLE_LIST));
-        if (u.hasPermission(Permission.MENU_FAULT_REPORTING)) result.add(new SystemMenuEntry("Fault reporting", "Dispatcher?page=" + Cmd.FAULT_LIST));
-        if (u.hasPermission(Permission.MENU_ADVERTS)) result.add(new SystemMenuEntry("Adverts", "Dispatcher?page=" + Cmd.ADVERT_LIST));
-        if (u.hasPermission(Permission.MENU_ADMINISTRATION)) result.add(new SystemMenuEntry("Administration", "Dispatcher?page=" + Cmd.COMPANY_DETAIL));
+        if (u.hasPermission(Permission.MENU_ARTICLES)) result.add(new SystemMenuEntry("Articles", String.format(d, Cmd.ARTICLE_LIST)));
+        if (u.hasPermission(Permission.MENU_CONTACT)) result.add(new SystemMenuEntry("Contact", String.format(d, Cmd.CONTACT)));
+        if (u.hasPermission(Permission.MENU_BUILDING_UNITS)) result.add(new SystemMenuEntry("Units", String.format(d, Cmd.MY_BUILDING_UNITS)));
+        if (u.hasPermission(Permission.MENU_PERSONAL_SETTINGS)) result.add(new SystemMenuEntry("Personal settings", String.format(d, Cmd.PERSONAL_DETAIL)));
+        if (u.hasPermission(Permission.MENU_REDACTION)) result.add(new SystemMenuEntry("Redaction", String.format(d, Cmd.REDACTION_ARTICLE_LIST)));
+        if (u.hasPermission(Permission.MENU_FAULT_REPORTING)) result.add(new SystemMenuEntry("Fault reporting", String.format(d, Cmd.FAULT_LIST)));
+        if (u.hasPermission(Permission.MENU_ADVERTS)) result.add(new SystemMenuEntry("Adverts", String.format(d, Cmd.ADVERT_LIST)));
+        if (u.hasPermission(Permission.MENU_ADMINISTRATION)) result.add(new SystemMenuEntry("Administration", String.format(d, Cmd.COMPANY_DETAIL)));
         
         return result;
     }

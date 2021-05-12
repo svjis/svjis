@@ -14,6 +14,8 @@ package cz.svjis.servlet;
 
 
 public class Cmd {
+    
+    private Cmd() {}
 
     
     // *****************
