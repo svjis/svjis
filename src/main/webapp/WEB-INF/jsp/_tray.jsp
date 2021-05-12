@@ -5,7 +5,7 @@
 --%>
 
 <%@page import="cz.svjis.bean.SystemMenuEntry"%>
-<%@page import="java.util.Iterator"%>
+<%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
@@ -15,9 +15,7 @@
     <div id="tray">
         <ul class="box">
             <%
-               Iterator systemMenuI = systemMenu.iterator();
-               while (systemMenuI.hasNext()) {
-                    SystemMenuEntry me = (SystemMenuEntry) systemMenuI.next();
+               for (SystemMenuEntry me : (List<SystemMenuEntry>) systemMenu) {
             %>   
             <!-- <li id="tray-active"> -->
             <li>

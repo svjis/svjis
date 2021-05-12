@@ -6,6 +6,7 @@
 
 <%@page import="cz.svjis.bean.User"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="cz.svjis.servlet.Cmd"%>
 <%@page import="cz.svjis.bean.BoardMemberType"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
@@ -25,7 +26,7 @@
                 <div id="content-main-in">
                     <h1 class="page-title"><%=language.getText("Board") %></h1>
                     <form action="Dispatcher" method="post">
-                        <input type="hidden" name="page" value="boardMemberSave" />
+                        <input type="hidden" name="page" value="<%=Cmd.BOARD_SAVE %>" />
                         <input type="hidden" name="origTypeId" value="<%=boardMember.getBoardMemberType().getId()  %>" />
                         <input type="hidden" name="origUserId" value="<%=boardMember.getUser().getId()  %>" />
                         <fieldset>
