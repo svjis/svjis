@@ -4,9 +4,10 @@
     Author     : berk
 --%>
 
-<%@page import="cz.svjis.bean.BuildingUnitType"%>
-<%@page import="java.util.Iterator"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="cz.svjis.bean.BuildingUnitType"%>
+<%@page import="cz.svjis.servlet.Cmd"%>
+<%@page import="java.util.Iterator"%>
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="buildingUnitType" scope="request" class="java.util.ArrayList" />
 <jsp:useBean id="buildingUnitList" scope="request" class="java.util.ArrayList" />
@@ -24,7 +25,7 @@
                     <h1 class="page-title" id="tbl-desc"><%=language.getText("Building unit list") %></h1>
                     <%=language.getText("Filter") %>:
                     <form action="Dispatcher" method="post" >
-                        <input type="hidden" name="page" value="buildingUnitList">
+                        <input type="hidden" name="page" value="<%=Cmd.BUILDING_UNIT_LIST %>">
                         <select name="typeId" onchange="this.form.submit()">
                         <option value="0">(<%=language.getText("all") %>)</option>
                         <%
@@ -44,8 +45,8 @@
                     </form>
                     <br>
 
-                    [<a href="Dispatcher?page=buildingUnitEdit&id=0"><%=language.getText("Add new building unit") %></a>]&nbsp;
-                    [<a href="Upload?page=exportBuildingUnitListToXls"><%=language.getText("Export to Excel") %></a>]<br>
+                    [<a href="Dispatcher?page=<%=Cmd.BUILDING_UNIT_EDIT %>&id=0"><%=language.getText("Add new building unit") %></a>]&nbsp;
+                    [<a href="Upload?page=<%=Cmd.BUILDING_UNIT_XLS %>"><%=language.getText("Export to Excel") %></a>]<br>
                     <table class="list" aria-describedby="tbl-desc">
                         <tr>
                             <th class="list" scope="col">&nbsp;</th>
@@ -67,9 +68,9 @@
                     %>
                         <tr>
                             <td class="list" style="text-align: right"><%=++i %></td>
-                            <td class="list"><a href="Dispatcher?page=buildingUnitEdit&id=<%=u.getId() %>"><img src="gfx/pencil.png" border="0" title="<%=language.getText("Edit") %>" alt="<%=language.getText("Edit") %>"></a></td>
-                            <td class="list"><a href="Dispatcher?page=buildingUnitOwner&id=<%=u.getId() %>"><img src="gfx/user.png" border="0" title="<%=language.getText("Owner list") %>" alt="<%=language.getText("Owner list") %>"></a></td>
-                            <td class="list"><a onclick="if (!confirm('<%=language.getText("Really do you want to remove unit") %> <%=u.getId() %> ?')) return false;" href="Dispatcher?page=buildingUnitDelete&id=<%=u.getId() %>"><img src="gfx/delete.png" border="0" title="<%=language.getText("Delete") %>" alt="<%=language.getText("Delete") %>"></a></td>
+                            <td class="list"><a href="Dispatcher?page=<%=Cmd.BUILDING_UNIT_EDIT %>&id=<%=u.getId() %>"><img src="gfx/pencil.png" border="0" title="<%=language.getText("Edit") %>" alt="<%=language.getText("Edit") %>"></a></td>
+                            <td class="list"><a href="Dispatcher?page=<%=Cmd.BUILDING_UNIT_OWNER %>&id=<%=u.getId() %>"><img src="gfx/user.png" border="0" title="<%=language.getText("Owner list") %>" alt="<%=language.getText("Owner list") %>"></a></td>
+                            <td class="list"><a onclick="if (!confirm('<%=language.getText("Really do you want to remove unit") %> <%=u.getId() %> ?')) return false;" href="Dispatcher?page=<%=Cmd.BUILDING_UNIT_DELETE %>&id=<%=u.getId() %>"><img src="gfx/delete.png" border="0" title="<%=language.getText("Delete") %>" alt="<%=language.getText("Delete") %>"></a></td>
                             <td class="list" style="text-align: right"><%=u.getId() %></td>
                             <td class="list"><%=u.getBuildingUnitType() %></td>
                             <td class="list"><%=u.getRegistrationId() %></td>

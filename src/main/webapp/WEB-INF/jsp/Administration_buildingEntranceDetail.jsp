@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="cz.svjis.servlet.Cmd"%>
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="buildingEntrance" scope="request" class="cz.svjis.bean.BuildingEntrance" />
 
@@ -20,7 +21,7 @@
                 <div id="content-main-in">
                     <h1 class="page-title"><%=language.getText("Building entrance") %></h1>
                     <form action="Dispatcher" method="post">
-                        <input type="hidden" name="page" value="buildingEntranceSave" />
+                        <input type="hidden" name="page" value="<%=Cmd.BUILDING_ENT_SAVE %>" />
                         <input type="hidden" name="id" value="<%=buildingEntrance.getId() %>" />
                         <fieldset>
                             <legend class="hidden-legend"><%=language.getText("General") %></legend>

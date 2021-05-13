@@ -4,9 +4,10 @@
     Author     : berk
 --%>
 
-<%@page import="cz.svjis.bean.BuildingUnit"%>
-<%@page import="java.util.Iterator"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="cz.svjis.bean.BuildingUnit"%>
+<%@page import="cz.svjis.servlet.Cmd"%>
+<%@page import="java.util.Iterator"%>
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="cUser" scope="request" class="cz.svjis.bean.User" />
 <jsp:useBean id="userHasUnitList" scope="request" class="java.util.ArrayList" />
@@ -40,7 +41,7 @@
                         %>
                             <tr>
                                 <td class="list" style="text-align: right"><%=++i %></td>
-                                <td class="list"><a onclick="if (!confirm('<%=language.getText("Really do you want to remove unit") %> <%=u.getId() %> ?')) return false;" href="Dispatcher?page=userBuildingUnitRemove&unitId=<%=u.getId() %>&userId=<%=cUser.getId() %>"><img src="gfx/delete.png" border="0" title="<%=language.getText("Delete") %>" alt="<%=language.getText("Delete") %>"></a></td>
+                                <td class="list"><a onclick="if (!confirm('<%=language.getText("Really do you want to remove unit") %> <%=u.getId() %> ?')) return false;" href="Dispatcher?page=<%=Cmd.USER_BU_REMOVE %>&unitId=<%=u.getId() %>&userId=<%=cUser.getId() %>"><img src="gfx/delete.png" border="0" title="<%=language.getText("Delete") %>" alt="<%=language.getText("Delete") %>"></a></td>
                                 <td class="list"><%=u.getBuildingUnitType() %></td>
                                 <td class="list"><%=u.getRegistrationId() %></td>
                                 <td class="list"><%=u.getDescription() %></td>
@@ -51,7 +52,7 @@
                     </table>
                                         
                     <form action="Dispatcher" method="post">
-                        <input type="hidden" name="page" value="userBuildingUnitAdd" />
+                        <input type="hidden" name="page" value="<%=Cmd.USER_BU_ADD %>" />
                         <input type="hidden" name="userId" value="<%=cUser.getId() %>" />
                         <select class="common-input" id="unit-input" name="unitId">
                             <option value="0"><%=language.getText("(choose)") %></option>

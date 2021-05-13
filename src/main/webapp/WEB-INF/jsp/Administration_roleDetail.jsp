@@ -4,9 +4,10 @@
     Author     : berk
 --%>
 
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="cz.svjis.servlet.Cmd"%>
 <%@page import="cz.svjis.bean.Permission"%>
 <%@page import="java.util.Iterator"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="role" scope="request" class="cz.svjis.bean.Role" />
 <jsp:useBean id="permissionList" scope="request" class="java.util.ArrayList" />
@@ -23,7 +24,7 @@
                 <div id="content-main-in">
                     <h1 class="page-title"><%=language.getText("Role") %></h1>
                     <form action="Dispatcher" method="post">
-                        <input type="hidden" name="page" value="roleSave" />
+                        <input type="hidden" name="page" value="<%=Cmd.ROLE_SAVE %>" />
                         <input type="hidden" name="id" value="<%=role.getId() %>" />
                         <fieldset>
                             <legend><%=language.getText("Role") %></legend>

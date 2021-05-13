@@ -4,10 +4,11 @@
     Author     : berk
 --%>
 
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="cz.svjis.bean.Role"%>
 <%@page import="cz.svjis.common.JspSnippets"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="cz.svjis.servlet.Cmd"%>
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="roleList" scope="request" class="java.util.ArrayList" />
 <jsp:useBean id="userList" scope="request" class="java.util.ArrayList" />
@@ -29,10 +30,10 @@
                         <div class="row">
 
                             <div class="left">
-                                <p>[<a href="Dispatcher?page=userEdit&id=0"><%=language.getText("Add new user") %></a>]</p>
+                                <p>[<a href="Dispatcher?page=<%=Cmd.USER_EDIT %>&id=0"><%=language.getText("Add new user") %></a>]</p>
                             </div>
                             <div class="left">
-                                <p>[<a href="Upload?page=exportUserListToXls"><%=language.getText("Export to Excel") %></a>]</p>
+                                <p>[<a href="Upload?page=<%=Cmd.USER_XLS %>"><%=language.getText("Export to Excel") %></a>]</p>
                             </div>
                             
                             <div class="right">
@@ -41,7 +42,7 @@
                             <div class="middle">
                                 <p>
                                 <form action="Dispatcher" method="post">
-                                    <input type="hidden" name="page" value="userList" />
+                                    <input type="hidden" name="page" value="<%=Cmd.USER_LIST %>" />
                                     <input type="checkbox" name="disabledUsers"  onchange='this.form.submit()' <%=(disabledUsers.isValue()) ? "checked" : "" %> />
                                 </form>
                                 </p>
@@ -52,7 +53,7 @@
                             <div class="middle">
                                 <p>
                                 <form action="Dispatcher" method="post">
-                                    <input type="hidden" name="page" value="userList" />
+                                    <input type="hidden" name="page" value="<%=Cmd.USER_LIST %>" />
                                     <select name='roleId' onchange='this.form.submit()'>
                                         <option value="0"><%=language.getText("all") %></option>
                                         <%
@@ -94,8 +95,8 @@
                     %>
                         <tr>
                             <td class="list" style="text-align: right"><%=++i %></td>
-                            <td class="list"><a href="Dispatcher?page=userEdit&id=<%=u.getId() %>"><img src="gfx/pencil.png" border="0" title="<%=language.getText("Edit") %>" alt="<%=language.getText("Edit") %>"></a></td>
-                            <td class="list"><a href="Dispatcher?page=userBuildingUnits&id=<%=u.getId() %>"><img src="gfx/house.png" border="0" title="<%=language.getText("Building unit list") %>" alt="<%=language.getText("Building unit list") %>"></a></td>
+                            <td class="list"><a href="Dispatcher?page=<%=Cmd.USER_EDIT %>&id=<%=u.getId() %>"><img src="gfx/pencil.png" border="0" title="<%=language.getText("Edit") %>" alt="<%=language.getText("Edit") %>"></a></td>
+                            <td class="list"><a href="Dispatcher?page=<%=Cmd.USER_BU %>&id=<%=u.getId() %>"><img src="gfx/house.png" border="0" title="<%=language.getText("Building unit list") %>" alt="<%=language.getText("Building unit list") %>"></a></td>
                             <td class="list"><%=u.getLastName() %></td>
                             <td class="list"><%=u.getFirstName() %></td>
                             <td class="list"><%=(u.isEnabled()) ? language.getText("yes") : language.getText("no") %></td>

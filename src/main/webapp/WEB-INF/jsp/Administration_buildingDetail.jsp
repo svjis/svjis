@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="cz.svjis.servlet.Cmd"%>
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="company" scope="session" class="cz.svjis.bean.Company" />
 <jsp:useBean id="building" scope="request" class="cz.svjis.bean.Building" />
@@ -23,7 +24,7 @@
                     <h1 class="page-title"><%=language.getText("Building") %></h1>
                     <strong class="message"><%=message %></strong>
                     <form action="Dispatcher" method="post">
-                        <input type="hidden" name="page" value="buildingSave" />
+                        <input type="hidden" name="page" value="<%=Cmd.BUILDING_SAVE %>" />
                         <fieldset>
                             <legend class="hidden-legend"><%=language.getText("General") %></legend>
                             <p>
@@ -48,7 +49,7 @@
                         </p>
                     </form>
                             
-                    <form action="Dispatcher?page=buildingPictureSave" enctype="multipart/form-data" method="post">
+                    <form action="Dispatcher?page=<%=Cmd.BUILDING_PIC_SAVE %>" enctype="multipart/form-data" method="post">
                         <fieldset>
                             <legend><%=language.getText("Building picture (size 529 x 94 px)") %></legend>
                             <% if (company.getPictureFilename() != null) { %>

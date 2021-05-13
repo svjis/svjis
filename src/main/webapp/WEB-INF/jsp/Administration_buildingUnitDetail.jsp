@@ -4,9 +4,10 @@
     Author     : berk
 --%>
 
-<%@page import="cz.svjis.bean.BuildingUnitType"%>
-<%@page import="java.util.Iterator"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="cz.svjis.bean.BuildingUnitType"%>
+<%@page import="cz.svjis.servlet.Cmd"%>
+<%@page import="java.util.Iterator"%>
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="buildingUnit" scope="request" class="cz.svjis.bean.BuildingUnit" />
 <jsp:useBean id="buildingUnitType" scope="request" class="java.util.ArrayList" />
@@ -23,7 +24,7 @@
                 <div id="content-main-in">
                     <h1 class="page-title"><%=language.getText("Building unit") %></h1>
                     <form action="Dispatcher" method="post">
-                        <input type="hidden" name="page" value="buildingUnitSave" />
+                        <input type="hidden" name="page" value="<%=Cmd.BUILDING_UNIT_SAVE %>" />
                         <input type="hidden" name="id" value="<%=buildingUnit.getId() %>" />
                         <fieldset>
                             <legend class="hidden-legend"><%=language.getText("General") %></legend>

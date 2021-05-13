@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="cz.svjis.servlet.Cmd"%>
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="setup" scope="session" class="cz.svjis.bean.Setup" />
 <jsp:useBean id="key" scope="request" class="java.lang.String" />
@@ -21,7 +22,7 @@
                 <div id="content-main-in">
                     <h1 class="page-title"><%=language.getText("Property") %></h1>
                     <form action="Dispatcher" method="post">
-                        <input type="hidden" name="page" value="propertySave" />
+                        <input type="hidden" name="page" value="<%=Cmd.PROPERTY_SAVE %>" />
                         <input type="hidden" name="origKey" value="<%=key %>" />
                         <fieldset>
                             <legend class="hidden-legend"><%=language.getText("General") %></legend>

@@ -4,10 +4,11 @@
     Author     : berk
 --%>
 
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="cz.svjis.bean.Role"%>
 <%@page import="cz.svjis.bean.Language"%>
+<%@page import="cz.svjis.servlet.Cmd"%>
 <%@page import="java.util.Iterator"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="cUser" scope="request" class="cz.svjis.bean.User" />
 <jsp:useBean id="languageList" scope="request" class="java.util.ArrayList" />
@@ -30,7 +31,7 @@
                     <strong class="message"><%=message %></strong>
                     <strong class="error-message"><%=errorMessage %></strong>
                     <form action="Dispatcher" method="post">
-                        <input type="hidden" name="page" value="userSave" />
+                        <input type="hidden" name="page" value="<%=Cmd.USER_SAVE %>" />
                         <input type="hidden" name="id" value="<%=cUser.getId() %>" />
                         <fieldset>
                             <legend><%=language.getText("Person") %></legend>

@@ -5,9 +5,8 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
+<%@page import="cz.svjis.servlet.Cmd"%>
 <%@page import="cz.svjis.common.JspSnippets"%>
-
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="company" scope="session" class="cz.svjis.bean.Company" />
 <jsp:useBean id="message" scope="request" class="java.lang.String" />
@@ -25,7 +24,7 @@
                     <h1 class="page-title"><%=language.getText("Company") %></h1>
                     <strong class="message"><%=message %></strong>
                     <form action="Dispatcher" method="post">
-                        <input type="hidden" name="page" value="companySave" />
+                        <input type="hidden" name="page" value="<%=Cmd.COMPANY_SAVE %>" />
                         <fieldset>
                             <legend class="hidden-legend"><%=language.getText("General") %></legend>
                             <p>

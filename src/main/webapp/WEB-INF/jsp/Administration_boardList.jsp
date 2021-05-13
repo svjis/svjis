@@ -4,10 +4,10 @@
     Author     : jarberan
 --%>
 
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="cz.svjis.bean.BoardMember"%>
 <%@page import="cz.svjis.servlet.Cmd"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="boardList" scope="request" class="java.util.ArrayList" />
 
