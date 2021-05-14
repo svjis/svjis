@@ -5,12 +5,15 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<%@page import="cz.svjis.servlet.Cmd"%>
+
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 
 <%
     String p = request.getParameter("page");
     if (p == null) {
-        p = "myBuildingUnitList";
+        p = Cmd.MY_BUILDING_UNITS;
     }
 %>
 
@@ -25,7 +28,7 @@
             </div> <!-- /padding -->
             
             <ul class="nav">
-                <li <%=(p.startsWith("myBuildingUnitList") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=myBuildingUnitList"><%=language.getText("Building unit list") %></a></li>
+                <li <%=(p.startsWith("myBuildingUnitList") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=<%=Cmd.MY_BUILDING_UNITS %>"><%=language.getText("Building unit list") %></a></li>
             </ul>
             
             <div class="padding">

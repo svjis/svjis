@@ -7,8 +7,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%@page import="cz.svjis.bean.MiniNews"%>
-<%@page import="java.util.Iterator"%>
 <%@page import="cz.svjis.common.JspSnippets"%>
+<%@page import="cz.svjis.servlet.Cmd"%>
+<%@page import="java.util.Iterator"%>
 
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="miniNewsList" scope="request" class="java.util.ArrayList" />
@@ -25,7 +26,7 @@
             <div id="content-main">
                 <div id="content-main-in">
                     <h1 class="page-title" id="tbl-desc"><%=language.getText("News list") %></h1>
-                    [<a href="Dispatcher?page=redactionNewsEdit&id=0"><%=language.getText("Add new mini news") %></a>]<br>
+                    [<a href="Dispatcher?page=<%=Cmd.REDACTION_NEWS_EDIT %>&id=0"><%=language.getText("Add new mini news") %></a>]<br>
 
                     <table class="list" width="100%" aria-describedby="tbl-desc">
                         <tr>
@@ -42,7 +43,7 @@
                             MiniNews n = (MiniNews) articleListI.next();
                     %>
                         <tr>
-                            <td class="list"><a href="Dispatcher?page=redactionNewsEdit&id=<%=n.getId() %>"><img src="gfx/pencil.png" border="0" title="<%=language.getText("Edit") %>" alt="<%=language.getText("Edit") %>"></a></td>
+                            <td class="list"><a href="Dispatcher?page=<%=Cmd.REDACTION_NEWS_EDIT %>&id=<%=n.getId() %>"><img src="gfx/pencil.png" border="0" title="<%=language.getText("Edit") %>" alt="<%=language.getText("Edit") %>"></a></td>
                             <td class="list"><%=JspSnippets.renderDateTime(n.getTime()) %></td>
                             <td class="list"><%=n.getLanguage() %></td>
                             <td class="list"><%=n.getCreatedBy().getFullName(false) %></td>

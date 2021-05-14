@@ -5,6 +5,9 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<%@page import="cz.svjis.servlet.Cmd"%>
+
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
 <jsp:useBean id="message" scope="request" class="java.lang.String" />
@@ -24,7 +27,7 @@
                     <strong class="message"><%=message %></strong>
                     <strong class="error-message"><%=errorMessage %></strong>
                     <form action="Dispatcher" method="post">
-                        <input type="hidden" name="page" value="psPasswordChangeSave" />
+                        <input type="hidden" name="page" value="<%=Cmd.PERSONAL_PW_CHANGE_SAVE %>" />
                         <fieldset>
                             <legend><%=language.getText("Password change") %></legend>
                             <p>

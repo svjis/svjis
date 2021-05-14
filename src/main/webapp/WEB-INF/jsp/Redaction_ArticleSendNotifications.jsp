@@ -6,8 +6,9 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
-<%@page import="java.util.Iterator"%>
 <%@page import="cz.svjis.bean.User"%>
+<%@page import="cz.svjis.servlet.Cmd"%>
+<%@page import="java.util.Iterator"%>
 
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
@@ -28,7 +29,7 @@
                     <h1 class="page-title" id="tbl-desc"><%=language.getText("Send notifications") %> - <%=article.getHeader() %></h1>
                     
                     <form action="Dispatcher" method="post">
-                        <input type="hidden" name="page" value="redactionArticleSendNotificationsConfirmation">
+                        <input type="hidden" name="page" value="<%=Cmd.REDACTION_ARTICLE_NOTIF_CONFIRMATION %>">
                         <input type="hidden" name="id" value="<%=article.getId() %>">
                             
                     <table id="recipient-list" class="list" width="100%" aria-describedby="tbl-desc">

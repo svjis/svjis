@@ -5,13 +5,16 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<%@page import="cz.svjis.servlet.Cmd"%>
+
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="currCompany" scope="request" class="cz.svjis.bean.Company" />
 
 <%
     String p = request.getParameter("page");
     if (p == null) {
-        p = "psUserDetail";
+        p = Cmd.PERSONAL_DETAIL;
     }
 %>
 
@@ -26,8 +29,8 @@
             </div> <!-- /padding -->
             
             <ul class="nav">
-                <li <%=(p.startsWith("psUserDetail") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=psUserDetail"><%=language.getText("Personal settings") %></a></li>
-                <li <%=(p.startsWith("psPasswordChange") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=psPasswordChange"><%=language.getText("Password change") %></a></li>
+                <li <%=(p.startsWith("psUserDetail") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=<%=Cmd.PERSONAL_DETAIL %>"><%=language.getText("Personal settings") %></a></li>
+                <li <%=(p.startsWith("psPasswordChange") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=<%=Cmd.PERSONAL_PW_CHANGE %>"><%=language.getText("Password change") %></a></li>
             </ul>
             
             <div class="padding">

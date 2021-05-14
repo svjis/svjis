@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%@page import="cz.svjis.bean.Language"%>
+<%@page import="cz.svjis.servlet.Cmd"%>
 <%@page import="java.util.Iterator"%>
 
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
@@ -29,7 +30,7 @@
                     <strong class="message"><%=message %></strong>
                     <strong class="error-message"><%=errorMessage %></strong>
                     <form action="Dispatcher" method="post">
-                        <input type="hidden" name="page" value="psUserDetailSave" />
+                        <input type="hidden" name="page" value="<%=Cmd.PERSONAL_DETAIL_SAVE %>" />
                         <fieldset>
                             <legend><%=language.getText("Person") %></legend>
                             <p>

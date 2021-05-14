@@ -8,9 +8,9 @@
 
 <%@page import="cz.svjis.bean.Permission"%>
 <%@page import="cz.svjis.bean.Attachment"%>
-<%@page import="cz.svjis.common.JspSnippets"%>
 <%@page import="cz.svjis.bean.Language"%>
-
+<%@page import="cz.svjis.common.JspSnippets"%>
+<%@page import="cz.svjis.servlet.Cmd"%>
 
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
@@ -33,19 +33,19 @@
                     <h1 class="page-title" style="<%=stl %>" id="tbl-desc">#<%=report.getId() %>&nbsp;-&nbsp;<%=JspSnippets.highlight(report.getSubject(), request.getParameter("search")) %></h1>
 
                     <% if (user.hasPermission(Permission.FAULT_REPORTING_RESOLVER)) { %>
-                    [<a href="Dispatcher?page=faultReportingEdit&id=<%=report.getId() %>"><%=language.getText("Edit") %></a>]&nbsp;
+                    [<a href="Dispatcher?page=<%=Cmd.FAULT_EDIT %>&id=<%=report.getId() %>"><%=language.getText("Edit") %></a>]&nbsp;
                         <% if (report.getAssignedToUser() == null) { %>
-                        [<a href="Dispatcher?page=faultReportingFast&id=<%=report.getId() %>&takeTicket=1"><%=language.getText("Take this ticket") %></a>]&nbsp;
+                        [<a href="Dispatcher?page=<%=Cmd.FAULT_FAST_OP %>&id=<%=report.getId() %>&takeTicket=1"><%=language.getText("Take this ticket") %></a>]&nbsp;
                         <% } %>
                         <% if ((report.getAssignedToUser() != null) && (report.getAssignedToUser().getId() == user.getId()) && !report.isClosed()) { %>
-                        [<a href="Dispatcher?page=faultReportingFast&id=<%=report.getId() %>&closeTicket=1"><%=language.getText("Close this ticket") %></a>]&nbsp;
+                        [<a href="Dispatcher?page=<%=Cmd.FAULT_FAST_OP %>&id=<%=report.getId() %>&closeTicket=1"><%=language.getText("Close this ticket") %></a>]&nbsp;
                         <% } %>
                     <% } %>
 
                     <% if (watching.equals("0")) { %>
-                        [<a href="Dispatcher?page=faultReportingFast&id=<%=report.getId() %>&watch=1"><%=language.getText("Start watching") %></a>]&nbsp;
+                        [<a href="Dispatcher?page=<%=Cmd.FAULT_FAST_OP %>&id=<%=report.getId() %>&watch=1"><%=language.getText("Start watching") %></a>]&nbsp;
                     <% } else { %>
-                        [<a href="Dispatcher?page=faultReportingFast&id=<%=report.getId() %>&watch=0"><%=language.getText("Stop watching") %></a>]&nbsp;
+                        [<a href="Dispatcher?page=<%=Cmd.FAULT_FAST_OP %>&id=<%=report.getId() %>&watch=0"><%=language.getText("Stop watching") %></a>]&nbsp;
                     <% } %>
 
                     <table class="list" width="95%" aria-describedby="tbl-desc">
@@ -76,7 +76,7 @@
                     </table>
                         
                     <% if (report.getId() != 0) { %>
-                    <form action="Dispatcher?page=faultReportingAttachmentSave&reportId=<%=report.getId() %>" enctype="multipart/form-data" method="post">
+                    <form action="Dispatcher?page=<%=Cmd.FAULT_ATT_SAVE %>&reportId=<%=report.getId() %>" enctype="multipart/form-data" method="post">
                         <fieldset>
                             <legend id="tbl2-desc"><%=language.getText("Attachments") %></legend>
                             <%=JspSnippets.renderAttachments(report.getAttachmentList(), request, "File", "faultReportingDownload", "faultReportingAttachmentDelete", true, true, false, !report.isClosed(), "tbl2-desc") %>
@@ -95,7 +95,7 @@
                       
                     <% if (user.hasPermission(Permission.FAULT_REPORTING_COMMENT) && (!report.isClosed())) { %>
                         <form action="Dispatcher" method="post">
-                             <input type="hidden" name="page" value="faultInsertComment">
+                             <input type="hidden" name="page" value="<%=Cmd.FAULT_COMMENT %>">
                              <input type="hidden" name="id" value="<%=report.getId() %>">
                              <p>
                                  <textarea

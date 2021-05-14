@@ -8,6 +8,7 @@
 
 <%@page import="cz.svjis.bean.Article"%>
 <%@page import="cz.svjis.common.JspSnippets"%>
+<%@page import="cz.svjis.servlet.Cmd"%>
 <%@page import="java.util.Iterator"%>
 
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
@@ -35,7 +36,7 @@
                         <div class="row">
                             
                             <div class="left">
-                                <p>[<a href="Dispatcher?page=redactionArticleEdit&id=0"><%=language.getText("Add new article") %></a>]</p>
+                                <p>[<a href="Dispatcher?page=<%=Cmd.REDACTION_ARTICLE_EDIT %>&id=0"><%=language.getText("Add new article") %></a>]</p>
                             </div>
                             <div class="middle" style="padding-left: 300px">
                                 <p>&nbsp;</p>
@@ -46,7 +47,7 @@
                             <div class="middle">
                                 <p>
                                     <form action="Dispatcher" method="post">
-                                        <input type="hidden" name="page" value="redactionArticleList" />
+                                        <input type="hidden" name="page" value="<%=Cmd.REDACTION_ARTICLE_LIST %>" />
                                         <select name='roleId' onchange='this.form.submit()'>
                                             <option value="0"><%=language.getText("all") %></option>
                                             <%
@@ -93,9 +94,9 @@
                             Article a = (Article) articleListI.next();
                     %>
                         <tr>
-                            <td class="list"><a href="Dispatcher?page=articleDetail&id=<%=a.getId() %><%=search %>"><img src="gfx/find.png" border="0" title="View" alt="View"></a></td>
-                            <td class="list"><a href="Dispatcher?page=redactionArticleEdit&id=<%=a.getId() %>"><img src="gfx/pencil.png" border="0" title="<%=language.getText("Edit") %>" alt="<%=language.getText("Edit") %>"></a></td>
-                            <td class="list"><a href="Dispatcher?page=redactionArticleSendNotifications&id=<%=a.getId() %>"><img src="gfx/email_open_image.png" border="0" title="<%=language.getText("Send notifications") %>" alt="<%=language.getText("Send notifications") %>"></td>
+                            <td class="list"><a href="Dispatcher?page=<%=Cmd.ARTICLE_DETAIL %>&id=<%=a.getId() %><%=search %>"><img src="gfx/find.png" border="0" title="View" alt="View"></a></td>
+                            <td class="list"><a href="Dispatcher?page=<%=Cmd.REDACTION_ARTICLE_EDIT %>&id=<%=a.getId() %>"><img src="gfx/pencil.png" border="0" title="<%=language.getText("Edit") %>" alt="<%=language.getText("Edit") %>"></a></td>
+                            <td class="list"><a href="Dispatcher?page=<%=Cmd.REDACTION_ARTICLE_NOTIF %>&id=<%=a.getId() %>"><img src="gfx/email_open_image.png" border="0" title="<%=language.getText("Send notifications") %>" alt="<%=language.getText("Send notifications") %>"></td>
                             <td class="list"><%=JspSnippets.highlight(a.getHeader(), request.getParameter("search")) %></td>
                             <td class="list"><%=a.getMenuNodeDescription() %></td>
                             <td class="list"><%=a.getAuthor().getFullName(false) %></td>

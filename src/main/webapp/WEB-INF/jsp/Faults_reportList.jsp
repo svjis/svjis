@@ -10,6 +10,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="cz.svjis.bean.FaultReport"%>
 <%@page import="cz.svjis.common.JspSnippets"%>
+<%@page import="cz.svjis.servlet.Cmd"%>
 
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
@@ -29,7 +30,7 @@
                 <div id="content-main-in">
                     <h1 class="page-title" id="tbl-desc"><%=language.getText("Fault reporting") %></h1>
                     <% if (user.hasPermission(Permission.FAULT_REPORTING_REPORTER)) { %>
-                    <a href="Dispatcher?page=faultReportingEdit&id=0" class="create-button"><%=language.getText("Report new fault") %></a>
+                    <a href="Dispatcher?page=<%=Cmd.FAULT_EDIT %>&id=0" class="create-button"><%=language.getText("Report new fault") %></a>
                     <% } %>
                     <table width="100%" class="list" aria-describedby="tbl-desc">
                         <tr>
@@ -46,7 +47,7 @@
                             String stl = (f.isClosed()) ? "background-color:#d0d0d0;text-decoration: line-through;" : "";
                         %>
                         <tr>
-                            <td class="list" style="<%=stl %>"><a href="Dispatcher?page=faultDetail&id=<%=f.getId() %><%=(request.getParameter("search") != null) ? "&search=" + JspSnippets.encodeUrl(request.getParameter("search")) : "" %>"><img src="gfx/find.png" border="0" title="View" alt="View"></a></td>
+                            <td class="list" style="<%=stl %>"><a href="Dispatcher?page=<%=Cmd.FAULT_DETAIL %>&id=<%=f.getId() %><%=(request.getParameter("search") != null) ? "&search=" + JspSnippets.encodeUrl(request.getParameter("search")) : "" %>"><img src="gfx/find.png" border="0" title="View" alt="View"></a></td>
                             <td class="list" style="<%=stl %>text-align: right;"><%=f.getId() %></td>
                             <td class="list" style="<%=stl %>"><%=JspSnippets.renderDate(f.getCreationDate()) %></td>
                             <td class="list" style="<%=stl %>"><%=JspSnippets.highlight(f.getSubject(), request.getParameter("search")) %></td>

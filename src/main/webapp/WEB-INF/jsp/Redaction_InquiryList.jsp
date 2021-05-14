@@ -6,8 +6,9 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
-<%@page import="cz.svjis.common.JspSnippets"%>
 <%@page import="cz.svjis.bean.Inquiry"%>
+<%@page import="cz.svjis.common.JspSnippets"%>
+<%@page import="cz.svjis.servlet.Cmd"%>
 <%@page import="java.util.Iterator"%>
 
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
@@ -25,7 +26,7 @@
             <div id="content-main">
                 <div id="content-main-in">
                     <h1 class="page-title" id="tbl-desc"><%=language.getText("Inquiry list") %></h1>
-                    [<a href="Dispatcher?page=redactionInquiryEdit&id=0"><%=language.getText("Add new inquiry") %></a>]<br>
+                    [<a href="Dispatcher?page=<%=Cmd.REDACTION_INQUIRY_EDIT %>&id=0"><%=language.getText("Add new inquiry") %></a>]<br>
 
                     <table class="list" width="100%" aria-describedby="tbl-desc">
                         <tr>
@@ -44,9 +45,9 @@
                             Inquiry i = (Inquiry) inquiryListI.next();
                     %>
                         <tr>
-                            <td class="list"><a href="Dispatcher?page=redactionInquiryEdit&id=<%=i.getId() %>"><img src="gfx/pencil.png" border="0" title="<%=language.getText("Edit") %>" alt="<%=language.getText("Edit") %>"></a></td>
-                            <td class="list"><a href="Dispatcher?page=redactionInquiryLog&id=<%=i.getId() %>"><img src="gfx/chart_bar.png" border="0" title="<%=language.getText("Log") %>" alt="<%=language.getText("Log") %>"></a></td>
-                            <td class="list"><a href="Upload?page=exportInquiryLogToXls&id=<%=i.getId() %>"><img src="gfx/Files_xls.gif" border="0" title="<%=language.getText("Export to Excel") %>" alt="<%=language.getText("Export to Excel") %>"></a></td>
+                            <td class="list"><a href="Dispatcher?page=<%=Cmd.REDACTION_INQUIRY_EDIT %>&id=<%=i.getId() %>"><img src="gfx/pencil.png" border="0" title="<%=language.getText("Edit") %>" alt="<%=language.getText("Edit") %>"></a></td>
+                            <td class="list"><a href="Dispatcher?page=<%=Cmd.REDACTION_INQUIRY_LOG %>&id=<%=i.getId() %>"><img src="gfx/chart_bar.png" border="0" title="<%=language.getText("Log") %>" alt="<%=language.getText("Log") %>"></a></td>
+                            <td class="list"><a href="Upload?page=<%=Cmd.REDACTION_INQUIRY_XLS %>&id=<%=i.getId() %>"><img src="gfx/Files_xls.gif" border="0" title="<%=language.getText("Export to Excel") %>" alt="<%=language.getText("Export to Excel") %>"></a></td>
                             <td class="list"><%=i.getDescription() %></td>
                             <td class="list"><%=JspSnippets.renderDate(i.getStartingDate()) %></td>
                             <td class="list"><%=JspSnippets.renderDate(i.getEndingDate()) %></td>

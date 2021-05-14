@@ -199,7 +199,7 @@ public class CmdFactory {
         // *******************
         if (ctx.getUser().hasPermission(Permission.MENU_FAULT_REPORTING)) {
             
-            if (page.equals(Cmd.FAULT_LIST) || page.equals(Cmd.FAULT_LIST_CREATED) || page.equals(Cmd.FAULT_LIST_CLOSED) || page.equals(Cmd.FAULT_LIST_SEARCH)) {
+            if (page.equals(Cmd.FAULT_LIST) || page.equals(Cmd.FAULT_LIST_CREATED) || page.equals(Cmd.FAULT_LIST_ASSIGNED) || page.equals(Cmd.FAULT_LIST_CLOSED) || page.equals(Cmd.FAULT_LIST_SEARCH)) {
                 return new FaultReportingListCmd(ctx);
             }
 

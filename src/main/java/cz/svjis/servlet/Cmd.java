@@ -91,6 +91,7 @@ public class Cmd {
     // *******************
     public static final String FAULT_LIST = "faultReportingList";
     public static final String FAULT_LIST_CREATED = "faultReportingListCreatedByMe";
+    public static final String FAULT_LIST_ASSIGNED = "faultReportingListAssignedToMe";
     public static final String FAULT_LIST_CLOSED = "faultReportingListClosed";
     public static final String FAULT_LIST_SEARCH = "faultReportingListSearch";
     public static final String FAULT_EDIT = "faultReportingEdit";

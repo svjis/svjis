@@ -8,6 +8,7 @@
 
 <%@page import="cz.svjis.bean.InquiryOption"%>
 <%@page import="cz.svjis.common.JspSnippets"%>
+<%@page import="cz.svjis.servlet.Cmd"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.Date"%>
 
@@ -29,7 +30,7 @@
                     <h1 class="page-title"><%=language.getText("Inquiry") %></h1>
                     <strong class="message"><%=message %></strong>
                     <form action="Dispatcher" method="post">
-                        <input type="hidden" name="page" value="redactionInquirySave">
+                        <input type="hidden" name="page" value="<%=Cmd.REDACTION_INQUIRY_SAVE %>">
                         <input type="hidden" name="id" value="<%=inquiry.getId() %>">
                         
                         <p>
@@ -59,7 +60,7 @@
                                             <input class="common-input" id="o<%=i %>-input" type="text" name="o_<%=i %>" size="50" maxlength="250" value="<%=io.getDescription() %>">
                                         </td>
                                         <% if (inquiry.getCount() == 0) { %>
-                                        <td>&nbsp;<a href="Dispatcher?page=redactionInquiryOptionDelete&id=<%=io.getId() %>"><img src="gfx/delete.png" border="0" title="<%=language.getText("Delete") %>" alt="<%=language.getText("Delete") %>"></td>
+                                        <td>&nbsp;<a href="Dispatcher?page=<%=Cmd.REDACTION_INQUIRY_OPT_DELETE %>&id=<%=io.getId() %>"><img src="gfx/delete.png" border="0" title="<%=language.getText("Delete") %>" alt="<%=language.getText("Delete") %>"></td>
                                         <% } else { %>
                                         <td>&nbsp;(<%=language.getText("Votes") %>:&nbsp;<%=io.getCount() %>)</td>
                                         <% } %>

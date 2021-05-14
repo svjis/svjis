@@ -5,6 +5,9 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<%@page import="cz.svjis.servlet.Cmd"%>
+
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 
 <jsp:include page="_header.jsp" />
@@ -17,7 +20,7 @@
                     <h1 class="page-title"><%=language.getText("Password assistance")%></h1>
                     
                         <form action="Dispatcher" method="post">
-                        <input type="hidden" name="page" value="lostPassword_submit" />
+                        <input type="hidden" name="page" value="<%=Cmd.LOST_PWD_SUBMIT %>" />
                         <fieldset>
                             <legend class="hidden-legend"><%=language.getText("General") %></legend>
                             <p>
