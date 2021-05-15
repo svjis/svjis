@@ -15,6 +15,8 @@ package cz.svjis.bean;
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.svjis.servlet.Cmd;
+
 /**
  *
  * @author jaroslav_b
@@ -148,7 +150,7 @@ public class Menu {
             if ((isTopLevel) && ((activeSection == ami.getSection().getId()) || (ami.getSubSections() != null))) {
                 active = " id=\"nav-active\"";
             }
-            output.append(String.format("<li %s><a href=\"Dispatcher?page=articleList&section=%d\">%s</a>", active, ami.getSection().getId(), ami.getSection().getDescription()));
+            output.append(String.format("<li %s><a href=\"Dispatcher?page=%s&section=%d\">%s</a>", active, Cmd.ARTICLE_LIST, ami.getSection().getId(), ami.getSection().getDescription()));
             if (ami.getSubSections() != null) {
                 output.append(writeSubMenu(ami.getSubSections(), activeSection, false));
             }
