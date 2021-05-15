@@ -6,12 +6,12 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
-<%@page import="java.util.ArrayList"%>
-<%@page import="cz.svjis.common.JspSnippets"%>
 <%@page import="cz.svjis.bean.InquiryLog"%>
 <%@page import="cz.svjis.bean.InquiryOption"%>
-<%@page import="java.util.Iterator"%>
+<%@page import="cz.svjis.common.JspSnippets"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Date"%>
+<%@page import="java.util.Iterator"%>
 
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />

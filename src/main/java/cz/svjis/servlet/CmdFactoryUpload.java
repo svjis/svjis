@@ -26,18 +26,16 @@ import cz.svjis.servlet.cmd.FaultReportingDownloadCmd;
  * @author jaroslav_b
  */
 public class CmdFactoryUpload {
-
-    public static final String ADVERT_ATTACHMENT_DOWNLOAD = "advertAttachmentDownload";
     
     private CmdFactoryUpload() {}
 
     public static Command create(String page, CmdContext ctx) {
         
-        if (page.equals("download")) {
+        if (page.equals(Cmd.ARTICLE_ATT_DOWNLOAD)) {
             return new DownloadCmd(ctx);
         }
 
-        if (page.equals("getBuildingPicture")) {
+        if (page.equals(Cmd.BUILDING_PIC_GET)) {
             return new BuildingPictureCmd(ctx);
         }
         
@@ -46,11 +44,11 @@ public class CmdFactoryUpload {
         // ******************
         if (ctx.getUser().hasPermission(Permission.MENU_ADMINISTRATION)) {
             
-            if (page.equals("exportBuildingUnitListToXls")) {
+            if (page.equals(Cmd.BUILDING_UNIT_XLS)) {
                 return new ExportBuildingUnitListToXlsCmd(ctx);
             }
             
-            if (page.equals("exportUserListToXls")) {
+            if (page.equals(Cmd.USER_XLS)) {
                 return new ExportUserListToXlsCmd(ctx);
             }
         }
@@ -59,7 +57,7 @@ public class CmdFactoryUpload {
         // * Fault reporting *
         // *******************
         if (ctx.getUser().hasPermission(Permission.MENU_FAULT_REPORTING)) {
-            if (page.equals("faultReportingDownload")) {
+            if (page.equals(Cmd.FAULT_ATT_DOWNLOAD)) {
                 return new FaultReportingDownloadCmd(ctx);
             }
         }
@@ -68,7 +66,7 @@ public class CmdFactoryUpload {
         // * Adverts         *
         // *******************
         if (ctx.getUser().hasPermission(Permission.MENU_ADVERTS)) {
-            if (page.equals(ADVERT_ATTACHMENT_DOWNLOAD)) {
+            if (page.equals(Cmd.ADVERT_ATT_DOWNLOAD)) {
                 return new AdvertAttachmentDownloadCmd(ctx);
             }
         }
@@ -77,7 +75,7 @@ public class CmdFactoryUpload {
         // * Redaction     *
         // *****************
         if (ctx.getUser().hasPermission(Permission.MENU_REDACTION)) {
-            if (page.equals("exportInquiryLogToXls")) {
+            if (page.equals(Cmd.REDACTION_INQUIRY_XLS)) {
                 return new ExportInquiryLogToXlsCmd(ctx);
             }
         }

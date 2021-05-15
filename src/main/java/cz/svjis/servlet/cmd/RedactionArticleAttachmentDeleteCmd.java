@@ -17,6 +17,7 @@ import cz.svjis.bean.Attachment;
 import cz.svjis.bean.ArticleDAO;
 import cz.svjis.bean.LogDAO;
 import cz.svjis.bean.Permission;
+import cz.svjis.servlet.Cmd;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -56,7 +57,7 @@ public class RedactionArticleAttachmentDeleteCmd extends Command {
         }
         articleDao.deleteArticleAttachment(parId);
         
-        String url = "Dispatcher?page=redactionArticleEdit&id=" + aa.getDocumentId();
+        String url = String.format("Dispatcher?page=%s&id=%d", Cmd.REDACTION_ARTICLE_EDIT, aa.getDocumentId());
         getResponse().sendRedirect(url);
         logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_DELETE_ATTACHMENT, aa.getDocumentId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
     }

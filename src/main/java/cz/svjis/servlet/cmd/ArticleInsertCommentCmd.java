@@ -18,6 +18,7 @@ import cz.svjis.bean.Comment;
 import cz.svjis.bean.MailDAO;
 import cz.svjis.bean.Permission;
 import cz.svjis.bean.User;
+import cz.svjis.servlet.Cmd;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -85,13 +86,13 @@ public class ArticleInsertCommentCmd extends Command {
                 }
                 String body = String.format(tBody,
                         getUser().getFirstName() + " " + getUser().getLastName(),
-                        "<a href=\"http://" + getCompany().getInternetDomain() + "/Dispatcher?page=articleDetail&id=" + article.getId() + "\">" + article.getHeader() + "</a>",
+                        "<a href=\"http://" + getCompany().getInternetDomain() + "/Dispatcher?page=" + Cmd.ARTICLE_DETAIL + "&id=" + article.getId() + "\">" + article.getHeader() + "</a>",
                         ac.getBody().replace("\n", "<br>"));
                 mailDao.queueMail(getCompany().getId(), u.geteMail(), subject, body);
             }
         }
 
-        String url = "Dispatcher?page=articleDetail&id=" + articleId;
+        String url = String.format("Dispatcher?page=%s&id=%d", Cmd.ARTICLE_DETAIL, articleId);
         getResponse().sendRedirect(url);
     }
 }

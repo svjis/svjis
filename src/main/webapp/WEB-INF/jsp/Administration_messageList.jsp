@@ -4,8 +4,8 @@
     Author     : berk
 --%>
 
-<%@page import="cz.svjis.common.JspSnippets"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="cz.svjis.common.JspSnippets"%>
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="messageList" scope="request" class="java.util.ArrayList" />
 

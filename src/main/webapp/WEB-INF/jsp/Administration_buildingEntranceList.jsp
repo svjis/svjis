@@ -4,9 +4,10 @@
     Author     : jarberan
 --%>
 
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="cz.svjis.bean.BuildingEntrance"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="cz.svjis.servlet.Cmd"%>
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="buildingEntranceList" scope="request" class="java.util.ArrayList" />
 
@@ -22,7 +23,7 @@
                 <div id="content-main-in">
                     <h1 class="page-title" id="tbl-desc"><%=language.getText("Building entrance list") %></h1>
 
-                    [<a href="Dispatcher?page=buildingEntranceEdit&id=0"><%=language.getText("Add new building entrance") %></a>]
+                    [<a href="Dispatcher?page=<%=Cmd.BUILDING_ENT_EDIT %>&id=0"><%=language.getText("Add new building entrance") %></a>]
                     
                     <table class="list" aria-describedby="tbl-desc">
                         <tr>
@@ -38,8 +39,8 @@
                     %>
                         <tr>
                             <td class="list" style="text-align: right"><%=++i %></td>
-                            <td class="list"><a href="Dispatcher?page=buildingEntranceEdit&id=<%=be.getId() %>"><img src="gfx/pencil.png" border="0" title="<%=language.getText("Edit") %>" alt="<%=language.getText("Edit") %>"></a></td>
-                            <td class="list"><a onclick="if (!confirm('<%=language.getText("Really do you want to remove entrance") %> <%=be.getDescription() %> ?')) return false;" href="Dispatcher?page=buildingEntranceDelete&id=<%=be.getId() %>"><img src="gfx/delete.png" border="0" title="<%=language.getText("Delete") %>" alt="<%=language.getText("Delete") %>"></a></td>
+                            <td class="list"><a href="Dispatcher?page=<%=Cmd.BUILDING_ENT_EDIT %>&id=<%=be.getId() %>"><img src="gfx/pencil.png" border="0" title="<%=language.getText("Edit") %>" alt="<%=language.getText("Edit") %>"></a></td>
+                            <td class="list"><a onclick="if (!confirm('<%=language.getText("Really do you want to remove entrance") %> <%=be.getDescription() %> ?')) return false;" href="Dispatcher?page=<%=Cmd.BUILDING_ENT_DELETE %>&id=<%=be.getId() %>"><img src="gfx/delete.png" border="0" title="<%=language.getText("Delete") %>" alt="<%=language.getText("Delete") %>"></a></td>
                             <td class="list"><%=be.getDescription() %></td>
                             <td class="list"><%=be.getAddress() %></td>
                         </tr>

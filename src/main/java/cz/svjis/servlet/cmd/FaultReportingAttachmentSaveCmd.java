@@ -17,6 +17,7 @@ import cz.svjis.bean.Attachment;
 import cz.svjis.bean.FaultReportDAO;
 import cz.svjis.bean.LogDAO;
 import cz.svjis.bean.Permission;
+import cz.svjis.servlet.Cmd;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -81,7 +82,7 @@ public class FaultReportingAttachmentSaveCmd extends Command {
                 }
             }
         }
-        String url = "Dispatcher?page=faultDetail&id=" + reportId;
+        String url = String.format("Dispatcher?page=%s&id=%d", Cmd.FAULT_DETAIL, reportId);
         getResponse().sendRedirect(url);
     }
 }

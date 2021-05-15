@@ -14,6 +14,7 @@ package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.BoardMemberDAO;
 import cz.svjis.bean.Permission;
+import cz.svjis.servlet.Cmd;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -51,7 +52,7 @@ public class BoardSaveCmd extends Command {
             boardDao.addBoardMember(getCompany().getId(), parUserId, parTypeId);
         }
 
-        String url = "Dispatcher?page=boardMemberList";
+        String url = String.format("Dispatcher?page=%s", Cmd.BOARD_LIST);
         getResponse().sendRedirect(url);
     }
 }

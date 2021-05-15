@@ -16,8 +16,8 @@ import cz.svjis.bean.Advert;
 import cz.svjis.bean.AdvertDAO;
 import cz.svjis.bean.Attachment;
 import cz.svjis.bean.Permission;
+import cz.svjis.servlet.Cmd;
 import cz.svjis.servlet.CmdContext;
-import cz.svjis.servlet.CmdFactory;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
 
@@ -60,7 +60,7 @@ public class AdvertAttachmentDeleteCmd extends Command {
         
         advertDao.deleteAttachment(id);
         
-        String url = String.format("Dispatcher?page=%s&id=%d", CmdFactory.ADVERT_EDIT, at.getDocumentId());
+        String url = String.format("Dispatcher?page=%s&id=%d", Cmd.ADVERT_EDIT, at.getDocumentId());
         getResponse().sendRedirect(url);
     }
 }

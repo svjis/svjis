@@ -6,9 +6,10 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
-<%@page import="java.util.Date"%>
-<%@page import="cz.svjis.common.JspSnippets"%>
 <%@page import="cz.svjis.bean.Language"%>
+<%@page import="cz.svjis.common.JspSnippets"%>
+<%@page import="cz.svjis.servlet.Cmd"%>
+<%@page import="java.util.Date"%>
 <%@page import="java.util.Iterator"%>
 
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
@@ -30,7 +31,7 @@
                     <h1 class="page-title"><%=language.getText("Mini news") %></h1>
                     <strong class="message"><%=message %></strong>
                     <form action="Dispatcher" method="post">
-                        <input type="hidden" name="page" value="redactionNewsEditSave">
+                        <input type="hidden" name="page" value="<%=Cmd.REDACTION_NEWS_SAVE %>">
                         <input type="hidden" name="id" value="<%=miniNews.getId() %>">
                         
                         <p>

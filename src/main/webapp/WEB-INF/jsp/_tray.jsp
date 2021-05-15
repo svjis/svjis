@@ -4,9 +4,9 @@
     Author     : berk
 --%>
 
-<%@page import="cz.svjis.bean.SystemMenuEntry"%>
-<%@page import="java.util.Iterator"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="cz.svjis.bean.SystemMenuEntry"%>
+<%@page import="java.util.List"%>
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="systemMenu" scope="request" class="java.util.ArrayList" />
@@ -15,9 +15,7 @@
     <div id="tray">
         <ul class="box">
             <%
-               Iterator systemMenuI = systemMenu.iterator();
-               while (systemMenuI.hasNext()) {
-                    SystemMenuEntry me = (SystemMenuEntry) systemMenuI.next();
+               for (SystemMenuEntry me : (List<SystemMenuEntry>) systemMenu) {
             %>   
             <!-- <li id="tray-active"> -->
             <li>

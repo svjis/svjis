@@ -17,6 +17,7 @@ import cz.svjis.bean.MailDAO;
 import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
 import cz.svjis.common.RandomString;
+import cz.svjis.servlet.Cmd;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -42,7 +43,7 @@ public class LostPasswordSubmitCmd extends Command {
         LogDAO logDao = new LogDAO(getCnn());
 
         if ((parEmail == null) || (parEmail.equals(""))) {
-            String url = "Dispatcher?page=lostPassword";
+            String url = String.format("Dispatcher?page=%s", Cmd.LOST_PWD);
             getResponse().sendRedirect(url);
             return;
         }

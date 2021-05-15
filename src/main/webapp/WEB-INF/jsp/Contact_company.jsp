@@ -4,9 +4,11 @@
     Author     : berk
 --%>
 
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <%@page import="cz.svjis.bean.BoardMember"%>
 <%@page import="java.util.ArrayList"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="company" scope="session" class="cz.svjis.bean.Company" />
 <jsp:useBean id="boardList" scope="request" class="java.util.ArrayList" />

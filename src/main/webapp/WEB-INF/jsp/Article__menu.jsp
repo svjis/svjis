@@ -4,11 +4,14 @@
     Author     : berk
 --%>
 
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="cz.svjis.bean.MenuItem"%>
+<%@page import="cz.svjis.servlet.Cmd"%>
 <%@page import="java.util.ArrayList"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="menu" scope="request" class="cz.svjis.bean.Menu" />
@@ -32,7 +35,7 @@
                             active = " id=\"nav-active\"";
                         }
                 %>
-                        <li <%=active %>><a href="Dispatcher?page=articleList"><%=language.getText("All articles") %></a></li>
+                        <li <%=active %>><a href="Dispatcher?page=<%=Cmd.ARTICLE_LIST %>"><%=language.getText("All articles") %></a></li>
                 <%
                     }
                 %>

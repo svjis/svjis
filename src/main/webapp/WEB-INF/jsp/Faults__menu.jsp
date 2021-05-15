@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%@page import="cz.svjis.bean.Permission"%>
+<%@page import="cz.svjis.servlet.Cmd"%>
 
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="user" scope="session" class="cz.svjis.bean.User" />
@@ -15,7 +16,7 @@
 <%
     String p = request.getParameter("page");
     if (p == null) {
-        p = "faultReportingList";
+        p = Cmd.FAULT_LIST;
     }
 %>
 
@@ -30,14 +31,14 @@
             </div> <!-- /padding -->
             
             <ul class="nav">
-                <li <%=(p.equals("faultReportingList") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=faultReportingList"><%=language.getText("All open") %>&nbsp;(<%=counters.getAllOpenCnt() %>)</a></li>
+                <li <%=(p.equals("faultReportingList") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=<%=Cmd.FAULT_LIST %>"><%=language.getText("All open") %>&nbsp;(<%=counters.getAllOpenCnt() %>)</a></li>
                 <% if (user.hasPermission(Permission.FAULT_REPORTING_REPORTER)) { %>
-                <li <%=(p.equals("faultReportingListCreatedByMe") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=faultReportingListCreatedByMe"><%=language.getText("Reported by me") %>&nbsp;(<%=counters.getAllCreatedByMeCnt() %>)</a></li>
+                <li <%=(p.equals("faultReportingListCreatedByMe") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=<%=Cmd.FAULT_LIST_CREATED %>"><%=language.getText("Reported by me") %>&nbsp;(<%=counters.getAllCreatedByMeCnt() %>)</a></li>
                 <% } %>
                 <% if (user.hasPermission(Permission.FAULT_REPORTING_RESOLVER)) { %>
-                <li <%=(p.equals("faultReportingListAssignedToMe") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=faultReportingListAssignedToMe"><%=language.getText("Assigned to me") %>&nbsp;(<%=counters.getAllAssignedToMeCnt() %>)</a></li>
+                <li <%=(p.equals("faultReportingListAssignedToMe") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=<%=Cmd.FAULT_LIST_ASSIGNED %>"><%=language.getText("Assigned to me") %>&nbsp;(<%=counters.getAllAssignedToMeCnt() %>)</a></li>
                 <% } %>
-                <li <%=(p.equals("faultReportingListClosed") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=faultReportingListClosed"><%=language.getText("All closed") %>&nbsp;(<%=counters.getAllClosedCnt() %>)</a></li>
+                <li <%=(p.equals("faultReportingListClosed") ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=<%=Cmd.FAULT_LIST_CLOSED %>"><%=language.getText("All closed") %>&nbsp;(<%=counters.getAllClosedCnt() %>)</a></li>
             </ul>
             
             <div class="padding">

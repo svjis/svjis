@@ -15,6 +15,7 @@ package cz.svjis.servlet.cmd;
 import cz.svjis.bean.BuildingDAO;
 import cz.svjis.bean.BuildingEntrance;
 import cz.svjis.bean.Permission;
+import cz.svjis.servlet.Cmd;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -53,7 +54,8 @@ public class BuildingEntranceSaveCmd extends Command {
         } else {
             buildingDao.modifyBuildingEntrance(be);
         }
-        String url = "Dispatcher?page=buildingEntranceList";
+        
+        String url = String.format("Dispatcher?page=%s", Cmd.BUILDING_ENT_LIST);
         getResponse().sendRedirect(url);
     }
 }

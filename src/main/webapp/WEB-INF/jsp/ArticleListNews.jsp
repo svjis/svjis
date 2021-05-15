@@ -9,7 +9,7 @@
 <%@page import="cz.svjis.bean.MiniNews"%>
 <%@page import="cz.svjis.common.JspSnippets"%>
 <%@page import="java.util.Calendar"%>
-<%@page import="java.util.Iterator"%>
+<%@page import="java.util.List"%>
 
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="miniNewsList" scope="request" class="java.util.ArrayList" />
@@ -24,10 +24,8 @@
  <div class="box-01">
      
      <%
-         Iterator<MiniNews> newsI = miniNewsList.iterator();
          boolean even = false;
-         while (newsI.hasNext()) {
-             MiniNews n = newsI.next();
+         for (MiniNews n: (List<MiniNews>) miniNewsList) {
              Calendar c = Calendar.getInstance();
              c.setTime(n.getTime());
              String months[] = {"JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"};

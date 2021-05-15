@@ -32,6 +32,7 @@ import cz.svjis.bean.Language;
 import cz.svjis.bean.Slider;
 import cz.svjis.bean.SliderItem;
 import cz.svjis.bean.User;
+import cz.svjis.servlet.Cmd;
 
 /**
  *
@@ -257,7 +258,7 @@ public class JspSnippets {
 
         if (attachments != null) {
             for (Attachment a: attachments) {
-                result = result.replaceAll("\\{" + a.getFileName() + "\\}", "<img src=\"Upload?page=download&id=" + a.getId() + "\" alt=\"" + a.getFileName() + "\">");
+                result = result.replaceAll("\\{" + a.getFileName() + "\\}", "<img src=\"Upload?page=" + Cmd.ARTICLE_ATT_DOWNLOAD + "&id=" + a.getId() + "\" alt=\"" + a.getFileName() + "\">");
             }
         }
 

@@ -22,12 +22,6 @@ import cz.svjis.servlet.cmd.*;
  */
 public class CmdFactory {
     
-    public static final String ADVERT_LIST = "advertList";
-    public static final String ADVERT_EDIT = "advertEdit";
-    public static final String ADVERT_SAVE = "advertSave";
-    public static final String ADVERT_ATTACHMENT_SAVE = "advertAttachmentSave";
-    public static final String ADVERT_ATTACHMENT_DELETE = "advertAttachmentDelete";
-
     private CmdFactory() {}
     
     public static Command create(String page, CmdContext ctx) {
@@ -35,22 +29,22 @@ public class CmdFactory {
         // *****************
         // * Login         *
         // *****************
-        if (page.equals("login")) {
+        if (page.equals(Cmd.LOGIN)) {
             return new LoginCmd(ctx);
         }
         
-        if (page.equals("logout")) {
+        if (page.equals(Cmd.LOGOUT)) {
             return new LogoutCmd(ctx);
         }
 
         // *****************
         // * Lost login    *
         // *****************
-        if (page.equals("lostPassword")) {
+        if (page.equals(Cmd.LOST_PWD)) {
             return new LostPasswordCmd(ctx);
         }
 
-        if (page.equals("lostPassword_submit")) {
+        if (page.equals(Cmd.LOST_PWD_SUBMIT)) {
             return new LostPasswordSubmitCmd(ctx);
         }
 
@@ -59,23 +53,23 @@ public class CmdFactory {
         // *****************
         if (ctx.getUser().hasPermission(Permission.MENU_ARTICLES)) {
 
-            if (page.equals("articleList") || page.equals("search")) {
+            if (page.equals(Cmd.ARTICLE_LIST) || page.equals(Cmd.ARTICLE_SEARCH)) {
                 return new ArticleListCmd(ctx);
             }
 
-            if (page.equals("inquiryVote")) {
+            if (page.equals(Cmd.INQUIRY_VOTE)) {
                 return new ArticleInquiryVoteCmd(ctx);
             }
 
-            if (page.equals("articleDetail")) {
+            if (page.equals(Cmd.ARTICLE_DETAIL)) {
                 return new ArticleDetailCmd(ctx);
             }
 
-            if (page.equals("insertArticleComment")) {
+            if (page.equals(Cmd.ARTICLE_COMMENT)) {
                 return new ArticleInsertCommentCmd(ctx);
             }
             
-            if (page.equals("articleFast")) {
+            if (page.equals(Cmd.ARTICLE_FAST_OP)) {
                 return new ArticleFastCmd(ctx);
             }
         }
@@ -85,11 +79,11 @@ public class CmdFactory {
         // *****************
         if (ctx.getUser().hasPermission(Permission.MENU_CONTACT)) {
 
-            if (page.equals("contact")) {
+            if (page.equals(Cmd.CONTACT)) {
                 return new ContactCompanyCmd(ctx);
             }
 
-            if (page.equals("phonelist")) {
+            if (page.equals(Cmd.PHONE_LIST)) {
                 return new ContactPhoneListCmd(ctx);
             }
         }
@@ -98,7 +92,8 @@ public class CmdFactory {
         // * My bulilding units  *
         // ***********************
         if (ctx.getUser().hasPermission(Permission.MENU_BUILDING_UNITS)) {
-            if (page.equals("myBuildingUnitList")) {
+            
+            if (page.equals(Cmd.MY_BUILDING_UNITS)) {
                 return new MyBuildingUnitsCmd(ctx);
             }
         }
@@ -107,18 +102,19 @@ public class CmdFactory {
         // * Personal settings  *
         // **********************
         if (ctx.getUser().hasPermission(Permission.MENU_PERSONAL_SETTINGS)) {
-            if (page.equals("psUserDetail")) {
+            
+            if (page.equals(Cmd.PERSONAL_DETAIL)) {
                 return new PersonalUserDetailCmd(ctx);
             }
 
-            if (page.equals("psUserDetailSave")) {
+            if (page.equals(Cmd.PERSONAL_DETAIL_SAVE)) {
                 return new PersonalUserDetailSaveCmd(ctx);
             }
 
-            if (page.equals("psPasswordChange")) {
+            if (page.equals(Cmd.PERSONAL_PW_CHANGE)) {
                 return new PersonalPasswordChangeCmd(ctx);
             }
-            if (page.equals("psPasswordChangeSave")) {
+            if (page.equals(Cmd.PERSONAL_PW_CHANGE_SAVE)) {
                 return new PersonalPasswordChangeSaveCmd(ctx);
             }
         }
@@ -127,72 +123,73 @@ public class CmdFactory {
         // * Redaction     *
         // *****************
         if (ctx.getUser().hasPermission(Permission.MENU_REDACTION)) {
-            if (page.equals("redactionArticleList") || page.equals("redactionArticleSearch")) {
+            
+            if (page.equals(Cmd.REDACTION_ARTICLE_LIST) || page.equals(Cmd.REDACTION_ARTICLE_SEARCH)) {
                 return new RedactionArticleListCmd(ctx);
             }
 
-            if (page.equals("redactionArticleEdit")) {
+            if (page.equals(Cmd.REDACTION_ARTICLE_EDIT)) {
                 return new RedactionArticleEditCmd(ctx);
             }
 
-            if (page.equals("redactionArticleSave")) {
+            if (page.equals(Cmd.REDACTION_ARTICLE_SAVE)) {
                 return new RedactionArticleSaveCmd(ctx);
             }
 
-            if (page.equals("redactionArticleSendNotifications")) {
+            if (page.equals(Cmd.REDACTION_ARTICLE_NOTIF)) {
                 return new RedactionArticleSendNotificationsCmd(ctx);
             }
 
-            if (page.equals("redactionArticleSendNotificationsConfirmation")) {
+            if (page.equals(Cmd.REDACTION_ARTICLE_NOTIF_CONFIRMATION)) {
                 return new RedactionArticleSendNotificationsConfirmationCmd(ctx);
             }
 
-            if (page.equals("redactionArticleAttachmentSave")) {
+            if (page.equals(Cmd.REDACTION_ARTICLE_ATT_SAVE)) {
                 return new RedactionArticleAttachmentSaveCmd(ctx);
             }
-            if (page.equals("redactionArticleAttachmentDelete")) {
+            if (page.equals(Cmd.REDACTION_ARTICLE_ATT_DELETE)) {
                 return new RedactionArticleAttachmentDeleteCmd(ctx);
             }
 
-            if (page.equals("redactionNewsList")) {
+            if (page.equals(Cmd.REDACTION_NEWS_LIST)) {
                 return new RedactionNewsListCmd(ctx);
             }
-            if (page.equals("redactionNewsEdit")) {
+            if (page.equals(Cmd.REDACTION_NEWS_EDIT)) {
                 return new RedactionNewsEditCmd(ctx);
             }
-            if (page.equals("redactionNewsEditSave")) {
+            if (page.equals(Cmd.REDACTION_NEWS_SAVE)) {
                 return new RedactionNewsEditSaveCmd(ctx);
             }
-            if (page.equals("redactionNewsDelete")) {
+            if (page.equals(Cmd.REDACTION_NEWS_DELETE)) {
                 return new RedactionNewsDeleteCmd(ctx);
             }
 
-            if (page.equals("redactionInquiryList")) {
+            if (page.equals(Cmd.REDACTION_INQUIRY_LIST)) {
                 return new RedactionInquiryListCmd(ctx);
             }
-            if (page.equals("redactionInquiryLog")) {
+            if (page.equals(Cmd.REDACTION_INQUIRY_LOG)) {
                 return new RedactionInquiryLogCmd(ctx);
             }
-            if (page.equals("redactionInquiryEdit")) {
+            if (page.equals(Cmd.REDACTION_INQUIRY_EDIT)) {
                 return new RedactionInquiryEditCmd(ctx);
             }
-            if (page.equals("redactionInquirySave")) {
+            if (page.equals(Cmd.REDACTION_INQUIRY_SAVE)) {
                 return new RedactionInquirySaveCmd(ctx);
             }
-            if (page.equals("redactionInquiryOptionDelete")) {
+            if (page.equals(Cmd.REDACTION_INQUIRY_OPT_DELETE)) {
                 return new RedactionInquiryOptionDeleteCmd(ctx);
             }
 
-            if (page.equals("redactionArticleMenu")) {
+            if (page.equals(Cmd.REDACTION_MENU)) {
                 return new RedactionArticleMenuCmd(ctx);
             }
-            if (page.equals("redactionArticleMenuEdit")) {
+            if (page.equals(Cmd.REDACTION_MENU_EDIT)) {
                 return new RedactionArticleMenuEditCmd(ctx);
             }
-            if (page.equals("redactionArticleMenuSave")) {
+            if (page.equals(Cmd.REDACTION_MENU_SAVE)) {
                 return new RedactionArticleMenuSaveCmd(ctx);
             }
-            if (page.equals("redactionArticleMenuDelete")) {
+            if (page.equals(Cmd.REDACTION_MENU_DELETE)) {
                 return new RedactionArticleMenuDeleteCmd(ctx);
             }
         }
@@ -201,35 +198,36 @@ public class CmdFactory {
         // * Fault reporting *
         // *******************
         if (ctx.getUser().hasPermission(Permission.MENU_FAULT_REPORTING)) {
-            if (page.startsWith("faultReportingList")) {
+            
+            if (page.equals(Cmd.FAULT_LIST) || page.equals(Cmd.FAULT_LIST_CREATED) || page.equals(Cmd.FAULT_LIST_ASSIGNED) || page.equals(Cmd.FAULT_LIST_CLOSED) || page.equals(Cmd.FAULT_LIST_SEARCH)) {
                 return new FaultReportingListCmd(ctx);
             }
 
-            if (page.equals("faultReportingEdit")) {
+            if (page.equals(Cmd.FAULT_EDIT)) {
                 return new FaultReportingEditCmd(ctx);
             }
 
-            if (page.equals("faultReportingSave")) {
+            if (page.equals(Cmd.FAULT_SAVE)) {
                 return new FaultReportingSaveCmd(ctx);
             }
             
-            if (page.equals("faultDetail")) {
+            if (page.equals(Cmd.FAULT_DETAIL)) {
                 return new FaultReportingDetailCmd(ctx);
             }
             
-            if (page.equals("faultInsertComment")) {
+            if (page.equals(Cmd.FAULT_COMMENT)) {
                 return new FaultReportingInsertCommentCmd(ctx);
             }
             
-            if (page.equals("faultReportingFast")) {
+            if (page.equals(Cmd.FAULT_FAST_OP)) {
                 return new FaultReportingFastCmd(ctx);
             }
             
-            if (page.equals("faultReportingAttachmentSave")) {
+            if (page.equals(Cmd.FAULT_ATT_SAVE)) {
                 return new FaultReportingAttachmentSaveCmd(ctx);
             }
             
-            if (page.equals("faultReportingAttachmentDelete")) {
+            if (page.equals(Cmd.FAULT_ATT_DELETE)) {
                 return new FaultReportingAttachmentDeleteCmd(ctx);
             }
         }
@@ -238,23 +236,24 @@ public class CmdFactory {
         // * Adverts         *
         // *******************
         if (ctx.getUser().hasPermission(Permission.MENU_ADVERTS)) {
-            if (page.equals(ADVERT_LIST)) {
+            
+            if (page.equals(Cmd.ADVERT_LIST)) {
                 return new AdvertListCmd(ctx);
             }
             
-            if (page.equals(ADVERT_EDIT)) {
+            if (page.equals(Cmd.ADVERT_EDIT)) {
                 return new AdvertEditCmd(ctx);
             }
             
-            if (page.equals(ADVERT_SAVE)) {
+            if (page.equals(Cmd.ADVERT_SAVE)) {
                 return new AdvertSaveCmd(ctx);
             }
             
-            if (page.equals(ADVERT_ATTACHMENT_SAVE)) {
+            if (page.equals(Cmd.ADVERT_ATT_SAVE)) {
                 return new AdvertAttachmentSaveCmd(ctx);
             }
             
-            if (page.equals(ADVERT_ATTACHMENT_DELETE)) {
+            if (page.equals(Cmd.ADVERT_ATT_DELETE)) {
                 return new AdvertAttachmentDeleteCmd(ctx);
             }
             
@@ -264,139 +263,140 @@ public class CmdFactory {
         // * Administration *
         // ******************
         if (ctx.getUser().hasPermission(Permission.MENU_ADMINISTRATION)) {
-            if (page.equals("companyDetail")) {
+            
+            if (page.equals(Cmd.COMPANY_DETAIL)) {
                 return new CompanyDetailCmd(ctx);
             }
 
-            if (page.equals("companySave")) {
+            if (page.equals(Cmd.COMPANY_SAVE)) {
                 return new CompanySaveCmd(ctx);
             }
 
-            if (page.equals("buildingDetail")) {
+            if (page.equals(Cmd.BUILDING_DETAIL)) {
                 return new BuildingDetailCmd(ctx);
             }
 
-            if (page.equals("buildingSave")) {
+            if (page.equals(Cmd.BUILDING_SAVE)) {
                 return new BuildingSaveCmd(ctx);
             }
 
-            if (page.equals("buildingPictureSave")) {
+            if (page.equals(Cmd.BUILDING_PIC_SAVE)) {
                 return new BuildingPictureSaveCmd(ctx);
             }
 
-            if (page.equals("buildingEntranceList")) {
+            if (page.equals(Cmd.BUILDING_ENT_LIST)) {
                 return new BuildingEntranceListCmd(ctx);
             }
             
-            if (page.equals("buildingEntranceEdit")) {
+            if (page.equals(Cmd.BUILDING_ENT_EDIT)) {
                 return new BuildingEntranceEditCmd(ctx);
             }
             
-            if (page.equals("buildingEntranceSave")) {
+            if (page.equals(Cmd.BUILDING_ENT_SAVE)) {
                 return new BuildingEntranceSaveCmd(ctx);
             }
             
-            if (page.equals("buildingEntranceDelete")) {
+            if (page.equals(Cmd.BUILDING_ENT_DELETE)) {
                 return new BuildingEntranceDeleteCmd(ctx);
             }
             
-            if (page.equals("buildingUnitList")) {
+            if (page.equals(Cmd.BUILDING_UNIT_LIST)) {
                 return new BuildingUnitListCmd(ctx);
             }
 
-            if (page.equals("buildingUnitEdit")) {
+            if (page.equals(Cmd.BUILDING_UNIT_EDIT)) {
                 return new BuildingUnitEditCmd(ctx);
             }
 
-            if (page.equals("buildingUnitSave")) {
+            if (page.equals(Cmd.BUILDING_UNIT_SAVE)) {
                 return new BuildingUnitSaveCmd(ctx);
             }
 
-            if (page.equals("buildingUnitDelete")) {
+            if (page.equals(Cmd.BUILDING_UNIT_DELETE)) {
                 return new BuildingUnitDeleteCmd(ctx);
             }
 
-            if (page.equals("buildingUnitOwner")) {
+            if (page.equals(Cmd.BUILDING_UNIT_OWNER)) {
                 return new BuildingUnitOwnerCmd(ctx);
             }
             
-            if (page.equals("boardMemberList")) {
+            if (page.equals(Cmd.BOARD_LIST)) {
                 return new BoardListCmd(ctx);
             }
             
-            if (page.equals("boardMemberEdit")) {
+            if (page.equals(Cmd.BOARD_EDIT)) {
                 return new BoardEditCmd(ctx);
             }
             
-            if (page.equals("boardMemberSave")) {
+            if (page.equals(Cmd.BOARD_SAVE)) {
                 return new BoardSaveCmd(ctx);
             }
             
-            if (page.equals("boardMemberDelete")) {
+            if (page.equals(Cmd.BOARD_DELETE)) {
                 return new BoardDeleteCmd(ctx);
             }
 
-            if (page.equals("userList")) {
+            if (page.equals(Cmd.USER_LIST)) {
                 return new UserListCmd(ctx);
             }
 
-            if (page.equals("userEdit")) {
+            if (page.equals(Cmd.USER_EDIT)) {
                 return new UserEditCmd(ctx);
             }
 
-            if (page.equals("userSave")) {
+            if (page.equals(Cmd.USER_SAVE)) {
                 return new UserSaveCmd(ctx);
             }
 
-            if (page.equals("userDelete")) {
+            if (page.equals(Cmd.USER_DELETE)) {
                 return new UserDeleteCmd(ctx);
             }
 
-            if (page.equals("userBuildingUnits")) {
+            if (page.equals(Cmd.USER_BU)) {
                 return new UserBuildingUnitsCmd(ctx);
             }
 
-            if (page.equals("userBuildingUnitAdd")) {
+            if (page.equals(Cmd.USER_BU_ADD)) {
                 return new UserBuildingUnitAddCmd(ctx);
             }
 
-            if (page.equals("userBuildingUnitRemove")) {
+            if (page.equals(Cmd.USER_BU_REMOVE)) {
                 return new UserBuildingUnitRemoveCmd(ctx);
             }
 
-            if (page.equals("roleList")) {
+            if (page.equals(Cmd.ROLE_LIST)) {
                 return new RoleListCmd(ctx);
             }
 
-            if (page.equals("roleEdit")) {
+            if (page.equals(Cmd.ROLE_EDIT)) {
                 return new RoleEditCmd(ctx);
             }
 
-            if (page.equals("roleSave")) {
+            if (page.equals(Cmd.ROLE_SAVE)) {
                 return new RoleSaveCmd(ctx);
             }
 
-            if (page.equals("roleDelete")) {
+            if (page.equals(Cmd.ROLE_DELETE)) {
                 return new RoleDeleteCmd(ctx);
             }
 
-            if (page.equals("propertyList")) {
+            if (page.equals(Cmd.PROPERTY_LIST)) {
                 return new PropertyListCmd(ctx);
             }
 
-            if (page.equals("propertyEdit")) {
+            if (page.equals(Cmd.PROPERTY_EDIT)) {
                 return new PropertyEditCmd(ctx);
             }
 
-            if (page.equals("propertySave")) {
+            if (page.equals(Cmd.PROPERTY_SAVE)) {
                 return new PropertySaveCmd(ctx);
             }
 
-            if (page.equals("propertyDelete")) {
+            if (page.equals(Cmd.PROPERTY_DELETE)) {
                 return new PropertyDeleteCmd(ctx);
             }
 
-            if (page.equals("messagesPending")) {
+            if (page.equals(Cmd.MESSAGES)) {
                 return new MessagesPendingCmd(ctx);
             }
         }

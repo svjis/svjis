@@ -7,7 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%@page import="cz.svjis.bean.AdvertType"%>
-<%@page import="cz.svjis.servlet.CmdFactory"%>
+<%@page import="cz.svjis.servlet.Cmd"%>
 <%@page import="java.util.ArrayList"%>
 
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
@@ -30,7 +30,7 @@
                 <%
                 for (AdvertType t: (ArrayList<AdvertType>) advertMenuList) {
                 %>
-                    <li <%=(currMenu.getId() == t.getId() ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=<%=CmdFactory.ADVERT_LIST %>&typeId=<%=t.getId() %>"><%=t.getDescription() %>&nbsp;(<%=t.getCnt() %>)</a></li>
+                    <li <%=(currMenu.getId() == t.getId() ? "id=\"nav-active\"" : "") %>><a href="Dispatcher?page=<%=Cmd.ADVERT_LIST %>&typeId=<%=t.getId() %>"><%=t.getDescription() %>&nbsp;(<%=t.getCnt() %>)</a></li>
                 <%    
                 }
                 %>

@@ -42,8 +42,7 @@ public class ArticleDetailCmd extends Command {
         }
         
         int parId = Validator.getInt(getRequest(), "id", 0, Validator.MAX_INT_ALLOWED, false);
-        Validator.getString(getRequest(), "search", 0, 50, true, false);
-        String parSearch = Validator.getString(getRequest(), "search", 0, Validator.MAX_STRING_LEN_ALLOWED, true, false);
+        String parSearch = Validator.getString(getRequest(), "search", 0, 50, true, false);
 
         MenuDAO menuDao = new MenuDAO(getCnn());
         ArticleDAO articleDao = new ArticleDAO(getCnn());

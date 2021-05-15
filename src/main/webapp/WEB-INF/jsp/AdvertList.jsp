@@ -10,8 +10,7 @@
 <%@page import="cz.svjis.bean.AdvertType"%>
 <%@page import="cz.svjis.bean.Permission"%>
 <%@page import="cz.svjis.common.JspSnippets"%>
-<%@page import="cz.svjis.servlet.CmdFactory"%>
-<%@page import="cz.svjis.servlet.CmdFactoryUpload"%>
+<%@page import="cz.svjis.servlet.Cmd"%>
 <%@page import="java.util.ArrayList"%>
 
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
@@ -34,7 +33,7 @@
                     <h1 class="page-title" id="tbl-desc"><%=language.getText("Adverts") %>: <%=currMenu.getDescription() %></h1>
                     
                     <% if (user.hasPermission(Permission.CAN_INSERT_ADVERT)) { %>
-                    <a href="Dispatcher?page=<%=CmdFactory.ADVERT_EDIT %>&id=0" class="create-button"><%=language.getText("Create new advert") %></a><br>
+                    <a href="Dispatcher?page=<%=Cmd.ADVERT_EDIT %>&id=0" class="create-button"><%=language.getText("Create new advert") %></a><br>
                     <% } %>
 
                     <%
@@ -47,12 +46,12 @@
                             <h2 style="<%=stl %>"><%=a.getHeader() %></h2>
                             <p class="info"><%=language.getText("Date") %>: <strong><%=JspSnippets.renderDate(a.getCreationDate()) %></strong> <%=language.getText("Author") %>: <strong><%=a.getUser().getFullName(false) %></strong>
                             <% if (a.getUser().getId() == user.getId()) { %>
-                                &nbsp;[<a href="Dispatcher?page=<%=CmdFactory.ADVERT_EDIT %>&id=<%=a.getId() %>"><%=language.getText("Edit") %></a>]
+                                &nbsp;[<a href="Dispatcher?page=<%=Cmd.ADVERT_EDIT %>&id=<%=a.getId() %>"><%=language.getText("Edit") %></a>]
                             <% } %>
                             </p>
                             <p class="nomb"  style="<%=stl %>"><%=a.getBody().replace("\n", "<br>") %></p>
                             <% if (!a.getAttachmentList().isEmpty()) { %>
-                            <p class="nomb"><%=JspSnippets.renderAttachments(a.getAttachmentList(), request, CmdFactoryUpload.ADVERT_ATTACHMENT_DOWNLOAD) %></p>
+                            <p class="nomb"><%=JspSnippets.renderAttachments(a.getAttachmentList(), request, Cmd.ADVERT_ATT_DOWNLOAD) %></p>
                             <% } %>
                             <p class="contact"  style="<%=stl %>">
                                 <% if ((a.getPhone() != null) && !a.getPhone().trim().equals("")) { %><%=language.getText("Phone") %>:&nbsp;<strong><%=a.getPhone() %></strong>&nbsp;<% } %> 

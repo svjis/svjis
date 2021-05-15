@@ -8,6 +8,7 @@
 
 <%@page import="cz.svjis.bean.Article"%>
 <%@page import="cz.svjis.common.JspSnippets"%>
+<%@page import="cz.svjis.servlet.Cmd"%>
 <%@page import="java.util.ArrayList"%>
 
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
@@ -38,9 +39,9 @@
                     <!-- Article -->
                     <div class="article box">
                         <div class="article-desc">
-                            <h1 class="article-title-list"><a href="Dispatcher?page=articleDetail&id=<%=a.getId() %><%=((searchKey != null) && !searchKey.equals("")) ? "&search=" + JspSnippets.encodeUrl(searchKey) : "" %>"><%=JspSnippets.highlight(a.getHeader(), searchKey) %></a></h1>
+                            <h1 class="article-title-list"><a href="Dispatcher?page=<%=Cmd.ARTICLE_DETAIL %>&id=<%=a.getId() %><%=((searchKey != null) && !searchKey.equals("")) ? "&search=" + JspSnippets.encodeUrl(searchKey) : "" %>"><%=JspSnippets.highlight(a.getHeader(), searchKey) %></a></h1>
                             <p class="info">
-                                <a href="Dispatcher?page=articleList&section=<%=a.getMenuNodeId() %>"><%=a.getMenuNodeDescription() %></a>:
+                                <a href="Dispatcher?page=<%=Cmd.ARTICLE_LIST %>&section=<%=a.getMenuNodeId() %>"><%=a.getMenuNodeDescription() %></a>:
                                 <strong><%=JspSnippets.renderDate(a.getCreationDate()) %></strong>,
                                 <%=language.getText("by:") %> <strong><%=a.getAuthor().getFullName(false) %></strong>
                                 <%=(a.getNumOfComments() != 0) ? ", " + language.getText("Comments:") + " <strong>" + a.getNumOfComments() + "</strong>" : "" %></p> 

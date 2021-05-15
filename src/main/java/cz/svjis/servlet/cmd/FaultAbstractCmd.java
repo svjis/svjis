@@ -15,6 +15,7 @@ package cz.svjis.servlet.cmd;
 import cz.svjis.bean.FaultReport;
 import cz.svjis.bean.MailDAO;
 import cz.svjis.bean.User;
+import cz.svjis.servlet.Cmd;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import java.sql.SQLException;
@@ -43,8 +44,8 @@ public abstract class FaultAbstractCmd  extends Command {
 
         
         String subject = String.format("%s: %s", getCompany().getInternetDomain(), f.getEmailSubject());
-        String link = String.format("<a href=\"http://%s/Dispatcher?page=faultDetail&id=%s\">%s</a>",
-                getCompany().getInternetDomain(), String.valueOf(f.getId()), f.getEmailSubject());
+        String link = String.format("<a href=\"http://%s/Dispatcher?page=%s&id=%s\">%s</a>",
+                getCompany().getInternetDomain(), Cmd.FAULT_DETAIL, String.valueOf(f.getId()), f.getEmailSubject());
         String tBody = template;
 
         for (User u : userList) {

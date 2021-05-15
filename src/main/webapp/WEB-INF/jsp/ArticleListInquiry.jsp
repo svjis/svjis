@@ -9,16 +9,15 @@
 <%@page import="java.text.DecimalFormat"%>
 <%@page import="cz.svjis.bean.InquiryOption"%>
 <%@page import="cz.svjis.bean.Inquiry"%>
-<%@page import="java.util.Iterator"%>
+<%@page import="cz.svjis.servlet.Cmd"%>
+<%@page import="java.util.List"%>
 
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="inquiryList" scope="request" class="java.util.ArrayList" />
 
 <%
  DecimalFormat df = new DecimalFormat("###");
- Iterator<Inquiry> iI = inquiryList.iterator();
- while (iI.hasNext()) {
-     Inquiry inquiry = iI.next();
+ for (Inquiry inquiry: (List<Inquiry>) inquiryList) {
  %>
  <!-- Inquiry -->
  <div class="box-02-top"></div>
@@ -29,13 +28,11 @@
      <strong><%=inquiry.getDescription() %></strong>
      <% if (inquiry.isUserCanVote() && inquiry.isOpenForVoting()) { %>
      <form action="Dispatcher" method="post">
-         <input type="hidden" name="page" value="inquiryVote">
+         <input type="hidden" name="page" value="<%=Cmd.INQUIRY_VOTE %>">
          <input type="hidden" name="id" value="<%=inquiry.getId() %>">
          <%
          int v = 1;
-         Iterator<InquiryOption> iIO = inquiry.getOptionList().iterator();
-         while (iIO.hasNext()) {
-             InquiryOption io = iIO.next();
+         for (InquiryOption io: (List<InquiryOption>) inquiry.getOptionList()) {
              String bar = (io.getCount() != inquiry.getMaximum()) ? "gfx/inq_0242.gif" : "gfx/inq_0212.gif";
              String pct = (inquiry.getCount() != 0) ? df.format(100 * io.getCount() / inquiry.getCount()) : "0";
          %>
@@ -50,9 +47,7 @@
      </form>
      <% } else { %>
          <%
-         Iterator<InquiryOption> iIO = inquiry.getOptionList().iterator();
-         while (iIO.hasNext()) {
-             InquiryOption io = iIO.next();
+         for (InquiryOption io: (List<InquiryOption>) inquiry.getOptionList()) {
              String bar = (io.getCount() != inquiry.getMaximum()) ? "gfx/inq_0242.gif" : "gfx/inq_0212.gif";
              String pct = (inquiry.getCount() != 0) ? df.format(100 * io.getCount() / inquiry.getCount()) : "0";
          %>

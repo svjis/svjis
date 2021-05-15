@@ -16,12 +16,13 @@ import cz.svjis.bean.Inquiry;
 import cz.svjis.bean.InquiryDAO;
 import cz.svjis.bean.InquiryOption;
 import cz.svjis.bean.Permission;
+import cz.svjis.servlet.Cmd;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
 import java.util.Iterator;
 
-/**
+/**+
  *
  * @author jaroslav_b
  */
@@ -60,7 +61,7 @@ public class ArticleInquiryVoteCmd extends Command {
                 }
             }
         }
-        String url = "Dispatcher?page=articleList";
+        String url = String.format("Dispatcher?page=%s", Cmd.ARTICLE_LIST);
         getResponse().sendRedirect(url);
     }
 }

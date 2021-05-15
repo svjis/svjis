@@ -15,6 +15,7 @@ package cz.svjis.servlet.cmd;
 import cz.svjis.bean.Permission;
 import cz.svjis.bean.Role;
 import cz.svjis.bean.RoleDAO;
+import cz.svjis.servlet.Cmd;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -59,7 +60,7 @@ public class RoleDeleteCmd extends Command {
             roleDao.deleteRole(role);
         }
         
-        String url = "Dispatcher?page=roleList";
+        String url = String.format("Dispatcher?page=%s", Cmd.ROLE_LIST);
         getResponse().sendRedirect(url);
     }
 }

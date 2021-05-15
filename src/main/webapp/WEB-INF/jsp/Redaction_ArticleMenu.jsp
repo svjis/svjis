@@ -6,11 +6,12 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
-<%@page import="java.util.List"%>
 <%@page import="cz.svjis.bean.Language"%>
-<%@page import="java.util.Iterator"%>
 <%@page import="cz.svjis.bean.MenuItem"%>
+<%@page import="cz.svjis.servlet.Cmd"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="java.util.Iterator"%>
+<%@page import="java.util.List"%>
 
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="menu" scope="request" class="cz.svjis.bean.Menu" />
@@ -29,9 +30,9 @@
             }
             output += ami.getSection().getDescription();
             output += "</td>";
-            output += "<td class=\"list\"><a href=\"Dispatcher?page=redactionArticleMenuEdit&id=" + ami.getSection().getId() + "\"><img src=\"gfx/pencil.png\" border=\"0\" title=\"" + language.getText("Edit") + "\"></a></td>";
+            output += "<td class=\"list\"><a href=\"Dispatcher?page=" + Cmd.REDACTION_MENU_EDIT + "&id=" + ami.getSection().getId() + "\"><img src=\"gfx/pencil.png\" border=\"0\" title=\"" + language.getText("Edit") + "\"></a></td>";
             if (ami.getSubSections().size() == 0) {
-                output += "<td class=\"list\"><a onclick=\"if (!confirm('" + language.getText("Really do you want to remove menu node") + " " + ami.getSection().getDescription() + " ?')) return false;\" href=\"Dispatcher?page=redactionArticleMenuDelete&id=" + ami.getSection().getId() + "\"><img src=\"gfx/delete.png\" border=\"0\" title=\"" + language.getText("Delete") + "\"></a></td>";
+                output += "<td class=\"list\"><a onclick=\"if (!confirm('" + language.getText("Really do you want to remove menu node") + " " + ami.getSection().getDescription() + " ?')) return false;\" href=\"Dispatcher?page=" + Cmd.REDACTION_MENU_DELETE + "&id=" + ami.getSection().getId() + "\"><img src=\"gfx/delete.png\" border=\"0\" title=\"" + language.getText("Delete") + "\"></a></td>";
             } else {
                 output += "<td class=\"list\">&nbsp;</td>";
             }
@@ -55,7 +56,7 @@
             <div id="content-main">
                 <div id="content-main-in">
                     <h1 class="page-title" id="tbl-desc"><%=language.getText("Article menu") %></h1>
-                    [<a href="Dispatcher?page=redactionArticleMenuEdit&id=0"><%=language.getText("Add new menu node") %></a>]
+                    [<a href="Dispatcher?page=<%=Cmd.REDACTION_MENU_EDIT %>&id=0"><%=language.getText("Add new menu node") %></a>]
                     <p>
                         <table class="list" aria-describedby="tbl-desc">
                             <tr>

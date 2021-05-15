@@ -18,6 +18,7 @@ import cz.svjis.bean.FaultReportMenuCounters;
 import cz.svjis.bean.Language;
 import cz.svjis.bean.Permission;
 import cz.svjis.bean.SliderImpl;
+import cz.svjis.servlet.Cmd;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -58,23 +59,23 @@ public class FaultReportingListCmd extends Command {
         sl.setNumOfItemsAtPage(pageSize);
         
         ArrayList<FaultReport> reportList = new ArrayList<>();
-        if (parPage.equals("faultReportingList")) {
+        if (parPage.equals(Cmd.FAULT_LIST)) {
             sl.setTotalNumOfItems(faultDao.getNumOfFaults(getCompany().getId(), 0));
             reportList = new ArrayList<>(faultDao.getFaultList(getCompany().getId(), pageNo, pageSize, 0));
         }
-        if (parPage.equals("faultReportingListCreatedByMe")) {
+        if (parPage.equals(Cmd.FAULT_LIST_CREATED)) {
             sl.setTotalNumOfItems(faultDao.getNumOfFaultsByCreator(getCompany().getId(), getUser().getId()));
             reportList = new ArrayList<>(faultDao.getFaultListByCreator(getCompany().getId(), pageNo, pageSize, getUser().getId()));
         }
-        if (parPage.equals("faultReportingListAssignedToMe")) {
+        if (parPage.equals(Cmd.FAULT_LIST_ASSIGNED)) {
             sl.setTotalNumOfItems(faultDao.getNumOfFaultsByResolver(getCompany().getId(), getUser().getId()));
             reportList = new ArrayList<>(faultDao.getFaultListByResolver(getCompany().getId(), pageNo, pageSize, getUser().getId()));
         }
-        if (parPage.equals("faultReportingListClosed")) {
+        if (parPage.equals(Cmd.FAULT_LIST_CLOSED)) {
             sl.setTotalNumOfItems(faultDao.getNumOfFaults(getCompany().getId(), 1));
             reportList = new ArrayList<>(faultDao.getFaultList(getCompany().getId(), pageNo, pageSize, 1));
         }
-        if (parPage.equals("faultReportingListSearch")) {
+        if (parPage.equals(Cmd.FAULT_LIST_SEARCH)) {
             if (parSearch.length() < 3) {
                 Language lang = (Language) this.getRequest().getSession().getAttribute("language");
                 getRequest().setAttribute("messageHeader", lang.getText("Search"));

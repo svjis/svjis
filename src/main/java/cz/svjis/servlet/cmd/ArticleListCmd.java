@@ -23,6 +23,7 @@ import cz.svjis.bean.MiniNews;
 import cz.svjis.bean.MiniNewsDAO;
 import cz.svjis.bean.Permission;
 import cz.svjis.bean.SliderImpl;
+import cz.svjis.servlet.Cmd;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -58,7 +59,7 @@ public class ArticleListCmd extends Command {
         InquiryDAO inquiryDao = new InquiryDAO(getCnn());
         
         if (parPage == null) 
-            parPage = "articleList";
+            parPage = Cmd.ARTICLE_LIST;
         
         if ((parSearch != null) && (parSearch.length() < 3)) {
             Language lang = (Language) this.getRequest().getSession().getAttribute("language");

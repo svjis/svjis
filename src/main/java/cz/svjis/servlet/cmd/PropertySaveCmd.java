@@ -14,6 +14,7 @@ package cz.svjis.servlet.cmd;
 
 import cz.svjis.bean.ApplicationSetupDAO;
 import cz.svjis.bean.Permission;
+import cz.svjis.servlet.Cmd;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -47,7 +48,7 @@ public class PropertySaveCmd extends Command {
         
         getRequest().getSession().setAttribute("setup", null);
         
-        String url = "Dispatcher?page=propertyList";
+        String url = String.format("Dispatcher?page=%s", Cmd.PROPERTY_LIST);
         getResponse().sendRedirect(url);
     }
 }

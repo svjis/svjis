@@ -21,6 +21,7 @@ import cz.svjis.bean.Permission;
 import cz.svjis.bean.Role;
 import cz.svjis.bean.RoleDAO;
 import cz.svjis.bean.SliderImpl;
+import cz.svjis.servlet.Cmd;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -67,7 +68,7 @@ public class RedactionArticleListCmd extends Command {
         sl.setNumOfItemsAtPage(getSetup().getArticlePageSize());
 
         ArrayList<Article> articleList = new ArrayList<>();
-        if (parPage.equals("redactionArticleList")) {
+        if (parPage.equals(Cmd.REDACTION_ARTICLE_LIST)) {
             sl.setTotalNumOfItems(articleDao.getNumOfArticles(getUser(), parSection, false, !getUser().hasPermission(Permission.REDACTION_ARTICLES_ALL), parRoleId));
             articleList = new ArrayList<>(articleDao.getArticleList(
                 getUser(),
@@ -79,7 +80,7 @@ public class RedactionArticleListCmd extends Command {
                 parRoleId));
         }
 
-        if (parPage.equals("redactionArticleSearch")) {
+        if (parPage.equals(Cmd.REDACTION_ARTICLE_SEARCH)) {
             if (parSearch.length() < 3) {
                 Language lang = (Language) this.getRequest().getSession().getAttribute("language");
                 getRequest().setAttribute("messageHeader", lang.getText("Search"));

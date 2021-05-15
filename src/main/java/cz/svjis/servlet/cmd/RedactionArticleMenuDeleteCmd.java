@@ -15,6 +15,7 @@ package cz.svjis.servlet.cmd;
 import cz.svjis.bean.MenuDAO;
 import cz.svjis.bean.MenuNode;
 import cz.svjis.bean.Permission;
+import cz.svjis.servlet.Cmd;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -58,7 +59,7 @@ public class RedactionArticleMenuDeleteCmd extends Command {
         }
         menuDao.deleteMenuNode(n, getUser().getCompanyId());
 
-        String url = "Dispatcher?page=redactionArticleMenu";
+        String url = String.format("Dispatcher?page=%s", Cmd.REDACTION_MENU);
         getResponse().sendRedirect(url);
     }
 }

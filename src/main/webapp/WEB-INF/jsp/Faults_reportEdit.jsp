@@ -8,9 +8,9 @@
 
 <%@page import="cz.svjis.bean.Permission"%>
 <%@page import="cz.svjis.bean.BuildingEntrance"%>
-
 <%@page import="cz.svjis.bean.Language"%>
 <%@page import="cz.svjis.bean.User"%>
+<%@page import="cz.svjis.servlet.Cmd"%>
 <%@page import="java.util.ArrayList"%>
 
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
@@ -31,7 +31,7 @@
                 <div id="content-main-in">
                     <h1 class="page-title"><%=language.getText("Fault reporting") %></h1>
                     <form action="Dispatcher" method="post">
-                        <input type="hidden" name="page" value="faultReportingSave">
+                        <input type="hidden" name="page" value="<%=Cmd.FAULT_SAVE %>">
                         <input type="hidden" name="id" value="<%=report.getId()  %>">
                         
                         <p>

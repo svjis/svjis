@@ -13,6 +13,7 @@
 <%@page import="cz.svjis.bean.Language"%>
 <%@page import="cz.svjis.bean.MenuItem"%>
 <%@page import="cz.svjis.common.JspSnippets"%>
+<%@page import="cz.svjis.servlet.Cmd"%>
 <%@page import="java.util.Iterator"%>
 
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
@@ -60,7 +61,7 @@
                     <h1 class="page-title"><%=language.getText("Article") %></h1>
                     <strong class="message"><%=message %></strong>
                     <form action="Dispatcher" method="post">
-                        <input type="hidden" name="page" value="redactionArticleSave">
+                        <input type="hidden" name="page" value="<%=Cmd.REDACTION_ARTICLE_SAVE %>">
                         <input type="hidden" name="id" value="<%=article.getId() %>">
                         <input type="hidden" name="authorId" value="<%=article.getAuthorId() %>">
                         <input type="hidden" name="creationDate" value="<%=JspSnippets.renderDateTime(article.getCreationDate()) %>">
@@ -142,7 +143,7 @@
                     <% if (article.getId() != 0) { %>
                     <h1 class="page-title" id="tbl-desc"><%=language.getText("Attachments") %></h1>
 
-                    <form action="Dispatcher?page=redactionArticleAttachmentSave&articleId=<%=article.getId() %>" enctype="multipart/form-data" method="post">
+                    <form action="Dispatcher?page=<%=Cmd.REDACTION_ARTICLE_ATT_SAVE %>&articleId=<%=article.getId() %>" enctype="multipart/form-data" method="post">
                         <fieldset>
                             <legend class="hidden-legend"><%=language.getText("General") %></legend>
                             <%=JspSnippets.renderAttachments(article.getAttachmentList(), request, "File", "download", "redactionArticleAttachmentDelete", false, false, true, false, "tbl-desc") %>
