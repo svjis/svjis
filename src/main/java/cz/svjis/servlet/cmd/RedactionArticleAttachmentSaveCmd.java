@@ -17,6 +17,7 @@ import cz.svjis.bean.Attachment;
 import cz.svjis.bean.ArticleDAO;
 import cz.svjis.bean.LogDAO;
 import cz.svjis.bean.Permission;
+import cz.svjis.servlet.Cmd;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -81,7 +82,7 @@ public class RedactionArticleAttachmentSaveCmd extends Command {
                 }
             }
         }
-        String url = "Dispatcher?page=redactionArticleEdit&id=" + parArticleId;
+        String url = String.format("Dispatcher?page=%s&id=%d", Cmd.REDACTION_ARTICLE_EDIT, parArticleId);
         getResponse().sendRedirect(url);
         logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_INSERT_ATTACHMENT, parArticleId, getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
     }

@@ -18,6 +18,7 @@ import cz.svjis.bean.LogDAO;
 import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
 import cz.svjis.common.PermanentLoginUtils;
+import cz.svjis.servlet.Cmd;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -52,11 +53,11 @@ public class LoginCmd extends Command {
             logDao.log(user.getId(), LogDAO.OPERATION_TYPE_LOGIN, LogDAO.ID_NULL, getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
             PermanentLoginUtils.savePermanentLogin(getResponse(), user, userDao, getSetup());
             
-            String url = "Dispatcher?page=articleList";
+            String url = String.format("Dispatcher?page=%s", Cmd.ARTICLE_LIST);
             getResponse().sendRedirect(url);
         } else {
             getRequest().setAttribute("messageHeader", getLanguage().getText("Bad login"));
-            getRequest().setAttribute("message", "<p>" + getLanguage().getText("You can continue") + " <a href=\"Dispatcher\">" + getLanguage().getText("here") + "</a>.</p><p><a href=\"Dispatcher?page=lostPassword\">" + getLanguage().getText("Forgot password?") + "</a></p>");
+            getRequest().setAttribute("message", "<p>" + getLanguage().getText("You can continue") + " <a href=\"Dispatcher\">" + getLanguage().getText("here") + "</a>.</p><p><a href=\"Dispatcher?page=" + Cmd.LOST_PWD + "\">" + getLanguage().getText("Forgot password?") + "</a></p>");
             RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_message.jsp");
             rd.forward(getRequest(), getResponse());
         }

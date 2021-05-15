@@ -15,6 +15,7 @@ package cz.svjis.servlet.cmd;
 import cz.svjis.bean.InquiryDAO;
 import cz.svjis.bean.InquiryOption;
 import cz.svjis.bean.Permission;
+import cz.svjis.servlet.Cmd;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -47,7 +48,7 @@ public class RedactionInquiryOptionDeleteCmd extends Command {
             return;
         }
         inquiryDao.deleteInquiryOption(io);
-        String url = "Dispatcher?page=redactionInquiryEdit&id=" + io.getInquiryId();
+        String url = String.format("Dispatcher?page=%s&id=%d", Cmd.REDACTION_INQUIRY_EDIT ,io.getInquiryId());
         getResponse().sendRedirect(url);
     }
 }

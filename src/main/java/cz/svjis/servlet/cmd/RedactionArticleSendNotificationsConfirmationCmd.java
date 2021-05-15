@@ -18,6 +18,7 @@ import cz.svjis.bean.LogDAO;
 import cz.svjis.bean.MailDAO;
 import cz.svjis.bean.Permission;
 import cz.svjis.bean.User;
+import cz.svjis.servlet.Cmd;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -61,7 +62,7 @@ public class RedactionArticleSendNotificationsConfirmationCmd extends Command {
 
         String subject = getCompany().getInternetDomain() + ": " + article.getHeader();
         String body = getSetup().getMailTemplateArticleNotification();
-        body = String.format(body, "<a href=\"http://" + getCompany().getInternetDomain() + "/Dispatcher?page=articleDetail&id=" + article.getId() + "\">" + article.getHeader() + "</a>");
+        body = String.format(body, "<a href=\"http://" + getCompany().getInternetDomain() + "/Dispatcher?page=" + Cmd.ARTICLE_DETAIL + "&id=" + article.getId() + "\">" + article.getHeader() + "</a>");
         MailDAO mailDao = new MailDAO(
                 getCnn(),
                 getSetup().getMailSmtp(),

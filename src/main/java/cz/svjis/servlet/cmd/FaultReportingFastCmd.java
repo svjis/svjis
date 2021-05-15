@@ -16,6 +16,7 @@ import cz.svjis.bean.FaultReport;
 import cz.svjis.bean.FaultReportDAO;
 import cz.svjis.bean.LogDAO;
 import cz.svjis.bean.Permission;
+import cz.svjis.servlet.Cmd;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.validator.Validator;
 
@@ -72,7 +73,7 @@ public class FaultReportingFastCmd extends FaultAbstractCmd {
             }
         }
 
-        String url = "Dispatcher?page=faultDetail&id=" + parId;
+        String url = String.format("Dispatcher?page=%s&id=%d", Cmd.FAULT_DETAIL, parId);
         getResponse().sendRedirect(url);
     }
 }

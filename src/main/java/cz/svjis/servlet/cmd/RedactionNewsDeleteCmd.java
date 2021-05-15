@@ -15,6 +15,7 @@ package cz.svjis.servlet.cmd;
 import cz.svjis.bean.MiniNews;
 import cz.svjis.bean.MiniNewsDAO;
 import cz.svjis.bean.Permission;
+import cz.svjis.servlet.Cmd;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -45,7 +46,7 @@ public class RedactionNewsDeleteCmd extends Command {
         n.setId(parId);
         n.setCompanyId(getUser().getCompanyId());
         newsDao.deleteMiniNews(n);
-        String url = "Dispatcher?page=redactionNewsList";
+        String url = String.format("Dispatcher?page=%s", Cmd.REDACTION_NEWS_LIST);
         getResponse().sendRedirect(url);
     }
 }

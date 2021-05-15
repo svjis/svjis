@@ -19,6 +19,7 @@ import cz.svjis.bean.MailDAO;
 import cz.svjis.bean.Permission;
 import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
+import cz.svjis.servlet.Cmd;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -99,8 +100,8 @@ public class FaultReportingInsertCommentCmd extends Command {
                 if (u.getId() == getUser().getId()) {
                     continue;
                 }
-                String link = String.format("<a href=\"http://%s/Dispatcher?page=faultDetail&id=%s\">%s</a>",
-                        getCompany().getInternetDomain(), String.valueOf(report.getId()), report.getEmailSubject());
+                String link = String.format("<a href=\"http://%s/Dispatcher?page=%s&id=%s\">%s</a>",
+                        getCompany().getInternetDomain(), Cmd.FAULT_DETAIL, String.valueOf(report.getId()), report.getEmailSubject());
                 String body = String.format(tBody,
                         getUser().getFirstName() + " " + getUser().getLastName(),
                         link,
@@ -109,7 +110,7 @@ public class FaultReportingInsertCommentCmd extends Command {
             }
         }
         
-        String url = "Dispatcher?page=faultDetail&id=" + parId;
+        String url = String.format("Dispatcher?page=%s&id=%d", Cmd.FAULT_DETAIL, parId);
         getResponse().sendRedirect(url);
     }
     

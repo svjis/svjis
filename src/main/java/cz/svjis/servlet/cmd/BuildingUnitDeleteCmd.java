@@ -15,6 +15,7 @@ package cz.svjis.servlet.cmd;
 import cz.svjis.bean.BuildingDAO;
 import cz.svjis.bean.BuildingUnit;
 import cz.svjis.bean.Permission;
+import cz.svjis.servlet.Cmd;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -49,7 +50,7 @@ public class BuildingUnitDeleteCmd extends Command {
         
         buildingDao.deleteBuildingUnit(u);
         
-        String url = "Dispatcher?page=buildingUnitList";
+        String url = String.format("Dispatcher?page=%s", Cmd.BUILDING_UNIT_LIST);
         getResponse().sendRedirect(url);
     }
 }

@@ -15,6 +15,7 @@ package cz.svjis.servlet.cmd;
 import cz.svjis.bean.Company;
 import cz.svjis.bean.CompanyDAO;
 import cz.svjis.bean.Permission;
+import cz.svjis.servlet.Cmd;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import java.io.File;
@@ -58,7 +59,8 @@ public class BuildingPictureSaveCmd extends Command {
         Company company = compDao.getCompany(getCompany().getId());
         getRequest().getSession().setAttribute("company", company);
         company.refreshPicture(getRequest().getServletContext().getRealPath("/"));
-        String url = "Dispatcher?page=buildingDetail";
+        
+        String url = String.format("Dispatcher?page=%s", Cmd.BUILDING_DETAIL);
         getResponse().sendRedirect(url);
     }
 }

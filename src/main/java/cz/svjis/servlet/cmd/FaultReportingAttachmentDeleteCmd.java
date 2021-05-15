@@ -17,6 +17,7 @@ import cz.svjis.bean.Attachment;
 import cz.svjis.bean.FaultReportDAO;
 import cz.svjis.bean.LogDAO;
 import cz.svjis.bean.Permission;
+import cz.svjis.servlet.Cmd;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -61,7 +62,8 @@ public class FaultReportingAttachmentDeleteCmd extends Command {
             faultDao.deleteFaultAttachment(id);
             logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_DELETE_FAULT_ATTACHMENT, f.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
         }
-        String url = "Dispatcher?page=faultDetail&id=" + fa.getDocumentId();
+        
+        String url = String.format("Dispatcher?page=%s&id=%d", Cmd.FAULT_DETAIL, fa.getDocumentId());
         getResponse().sendRedirect(url);
     }
 }

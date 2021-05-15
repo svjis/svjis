@@ -15,6 +15,7 @@ package cz.svjis.servlet.cmd;
 import cz.svjis.bean.Article;
 import cz.svjis.bean.ArticleDAO;
 import cz.svjis.bean.Permission;
+import cz.svjis.servlet.Cmd;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.validator.Validator;
 
@@ -55,7 +56,7 @@ public class ArticleFastCmd extends FaultAbstractCmd {
             }
         }
 
-        String url = "Dispatcher?page=articleDetail&id=" + parId;
+        String url = String.format("Dispatcher?page=%s&id=%d", Cmd.ARTICLE_DETAIL, parId);
         getResponse().sendRedirect(url);
     }
 }

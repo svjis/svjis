@@ -19,6 +19,7 @@ import cz.svjis.bean.LogDAO;
 import cz.svjis.bean.Permission;
 import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
+import cz.svjis.servlet.Cmd;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.validator.Validator;
 import java.util.ArrayList;
@@ -60,7 +61,7 @@ public class FaultReportingSaveCmd extends FaultAbstractCmd {
         UserDAO userDao = new UserDAO(getCnn());
 
         if ((parSubject == null || parSubject.equals("")) && (parBody == null || parBody.equals(""))) {
-            String url = "Dispatcher?page=faultReportingList";
+            String url = String.format("Dispatcher?page=%s", Cmd.FAULT_LIST);
             getResponse().sendRedirect(url);
             return;
         }
@@ -146,7 +147,7 @@ public class FaultReportingSaveCmd extends FaultAbstractCmd {
             }
         }
         
-        String url = "Dispatcher?page=faultDetail&id=" + f.getId();
+        String url = String.format("Dispatcher?page=%s&id=%d", Cmd.FAULT_DETAIL, f.getId());
         getResponse().sendRedirect(url);
     }
 }

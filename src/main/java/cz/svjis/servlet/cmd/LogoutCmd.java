@@ -18,6 +18,7 @@ import cz.svjis.bean.LogDAO;
 import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
 import cz.svjis.common.PermanentLoginUtils;
+import cz.svjis.servlet.Cmd;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 
@@ -52,7 +53,7 @@ public class LogoutCmd extends Command {
         Language language = languageDao.getDictionary(user.getLanguageId());
         getRequest().getSession().setAttribute("language", language);
 
-        String url = "Dispatcher?page=articleList";
+        String url = String.format("Dispatcher?page=%s", Cmd.ARTICLE_LIST);
         getResponse().sendRedirect(url);
     }
 }

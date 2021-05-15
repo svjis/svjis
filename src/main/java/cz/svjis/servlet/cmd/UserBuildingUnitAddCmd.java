@@ -18,6 +18,7 @@ import cz.svjis.bean.BuildingUnit;
 import cz.svjis.bean.Permission;
 import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
+import cz.svjis.servlet.Cmd;
 import cz.svjis.servlet.CmdContext;
 import cz.svjis.servlet.Command;
 import cz.svjis.validator.Validator;
@@ -80,7 +81,7 @@ public class UserBuildingUnitAddCmd extends Command {
             }
         }
 
-        String url = "Dispatcher?page=userBuildingUnits&id=" + parUserId;
+        String url = String.format("Dispatcher?page=%s&id=%d", Cmd.USER_BU, parUserId);
         getResponse().sendRedirect(url);
     }
 }
