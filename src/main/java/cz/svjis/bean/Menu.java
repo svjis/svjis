@@ -53,6 +53,20 @@ public class Menu {
     }
     
     /**
+     * @return the defaultSection
+     */
+    public int getDefaultSection() {
+        return defaultSection;
+    }
+
+    /**
+     * @param defaultSection the defaultSection to set
+     */
+    public void setDefaultSection(int defaultSection) {
+        this.defaultSection = defaultSection;
+    }
+    
+    /**
      * @return the activeMenuContent
      */
     public List<MenuNode> getActiveMenuContent() {
@@ -195,18 +209,32 @@ public class Menu {
         }
         return output.toString();
     }
-
-    /**
-     * @return the defaultSection
-     */
-    public int getDefaultSection() {
-        return defaultSection;
-    }
-
-    /**
-     * @param defaultSection the defaultSection to set
-     */
-    public void setDefaultSection(int defaultSection) {
-        this.defaultSection = defaultSection;
+    
+    
+    public String writeRedactionSubMenu(List<MenuItem> menu, int level, Language language) {
+        String ident = "&nbsp;&nbsp;&nbsp;";
+        StringBuilder sb = new StringBuilder();
+        
+        for (MenuItem ami: menu) {
+            String stl = (ami.getSection().isHide()) ? "text-decoration: line-through;" : "";
+            sb.append("<tr>");
+            sb.append(String.format("<td class=\"list\" style=\"%s\">", stl));
+            for (int n = 0; n < level; n++) {
+                sb.append(ident);
+            }
+            sb.append(ami.getSection().getDescription());
+            sb.append("</td>");
+            sb.append(String.format("<td class=\"list\"><a href=\"Dispatcher?page=%s&id=%d\"><img src=\"gfx/pencil.png\" border=\"0\" title=\"%s\"></a></td>", Cmd.REDACTION_MENU_EDIT, ami.getSection().getId(), language.getText("Edit")));
+            if (ami.getSubSections().size() == 0) {
+                sb.append(String.format("<td class=\"list\"><a onclick=\"if (!confirm('%s %s ?')) return false;\" href=\"Dispatcher?page=%s&id=%d\"><img src=\"gfx/delete.png\" border=\"0\" title=\"%s\"></a></td>", language.getText("Really do you want to remove menu node"), ami.getSection().getDescription(), Cmd.REDACTION_MENU_DELETE, ami.getSection().getId(), language.getText("Delete")));
+            } else {
+                sb.append("<td class=\"list\">&nbsp;</td>");
+            }
+            sb.append("</tr>\n");
+            if ((ami.getSubSections() != null) && (!ami.getSubSections().isEmpty()))
+                sb.append(writeRedactionSubMenu(ami.getSubSections(), level + 1, language));
+        }
+        
+        return sb.toString();
     }
 }
