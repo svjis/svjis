@@ -225,7 +225,7 @@ public class Menu {
             sb.append(ami.getSection().getDescription());
             sb.append("</td>");
             sb.append(String.format("<td class=\"list\"><a href=\"Dispatcher?page=%s&id=%d\"><img src=\"gfx/pencil.png\" border=\"0\" title=\"%s\"></a></td>", Cmd.REDACTION_MENU_EDIT, ami.getSection().getId(), language.getText("Edit")));
-            if (ami.getSubSections().size() == 0) {
+            if (ami.getSubSections().isEmpty()) {
                 sb.append(String.format("<td class=\"list\"><a onclick=\"if (!confirm('%s %s ?')) return false;\" href=\"Dispatcher?page=%s&id=%d\"><img src=\"gfx/delete.png\" border=\"0\" title=\"%s\"></a></td>", language.getText("Really do you want to remove menu node"), ami.getSection().getDescription(), Cmd.REDACTION_MENU_DELETE, ami.getSection().getId(), language.getText("Delete")));
             } else {
                 sb.append("<td class=\"list\">&nbsp;</td>");
