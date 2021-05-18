@@ -45,10 +45,6 @@ public class AdvertListCmd extends Command {
         
         AdvertDAO advertDao = new AdvertDAO(getCnn());
         
-        if (parTypeId == 0) {
-            parTypeId = getSetup().getAdvertMenuDefault();
-        }
-        
         int pageNo = (parPageNo == 0) ? 1 : parPageNo;
         int pageSize = getSetup().getAdvertPageSize();
         
@@ -58,26 +54,34 @@ public class AdvertListCmd extends Command {
         sl.setCurrentPage(pageNo);
         sl.setNumOfItemsAtPage(pageSize);
         int listSize;
-        if (parTypeId == AdvertDAO.MY_ADVERTS_TYPE_ID) {
-            listSize = advertDao.getAdverListSize(AdvertDAO.AdvertListType.USER, getCompany().getId(), getUser().getId());
-        } else {
-            listSize = advertDao.getAdverListSize(AdvertDAO.AdvertListType.ADVERT_TYPE, getCompany().getId(), parTypeId);
+        switch (parTypeId) {
+            case AdvertDAO.ALL_ADVERTS_TYPE_ID:
+                listSize = advertDao.getAdverListSize(AdvertDAO.AdvertListType.ALL, getCompany().getId(), 0);
+                break;
+            case AdvertDAO.MY_ADVERTS_TYPE_ID:
+                listSize = advertDao.getAdverListSize(AdvertDAO.AdvertListType.USER, getCompany().getId(), getUser().getId());
+                break;
+            default:
+                listSize = advertDao.getAdverListSize(AdvertDAO.AdvertListType.ADVERT_TYPE, getCompany().getId(), parTypeId);
         }
         sl.setTotalNumOfItems(listSize);
         getRequest().setAttribute("slider", sl);
         
         ArrayList<AdvertType> advertMenuList = new ArrayList<>(advertDao.getAdvertTypeList(getCompany().getId()));
+        AdvertType at = advertDao.getAllAdvertType(getCompany().getId());
+        at.setDescription(getLanguage().getText(at.getDescription()));
+        advertMenuList.add(0, at);
         if (getUser().hasPermission(Permission.CAN_INSERT_ADVERT)) {
-            AdvertType at = advertDao.getMyAdvertType(getCompany().getId(), getUser().getId());
+            at = advertDao.getMyAdvertType(getCompany().getId(), getUser().getId());
             at.setDescription(getLanguage().getText(at.getDescription()));
             advertMenuList.add(at);
         }
         getRequest().setAttribute("advertMenuList", advertMenuList);
         
         AdvertType currMenu = new AdvertType(); 
-        for (AdvertType at: advertMenuList) {
-            if (at.getId() == parTypeId) {
-                currMenu = at;
+        for (AdvertType att: advertMenuList) {
+            if (att.getId() == parTypeId) {
+                currMenu = att;
                 break;
             }
         }
@@ -87,14 +91,19 @@ public class AdvertListCmd extends Command {
         getRequest().setAttribute("advertTypeList", advertTypeList);
         
         ArrayList<Advert> advertList;
-        RequestDispatcher rd;
-        if (parTypeId == AdvertDAO.MY_ADVERTS_TYPE_ID) {
-            advertList = new ArrayList<>(advertDao.getAdvertList(pageNo, pageSize, AdvertDAO.AdvertListType.USER, getCompany().getId(), getUser().getId()));
-        } else {
-            advertList = new ArrayList<>(advertDao.getAdvertList(pageNo, pageSize, AdvertDAO.AdvertListType.ADVERT_TYPE, getCompany().getId(), parTypeId));
+        switch (parTypeId) {
+            case AdvertDAO.ALL_ADVERTS_TYPE_ID:
+                advertList = new ArrayList<>(advertDao.getAdvertList(pageNo, pageSize, AdvertDAO.AdvertListType.ALL, getCompany().getId(), 0));
+                break;
+            case AdvertDAO.MY_ADVERTS_TYPE_ID:
+                advertList = new ArrayList<>(advertDao.getAdvertList(pageNo, pageSize, AdvertDAO.AdvertListType.USER, getCompany().getId(), getUser().getId()));
+                break;
+            default:
+                advertList = new ArrayList<>(advertDao.getAdvertList(pageNo, pageSize, AdvertDAO.AdvertListType.ADVERT_TYPE, getCompany().getId(), parTypeId));
         }
         getRequest().setAttribute("advertList", advertList);
         
+        RequestDispatcher rd;
         rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/AdvertList.jsp");    
         rd.forward(getRequest(), getResponse());
     }
