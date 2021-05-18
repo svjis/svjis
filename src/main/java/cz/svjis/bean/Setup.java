@@ -26,8 +26,6 @@ public class Setup implements Serializable {
     private static final long serialVersionUID = 3626374526742634517L;
     private static final Logger LOGGER = Logger.getLogger(Setup.class.getName());
     
-    private static final String ADVERT_MENU_DEFAULT_KEY = "advert.menu.default";
-    private static final int ADVERT_MENU_DEFAULT = 10;
     private static final String ADVERT_PAGE_SIZE_KEY = "advert.page.size";
     private static final int ADVERT_PAGE_SIZE_DEFAULT = 10;
     private static final String ANONIMOUS_USER_ID_KEY = "anonymous.user.id";
@@ -89,14 +87,6 @@ public class Setup implements Serializable {
     
     public Setup(Properties setup) {
         this.props = setup;
-    }
-    
-    /**
-     * 
-     * @return Id of default Advert folder in menu
-     */
-    public int getAdvertMenuDefault() {
-        return getIntValue(Setup.ADVERT_MENU_DEFAULT_KEY, Setup.ADVERT_MENU_DEFAULT);
     }
     
     /**

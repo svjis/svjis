@@ -24,10 +24,12 @@ public class AdvertDAO extends DAO {
     private AttachmentDAO attDao;
     
     public enum AdvertListType {
+        ALL,
         ADVERT_TYPE,
         USER
     }
     
+    public static final int ALL_ADVERTS_TYPE_ID = 0;
     public static final int MY_ADVERTS_TYPE_ID = 99;
     
     private static final String ADVERT_SELECT = "SELECT %s \n" +
@@ -105,17 +107,23 @@ public class AdvertDAO extends DAO {
     
     public int getAdverListSize(AdvertListType listType, int companyId, int typeId) throws SQLException {
         int result = 0;
+        String whereType = "";
         
-        String whereType = "r.TYPE_ID = ? AND PUBLISHED = 1 AND u.ENABLED = 1";
-        if (listType == AdvertListType.USER) {
-            whereType = "r.USER_ID = ?";
+        switch (listType) {
+            case ALL:
+                whereType = "PUBLISHED = 1 AND u.ENABLED = 1";
+                break;
+            case ADVERT_TYPE:
+                whereType = String.format("r.TYPE_ID = %d AND PUBLISHED = 1 AND u.ENABLED = 1", typeId);
+                break;
+            case USER:
+                whereType = String.format("r.USER_ID = %d", typeId);
         }
         
         String select = "SELECT count(*) AS \"CNT\" FROM ADVERT r LEFT JOIN \"USER\" u ON u.ID = r.USER_ID WHERE r.COMPANY_ID = ? AND " + whereType;
         
         try (PreparedStatement ps = cnn.prepareStatement(select)) {
             ps.setInt(1, companyId);
-            ps.setInt(2, typeId);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     result = rs.getInt("CNT");
@@ -129,17 +137,23 @@ public class AdvertDAO extends DAO {
     
     public List<Advert> getAdvertList(int pageNo, int pageSize, AdvertListType listType, int companyId, int typeId) throws SQLException {
         ArrayList<Advert> result = new ArrayList<>();
+        String whereType = "";
         
-        String whereType = "r.TYPE_ID = ? AND PUBLISHED = 1 AND u.ENABLED = 1";
-        if (listType == AdvertListType.USER) {
-            whereType = "r.USER_ID = ?";
+        switch (listType) {
+            case ALL:
+                whereType = "PUBLISHED = 1 AND u.ENABLED = 1";
+                break;
+            case ADVERT_TYPE:
+                whereType = String.format("r.TYPE_ID = %d AND PUBLISHED = 1 AND u.ENABLED = 1", typeId);
+                break;
+            case USER:
+                whereType = String.format("r.USER_ID = %d", typeId);
         }
         
         String select = String.format(ADVERT_SELECT, "FIRST " + (pageNo * pageSize), "AND " + whereType + " ORDER BY r.CREATION_DATE DESC");
         
         try (PreparedStatement ps = cnn.prepareStatement(select)) {
             ps.setInt(1, companyId);
-            ps.setInt(2, typeId);
             try (ResultSet rs = ps.executeQuery()) {
                 
                 int cPageNo = 1;
@@ -240,6 +254,26 @@ public class AdvertDAO extends DAO {
                     t.setDescription(rs.getString("DESCRIPTION"));
                     t.setCnt(rs.getInt("CNT"));
                     result.add(t);
+                }
+            }
+        }
+        
+        return result;
+    }
+    
+    public AdvertType getAllAdvertType(int companyId) throws SQLException {
+        AdvertType result = new AdvertType();
+        String select = String.format("SELECT '%d' AS \"ID\", 'All' AS \"DESCRIPTION\", (SELECT count(*) FROM ADVERT a LEFT JOIN \"USER\" u ON u.ID = a.USER_ID WHERE a.COMPANY_ID = ? AND a.PUBLISHED = 1 AND u.ENABLED = 1) AS \"CNT\" \n" + 
+                "FROM ADVERT_TYPE r \n" + 
+                "ORDER BY r.ID", ALL_ADVERTS_TYPE_ID);
+        
+        try (PreparedStatement ps = cnn.prepareStatement(select)) {
+            ps.setInt(1, companyId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    result.setId(rs.getInt("ID"));
+                    result.setDescription(rs.getString("DESCRIPTION"));
+                    result.setCnt(rs.getInt("CNT"));
                 }
             }
         }

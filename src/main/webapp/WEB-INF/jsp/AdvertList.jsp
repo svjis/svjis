@@ -44,7 +44,7 @@
                     <div id="advert" class="box">
                         <div id="advert-desc">
                             <h2 style="<%=stl %>"><%=a.getHeader() %></h2>
-                            <p class="info"><%=language.getText("Date") %>: <strong><%=JspSnippets.renderDate(a.getCreationDate()) %></strong> <%=language.getText("Author") %>: <strong><%=a.getUser().getFullName(false) %></strong>
+                            <p class="info"><a href="Dispatcher?page=<%=Cmd.ADVERT_LIST %>&typeId=<%=a.getType().getId() %>"><%=a.getType().getDescription() %></a>: <strong><%=JspSnippets.renderDate(a.getCreationDate()) %></strong> <%=language.getText("Author") %>: <strong><%=a.getUser().getFullName(false) %></strong>
                             <% if (a.getUser().getId() == user.getId()) { %>
                                 &nbsp;[<a href="Dispatcher?page=<%=Cmd.ADVERT_EDIT %>&id=<%=a.getId() %>"><%=language.getText("Edit") %></a>]
                             <% } %>
