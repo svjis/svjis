@@ -5,9 +5,12 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <jsp:useBean id="company" scope="session" class="cz.svjis.bean.Company" />
 <jsp:useBean id="language" scope="session" class="cz.svjis.bean.Language" />
 <jsp:useBean id="setup" scope="session" class="cz.svjis.bean.Setup" />
+<jsp:useBean id="pageTitle" scope="request" class="java.lang.String" />
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
@@ -31,7 +34,7 @@
     <link rel="stylesheet" media="screen,projection" type="text/css" href="css/style.css" />
     <link rel="stylesheet" media="print" type="text/css" href="css/print.css" />
 
-    <title><%=company.getName() %></title>
+    <title><%=(!pageTitle.equals("")) ? pageTitle : company.getName() %></title>
     
     <% if (!setup.getGoogleAnalyticsId().equals("")) { %>
     <!-- Global site tag (gtag.js) - Google Analytics -->
