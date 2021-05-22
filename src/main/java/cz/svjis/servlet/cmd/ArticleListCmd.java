@@ -59,12 +59,13 @@ public class ArticleListCmd extends Command {
         InquiryDAO inquiryDao = new InquiryDAO(getCnn());
         
         Language lang = (Language) this.getRequest().getSession().getAttribute("language");
+        String lblSearch = lang.getText("Search");
         
         if (parPage == null) 
             parPage = Cmd.ARTICLE_LIST;
         
         if ((parSearch != null) && (parSearch.length() < 3)) {
-            getRequest().setAttribute("messageHeader", lang.getText("Search"));
+            getRequest().setAttribute("messageHeader", lblSearch);
             getRequest().setAttribute("message", lang.getText("Text to be searched should has 3 chars at least."));
             RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_message.jsp");
             rd.forward(getRequest(), getResponse());
@@ -89,9 +90,9 @@ public class ArticleListCmd extends Command {
         sl.setNumOfItemsAtPage(getSetup().getArticlePageSize());
         if (parSearch != null) {
             sl.setTotalNumOfItems(articleDao.getNumOfArticlesFromSearch(parSearch, getUser(), section, true, false));
-            getRequest().setAttribute("pageTitle", String.format("%s: %s", lang.getText("Search"), parSearch));
+            getRequest().setAttribute("pageTitle", String.format("%s: %s", lblSearch, parSearch));
             if (sl.getTotalNumOfItems() == 0) {
-                getRequest().setAttribute("messageHeader", lang.getText("Search"));
+                getRequest().setAttribute("messageHeader", lblSearch);
                 getRequest().setAttribute("message", lang.getText("Nothing found."));
                 RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_message.jsp");
                 rd.forward(getRequest(), getResponse());
