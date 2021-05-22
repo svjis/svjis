@@ -76,8 +76,9 @@ public class FaultReportingListCmd extends Command {
             reportList = new ArrayList<>(faultDao.getFaultList(getCompany().getId(), pageNo, pageSize, 1));
         }
         if (parPage.equals(Cmd.FAULT_LIST_SEARCH)) {
+            Language lang = (Language) this.getRequest().getSession().getAttribute("language");
+            
             if (parSearch.length() < 3) {
-                Language lang = (Language) this.getRequest().getSession().getAttribute("language");
                 getRequest().setAttribute("messageHeader", lang.getText("Search"));
                 getRequest().setAttribute("message", lang.getText("Text to be searched should has 3 chars at least."));
                 RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_message.jsp");
@@ -86,9 +87,9 @@ public class FaultReportingListCmd extends Command {
             }
 
             sl.setTotalNumOfItems(faultDao.getFaultListSizeFromSearch(getCompany().getId(), parSearch));
+            getRequest().setAttribute("pageTitle", String.format("%s: %s", lang.getText("Search"), parSearch));
 
             if (sl.getTotalNumOfItems() == 0) {
-                Language lang = (Language) this.getRequest().getSession().getAttribute("language");
                 getRequest().setAttribute("messageHeader", lang.getText("Search"));
                 getRequest().setAttribute("message", lang.getText("Nothing found."));
                 RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_message.jsp");

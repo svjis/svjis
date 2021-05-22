@@ -58,11 +58,12 @@ public class ArticleListCmd extends Command {
         MiniNewsDAO newsDao = new MiniNewsDAO(getCnn());
         InquiryDAO inquiryDao = new InquiryDAO(getCnn());
         
+        Language lang = (Language) this.getRequest().getSession().getAttribute("language");
+        
         if (parPage == null) 
             parPage = Cmd.ARTICLE_LIST;
         
         if ((parSearch != null) && (parSearch.length() < 3)) {
-            Language lang = (Language) this.getRequest().getSession().getAttribute("language");
             getRequest().setAttribute("messageHeader", lang.getText("Search"));
             getRequest().setAttribute("message", lang.getText("Text to be searched should has 3 chars at least."));
             RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_message.jsp");
@@ -88,8 +89,8 @@ public class ArticleListCmd extends Command {
         sl.setNumOfItemsAtPage(getSetup().getArticlePageSize());
         if (parSearch != null) {
             sl.setTotalNumOfItems(articleDao.getNumOfArticlesFromSearch(parSearch, getUser(), section, true, false));
+            getRequest().setAttribute("pageTitle", String.format("%s: %s", lang.getText("Search"), parSearch));
             if (sl.getTotalNumOfItems() == 0) {
-                Language lang = (Language) this.getRequest().getSession().getAttribute("language");
                 getRequest().setAttribute("messageHeader", lang.getText("Search"));
                 getRequest().setAttribute("message", lang.getText("Nothing found."));
                 RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/_message.jsp");

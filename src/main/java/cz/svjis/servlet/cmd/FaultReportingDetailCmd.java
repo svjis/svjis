@@ -61,6 +61,8 @@ public class FaultReportingDetailCmd extends Command {
         getRequest().setAttribute("watching", watching);
         
         getRequest().setAttribute("searchKey", parSearch);
+        
+        getRequest().setAttribute("pageTitle", String.format("#%d - %s", report.getId(), report.getSubject()));
 
         RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/Faults_reportDetail.jsp");
         rd.forward(getRequest(), getResponse());

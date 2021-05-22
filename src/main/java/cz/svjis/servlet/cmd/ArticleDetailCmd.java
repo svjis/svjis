@@ -67,6 +67,8 @@ public class ArticleDetailCmd extends Command {
         String watching = (articleDao.isUserWatchingArticle(article.getId(), getUser().getId())) ? "1" : "0";
         getRequest().setAttribute("watching", watching);
         
+        getRequest().setAttribute("pageTitle", article.getHeader());
+        
         RequestDispatcher rd = getRequest().getRequestDispatcher("/WEB-INF/jsp/ArticleDetail.jsp");
         rd.forward(getRequest(), getResponse());
         logDao.log(getUser().getId(), LogDAO.OPERATION_TYPE_READ, article.getId(), getRequest().getRemoteAddr(), getRequest().getHeader("User-Agent"));
