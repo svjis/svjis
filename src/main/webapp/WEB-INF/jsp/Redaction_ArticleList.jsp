@@ -85,7 +85,7 @@
                         </tr>
                     <%
                         String search = "";
-                        if (searchKey != null) {
+                        if((searchKey != null) && !searchKey.equals("")) {
                             search = "&search=" + searchKey;
                         }
 
