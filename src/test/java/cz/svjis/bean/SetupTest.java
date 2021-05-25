@@ -21,11 +21,11 @@ import org.junit.jupiter.api.Test;
  *
  * @author jarberan
  */
-public class SetupTest {
+class SetupTest {
     
     @Test
     @DisplayName("Anonymous user id test")
-    public void testGetAnonymousUserId() {
+    void testGetAnonymousUserId() {
         Properties p = new Properties();
         p.setProperty("anonymous.user.id", "22");
         Setup s = new Setup(p);
@@ -34,7 +34,7 @@ public class SetupTest {
     
     @Test
     @DisplayName("Menu default item test")
-    public void testGetMenuDefaultItem() {
+    void testGetMenuDefaultItem() {
         Properties p = new Properties();
         Setup s = new Setup(p);
         assertEquals(0, s.getMenuDefaultItem());
@@ -42,7 +42,7 @@ public class SetupTest {
     
     @Test
     @DisplayName("Article page size test")
-    public void testGetArticlePageSize() {
+    void testGetArticlePageSize() {
         Properties p = new Properties();
         p.setProperty("article.page.size", "test");
         Setup s = new Setup(p);
@@ -51,7 +51,7 @@ public class SetupTest {
     
     @Test
     @DisplayName("Mail login test")
-    public void testGetMailLogin() {
+    void testGetMailLogin() {
         Properties p = new Properties();
         p.setProperty("mail.login", "test");
         Setup s = new Setup(p);
@@ -60,7 +60,7 @@ public class SetupTest {
     
     @Test
     @DisplayName("Mail password test")
-    public void testGetMailPassword() {
+    void testGetMailPassword() {
         Properties p = new Properties();
         Setup s = new Setup(p);
         assertEquals("", s.getMailPassword());

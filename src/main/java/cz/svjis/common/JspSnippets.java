@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -273,7 +274,7 @@ public class JspSnippets {
         if (userAgent.contains("MSIE") || userAgent.contains("Edge") || userAgent.contains("Opera") || userAgent.contains("Trident")) {
             encodedFileName = URLEncoder.encode(fileName.replace(" ", "_"), "UTF-8");
         } else {
-            encodedFileName = "=?UTF-8?B?" + Base64.encodeBase64String(fileName.replace(" ", "_").getBytes("UTF-8")) + "?=";
+            encodedFileName = "=?UTF-8?B?" + Base64.encodeBase64String(fileName.replace(" ", "_").getBytes(StandardCharsets.UTF_8)) + "?=";
         }
 
         response.setContentType(contentType);

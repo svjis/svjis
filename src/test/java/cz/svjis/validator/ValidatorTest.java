@@ -27,11 +27,11 @@ import static org.mockito.Mockito.when;
  *
  * @author jaroslav_b
  */
-public class ValidatorTest {
+class ValidatorTest {
     
     @Test
     @DisplayName("Positive int validation")
-    public void testValidatePositiveInteger() {
+    void testValidatePositiveInteger() {
         assertFalse(Validator.validateInteger(null ,0, 1), "PositiveInteger < null");
         assertFalse(Validator.validateInteger("" ,0, 1), "PositiveInteger < \"\"");
         assertFalse(Validator.validateInteger("0hello" ,0, 1), "PositiveInteger < 0hello");
@@ -43,7 +43,7 @@ public class ValidatorTest {
     
     @Test
     @DisplayName("String validation")
-    public void testValidateString() {
+    void testValidateString() {
         assertFalse(Validator.validateString(null ,1, 100), "String < null");
         assertFalse(Validator.validateString("" ,1, 100), "String < \"\"");
         assertFalse(Validator.validateString("123456" ,1, 5), "String < over max");
@@ -55,7 +55,7 @@ public class ValidatorTest {
     
     @Test
     @DisplayName("fixTextInput")
-    public void testFixTextInput() {
+    void testFixTextInput() {
         
         assertEquals("<b>Ahoj</b>", Validator.fixTextInput("<b>Ahoj</b>", true), "HTML enabled");
         assertEquals("&lt;b&gt;Ahoj&lt;/b&gt;", Validator.fixTextInput("<b>Ahoj</b>", false), "HTML disabled");
@@ -64,7 +64,7 @@ public class ValidatorTest {
 
     @Test
     @DisplayName("getString")
-    public void testGetString() throws InputValidationException {
+    void testGetString() throws InputValidationException {
         final HttpServletRequest request = mock(HttpServletRequest.class);
         when(request.getParameter("testNull")).thenReturn(null);
         when(request.getParameter("testValue")).thenReturn("value");
@@ -104,7 +104,7 @@ public class ValidatorTest {
 
     @Test
     @DisplayName("getInt")
-    public void testGetInt() throws InputValidationException {
+    void testGetInt() throws InputValidationException {
         final HttpServletRequest request = mock(HttpServletRequest.class);
         when(request.getParameter("testNull")).thenReturn(null);
         when(request.getParameter("testValue")).thenReturn("10");
@@ -133,7 +133,7 @@ public class ValidatorTest {
 
     @Test
     @DisplayName("getBoolean")
-    public void testGetBoolean() {
+    void testGetBoolean() {
         HttpServletRequest request = mock(HttpServletRequest.class);
         when(request.getParameter("testNull")).thenReturn(null);
         when(request.getParameter("testValue")).thenReturn("10");
