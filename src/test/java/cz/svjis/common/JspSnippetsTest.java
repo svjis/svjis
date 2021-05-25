@@ -20,11 +20,11 @@ import org.junit.jupiter.api.Test;
  *
  * @author jarberan
  */
-public class JspSnippetsTest {
+class JspSnippetsTest {
     
     @Test
     @DisplayName("Highlight regex test")
-    public void testValidatePositiveInteger() {
+    void testValidatePositiveInteger() {
         assertEquals("Ahoj jak se máš?", JspSnippets.envelStrInHtml("Ahoj jak se máš?", "", "*", "#"), "Negative test");
         assertEquals("Ahoj jak se máš?", JspSnippets.envelStrInHtml("Ahoj jak se máš?", "jak sem", "*", "#"), "Negative test");
         assertEquals("Ahoj *jak se# máš?", JspSnippets.envelStrInHtml("Ahoj jak se máš?", "jak se", "*", "#"), "Plain text");
@@ -37,7 +37,7 @@ public class JspSnippetsTest {
     
     @Test
     @DisplayName("Make hyperlinks")
-    public void testMakeHyperlinks() {
+    void testMakeHyperlinks() {
         assertEquals("Ahoj jak se máš?", JspSnippets.makeHyperlinks("Ahoj jak se máš?"), "Negative test");
         
         assertEquals("<a href=\"http://www.seznam.cz\" target=\"_blank\">http://www.seznam.cz</a>", JspSnippets.makeHyperlinks("http://www.seznam.cz"), "http alone");
