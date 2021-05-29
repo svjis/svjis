@@ -78,12 +78,16 @@ public class AdvertListCmd extends Command {
         }
         getRequest().setAttribute("advertMenuList", advertMenuList);
         
-        AdvertType currMenu = new AdvertType(); 
+        AdvertType currMenu = null; 
         for (AdvertType att: advertMenuList) {
             if (att.getId() == parTypeId) {
                 currMenu = att;
                 break;
             }
+        }
+        if (currMenu == null) {
+            new Error404NotFoundCmd(getCtx()).execute();
+            return;
         }
         getRequest().setAttribute("currMenu", currMenu);
         
