@@ -78,6 +78,10 @@ public class ArticleListCmd extends Command {
         if ((section == 0) && (defaultSection != 0)) {
             section = defaultSection;
         }
+        if ((section != 0) && (menuDao.getMenuNode(section, getCompany().getId()) == null)) {
+            new Error404NotFoundCmd(getCtx()).execute();
+            return;
+        }
         menu.setActiveSection(section);
         menu.setDefaultSection(defaultSection);
         getRequest().setAttribute("menu", menu);
