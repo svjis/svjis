@@ -12,6 +12,7 @@
 
 package cz.svjis.validator;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -26,36 +27,49 @@ public class Validator {
     private Validator() {}
     
     public static String getString(HttpServletRequest request, String parName, int minLen, int maxLen, boolean canBeNull, boolean canContainHtmlTags) throws InputValidationException {
-        String val = request.getParameter(parName);
-        String msg = "String parameter %s[%s, %s] is not valid. (%s)";
-        
-        if ((val == null) && canBeNull) {
-            return val;
-        }
-        
-        val = Validator.fixTextInput(val, canContainHtmlTags);
-        
-        if (!Validator.validateString(val, minLen, maxLen)) {
-            throw new InputValidationException(String.format(msg, parName, String.valueOf(minLen), String.valueOf(maxLen), val));
-        }
-        
-        return val;
+        return validateString(request.getParameter(parName), parName, minLen, maxLen, canBeNull, canContainHtmlTags);
     }
     
+    public static String getStringFromCookie(HttpServletRequest request, String parName, int minLen, int maxLen, boolean canBeNull, boolean canContainHtmlTags) throws InputValidationException {    
+        return validateString(getCookie(request.getCookies(), parName), parName, minLen, maxLen, canBeNull, canContainHtmlTags);
+    }
+    
+    private static String validateString(String value, String parName, int minLen, int maxLen, boolean canBeNull, boolean canContainHtmlTags) throws InputValidationException {
+        String msg = "String parameter %s[%s, %s] is not valid. (%s)";
+        
+        if ((value == null) && canBeNull) {
+            return value;
+        }
+        
+        value = Validator.fixTextInput(value, canContainHtmlTags);
+        
+        if (!Validator.validateString(value, minLen, maxLen)) {
+            throw new InputValidationException(String.format(msg, parName, String.valueOf(minLen), String.valueOf(maxLen), value));
+        }
+        
+        return value;
+    }
     
     public static int getInt(HttpServletRequest request, String parName, int minInt, int maxInt, boolean canBeNull) throws InputValidationException {
-        String val = request.getParameter(parName);
+        return validateInt(request.getParameter(parName), parName, minInt, maxInt, canBeNull);
+    }
+    
+    public static int getIntFromCookie(HttpServletRequest request, String parName, int minInt, int maxInt, boolean canBeNull) throws InputValidationException {
+        return validateInt(getCookie(request.getCookies(), parName), parName, minInt, maxInt, canBeNull);
+    }
+    
+    private static int validateInt(String value, String parName, int minInt, int maxInt, boolean canBeNull) throws InputValidationException {
         String msg = "Integer parameter %s[%s, %s] is not valid. (%s)";
         
-        if ((val == null) && canBeNull) {
+        if ((value == null) && canBeNull) {
             return 0;
         }
         
-        if (!Validator.validateInteger(val, minInt, maxInt)) {
-            throw new InputValidationException(String.format(msg, parName, String.valueOf(minInt), String.valueOf(maxInt), val));
+        if (!Validator.validateInteger(value, minInt, maxInt)) {
+            throw new InputValidationException(String.format(msg, parName, String.valueOf(minInt), String.valueOf(maxInt), value));
         }
 
-        return Integer.valueOf(val);
+        return Integer.valueOf(value);
     }
     
     
@@ -129,4 +143,23 @@ public class Validator {
         
         return result;
     }
+    
+    /**
+    *
+    * @param cookies
+    * @param key
+    * @return cookie value
+    */
+   private static String getCookie(Cookie[] cookies, String key) {
+       String result = null;
+       if (cookies != null) {
+           for (int i = 0; i < cookies.length; i++) {
+               if (cookies [i].getName().equals(key)) {
+                   result = cookies[i].getValue();
+                   break;
+               }
+           }
+       }
+       return result;
+   }
 }
