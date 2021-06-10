@@ -15,6 +15,9 @@ package cz.svjis.common;
 import cz.svjis.bean.Setup;
 import cz.svjis.bean.User;
 import cz.svjis.bean.UserDAO;
+import cz.svjis.validator.InputValidationException;
+import cz.svjis.validator.Validator;
+
 import java.sql.SQLException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -75,12 +78,20 @@ public class PermanentLoginUtils {
      */
     public static int checkPermanentLogin(HttpServletRequest request, UserDAO userDao, int companyId) throws SQLException {
         int result = 0;
-        Cookie[] cookies = request.getCookies();
-        int company = (getCookie(cookies, PM_COMPANY).equals("")) ? 0 : Integer.valueOf(getCookie(cookies, PM_COMPANY));
-        String login = getCookie(cookies, PM_LOGIN);
-        String token = getCookie(cookies, PM_PASSWORD);
+        int company;
+        String login;
+        String token;
+
+        try {
+            company = Validator.getIntFromCookie(request, PM_COMPANY, 0, Validator.MAX_INT_ALLOWED, false);
+            login = Validator.getStringFromCookie(request, PM_LOGIN, 0, 50, false, false);
+            token = Validator.getStringFromCookie(request, PM_PASSWORD, 0, 100, false, false);
+        } catch (InputValidationException ex) {
+            return result;
+        }
+        
         User u = userDao.getUserByLogin(company, login);
-        if ((company == companyId) && (u != null) && verifyAuthToken(userDao, company, login, token) && (u.isEnabled())) {
+        if ((company == companyId) && (u != null) && u.isEnabled() && verifyAuthToken(userDao, company, login, token)) {
             result = u.getId();
         }
         return result;
@@ -94,25 +105,6 @@ public class PermanentLoginUtils {
             result = true;
         }
         
-        return result;
-    }
-
-    /**
-     *
-     * @param cookies
-     * @param key
-     * @return cookie value
-     */
-    private static String getCookie(Cookie[] cookies, String key) {
-        String result = "";
-        if (cookies != null) {
-            for (int i = 0; i < cookies.length; i++) {
-                if (cookies [i].getName().equals(key)) {
-                    result = cookies[i].getValue();
-                    break;
-                }
-            }
-        }
         return result;
     }
     
