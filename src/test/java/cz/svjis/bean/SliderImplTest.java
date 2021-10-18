@@ -20,11 +20,11 @@ import org.junit.jupiter.api.Test;
  *
  * @author berk
  */
-class SliderImplTest {
+public class SliderImplTest {
     
     @Test
     @DisplayName("Slider")
-    void testSlider() {
+    public void testSlider() {
         SliderImpl sl = new SliderImpl();
         sl.setSliderWide(10);
         sl.setCurrentPage(1);
