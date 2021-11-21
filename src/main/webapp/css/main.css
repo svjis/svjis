@@ -97,7 +97,7 @@ h3 {font-size: small;}
             #login-submit, #logout-submit {width:100px; height:22px; border:0;}
             #login-label, #password-label, #login-input, #password-input, #login-submit, #logout-submit {font-size:100%; font-family:"arial",sans-serif;}
 
-            .common-label {width: 15em; float: left; text-align: right; margin-right: 0.5em; display: block;}
+            .common-label {width: 14em; float: left; text-align: left; margin-right: 0.5em; display: block;}
             .common-input {color: #000000; background: #ffffff; height:22px; border: 1px solid #e5e5e5;}
             .common-textarea {color: #000000; background: #ffffff; height:150px; border: 1px solid #e5e5e5;}
             .common-submit input {margin-left: 15em;} 
