@@ -96,6 +96,9 @@ public class LogDAO extends DAO {
     }
     
     private String trim(String s, int maxLength) {
+    	if (s == null) {
+    		s = "";
+    	}
         if (s.length() > maxLength) {
             s = s.substring(0, maxLength - 1);
         }
