@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-
+    timeout-minutes: 10
     runs-on: ubuntu-latest
 
     steps:
@@ -27,3 +27,32 @@ jobs:
         cd docker
         docker build -t berk76/svjis-app:latest .
     
+    - name: Start containers
+      run: |
+        git clone https://github.com/svjis/svjis-docker.git
+        cd svjis-docker/docker-compose
+        docker-compose -f svjis-dev.yml up -d
+
+    - name: Create schema
+      run: |
+        cd svjis-docker/docker-compose
+        docker cp ../../db_schema/database.sql svjis_db:/firebird/
+        docker cp ./create-schema.sh svjis_db:/firebird/
+        docker exec svjis_db bash "/firebird/create-schema.sh"
+
+    - name: Test of docker-compose
+      run: |
+        string="New Company"
+        if curl -s "http://localhost:8080" | grep -q "$string"; then
+            echo "'$string' found"
+        else
+            curl "http://localhost:8080"
+            echo "'$string' not found"
+            exit 1
+        fi
+
+    - name: Stop containers
+      if: always()
+      run: |
+        cd svjis-docker/docker-compose
+        docker-compose -f svjis-dev.yml down
