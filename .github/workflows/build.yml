@@ -12,9 +12,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Set up JDK 11.0.5
+
+    - name: Set up JDK
       uses: actions/setup-java@v1
       with:
-        java-version: 11.0.5
+        java-version: 8
+    
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      run: mvn --no-transfer-progress package --file pom.xml
+
+    - name: Build docker image
+      run: |
+        cd docker
+        docker build -t berk76/svjis-app:latest .
+    
