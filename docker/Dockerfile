@@ -6,5 +6,5 @@ ENV DB_SERVER=localhost \
 WORKDIR /usr/local/tomcat/webapps/
 COPY setenv.sh /usr/local/tomcat/bin/setenv.sh
 RUN chmod ugo+x /usr/local/tomcat/bin/setenv.sh
-COPY ../target/*.war /usr/local/tomcat/webapps/ROOT.war
+COPY ROOT.war /usr/local/tomcat/webapps/ROOT.war
 ENTRYPOINT ["catalina.sh", "run"]
