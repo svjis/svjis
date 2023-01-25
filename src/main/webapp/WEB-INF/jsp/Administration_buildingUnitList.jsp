@@ -53,7 +53,6 @@
                             <th class="list" scope="col">&nbsp;</th>
                             <th class="list" scope="col">&nbsp;</th>
                             <th class="list" scope="col">&nbsp;</th>
-                            <th class="list" scope="col"><%=language.getText("Id") %></th>
                             <th class="list" scope="col"><%=language.getText("Type") %></th>
                             <th class="list" scope="col"><%=language.getText("Registration Id.") %></th>
                             <th class="list" scope="col"><%=language.getText("Description") %></th>
@@ -71,7 +70,6 @@
                             <td class="list"><a href="Dispatcher?page=<%=Cmd.BUILDING_UNIT_EDIT %>&id=<%=u.getId() %>"><img src="gfx/pencil.png" border="0" title="<%=language.getText("Edit") %>" alt="<%=language.getText("Edit") %>"></a></td>
                             <td class="list"><a href="Dispatcher?page=<%=Cmd.BUILDING_UNIT_OWNER %>&id=<%=u.getId() %>"><img src="gfx/user.png" border="0" title="<%=language.getText("Owner list") %>" alt="<%=language.getText("Owner list") %>"></a></td>
                             <td class="list"><a onclick="if (!confirm('<%=language.getText("Really do you want to remove unit") %> <%=u.getId() %> ?')) return false;" href="Dispatcher?page=<%=Cmd.BUILDING_UNIT_DELETE %>&id=<%=u.getId() %>"><img src="gfx/delete.png" border="0" title="<%=language.getText("Delete") %>" alt="<%=language.getText("Delete") %>"></a></td>
-                            <td class="list" style="text-align: right"><%=u.getId() %></td>
                             <td class="list"><%=u.getBuildingUnitType() %></td>
                             <td class="list"><%=u.getRegistrationId() %></td>
                             <td class="list"><%=u.getDescription() %></td>
