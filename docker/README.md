@@ -5,6 +5,8 @@
 Image sestavíte následujícím příkazem:
 
 ```sh
+cp target/*.war docker/ROOT.war
+cd docker
 docker build -t berk76/svjis-app:latest .
 ```
 
