@@ -20,7 +20,7 @@
         <div id="content">
             <div id="content-main">
                 <div id="content-main-in">
-                    <h1 class="page-title" id="tbl-desc"><%=buildingUnit.getBuildingUnitType() %> <%=buildingUnit.getDescription() %> - <%=language.getText("Owner list") %></h1>
+                    <h1 class="page-title" id="tbl-desc"><%=buildingUnit.getBuildingUnitType() %> - <%=buildingUnit.getRegistrationId() %> <%=buildingUnit.getDescription() %> - <%=language.getText("Owner list") %></h1>
                     <table class="list" aria-describedby="tbl-desc">
                         <tr>
                             <th class="list" scope="col">&nbsp;</th>
