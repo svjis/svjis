@@ -9,7 +9,7 @@
     <packaging>war</packaging>
 
     <name>SVJIS</name>
-    <url>https://github.com/svjis/svjis/wiki</url>
+    <url>https://svjis.github.io/</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
