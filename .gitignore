@@ -1,6 +1,9 @@
 # Maven
 target/
 
+# docker
+docker/*.war
+
 # NetBeans
 nb-configuration.xml
 
