@@ -1,0 +1,36 @@
+name: build docker image and push to dockerhub
+
+on:
+  push:
+    tags:
+    - 'Version_*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Set up JDK
+      uses: actions/setup-java@v1
+      with:
+        java-version: 8
+    
+    - name: Build war file
+      run: mvn --no-transfer-progress package --file pom.xml
+
+    - name: Build docker image
+      run: |
+        cp target/*.war docker/ROOT.war
+        cd docker
+        docker build -t berk76/svjis-app:latest .
+
+    - name: Tag version and push
+      run: |
+        TAG=`echo ${{  github.ref_name }} | sed 's/Version_\(.*\)$/\1/'`
+        echo $TAG
+        # docker tag berk76/svjis-app:latest berk76/svjis-app:$TAG
+        # docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password ${{ secrets.DOCKERHUB_TOKEN }}
+        # docker push berk76/svjis-app:$TAG
+        # docker push berk76/svjis-app:latest
