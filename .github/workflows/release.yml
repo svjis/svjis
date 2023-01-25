@@ -30,7 +30,7 @@ jobs:
       run: |
         TAG=`echo ${{  github.ref_name }} | sed 's/Version_\(.*\)$/\1/'`
         echo $TAG
-        # docker tag berk76/svjis-app:latest berk76/svjis-app:$TAG
-        # docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password ${{ secrets.DOCKERHUB_TOKEN }}
-        # docker push berk76/svjis-app:$TAG
-        # docker push berk76/svjis-app:latest
+        docker tag berk76/svjis-app:latest berk76/svjis-app:$TAG
+        docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password ${{ secrets.DOCKERHUB_TOKEN }}
+        docker push berk76/svjis-app:$TAG
+        docker push berk76/svjis-app:latest
