@@ -2,7 +2,8 @@ name: codeql
 
 on:
   push:
-  pull_request:
+    branches: [master]
+  # pull_request:
   workflow_dispatch:
   # schedule:
   #   - cron: '0 10 * * 6'

@@ -1,0 +1,88 @@
+name: selenium test
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Set up JDK
+      uses: actions/setup-java@v1
+      with:
+        java-version: 8
+    
+    - name: Build war file
+      run: mvn --no-transfer-progress package --file pom.xml
+
+    - name: Build docker image
+      run: |
+        cp target/*.war docker/ROOT.war
+        cd docker
+        docker build -t berk76/svjis-app:latest .
+    
+    - name: Start containers
+      run: |
+        git clone https://github.com/svjis/svjis-docker.git
+        cd svjis-docker/docker-compose
+        docker-compose -f svjis-dev.yml up -d
+
+    - name: Create schema
+      run: |
+        cd svjis-docker/docker-compose
+        docker cp ../../db_schema/database.sql svjis_db:/firebird/
+        docker cp ./create-schema.sh svjis_db:/firebird/
+        docker exec svjis_db bash "/firebird/create-schema.sh"
+
+    - name: Test of docker-compose
+      run: |
+        string="New Company"
+        if curl -s "http://localhost:8080" | grep -q "$string"; then
+            echo "'$string' found"
+        else
+            curl "http://localhost:8080"
+            echo "'$string' not found"
+            exit 1
+        fi
+
+    - name: Install Google Chrome
+      run: |
+        sudo apt install google-chrome-stable
+        google-chrome --version
+
+    - name: Install ChromeDriver
+      run: |
+        CHROME_VERSION=$(google-chrome --version | cut -f 3 -d ' ' | cut -d '.' -f 1) \
+          && CHROMEDRIVER_RELEASE=$(curl --location --fail --retry 3 http://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION}) \
+          && curl --silent --show-error --location --fail --retry 3 --output /tmp/chromedriver_linux64.zip "http://chromedriver.storage.googleapis.com/$CHROMEDRIVER_RELEASE/chromedriver_linux64.zip" \
+          && cd /tmp \
+          && unzip chromedriver_linux64.zip \
+          && rm -rf chromedriver_linux64.zip \
+          && sudo mv chromedriver /usr/local/bin/chromedriver \
+          && sudo chmod +x /usr/local/bin/chromedriver \
+          && chromedriver --version
+
+    - name: Run selenium test
+      run: |
+        git clone https://github.com/svjis/svjis-selenium.git
+        cd svjis-selenium
+        mvn test --no-transfer-progress
+
+    - name: Archive screen shots
+      uses: actions/upload-artifact@v3
+      with:
+        name: Screenshots
+        path: svjis-selenium/target/*.png
+
+    - name: Stop containers
+      if: always()
+      run: |
+        cd svjis-docker/docker-compose
+        docker-compose -f svjis-dev.yml down
