@@ -1,4 +1,4 @@
-FROM tomcat:11.0-jdk17
+FROM tomcat:10.0-jdk17
 
 ENV DB_SERVER=localhost \
     DB_USERNAME=admin \
