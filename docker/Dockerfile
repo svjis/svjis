@@ -1,4 +1,4 @@
-FROM tomcat:9-jdk8-openjdk-slim
+FROM tomcat:11.0-jdk17
 
 ENV DB_SERVER=localhost \
     DB_USERNAME=admin \
