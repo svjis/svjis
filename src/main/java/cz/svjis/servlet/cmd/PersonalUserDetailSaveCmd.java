@@ -80,6 +80,9 @@ public class PersonalUserDetailSaveCmd extends Command {
         if (!userDao.testLoginDuplicity(u.getLogin(), u.getId(), u.getCompanyId())) {
             errorMessage += getLanguage().getText("Login already exists.") + " (" + u.getLogin() + ")<br>";
         }
+        if (!userDao.testEmailValidity(u.geteMail())) {
+            errorMessage += getLanguage().getText("E-Mail is not valid.") + " (" + u.geteMail() + ")<br>";
+        }
         if (errorMessage.equals("")) {
             userDao.modifyUser(u);
             Language language = languageDao.getDictionary(u.getLanguageId());
