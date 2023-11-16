@@ -30,6 +30,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.DatatypeConverter;
+import org.apache.commons.validator.routines.EmailValidator;
 
 /**
  *
@@ -642,6 +643,11 @@ public class UserDAO extends DAO {
             result = false;
         }
         return result;
+    }
+
+    public boolean testEmailValidity(String email) {
+        EmailValidator validator = EmailValidator.getInstance();
+        return validator.isValid(email);
     }
     
     public List<User> findLostPassword(int companyId, String email) throws SQLException {

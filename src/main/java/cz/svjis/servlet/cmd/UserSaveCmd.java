@@ -115,6 +115,9 @@ public class UserSaveCmd extends Command {
         if (parSendCredentials && (u.geteMail() == null || u.geteMail().equals(""))) {
             errorMessage += getLanguage().getText("E-Mail is missing.") + "<br>";
         }
+        if (!userDao.testEmailValidity(u.geteMail())) {
+            errorMessage += getLanguage().getText("E-Mail is not valid.") + " (" + u.geteMail() + ")<br>";
+        }
         if (errorMessage.equals("")) {
             if (u.getId() == 0) {
                 u.setId(userDao.insertUser(u));
