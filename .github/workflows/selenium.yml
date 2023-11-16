@@ -20,6 +20,12 @@ jobs:
         # https://github.com/actions/setup-java#supported-distributions
         distribution: 'zulu'
         java-version: 8
+
+    - name: Set up Node
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16.x'
+        registry-url: 'https://registry.npmjs.org'
     
     - name: Build war file
       run: mvn --no-transfer-progress package --file pom.xml
@@ -56,20 +62,8 @@ jobs:
 
     - name: Install Google Chrome
       run: |
-        sudo apt install google-chrome-stable
+        npx @puppeteer/browsers install chrome@stable
         google-chrome --version
-
-    - name: Install ChromeDriver
-      run: |
-        CHROME_VERSION=$(google-chrome --version | cut -f 3 -d ' ' | cut -d '.' -f 1) \
-          && CHROMEDRIVER_RELEASE=$(curl --location --fail --retry 3 https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE_${CHROME_VERSION}) \
-          && curl --silent --show-error --location --fail --retry 3 --output /tmp/chromedriver_linux64.zip "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/$CHROMEDRIVER_RELEASE/linux64/chrome-linux64.zip" \
-          && cd /tmp \
-          && unzip chromedriver_linux64.zip \
-          && rm -rf chromedriver_linux64.zip \
-          && sudo mv chromedriver /usr/local/bin/chromedriver \
-          && sudo chmod +x /usr/local/bin/chromedriver \
-          && chromedriver --version
 
     - name: Run selenium test
       run: |
