@@ -60,7 +60,12 @@
                                             <input class="common-input" id="o<%=i %>-input" type="text" name="o_<%=i %>" size="50" maxlength="250" value="<%=io.getDescription() %>">
                                         </td>
                                         <% if (inquiry.getCount() == 0) { %>
-                                        <td>&nbsp;<a href="Dispatcher?page=<%=Cmd.REDACTION_INQUIRY_OPT_DELETE %>&id=<%=io.getId() %>"><img src="gfx/delete.png" border="0" title="<%=language.getText("Delete") %>" alt="<%=language.getText("Delete") %>"></td>
+                                        <td>
+                                            &nbsp;
+                                            <a href="Dispatcher?page=<%=Cmd.REDACTION_INQUIRY_OPT_DELETE %>&id=<%=io.getId() %>">
+                                                <img src="gfx/delete.png" border="0" title="<%=language.getText("Delete") %>" alt="<%=language.getText("Delete") %>">
+                                            </a>
+                                        </td>
                                         <% } else { %>
                                         <td>&nbsp;(<%=language.getText("Votes") %>:&nbsp;<%=io.getCount() %>)</td>
                                         <% } %>
